@@ -54,7 +54,13 @@ namespace NewsParser
             {
                 options.UseSqlServer(connection);
             });
-            
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin());
+            });
+
             services.AddMvc();
         }
 
@@ -87,6 +93,8 @@ namespace NewsParser
             ModelsMapper.Congifure();
 
             ConfigureAuthentication(app);
+
+            app.UseCors("CorsPolicy");
 
             app.UseMvc(routes =>
             {
