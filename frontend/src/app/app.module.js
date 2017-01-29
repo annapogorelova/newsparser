@@ -10,16 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
-var app_component_1 = require('./app.component.ts');
+var shared_module_1 = require('../shared/shared.module');
+var app_component_1 = require('./app.component');
+var news_module_1 = require('../news/news.module');
+var app_router_1 = require('./app.routing.ts');
+var account_module_1 = require('../account/account.module');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule],
+            imports: [platform_browser_1.BrowserModule, shared_module_1.SharedModule, news_module_1.NewsModule, account_module_1.AccountModule, app_router_1.AppRouter],
             declarations: [app_component_1.AppComponent],
-            bootstrap: [app_component_1.AppComponent]
-        }),
+            bootstrap: [app_component_1.AppComponent],
+            providers: [app_router_1.AppRoutingProviders]
+        }), 
         __metadata('design:paramtypes', [])
     ], AppModule);
     return AppModule;

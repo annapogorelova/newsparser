@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6" *ngIf="news.length">
+        <div class="ibox" *ngFor="let newsItem of news">
+            <div class="ibox-content">
+                <a>
+                    <h2>
+                        {{newsItem.title}}
+                    </h2>
+                </a>
+                <div class="small m-b-xs">
+                    <strong>A.P.</strong> <span class="text-muted"><i class="fa fa-clock-o"></i> {{newsItem.date | date}}</span>
+                </div>
+                <p>
+                    {{newsItem.description}}
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Category:</h5>
+                        <button class="btn btn-white btn-xs" type="button">{{newsItem.categoryName}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3"></div>
+</div>

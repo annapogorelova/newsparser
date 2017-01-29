@@ -1,0 +1,27 @@
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li>
+                    <a role="button" routerLink="/news" routerLinkActive="active">News</a>
+                </li>
+                <li *ngIf="!authService.isAuthenticated()">
+                    <a role="button" routerLink="/sign-in" routerLinkActive="active">Sign In</a>
+                </li>
+                <li *ngIf="authService.isAuthenticated()">
+                    <a role="button" (click)="signOut()">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="wrapper wrapper-content">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="footer">
+            <div>
+                <strong>Copyright</strong> News Parser © 2017
+            </div>
+        </div>
+    </div>
+</div>

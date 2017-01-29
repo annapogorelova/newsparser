@@ -1,0 +1,25 @@
+<div class="middle-box text-center loginscreen">
+    <div>
+        <div class="ibox-content">
+             <form class="m-t" name="sign-in">
+                <div class="form-group">
+                    <input class="form-control" [(ngModel)]="email" placeholder="Email" required="true"
+                           type="email" name="email">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" [(ngModel)]="password" placeholder="Password" required="true"
+                           type="password" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b" (click)="signIn()">
+                    Sign In
+                </button>
+                <p class="text-muted text-center">
+                    <small>Do not have an account?</small>
+                </p>
+                <button class="btn btn-primary block full-width m-b" (click)="register()">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
