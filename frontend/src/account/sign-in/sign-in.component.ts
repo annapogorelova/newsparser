@@ -25,6 +25,6 @@ export class SignInComponent  {
     };
 
     signIn = () => {
-        this.authService.postUserCredentials(this.email, this.password).then(auth => this.handleAuth(auth));
+        this.authService.signIn(this.email, this.password).then(auth => this.handleAuth(auth));
     };
 }

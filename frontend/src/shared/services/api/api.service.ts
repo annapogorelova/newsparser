@@ -17,6 +17,12 @@ export class ApiService{
                 .catch(this.handleError).toPromise();
     };
 
+    getAuth = (username: string, password: string) => {
+        var requestBody = `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+        var requestHeaders = {'Content-Type': 'application/x-www-form-urlencoded'};
+        return this.post('token', requestBody, requestHeaders);
+    };
+
     post = (url: string, params: any, headers: any = null) =>{
         var requestHeaders = this.initializeHeaders(headers);
         var requestOptions = new RequestOptions({ headers: requestHeaders });
@@ -32,6 +38,10 @@ export class ApiService{
     };
 
     private handleError (response: Response) {
+        if(response.status === 401){
+            // this.localStorageService.clearAll();
+            // refresh token
+        }
         return Observable.throw(new Error(response.toString()));
     };
 
@@ -41,7 +51,7 @@ export class ApiService{
 
     private initializeBody = (body?:any) => {
         return body || {};
-    }
+    };
 
     private initializeHeaders = (customHeaders: Headers): Headers => {
         var headers = new Headers(customHeaders);

@@ -1,25 +1,31 @@
-<div class="middle-box text-center loginscreen">
-    <div>
-        <div class="ibox-content">
-             <form class="m-t" name="sign-in">
-                <div class="form-group">
-                    <input class="form-control" [(ngModel)]="email" placeholder="Email" required="true"
-                           type="email" name="email">
-                </div>
-                <div class="form-group">
-                    <input class="form-control" [(ngModel)]="password" placeholder="Password" required="true"
-                           type="password" name="password">
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b" (click)="signIn()">
-                    Sign In
-                </button>
-                <p class="text-muted text-center">
-                    <small>Do not have an account?</small>
-                </p>
-                <button class="btn btn-primary block full-width m-b" (click)="register()">
+<div class="container">
+    <form name="sign-in">
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email"
+                       [(ngModel)]="email" required="true">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password"
+                       [(ngModel)]="password" required="true">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" (click)="signIn()">Sign in</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-sm-2 col-sm-10">
+                <p><small>Do not have an account?</small></p>
+                <button class="btn btn-default" (click)="register()">
                     Register
                 </button>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>

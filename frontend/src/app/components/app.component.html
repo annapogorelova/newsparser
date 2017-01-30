@@ -1,0 +1,27 @@
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button"
+            (click)="isNavbarCollapsed = !isNavbarCollapsed"
+            [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" routerLink="/news">News Parser</a>
+    <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" *ngIf="authService.isAuthenticated()">
+                <a class="nav-link" routerLink="/news" routerLinkActive="active">News</a>
+            </li>
+        </ul>
+        <div class="navbar-nav">
+            <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" (click)="signOut()">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+            <a href="#" role="link" class="nav-link" *ngIf="!authService.isAuthenticated()"
+               routerLink="/sign-in" routerLinkActive="active">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <router-outlet></router-outlet>
+</div>

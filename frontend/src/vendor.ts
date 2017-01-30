@@ -7,9 +7,7 @@ import '@angular/http';
 import '@angular/router';
 // RxJS
 import 'rxjs';
-
-// Css
-import '../public/theme/font-awesome/css/font-awesome.css';
-import '../public/theme/css/style.css';
-import '../public/theme/css/bootstrap.css';
-import '../public/theme/css/animate.css';
+// Bootstrap
+import '../public/css/app.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../public/font-awesome/css/font-awesome.min.css';
