@@ -66,14 +66,14 @@ namespace NewsParser.Identity
             // You can add other claims here, if you want:
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Sub, identity.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, nowDto.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };
 
             // Create the JWT and write it to a string
             var jwt = new JwtSecurityToken(
-                issuer: _options.Issuer,
+                _options.Issuer,
                 //audience: _options.Audience,
                 claims: claims,
                 notBefore: now,
@@ -97,7 +97,11 @@ namespace NewsParser.Identity
             var user = _userRepository.GetUserByEmail(username);
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {
-                return Task.FromResult(new ClaimsIdentity(new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] { }));
+                return Task.FromResult(new ClaimsIdentity(
+                    new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[]
+                    {
+                        
+                    }));
             }
             
             // Credentials are invalid, or account doesn't exist
