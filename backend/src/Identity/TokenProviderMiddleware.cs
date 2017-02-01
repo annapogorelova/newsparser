@@ -98,10 +98,7 @@ namespace NewsParser.Identity
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {
                 return Task.FromResult(new ClaimsIdentity(
-                    new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[]
-                    {
-                        
-                    }));
+                    new System.Security.Principal.GenericIdentity(username, "Token"), new Claim[] {}));
             }
             
             // Credentials are invalid, or account doesn't exist

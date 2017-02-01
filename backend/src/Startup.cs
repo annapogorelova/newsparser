@@ -133,16 +133,14 @@ namespace NewsParser
                     {
                         var exception = context.Exception;
                         return Task.FromResult(0);
-                    },
-
+                    }
                 }
             });
 
             var options = new TokenProviderOptions
             {
                 Issuer = "http://localhost:50451",
-                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
-                Expiration = TimeSpan.FromHours(24)
+                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
             };
 
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
