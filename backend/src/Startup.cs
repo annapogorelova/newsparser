@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NewsParser.DAL;
 using NewsParser.DAL.News;
+using NewsParser.DAL.NewsSources;
 using NewsParser.DAL.Users;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
@@ -46,6 +47,7 @@ namespace NewsParser
             
             // Registering dependencies
             services.AddSingleton<INewsRepository, NewsRepository>();
+            services.AddSingleton<INewsSourceRepository, NewsSourceRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
 
             // Database
