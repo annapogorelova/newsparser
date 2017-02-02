@@ -13,6 +13,7 @@ namespace NewsParser.DAL.Models
 
         [Required, MaxLength(100)]
         public string MainUrl { get; set; }
+
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
 
         public List<NewsItem> News { get; set; }

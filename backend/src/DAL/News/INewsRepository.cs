@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.News
@@ -9,5 +10,8 @@ namespace NewsParser.DAL.News
         IQueryable<NewsItem> GetNewsByCategory(int categoryId);
         IQueryable<NewsItem> GetNewsBySource(int sourceId);
         NewsItem GetNewsById(int id);
+        void AddNewsItem(NewsItem newsItem);
+        void DeleteNewsItem(int id);
+        void DeleteNews(DateTime dateTo, DateTime? dateFrom = null);
     }
 }

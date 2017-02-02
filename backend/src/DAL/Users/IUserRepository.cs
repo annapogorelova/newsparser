@@ -8,8 +8,8 @@ namespace NewsParser.DAL.Users
         User GetUserById(int id);
         User GetUserByEmail(string email);
         IQueryable<User> GetUses();
-        User AddUser(User user);
-        User UpdateUser(User user);
+        void AddUser(User user);
+        void UpdateUser(User user);
         void DeleteUser(int id);
     }
 }

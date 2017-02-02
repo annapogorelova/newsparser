@@ -28,18 +28,16 @@ namespace NewsParser.DAL.Users
             return _dbContext.Users;
         }
 
-        public User AddUser(User user)
+        public void AddUser(User user)
         {
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
-            return _dbContext.Entry(user).Entity;
         }
 
-        public User UpdateUser(User updatedUser)
+        public void UpdateUser(User updatedUser)
         {
             _dbContext.Entry(updatedUser).State = EntityState.Modified;
             _dbContext.SaveChanges();
-            return _dbContext.Entry(updatedUser).Entity;
         }
 
         public void DeleteUser(int id)
