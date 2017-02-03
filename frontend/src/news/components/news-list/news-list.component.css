@@ -1,0 +1,7 @@
+div.news-item {
+    margin: 10px 0 10px 0;
+}
+
+a.news-item-link * {
+    max-width: 100%;
+}

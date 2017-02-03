@@ -1,13 +1,14 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8" *ngIf="news.length">
-        <div class="list-group" *ngFor="let newsItem of news">
-            <a target="_blank" href="{{newsItem.linkToSource}}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="news-item list-group" *ngFor="let newsItem of news">
+            <a target="_blank" href="{{newsItem.linkToSource}}"
+               class="news-item-link list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{newsItem.title}}</h5>
                     <small>{{newsItem.dateAdded | date}}</small>
                 </div>
-                <p class="mb-1">{{newsItem.description}}</p>
+                <div class="news-item-content mb-1" [innerHtml]="newsItem.description"></div>
             </a>
         </div>
     </div>
