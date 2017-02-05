@@ -28,7 +28,8 @@
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0",
     "CryptoHelper": "2.1.0",
-    "AutoMapper": "5.2.0"
+    "AutoMapper": "5.2.0",
+    "FluentScheduler": "5.1.3"
   },
 
   "tools": {

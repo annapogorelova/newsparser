@@ -72,6 +72,16 @@ namespace NewsParser.DAL.News
         }
 
         /// <summary>
+        /// Gets news item by link to source
+        /// </summary>
+        /// <param name="linkToSource">Link to source</param>
+        /// <returns>NewsItem object or null if none exists</returns>
+        public NewsItem GetNewsItemByLink(string linkToSource)
+        {
+            return _dbContext.News.FirstOrDefault(n => n.LinkToSource == linkToSource);
+        }
+
+        /// <summary>
         /// Adds news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>

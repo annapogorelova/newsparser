@@ -10,6 +10,7 @@ namespace NewsParser.DAL.News
         IQueryable<NewsItem> GetNewsByCategory(int categoryId);
         IQueryable<NewsItem> GetNewsBySource(int sourceId);
         NewsItem GetNewsById(int id);
+        NewsItem GetNewsItemByLink(string linkToSource);
         void AddNewsItem(NewsItem newsItem);
         void DeleteNewsItem(int id);
         void DeleteNews(DateTime dateTo, DateTime? dateFrom = null);

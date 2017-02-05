@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using FluentScheduler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,9 +17,17 @@ using NewsParser.DAL.NewsSources;
 using NewsParser.DAL.Users;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
+using NewsParser.Parser;
+using NewsParser.Scheduler;
+using static System.Int32;
 
 namespace NewsParser
 {
+    public static class ServiceLocator
+    {
+        public static IServiceProvider Instance { get; set; }
+    }
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -46,9 +55,7 @@ namespace NewsParser
             services.AddApplicationInsightsTelemetry(Configuration);
             
             // Registering dependencies
-            services.AddSingleton<INewsRepository, NewsRepository>();
-            services.AddSingleton<INewsSourceRepository, NewsSourceRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            RegisterDependencies(services);
 
             // Database
             var connection = Configuration.GetConnectionString("AppDbContext");
@@ -98,6 +105,10 @@ namespace NewsParser
 
             app.UseCors("CorsPolicy");
 
+            ServiceLocator.Instance = app.ApplicationServices;
+
+            InitializeJobScheduler();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -146,6 +157,20 @@ namespace NewsParser
             };
 
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
+        }
+
+        private void RegisterDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<INewsRepository, NewsRepository>();
+            services.AddSingleton<INewsSourceRepository, NewsSourceRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IFeedParser, FeedParser>();
+        }
+
+        private void InitializeJobScheduler()
+        {
+            int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateInterval"]);
+            JobManager.Initialize(new JobRegistry(feedUpdateInterval));
         }
     }
 }
