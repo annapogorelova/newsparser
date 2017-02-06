@@ -17,16 +17,15 @@ export class GoTopComponent {
 
     @HostListener("window:scroll", [])
     onWindowScroll = () => {
-        let number = this.document.body.scrollTop;
-        if (number > this.scrollYDistance) {
+        if (this.document.body.scrollTop > this.scrollYDistance) {
             this.displayGoTopButton = true;
         } else if(this.displayGoTopButton){
             this.displayGoTopButton = false;
         }
-    }
+    };
 
     scrollTop = (event: any) =>{
         event.preventDefault();
         window.scrollTo(0, 0);
-    }
+    };
 }

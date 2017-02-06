@@ -1,4 +1,4 @@
-.go-top-button {
+go-top-button .go-top-button {
     position: fixed;
     bottom: 2em;
     right: 2em;
@@ -10,11 +10,11 @@
     display: none;
 }
 
-.go-top-button.visible {
+go-top-button .go-top-button.visible {
     display: block;
 }
 
-.go-top-button:hover, .go-top-button:focus {
+go-top-button .go-top-button:hover, .go-top-button:focus {
     background-color: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     color: white;
