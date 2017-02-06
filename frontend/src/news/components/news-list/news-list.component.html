@@ -1,16 +1,29 @@
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8" *ngIf="news.length">
-        <div class="news-item list-group" *ngFor="let newsItem of news">
-            <a target="_blank" href="{{newsItem.linkToSource}}"
-               class="news-item-link list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{newsItem.title}}</h5>
-                    <small>{{newsItem.dateAdded | date}}</small>
-                </div>
-                <div class="news-item-content mb-1" [innerHtml]="newsItem.description"></div>
-            </a>
+    <div class="col-md-8">
+         <div class="news-container" *ngIf="news.length" infinite-scroll
+             [infiniteScrollDistance]="2"
+             [infiniteScrollThrottle]="300"
+             [infiniteScrollDisabled]="!hasMoreItems"
+             (scrolled)="loadMore()">
+            <div class="news-item list-group" *ngFor="let newsItem of news">
+                <a target="_blank" href="{{newsItem.linkToSource}}"
+                   class="news-item-link list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="mb-1">
+                        <small>{{newsItem.dateAdded | date}}</small>
+                        <span class="badge badge-default badge-pill">{{newsItem.sourceName}}</span>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{newsItem.title}}</h5>
+                    </div>
+                    <div class="news-item-content mb-1" [innerHtml]="newsItem.description"></div>
+                </a>
+            </div>
+             <div *ngIf="loadingInProgress">
+                 Loading...
+             </div>
         </div>
+        <div *ngIf="!news.length">No News</div>
     </div>
     <div class="col-md-2"></div>
 </div>

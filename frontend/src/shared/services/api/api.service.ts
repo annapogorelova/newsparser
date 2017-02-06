@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers, Response, RequestOptions} from '@angular/http';
+import {Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import {AppSettings} from '../../../app/app.settings';
 import {Observable} from 'rxjs/Observable';
 import {LocalStorageService} from 'angular-2-local-storage';
@@ -10,7 +10,7 @@ export class ApiService{
 
     get = (url: string, params: any = null, headers: any = null) => {
         var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({ headers: requestHeaders, search: params });
+        var requestOptions = new RequestOptions({ headers: requestHeaders, search: this.initializeParams(params) });
 
         return this.http.get(this.getAbsoluteUrl(url), requestOptions)
                 .map(this.extractData)
@@ -65,5 +65,15 @@ export class ApiService{
         }
 
         return headers;
+    };
+
+    private initializeParams = (params: any): URLSearchParams => {
+        var searchParams = new URLSearchParams();
+
+        for(var key in params){
+            searchParams.set(key, params[key]);
+        }
+
+        return searchParams;
     };
 }
