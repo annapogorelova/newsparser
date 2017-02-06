@@ -1,0 +1,21 @@
+.go-top-button {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+    padding: 1em;
+    display: none;
+}
+
+.go-top-button.visible {
+    display: block;
+}
+
+.go-top-button:hover, .go-top-button:focus {
+    background-color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    color: white;
+}
