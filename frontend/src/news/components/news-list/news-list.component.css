@@ -1,7 +1,28 @@
 div.news-item {
     margin: 10px 0 10px 0;
+    font-size: small;
+}
+
+.news-item h1, h2 {
+    font-size: 1rem;
+}
+
+.news-item h5 {
+    padding-bottom: 5px;
+}
+
+.news-item p, br {
+    padding-bottom: 0;
 }
 
 a.news-item-link * {
     max-width: 100%;
+}
+
+a.news-item-link img {
+    padding: 5px;
+}
+
+div.news-item-info-container {
+    width: 100%;
 }

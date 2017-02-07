@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 
 @Component({
@@ -9,6 +9,7 @@ export class NewsListComponent  {
     public news: any = [];
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
+
     private params: any = { startIndex: 0, numResults: 10};
 
     constructor(private apiService: ApiService){
@@ -31,5 +32,13 @@ export class NewsListComponent  {
         }
         this.loadingInProgress = true;
         this.apiService.get('news', this.params).then(news => this.handleLoadedNews(news));
+    };
+
+    @HostListener("window:scroll", [])
+    onWindowScroll = () => {
+        // TODO: refactor
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+            this.loadMore();
+        }
     };
 }

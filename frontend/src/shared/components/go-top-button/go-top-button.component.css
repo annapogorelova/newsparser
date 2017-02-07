@@ -1,17 +1,17 @@
 go-top-button .go-top-button {
     position: fixed;
-    bottom: 2em;
-    right: 2em;
+    top: 50%;
+    bottom: 50%;
+    right: 0;
+    width: 35px;
+    height: 65px;
+    line-height: 35px;
     text-decoration: none;
     color: white;
-    background-color: rgba(0, 0, 0, 0.3);
-    font-size: 12px;
-    padding: 1em;
-    display: none;
-}
-
-go-top-button .go-top-button.visible {
-    display: block;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 3px 0 0 3px;
+    cursor: pointer;
 }
 
 go-top-button .go-top-button:hover, .go-top-button:focus {
