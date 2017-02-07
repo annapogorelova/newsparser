@@ -1,5 +1,4 @@
-import {Component, Inject, HostListener, Input, trigger, state, style, transition, animate} from '@angular/core';
-import {DOCUMENT} from '@angular/platform-browser';
+import {Component, HostListener, Input, trigger, state, style, transition, animate} from '@angular/core';
 import {AppSettings} from '../../../app/app.settings';
 
 @Component({
