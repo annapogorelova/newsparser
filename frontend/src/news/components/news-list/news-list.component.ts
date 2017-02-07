@@ -1,28 +1,26 @@
 import {Component, HostListener} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
+import {PagerService} from '../../../shared/services/pager/pager.service';
 
 @Component({
     templateUrl: './news-list.component.html',
     styles: [require('./news-list.component.css').toString()]
 })
 export class NewsListComponent  {
-    public news: any = [];
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
 
-    private params: any = { startIndex: 0, numResults: 10};
-
-    constructor(private apiService: ApiService){
+    constructor(private apiService: ApiService, private pager: PagerService){
         this.loadingInProgress = true;
-        this.apiService.get('news', this.params).then(news => this.handleLoadedNews(news));
+        var requestParams = { startIndex: this.pager.getNextPageStartIndex(), numResults: this.pager.getPageSize() };
+        this.apiService.get('news', requestParams).then(news => this.handleLoadedNews(news));
     }
 
     handleLoadedNews = (data: any) => {
         if(!data.length){
             this.hasMoreItems = false;
         }
-        this.news = this.news.concat(data);
-        this.params.startIndex = this.news.length;
+        this.pager.appendItems(data);
         this.loadingInProgress = false;
     };
 
@@ -31,7 +29,12 @@ export class NewsListComponent  {
             return;
         }
         this.loadingInProgress = true;
-        this.apiService.get('news', this.params).then(news => this.handleLoadedNews(news));
+        var requestParams = { startIndex: this.pager.getNextPageStartIndex(), numResults: this.pager.getPageSize() };
+        this.apiService.get('news', requestParams).then(news => this.handleLoadedNews(news));
+    };
+
+    hasItems = () => {
+        return this.pager.getItems().length;
     };
 
     @HostListener("window:scroll", [])

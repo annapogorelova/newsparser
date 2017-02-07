@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-10">
-         <div class="news-container" *ngIf="news.length" infinite-scroll
+         <div class="news-container" *ngIf="hasItems()" infinite-scroll
              [infiniteScrollDistance]="4"
              [infiniteScrollThrottle]="300"
              [infiniteScrollDisabled]="!hasMoreItems"
              (scrolled)="loadMore()">
-            <div class="news-item list-group" *ngFor="let newsItem of news">
+            <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
                 <a target="_blank" href="{{newsItem.linkToSource}}"
                    class="news-item-link list-group-item list-group-item-action flex-column align-items-start">
                     <div class="news-item-info-container">
@@ -25,7 +25,7 @@
                  Loading...
              </div>
         </div>
-        <div *ngIf="!news.length">No News</div>
+        <div *ngIf="!hasItems()">No News</div>
     </div>
     <go-top-button [scrollYDistance]="250"></go-top-button>
 </div>
