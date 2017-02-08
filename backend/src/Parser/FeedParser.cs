@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.News;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NewsParser.Parser
@@ -21,41 +22,103 @@ namespace NewsParser.Parser
             _newsRepository = newsRepository;
         }
 
+        /// <summary>
+        /// Parses news source's RSS and saves new news into database
+        /// </summary>
+        /// <param name="newsSource">NewsSource object</param>
+        /// <returns>Async Task object</returns>
         public async Task Parse(NewsSource newsSource)
         {
             try
             {
                 HttpClient httpClient = new HttpClient();
-                string result = await httpClient.GetStringAsync(newsSource.MainUrl);
+                string result = await httpClient.GetStringAsync(newsSource.RssUrl);
 
                 XElement xmlItems = XElement.Parse(result);
-                List<XElement> elements = xmlItems.Descendants("item").ToList();
+                List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
 
-                var existingSourceNews = _newsRepository.GetNewsBySource(newsSource.Id);
-
-                foreach (var rssItem in elements)
+                var newsToAdd = ParseSourceNews(xmlElements, newsSource);
+                if (newsToAdd.Any())
                 {
-                    Console.WriteLine(newsSource.Name);
-                    var newsItem = new NewsItem()
-                    {
-                        SourceId = newsSource.Id,
-                        Title = rssItem.Element("title").Value,
-                        Description = rssItem.Element("description").Value,
-                        DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
-                        CategoryId = 10,
-                        LinkToSource = rssItem.Element("link").Value
-                    };
-
-                    if (!existingSourceNews.Any(n => n.LinkToSource == newsItem.LinkToSource))
-                    {
-                        _newsRepository.AddNewsItem(newsItem);
-                    }
+                    _newsRepository.AddNewsItems(newsToAdd);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
-            }   
+                throw new FeedParsingException("Failed to parse RSS feed", e);
+            }
+        }
+
+        /// <summary>
+        /// Parses the incoming news source RSS feed XML
+        /// </summary>
+        /// <param name="xmlElements">The list of XML elements of RSS feed</param>
+        /// <param name="newsSource">NewsSource object</param>
+        /// <returns>List of NewsItem</returns>
+        private List<NewsItem> ParseSourceNews(List<XElement> xmlElements, NewsSource newsSource)
+        {
+            var existingSourceNews = _newsRepository.GetNewsBySource(newsSource.Id);
+            var sourceNews = (from rssItem in xmlElements
+                              let rssItemDescription = rssItem.Element("description").Value
+                              select new NewsItem
+                              {
+                                  SourceId = newsSource.Id,
+                                  Title = rssItem.Element("title").Value,
+                                  Description = CleanHtmlString(rssItemDescription),
+                                  DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
+                                  LinkToSource = rssItem.Element("link").Value,
+                                  ImageUrl = ExtractFirstImage(rssItemDescription)
+                              }
+                    into newsItem
+                              where !existingSourceNews.Any(n => n.LinkToSource == newsItem.LinkToSource)
+                              select newsItem).ToList();
+
+            return sourceNews;
+        }
+
+        /// <summary>
+        /// Performs the cleaning action for html string (removing some tags, etc.)
+        /// </summary>
+        /// <param name="html">Html string</param>
+        /// <returns>Cleaned html string</returns>
+        private string CleanHtmlString(string html)
+        {
+            string cleanHtmlString = RemoveLineBreakes(html);
+            cleanHtmlString = RemoveImages(cleanHtmlString);
+            return cleanHtmlString;
+        }
+
+        /// <summary>
+        /// Removes line breaks in html string
+        /// </summary>
+        /// <param name="html">Html string</param>
+        /// <returns>Cleaned html string</returns>
+        private string RemoveLineBreakes(string html)
+        {
+            var regex = new Regex(@"([\b\s]*<[\b\s]*[b][r][\s]*/?[\b\s]*>)", RegexOptions.IgnoreCase);
+            return regex.Replace(html, string.Empty);
+        }
+
+        /// <summary>
+        /// Removes img tags from html string
+        /// </summary>
+        /// <param name="html">Html string</param>
+        /// <returns>Cleaned html string</returns>
+        private string RemoveImages(string html)
+        {
+            var regex = new Regex(@"<img.+?/?>", RegexOptions.IgnoreCase);
+            return regex.Replace(html, string.Empty);
+        }
+
+        /// <summary>
+        /// Extracts the first img tag's src attribute from html string
+        /// </summary>
+        /// <param name="html">Html string</param>
+        /// <returns>First img tag's src attribute or null if no img tags found</returns>
+        private string ExtractFirstImage(string html)
+        {
+            var match = Regex.Match(html, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase);
+            return match.Success ? match.Groups[1].Value : null;
         }
     }
 }

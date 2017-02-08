@@ -12,7 +12,7 @@ namespace NewsParser.API.Models
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public string LinkToSource { get; set; }
-        public string CategoryName { get; set; }
         public string SourceName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

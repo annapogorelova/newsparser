@@ -1,4 +1,5 @@
-﻿using FluentScheduler;
+﻿using System;
+using FluentScheduler;
 using Microsoft.Extensions.DependencyInjection;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.NewsSources;
@@ -38,7 +39,14 @@ namespace NewsParser.Scheduler
 
         public async void ExecuteAsync(NewsSource newsSource)
         {
-            _feedParser.Parse(newsSource).Wait();
+            try
+            {
+                _feedParser.Parse(newsSource).Wait();
+            }
+            catch (FeedParsingException e)
+            {
+                throw new JobExecutionException($"Failed to execute feed update for {newsSource.Name}", e);
+            }
         }
     }
 }
