@@ -21,9 +21,9 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet]
-        public JsonResult Get(int? categoryId = null, int? sourceId = null, int startIndex = 0, int numResults = 5)
+        public JsonResult Get(int? sourceId = null, int startIndex = 0, int numResults = 5)
         {
-            var news = _newsRepository.GetNews(startIndex, numResults, categoryId, sourceId).ToList();
+            var news = _newsRepository.GetNews(startIndex, numResults, sourceId).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);
             return new JsonResult(newsModels);
         }

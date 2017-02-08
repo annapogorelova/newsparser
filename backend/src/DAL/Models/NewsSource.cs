@@ -12,7 +12,7 @@ namespace NewsParser.DAL.Models
         public string Name { get; set; }
 
         [Required, MaxLength(100)]
-        public string MainUrl { get; set; }
+        public string RssUrl { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
 

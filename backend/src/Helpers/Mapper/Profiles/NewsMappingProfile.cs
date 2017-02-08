@@ -12,7 +12,6 @@ namespace NewsParser.Helpers.Mapper.Profiles
         public NewsMappingProfile()
         {
             CreateMap<NewsItem, NewsItemApiModel>()
-                .ForMember(d => d.CategoryName, opt => opt.MapFrom(s => s.Category.Name))
                 .ForMember(d => d.SourceName, opt => opt.MapFrom(s => s.Source.Name));
         }
     }

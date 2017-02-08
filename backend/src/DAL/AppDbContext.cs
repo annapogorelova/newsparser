@@ -13,7 +13,6 @@ namespace NewsParser.DAL
         public DbSet<User> Users { get; set; }
         public DbSet<NewsItem> News { get; set; }
         public DbSet<NewsSource> NewsSources { get; set; }
-        public DbSet<NewsCategory> NewsCategories { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,10 +20,6 @@ namespace NewsParser.DAL
             modelBuilder.Entity<User>().ToTable("Users");
 
             modelBuilder.Entity<NewsItem>().ToTable("News");
-            modelBuilder.Entity<NewsItem>()
-                .HasOne(n => n.Category)
-                .WithMany(c => c.NewsItems)
-                .HasForeignKey(n => n.CategoryId);
             modelBuilder.Entity<NewsItem>()
                 .HasOne(n => n.Source)
                 .WithMany(s => s.News)
@@ -43,7 +38,6 @@ namespace NewsParser.DAL
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("NewsSources");
-            modelBuilder.Entity<NewsCategory>().ToTable("NewsCategories");
         }
     }
 }

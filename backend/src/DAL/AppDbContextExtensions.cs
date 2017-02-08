@@ -10,11 +10,6 @@ namespace NewsParser.DAL
         public static void EnsureSeedData(this AppDbContext dbContext)
         {
             // Inserting data
-            if (!dbContext.NewsCategories.Any())
-            {
-                AddNewsCategories(dbContext);
-            }
-
             if (!dbContext.NewsTags.Any())
             {
                 AddNewsTags(dbContext);
@@ -39,41 +34,6 @@ namespace NewsParser.DAL
             {
                 dbContext.SaveChanges();
             }
-        }
-
-        private static void AddNewsCategories(AppDbContext dbContext)
-        {
-            dbContext.NewsCategories.AddRange(new List<NewsCategory>()
-            {
-                new NewsCategory()
-                {
-                    Name = "Politics"
-                },
-                new NewsCategory()
-                {
-                    Name = "Sports"
-                },
-                new NewsCategory()
-                {
-                    Name = "Technology"
-                },
-                new NewsCategory()
-                {
-                    Name = "Science"
-                },
-                new NewsCategory()
-                {
-                    Name = "Art"
-                },
-                new NewsCategory()
-                {
-                    Name = "Crime"
-                },
-                new NewsCategory()
-                {
-                    Name = "Gossip"
-                }
-            });
         }
 
         private static void AddNewsTags(AppDbContext dbContext)
@@ -105,64 +65,46 @@ namespace NewsParser.DAL
             {
                 new NewsSource()
                 {
-                    DateAdded = DateTime.UtcNow,
-                    MainUrl = "https://zik.ua",
-                    Name = "ZIK"
+                    RssUrl = "https://me.ua",
+                    Name = "Me"
                 },
                 new NewsSource()
                 {
-                    DateAdded = DateTime.UtcNow,
-                    MainUrl = "https://bbc.com",
-                    Name = "BBC"
+                    RssUrl = "https://habrahabr.ru/rss/all/",
+                    Name = "Habrahabr"
                 },
                 new NewsSource()
                 {
-                    DateAdded = DateTime.UtcNow,
-                    MainUrl = "https://cnn.com",
-                    Name = "CNN"
+                    RssUrl = "https://geektimes.ru/rss/all/",
+                    Name = "Geektimes"
+                },
+                new NewsSource()
+                {
+                    RssUrl = "https://css-tricks.com/feed/",
+                    Name = "CSS Tricks"
+                },
+                new NewsSource()
+                {
+                    RssUrl = "http://arzamas.academy/feed_v1.rss",
+                    Name = "Arzamas"
                 }
             });
         }
 
         private static void AddNews(AppDbContext dbContext)
         {
-            var sources = dbContext.NewsSources.Local;
-            var categories = dbContext.NewsCategories.Local;
+            var sources = dbContext.NewsSources.Local.Count != 0 ? 
+                dbContext.NewsSources.Local.ToList() : dbContext.NewsSources.ToList();
 
             dbContext.News.AddRange(new List<NewsItem> ()
             {
                 new NewsItem()
                 {
-                    Title = "IRON MAN in Ukraine",
-                    Description = "Annual Iron Man Triathlon contest is going to be held in Lviv this year",
+                    Title = "Welcome!",
+                    Description = "Welcome to the News Parser",
                     DateAdded = DateTime.UtcNow,
-                    LinkToSource = "https://zik.ua/news/2383289",
-                    SourceId = sources.FirstOrDefault(s => s.Name == "ZIK") != null ? 
-                        sources.First(s => s.Name == "ZIK").Id : sources.First().Id,
-                    CategoryId = categories.FirstOrDefault(c => c.Name == "Sports") != null ?
-                        categories.First(c => c.Name == "Sports").Id : categories.First().Id
-                },
-                new NewsItem()
-                {
-                    Title = "Woman got killed by her husband",
-                    Description = "Woman, 37 years old got killed this thursday by her new husband Bill",
-                    DateAdded = DateTime.UtcNow,
-                    LinkToSource = "https://cnn.com/news/380nf00f",
-                    SourceId = sources.FirstOrDefault(s => s.Name == "CNN") != null ?
-                        sources.First(s => s.Name == "CNN").Id : sources.First().Id,
-                    CategoryId = categories.FirstOrDefault(c => c.Name == "Crime") != null ?
-                        categories.First(c => c.Name == "Crime").Id : categories.First().Id
-                },
-                new NewsItem()
-                {
-                    Title = "Are trees what we think they are?",
-                    Description = "Trees occured to have a primitive form of intellect",
-                    DateAdded = DateTime.UtcNow,
-                    LinkToSource = "https://bbc.com/news/380nf00f",
-                    SourceId = sources.FirstOrDefault(s => s.Name == "BBC") != null ?
-                        sources.First(s => s.Name == "BBC").Id : sources.First().Id,
-                    CategoryId = categories.FirstOrDefault(c => c.Name == "Science") != null ?
-                        categories.First(c => c.Name == "Science").Id : categories.First().Id
+                    LinkToSource = "https://localhost:50451/news",
+                    SourceId = sources.First().Id
                 }
             });
         }

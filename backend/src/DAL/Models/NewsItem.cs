@@ -14,12 +14,11 @@ namespace NewsParser.DAL.Models
         [Required]
         public string Description { get; set; }
 
+        public string ImageUrl { get; set; }
+
         [Required]
         public string LinkToSource { get; set; }
         
-        public int CategoryId { get; set; }
-        public NewsCategory Category { get; set; }
-
         public int SourceId { get; set; }
         public NewsSource Source { get; set; }
 

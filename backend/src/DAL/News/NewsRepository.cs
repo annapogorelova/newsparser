@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.Models;
@@ -21,14 +22,9 @@ namespace NewsParser.DAL.News
         /// Gets all news from database
         /// </summary>
         /// <returns>IQueryable of NewsItem</returns>
-        public IQueryable<NewsItem> GetNews(int startIndex = 0, int numResults = 5, int? categoryId = null, int? sourceId = null)
+        public IQueryable<NewsItem> GetNews(int startIndex = 0, int numResults = 5, int? sourceId = null)
         {
-            IQueryable<NewsItem> newsBaseQuery = _dbContext.News.Include(n => n.Category).Include(n => n.Source);
-
-            if (categoryId != null)
-            {
-                newsBaseQuery = newsBaseQuery.Where(n => n.CategoryId == categoryId.Value);
-            }
+            IQueryable<NewsItem> newsBaseQuery = _dbContext.News.Include(n => n.Source);
 
             if (sourceId != null)
             {
@@ -39,16 +35,6 @@ namespace NewsParser.DAL.News
                 .OrderByDescending(n => n.DateAdded)
                 .Skip(startIndex)
                 .Take(numResults);
-        }
-
-        /// <summary>
-        /// Gets news by category
-        /// </summary>
-        /// <param name="categoryId">Category id</param>
-        /// <returns>IQueryable of NewsItem</returns>
-        public IQueryable<NewsItem> GetNewsByCategory(int categoryId)
-        {
-            return _dbContext.News.Where(n => n.CategoryId == categoryId);
         }
 
         /// <summary>
@@ -82,12 +68,22 @@ namespace NewsParser.DAL.News
         }
 
         /// <summary>
-        /// Adds news item
+        /// Inserts news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>
         public void AddNewsItem(NewsItem newsItem)
         {
             _dbContext.News.Add(newsItem);
+            _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Inserts a range of news items
+        /// </summary>
+        /// <param name="newsItems">Collection of NewsItem</param>
+        public void AddNewsItems(IEnumerable<NewsItem> newsItems)
+        {
+            _dbContext.News.AddRange(newsItems);
             _dbContext.SaveChanges();
         }
 

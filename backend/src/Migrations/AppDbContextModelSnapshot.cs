@@ -16,30 +16,17 @@ namespace NewsParser.Migrations
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("NewsParser.DAL.Models.NewsCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsCategories");
-                });
-
             modelBuilder.Entity("NewsParser.DAL.Models.NewsItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<string>("Description")
                         .IsRequired();
+
+                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("LinkToSource")
                         .IsRequired();
@@ -50,8 +37,6 @@ namespace NewsParser.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("SourceId");
 
@@ -65,13 +50,13 @@ namespace NewsParser.Migrations
 
                     b.Property<DateTime>("DateAdded");
 
-                    b.Property<string>("MainUrl")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30);
+
+                    b.Property<string>("RssUrl")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -142,11 +127,6 @@ namespace NewsParser.Migrations
 
             modelBuilder.Entity("NewsParser.DAL.Models.NewsItem", b =>
                 {
-                    b.HasOne("NewsParser.DAL.Models.NewsCategory", "Category")
-                        .WithMany("NewsItems")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("NewsParser.DAL.Models.NewsSource", "Source")
                         .WithMany("News")
                         .HasForeignKey("SourceId")

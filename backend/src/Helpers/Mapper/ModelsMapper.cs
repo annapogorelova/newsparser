@@ -21,6 +21,7 @@ namespace NewsParser.Helpers.Mapper
         public static Action<IMapperConfigurationExpression> ConfigAction = cfg =>
         {
             cfg.AddProfile<NewsMappingProfile>();
+            cfg.AddProfile<NewsSourceMappingProfile>();
             cfg.AddProfile<UserMappingProfile>();
         };
     }

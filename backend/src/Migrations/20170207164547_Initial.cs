@@ -10,27 +10,14 @@ namespace NewsParser.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "NewsCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NewsCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NewsSources",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateAdded = table.Column<DateTime>(nullable: false),
-                    MainUrl = table.Column<string>(maxLength: 100, nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false)
+                    Name = table.Column<string>(maxLength: 30, nullable: false),
+                    RssUrl = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,9 +61,9 @@ namespace NewsParser.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CategoryId = table.Column<int>(nullable: false),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: true),
                     LinkToSource = table.Column<string>(nullable: false),
                     SourceId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false)
@@ -84,12 +71,6 @@ namespace NewsParser.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_News", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_News_NewsCategories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "NewsCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_News_NewsSources_SourceId",
                         column: x => x.SourceId,
@@ -125,11 +106,6 @@ namespace NewsParser.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_News_CategoryId",
-                table: "News",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_News_SourceId",
                 table: "News",
                 column: "SourceId");
@@ -158,9 +134,6 @@ namespace NewsParser.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tags");
-
-            migrationBuilder.DropTable(
-                name: "NewsCategories");
 
             migrationBuilder.DropTable(
                 name: "NewsSources");
