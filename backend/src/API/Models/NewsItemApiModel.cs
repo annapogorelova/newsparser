@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NewsParser.API.Models
 {
@@ -14,5 +15,6 @@ namespace NewsParser.API.Models
         public string LinkToSource { get; set; }
         public string SourceName { get; set; }
         public string ImageUrl { get; set; }
+        public List<string> Tags { get; set; } 
     }
 }

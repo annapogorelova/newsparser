@@ -24,7 +24,8 @@ namespace NewsParser.DAL.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNews(int startIndex = 0, int numResults = 5, int? sourceId = null)
         {
-            IQueryable<NewsItem> newsBaseQuery = _dbContext.News.Include(n => n.Source);
+            IQueryable<NewsItem> newsBaseQuery =
+                _dbContext.News.Include(n => n.Source).Include(n => n.NewsItemTags).ThenInclude(t => t.Tag);
 
             if (sourceId != null)
             {
@@ -45,6 +46,28 @@ namespace NewsParser.DAL.News
         public IQueryable<NewsItem> GetNewsBySource(int sourceId)
         {
             return _dbContext.News.Where(n => n.SourceId == sourceId);
+        }
+
+        /// <summary>
+        /// Get news that have tag with the name specified
+        /// </summary>
+        /// <param name="tagName">Tag name</param>
+        /// <returns>IQueryable of NewsItem</returns>
+        public IQueryable<NewsItem> GetNewsByTagName(string tagName)
+        {
+            return _dbContext.News.Include(n => n.NewsItemTags)
+                .Where(n => n.NewsItemTags.Any(t => t.Tag.Name == tagName));
+        }
+
+        /// <summary>
+        /// Get news that have tag with the id specified
+        /// </summary>
+        /// <param name="tagId">Tag id</param>
+        /// <returns>IQueryable of NewsItem</returns>
+        public IQueryable<NewsItem> GetNewsByTagId(int tagId)
+        {
+            return _dbContext.News.Include(n => n.NewsItemTags)
+                .Where(n => n.NewsItemTags.Any(t => t.Tag.Id == tagId));
         }
 
         /// <summary>
@@ -71,10 +94,11 @@ namespace NewsParser.DAL.News
         /// Inserts news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>
-        public void AddNewsItem(NewsItem newsItem)
+        public NewsItem AddNewsItem(NewsItem newsItem)
         {
             _dbContext.News.Add(newsItem);
             _dbContext.SaveChanges();
+            return _dbContext.Entry(newsItem).Entity;
         }
 
         /// <summary>
@@ -90,7 +114,7 @@ namespace NewsParser.DAL.News
         /// <summary>
         /// Deletes news item
         /// </summary>
-        /// <param name="newsItem">NewsItem object</param>
+        /// <param name="id">NewItem id</param>
         public void DeleteNewsItem(int id)
         {
             var newsItemToDelete = _dbContext.News.Find(id);
@@ -115,6 +139,20 @@ namespace NewsParser.DAL.News
             if (newsToDelete.Any())
             {
                 _dbContext.News.RemoveRange(newsToDelete);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Inserts a record that binds a news item to tag
+        /// </summary>
+        /// <param name="newsItem">NewsItem object</param>
+        /// <param name="tag">Tag object</param>
+        public void AddTagToNewsItem(NewsItem newsItem, NewsTag tag)
+        {
+            if (!_dbContext.NewsTagsNews.Any(nt => nt.NewsItemId == newsItem.Id && nt.TagId == tag.Id))
+            {
+                _dbContext.NewsTagsNews.Add(new NewsTagsNews {NewsItemId = newsItem.Id, TagId = tag.Id});
                 _dbContext.SaveChanges();
             }
         }

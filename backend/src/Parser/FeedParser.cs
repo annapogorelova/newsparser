@@ -7,6 +7,7 @@ using NewsParser.DAL.News;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using NewsParser.DAL.NewsTags;
 
 namespace NewsParser.Parser
 {
@@ -16,10 +17,12 @@ namespace NewsParser.Parser
     public class FeedParser : IFeedParser
     {
         private readonly INewsRepository _newsRepository;
+        private readonly INewsTagRepository _newsTagRepository;
 
-        public FeedParser(INewsRepository newsRepository)
+        public FeedParser(INewsRepository newsRepository, INewsTagRepository newsTagRepository)
         {
             _newsRepository = newsRepository;
+            _newsTagRepository = newsTagRepository;
         }
 
         /// <summary>
@@ -36,12 +39,7 @@ namespace NewsParser.Parser
 
                 XElement xmlItems = XElement.Parse(result);
                 List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
-
-                var newsToAdd = ParseSourceNews(xmlElements, newsSource);
-                if (newsToAdd.Any())
-                {
-                    _newsRepository.AddNewsItems(newsToAdd);
-                }
+                ParseSourceRssFeed(xmlElements, newsSource);
             }
             catch (Exception e)
             {
@@ -55,25 +53,30 @@ namespace NewsParser.Parser
         /// <param name="xmlElements">The list of XML elements of RSS feed</param>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>List of NewsItem</returns>
-        private List<NewsItem> ParseSourceNews(List<XElement> xmlElements, NewsSource newsSource)
+        private void ParseSourceRssFeed(List<XElement> xmlElements, NewsSource newsSource)
         {
             var existingSourceNews = _newsRepository.GetNewsBySource(newsSource.Id);
-            var sourceNews = (from rssItem in xmlElements
-                              let rssItemDescription = rssItem.Element("description").Value
-                              select new NewsItem
-                              {
-                                  SourceId = newsSource.Id,
-                                  Title = rssItem.Element("title").Value,
-                                  Description = CleanHtmlString(rssItemDescription),
-                                  DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
-                                  LinkToSource = rssItem.Element("link").Value,
-                                  ImageUrl = ExtractFirstImage(rssItemDescription)
-                              }
-                    into newsItem
-                              where !existingSourceNews.Any(n => n.LinkToSource == newsItem.LinkToSource)
-                              select newsItem).ToList();
+            foreach (var rssItem in xmlElements)
+            {
+                var rssItemDescription = rssItem.Element("description").Value;
+                var categories = ExtractRssItemCategories(rssItem);
 
-            return sourceNews;
+                var newsItem = new NewsItem
+                {
+                    SourceId = newsSource.Id,
+                    Title = rssItem.Element("title").Value,
+                    Description = CleanHtmlString(rssItemDescription),
+                    DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
+                    LinkToSource = rssItem.Element("link").Value,
+                    ImageUrl = ExtractFirstImage(rssItemDescription)
+                };
+
+                if (!existingSourceNews.Any(n => n.LinkToSource == newsItem.LinkToSource))
+                {
+                    var addedNewsItem = _newsRepository.AddNewsItem(newsItem);
+                    AddTagsToNewsItem(categories, addedNewsItem);
+                }
+            }
         }
 
         /// <summary>
@@ -119,6 +122,28 @@ namespace NewsParser.Parser
         {
             var match = Regex.Match(html, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase);
             return match.Success ? match.Groups[1].Value : null;
+        }
+
+        /// <summary>
+        /// Extracts the 'category' xml nodes from RSS feed item
+        /// </summary>
+        /// <param name="rssItem">XElement object</param>
+        /// <returns>List of categorie's names (strings)</returns>
+        private List<string> ExtractRssItemCategories(XElement rssItem)
+        {
+            var categoryElements = rssItem.Elements("category").ToList();
+            return categoryElements.Select(e => e.Value.ToLower()).ToList();
+        }
+
+        private void AddTagsToNewsItem(List<string> categories, NewsItem newsItem)
+        {
+            foreach (var category in categories)
+            {
+                var newsTag = _newsTagRepository.GetNewsTagByName(category) ??
+                                      _newsTagRepository.AddNewsTag(new NewsTag {Name = category});
+
+                _newsRepository.AddTagToNewsItem(newsItem, newsTag);
+            }
         }
     }
 }
