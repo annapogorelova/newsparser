@@ -1,31 +1,56 @@
-<div class="row">
+<div class="row" *ngIf="hasItems()">
     <div class="col-md-2"></div>
     <div class="col-md-10">
-         <div class="news-container" *ngIf="hasItems()" infinite-scroll
+        <div class="news-container" infinite-scroll
              [infiniteScrollDistance]="4"
              [infiniteScrollThrottle]="300"
              [infiniteScrollDisabled]="!hasMoreItems"
              (scrolled)="loadMore()">
             <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
-                <a target="_blank" href="{{newsItem.linkToSource}}"
-                   class="news-item-link list-group-item list-group-item-action flex-column align-items-start">
+                <div class="news-item-content list-group-item list-group-item-action flex-column align-items-start">
                     <div class="news-item-info-container">
                         <div class="mb-1 pull-right">
                             <small>{{newsItem.dateAdded | date}}</small>
-                            <span class="badge badge-default badge-pill">{{newsItem.sourceName}}</span>
+                            <h4 class="news-item-source">
+                                <span class="badge badge-primary badge-pill">{{newsItem.sourceName}}</span>
+                            </h4>
                         </div>
                     </div>
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{newsItem.title}}</h5>
+                    <div class="news-item-header">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">
+                                <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
+                                    {{newsItem.title}}
+                                </a>
+                            </h5>
+                        </div>
                     </div>
-                    <div class="news-item-content mb-1" [innerHtml]="newsItem.description"></div>
-                </a>
+                    <div class="news-image-container" *ngIf="newsItem.imageUrl"
+                         [ngStyle]="{'background-image': 'url(' + newsItem.imageUrl + ')'}">
+                    </div>
+                    <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
+                    <div class="news-item-footer">
+                        <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
+                            <h6>
+                                <span class="badge badge-default badge-pill">
+                                    {{tag}}
+                                </span>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
             </div>
-             <div *ngIf="loadingInProgress">
-                 Loading...
-             </div>
+            <div *ngIf="loadingInProgress">
+                Loading...
+            </div>
         </div>
-        <div *ngIf="!hasItems()">No News</div>
     </div>
     <go-top-button [scrollYDistance]="250"></go-top-button>
+</div>
+<div class="row" *ngIf="!hasItems()">
+    <div class="col-md-12">
+        <div *ngIf="!hasItems()" class="no-news-text">
+            <h5>No News</h5>
+        </div>
+    </div>
 </div>
