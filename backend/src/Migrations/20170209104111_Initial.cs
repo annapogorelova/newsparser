@@ -25,16 +25,16 @@ namespace NewsParser.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "NewsTags",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 30, nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_NewsTags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,9 +98,9 @@ namespace NewsParser.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NewsTagsNews_Tags_TagId",
+                        name: "FK_NewsTagsNews_NewsTags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tags",
+                        principalTable: "NewsTags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -133,7 +133,7 @@ namespace NewsParser.Migrations
                 name: "News");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "NewsTags");
 
             migrationBuilder.DropTable(
                 name: "NewsSources");

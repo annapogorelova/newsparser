@@ -70,11 +70,11 @@ namespace NewsParser.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("NewsTags");
                 });
 
             modelBuilder.Entity("NewsParser.DAL.Models.NewsTagsNews", b =>
@@ -136,12 +136,12 @@ namespace NewsParser.Migrations
             modelBuilder.Entity("NewsParser.DAL.Models.NewsTagsNews", b =>
                 {
                     b.HasOne("NewsParser.DAL.Models.NewsItem", "NewsItem")
-                        .WithMany("Tags")
+                        .WithMany("NewsItemTags")
                         .HasForeignKey("NewsItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NewsParser.DAL.Models.NewsTag", "Tag")
-                        .WithMany("NewsTags")
+                        .WithMany("TagNewsItems")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -7,9 +7,9 @@ namespace NewsParser.DAL.Models
     {
         public int Id { get; set; }
 
-        [Required, MaxLength(30)]
+        [Required, MaxLength(100)]
         public string Name { get; set; }
 
-        public List<NewsTagsNews> NewsTags { get; set; }
+        public List<NewsTagsNews> TagNewsItems { get; set; }
     }
 }

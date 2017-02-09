@@ -22,7 +22,7 @@ namespace NewsParser.DAL.Models
         public int SourceId { get; set; }
         public NewsSource Source { get; set; }
 
-        public List<NewsTagsNews> Tags { get; set; }
+        public List<NewsTagsNews> NewsItemTags { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
     }

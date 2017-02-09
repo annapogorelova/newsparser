@@ -9,12 +9,6 @@ namespace NewsParser.DAL
     {
         public static void EnsureSeedData(this AppDbContext dbContext)
         {
-            // Inserting data
-            if (!dbContext.NewsTags.Any())
-            {
-                AddNewsTags(dbContext);
-            }
-
             if (!dbContext.NewsSources.Any())
             {
                 AddNewsSources(dbContext);
@@ -36,54 +30,26 @@ namespace NewsParser.DAL
             }
         }
 
-        private static void AddNewsTags(AppDbContext dbContext)
-        {
-            dbContext.NewsTags.AddRange(new List<NewsTag>()
-            {
-                new NewsTag()
-                {
-                    Name = "lviv"
-                },
-                new NewsTag()
-                {
-                    Name = "celebration"
-                },
-                new NewsTag()
-                {
-                    Name = "computer science"
-                },
-                new NewsTag()
-                {
-                    Name = "event"
-                }
-            });
-        }
-
         private static void AddNewsSources(AppDbContext dbContext)
         {
             dbContext.NewsSources.AddRange(new List<NewsSource>()
             {
-                new NewsSource()
-                {
-                    RssUrl = "https://me.ua",
-                    Name = "Me"
-                },
-                new NewsSource()
+                new NewsSource
                 {
                     RssUrl = "https://habrahabr.ru/rss/all/",
                     Name = "Habrahabr"
                 },
-                new NewsSource()
+                new NewsSource
                 {
                     RssUrl = "https://geektimes.ru/rss/all/",
                     Name = "Geektimes"
                 },
-                new NewsSource()
+                new NewsSource
                 {
                     RssUrl = "https://css-tricks.com/feed/",
                     Name = "CSS Tricks"
                 },
-                new NewsSource()
+                new NewsSource
                 {
                     RssUrl = "http://arzamas.academy/feed_v1.rss",
                     Name = "Arzamas"
@@ -98,7 +64,7 @@ namespace NewsParser.DAL
 
             dbContext.News.AddRange(new List<NewsItem> ()
             {
-                new NewsItem()
+                new NewsItem
                 {
                     Title = "Welcome!",
                     Description = "Welcome to the News Parser",
@@ -111,7 +77,7 @@ namespace NewsParser.DAL
 
         private static void AddUsers(AppDbContext dbContext)
         {
-            dbContext.Add(new User()
+            dbContext.Add(new User
             {
                 DateAdded = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow,

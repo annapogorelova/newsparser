@@ -14,6 +14,7 @@ namespace NewsParser.DAL
         public DbSet<NewsItem> News { get; set; }
         public DbSet<NewsSource> NewsSources { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
+        public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,16 +26,16 @@ namespace NewsParser.DAL
                 .WithMany(s => s.News)
                 .HasForeignKey(n => n.SourceId);
 
-            modelBuilder.Entity<NewsTag>().ToTable("Tags");
+            modelBuilder.Entity<NewsTag>().ToTable("NewsTags");
 
             modelBuilder.Entity<NewsTagsNews>().ToTable("NewsTagsNews");
             modelBuilder.Entity<NewsTagsNews>()
                 .HasOne(nt => nt.Tag)
-                .WithMany(t => t.NewsTags)
+                .WithMany(t => t.TagNewsItems)
                 .HasForeignKey(nt => nt.TagId);
             modelBuilder.Entity<NewsTagsNews>()
                 .HasOne(nt => nt.NewsItem)
-                .WithMany(t => t.Tags)
+                .WithMany(t => t.NewsItemTags)
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("NewsSources");
