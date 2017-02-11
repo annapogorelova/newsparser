@@ -9,10 +9,11 @@ import {PagerService} from '../../../shared/services/pager/pager.service';
 export class NewsListComponent  {
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
+    public selectedSourceId: number = null;
 
     constructor(private apiService: ApiService, private pager: PagerService){
         this.loadingInProgress = true;
-        var requestParams = { startIndex: this.pager.getNextPageStartIndex(), numResults: this.pager.getPageSize() };
+        var requestParams = { pageIndex: this.pager.getNextPageStartIndex(), pageSize: this.pager.getPageSize() };
         this.apiService.get('news', requestParams).then(news => this.handleLoadedNews(news));
     }
 
@@ -24,13 +25,31 @@ export class NewsListComponent  {
         this.loadingInProgress = false;
     };
 
+    getRequestParams = () => {
+        return {
+            pageIndex: this.pager.getNextPageStartIndex(),
+            pageSize: this.pager.getPageSize(),
+            sourceId: this.selectedSourceId
+        };
+    };
+
+    reload = () => {
+        this.pager.reset();
+        this.loadingInProgress = true;
+        this.apiService.get('news', this.getRequestParams()).then(news => this.handleLoadedNews(news));
+    };
+
     loadMore = () => {
         if(this.loadingInProgress){
             return;
         }
         this.loadingInProgress = true;
-        var requestParams = { startIndex: this.pager.getNextPageStartIndex(), numResults: this.pager.getPageSize() };
-        this.apiService.get('news', requestParams).then(news => this.handleLoadedNews(news));
+        this.apiService.get('news', this.getRequestParams()).then(news => this.handleLoadedNews(news));
+    };
+
+    selectSource = (sourceId: number) => {
+        this.selectedSourceId = sourceId;
+        this.reload();
     };
 
     hasItems = () => {
@@ -39,8 +58,8 @@ export class NewsListComponent  {
 
     @HostListener("window:scroll", [])
     onWindowScroll = () => {
-        // TODO: refactor
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+        var userScrollPosition = window.innerHeight + window.scrollY;
+        if (userScrollPosition >= document.body.offsetHeight && this.hasMoreItems){
             this.loadMore();
         }
     };

@@ -75,3 +75,7 @@ div.news-item-tag-container {
 .news-item-link:hover {
     color: #636c72;
 }
+
+.news-item-source span {
+    cursor: pointer;
+}
