@@ -11,8 +11,8 @@
                     <div class="news-item-info-container">
                         <div class="mb-1 pull-right">
                             <small>{{newsItem.dateAdded | date}}</small>
-                            <h4 class="news-item-source" (click)="selectSource(newsItem.sourceId)">
-                                <span class="badge badge-primary badge-pill">{{newsItem.sourceName}}</span>
+                            <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
+                                <span class="badge badge-primary badge-pill">{{newsItem.source.name}}</span>
                             </h4>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                         <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
                             <h6>
                                 <span class="badge badge-default badge-pill">
-                                    {{tag}}
+                                    {{tag.name}}
                                 </span>
                             </h6>
                         </div>

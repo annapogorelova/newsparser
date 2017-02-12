@@ -9,7 +9,7 @@ import {PagerService} from '../../../shared/services/pager/pager.service';
 export class NewsListComponent  {
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
-    public selectedSourceId: number = null;
+    public selectedSource: any = null;
 
     constructor(private apiService: ApiService, private pager: PagerService){
         this.loadingInProgress = true;
@@ -29,7 +29,7 @@ export class NewsListComponent  {
         return {
             pageIndex: this.pager.getNextPageStartIndex(),
             pageSize: this.pager.getPageSize(),
-            sourceId: this.selectedSourceId
+            sourceId: this.selectedSource != null ? this.selectedSource.id : null
         };
     };
 
@@ -47,8 +47,8 @@ export class NewsListComponent  {
         this.apiService.get('news', this.getRequestParams()).then(news => this.handleLoadedNews(news));
     };
 
-    selectSource = (sourceId: number) => {
-        this.selectedSourceId = sourceId;
+    selectSource = (source: number) => {
+        this.selectedSource = source;
         this.reload();
     };
 
