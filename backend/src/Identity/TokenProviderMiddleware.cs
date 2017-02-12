@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using NewsParser.DAL.Users;
+using NewsParser.BL.Users;
+using NewsParser.DAL.Repositories.Users;
 using Newtonsoft.Json;
 
 namespace NewsParser.Identity
@@ -16,16 +17,16 @@ namespace NewsParser.Identity
     {
         private readonly RequestDelegate _next;
         private readonly TokenProviderOptions _options;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserBusinessService _userBusinessService;
 
         public TokenProviderMiddleware(
             RequestDelegate next,
             IOptions<TokenProviderOptions> options,
-            IUserRepository userRepository)
+            IUserBusinessService userBusinessService)
         {
             _next = next;
             _options = options.Value;
-            _userRepository = userRepository;
+            _userBusinessService = userBusinessService;
         }
 
         public Task Invoke(HttpContext context)
@@ -94,7 +95,7 @@ namespace NewsParser.Identity
 
         private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var user = _userRepository.GetUserByEmail(username);
+            var user = _userBusinessService.GetUserByEmail(username);
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {
                 return Task.FromResult(new ClaimsIdentity(

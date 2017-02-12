@@ -1,9 +1,8 @@
-﻿using System;
-using FluentScheduler;
+﻿using FluentScheduler;
 using Microsoft.Extensions.DependencyInjection;
 using NewsParser.DAL.Models;
-using NewsParser.DAL.NewsSources;
 using NewsParser.Parser;
+using NewsParser.BL.NewsSources;
 using System.Linq;
 
 namespace NewsParser.Scheduler
@@ -14,21 +13,21 @@ namespace NewsParser.Scheduler
     public class FeedUpdateJob: IJob
     {
         private readonly IFeedParser _feedParser;
-        private readonly INewsSourceRepository _newsSourceRepository;
+        private readonly INewsSourceBusinessService _newsSourceBusinessService;
 
         private readonly object _feedUpadteLock = new object();
 
         public FeedUpdateJob()
         {
             _feedParser = ServiceLocator.Instance.GetService<IFeedParser>();
-            _newsSourceRepository = ServiceLocator.Instance.GetService<INewsSourceRepository>();
+            _newsSourceBusinessService = ServiceLocator.Instance.GetService<INewsSourceBusinessService>();
         }
 
         public void Execute()
         {
             lock (_feedUpadteLock)
             {
-                var newsSources = _newsSourceRepository.GetNewsSources().ToList();
+                var newsSources = _newsSourceBusinessService.GetNewsSources(true).ToList();
 
                 foreach (var newsSource in newsSources)
                 {
@@ -41,7 +40,7 @@ namespace NewsParser.Scheduler
         {
             try
             {
-                _feedParser.Parse(newsSource).Wait();
+                _feedParser.ParseNewsSource(newsSource).Wait();
             }
             catch (FeedParsingException e)
             {

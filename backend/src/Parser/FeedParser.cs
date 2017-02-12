@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Xml.Linq;
 using NewsParser.DAL.Models;
-using NewsParser.DAL.News;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using NewsParser.BL.News;
+using NewsParser.BL.NewsTags;
+using NewsParser.BL.Users;
 using NewsParser.DAL.NewsTags;
+using NewsParser.DAL.Repositories.Users;
 
 namespace NewsParser.Parser
 {
@@ -16,13 +19,15 @@ namespace NewsParser.Parser
     /// </summary>
     public class FeedParser : IFeedParser
     {
-        private readonly INewsRepository _newsRepository;
-        private readonly INewsTagRepository _newsTagRepository;
+        private readonly INewsBusinessService _newsBusinessService;
+        private readonly INewsTagBusinessService _newsTagBusinessService;
+        private readonly IUserBusinessService _userBusinessService;
 
-        public FeedParser(INewsRepository newsRepository, INewsTagRepository newsTagRepository)
+        public FeedParser(INewsTagBusinessService newsTagBusinessService, IUserBusinessService userBusinessService, INewsBusinessService newsBusinessService)
         {
-            _newsRepository = newsRepository;
-            _newsTagRepository = newsTagRepository;
+            _newsTagBusinessService = newsTagBusinessService;
+            _userBusinessService = userBusinessService;
+            _newsBusinessService = newsBusinessService;
         }
 
         /// <summary>
@@ -30,7 +35,7 @@ namespace NewsParser.Parser
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>Async Task object</returns>
-        public async Task Parse(NewsSource newsSource)
+        public async Task ParseNewsSource(NewsSource newsSource)
         {
             try
             {
@@ -39,7 +44,7 @@ namespace NewsParser.Parser
 
                 XElement xmlItems = XElement.Parse(result);
                 List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
-                ParseSourceRssFeed(xmlElements, newsSource);
+                ParseNewsSourceRss(xmlElements, newsSource);
             }
             catch (Exception e)
             {
@@ -53,13 +58,14 @@ namespace NewsParser.Parser
         /// <param name="xmlElements">The list of XML elements of RSS feed</param>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>List of NewsItem</returns>
-        private void ParseSourceRssFeed(List<XElement> xmlElements, NewsSource newsSource)
+        private void ParseNewsSourceRss(List<XElement> xmlElements, NewsSource newsSource)
         {
-            var existingSourceNews = _newsRepository.GetNewsBySource(newsSource.Id);
+            var addedNewsItems = new List<NewsItem>();
+
             foreach (var rssItem in xmlElements)
             {
                 var rssItemDescription = rssItem.Element("description").Value;
-                var categories = ExtractRssItemCategories(rssItem);
+                var tags = ExtractRssItemTags(rssItem);
 
                 var newsItem = new NewsItem
                 {
@@ -71,12 +77,15 @@ namespace NewsParser.Parser
                     ImageUrl = ExtractFirstImage(rssItemDescription)
                 };
 
-                if (!existingSourceNews.Any(n => n.LinkToSource == newsItem.LinkToSource))
+                if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
                 {
-                    var addedNewsItem = _newsRepository.AddNewsItem(newsItem);
-                    AddTagsToNewsItem(categories, addedNewsItem);
+                    var addedNewsItem = _newsBusinessService.AddNewsItem(newsItem);
+                    addedNewsItems.Add(addedNewsItem);
+                    _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, tags);
                 }
             }
+
+            _newsBusinessService.AddNewsToSource(newsSource.Id, addedNewsItems);
         }
 
         /// <summary>
@@ -129,21 +138,10 @@ namespace NewsParser.Parser
         /// </summary>
         /// <param name="rssItem">XElement object</param>
         /// <returns>List of categorie's names (strings)</returns>
-        private List<string> ExtractRssItemCategories(XElement rssItem)
+        private List<string> ExtractRssItemTags(XElement rssItem)
         {
             var categoryElements = rssItem.Elements("category").ToList();
             return categoryElements.Select(e => e.Value.ToLower()).ToList();
-        }
-
-        private void AddTagsToNewsItem(List<string> categories, NewsItem newsItem)
-        {
-            foreach (var category in categories)
-            {
-                var newsTag = _newsTagRepository.GetNewsTagByName(category) ??
-                                      _newsTagRepository.AddNewsTag(new NewsTag {Name = category});
-
-                _newsRepository.AddTagToNewsItem(newsItem, newsTag);
-            }
         }
     }
 }

@@ -5,6 +5,6 @@ namespace NewsParser.Parser
 {
     public interface IFeedParser
     {
-        Task Parse(NewsSource newsSource);
+        Task ParseNewsSource(NewsSource newsSource);
     }
 }

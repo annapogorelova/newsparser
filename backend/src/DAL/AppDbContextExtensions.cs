@@ -24,6 +24,11 @@ namespace NewsParser.DAL
                 AddUsers(dbContext);
             }
 
+            if (!dbContext.UserSources.Any())
+            {
+                AddNewsSourcesToUsers(dbContext);
+            }
+
             if (dbContext.ChangeTracker.HasChanges())
             {
                 dbContext.SaveChanges();
@@ -86,6 +91,24 @@ namespace NewsParser.DAL
                 FirstName = "Anna",
                 LastName = "Pohorielova"
             });
+        }
+
+        private static void AddNewsSourcesToUsers(AppDbContext dbContext)
+        {
+            var newsSources = dbContext.NewsSources.Local.Any() ? 
+                dbContext.NewsSources.Local.ToList() : dbContext.NewsSources.ToList();
+            var user = dbContext.Users.Local.Any() ? dbContext.Users.Local.First() : dbContext.Users.First();
+
+            foreach (var newsSource in newsSources)
+            {
+                dbContext.UserSources.Add(new UserNewsSource()
+                {
+                    SourceId = newsSource.Id,
+                    UserId = user.Id
+                });
+            }
+
+            dbContext.SaveChanges();
         }
     }
 }

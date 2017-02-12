@@ -22,6 +22,7 @@ namespace NewsParser.Helpers.Mapper
         {
             cfg.AddProfile<NewsMappingProfile>();
             cfg.AddProfile<NewsSourceMappingProfile>();
+            cfg.AddProfile<NewsTagMappingProfile>();
             cfg.AddProfile<UserMappingProfile>();
         };
     }

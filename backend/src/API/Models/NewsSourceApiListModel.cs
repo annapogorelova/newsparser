@@ -1,12 +1,12 @@
 ﻿namespace NewsParser.API.Models
 {
     /// <summary>
-    /// Class represent a NewsSource model to be passed over API
+    /// Class represents a NewsSource model in API
     /// </summary>
-    public class NewsSourceApiModel
+    public class NewsSourceApiListModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string RssUrl { get; set; }
+        public string WebsiteUrl { get; set; }
     }
 }

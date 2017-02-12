@@ -11,11 +11,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NewsParser.BL.News;
+using NewsParser.BL.NewsSources;
+using NewsParser.BL.NewsTags;
+using NewsParser.BL.Users;
 using NewsParser.DAL;
-using NewsParser.DAL.News;
-using NewsParser.DAL.NewsSources;
 using NewsParser.DAL.NewsTags;
-using NewsParser.DAL.Users;
+using NewsParser.DAL.Repositories.News;
+using NewsParser.DAL.Repositories.NewsSources;
+using NewsParser.DAL.Repositories.Users;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
 using NewsParser.Parser;
@@ -162,10 +166,19 @@ namespace NewsParser
 
         private void RegisterDependencies(IServiceCollection services)
         {
+            // Data repositories
             services.AddSingleton<INewsRepository, NewsRepository>();
             services.AddSingleton<INewsSourceRepository, NewsSourceRepository>();
             services.AddSingleton<INewsTagRepository, NewsTagRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
+
+            // Business layer services
+            services.AddSingleton<INewsBusinessService, NewsBusinessService>();
+            services.AddSingleton<INewsSourceBusinessService, NewsSourceBusinessService>();
+            services.AddSingleton<INewsTagBusinessService, NewsTagBusinessService>();
+            services.AddSingleton<IUserBusinessService, UserBusinessService>();
+
+            // Feed parser
             services.AddSingleton<IFeedParser, FeedParser>();
         }
 

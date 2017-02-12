@@ -13,8 +13,8 @@ namespace NewsParser.API.Models
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public string LinkToSource { get; set; }
-        public string SourceName { get; set; }
         public string ImageUrl { get; set; }
-        public List<string> Tags { get; set; } 
+        public NewsSourceApiListModel Source { get; set; }        
+        public List<NewsTagApiModel> Tags { get; set; } 
     }
 }

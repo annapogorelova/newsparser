@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
-using NewsParser.DAL.Users;
+using NewsParser.BL.Users;
 
 namespace NewsParser.API.Controllers
 {
@@ -11,18 +11,18 @@ namespace NewsParser.API.Controllers
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserBusinessService _userBusinessService;
 
-        public AccountController(IUserRepository userRepository)
+        public AccountController(IUserBusinessService userBusinessService)
         {
-            _userRepository = userRepository;
+            _userBusinessService = userBusinessService;
         }
 
         [HttpGet]
         public JsonResult Get()
         {
             string userEmail = HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = _userRepository.GetUserByEmail(userEmail);
+            var user = _userBusinessService.GetUserByEmail(userEmail);
             var userModel = Mapper.Map<UserApiModel>(user);
             return new JsonResult(new { User = userModel });
         }

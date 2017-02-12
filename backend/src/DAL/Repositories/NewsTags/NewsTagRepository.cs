@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.NewsTags
 {
     /// <summary>
-    /// Repository for accessing the news tags data
+    /// Provides a functionality to access the NewsTag entity data
     /// </summary>
     public class NewsTagRepository: INewsTagRepository
     {
@@ -28,7 +29,7 @@ namespace NewsParser.DAL.NewsTags
         /// <summary>
         /// Gets news tag by id
         /// </summary>
-        /// <param name="id">News tag's id</param>
+        /// <param name="id">News tag id</param>
         /// <returns>NewsTag object</returns>
         public NewsTag GetNewsTagById(int id)
         {
@@ -38,7 +39,7 @@ namespace NewsParser.DAL.NewsTags
         /// <summary>
         /// Gets news tag by name
         /// </summary>
-        /// <param name="name">News tag's name</param>
+        /// <param name="name">News tag name</param>
         /// <returns>NewsTag object</returns>
         public NewsTag GetNewsTagByName(string name)
         {
@@ -52,6 +53,11 @@ namespace NewsParser.DAL.NewsTags
         /// <returns>NewsTag object</returns>
         public NewsTag AddNewsTag(NewsTag newsTag)
         {
+            if (newsTag == null)
+            {
+                throw new ArgumentNullException(nameof(newsTag), "News tag cannot be null");
+            }
+
             _dbContext.NewsTags.Add(newsTag);
             _dbContext.SaveChanges();
             return _dbContext.Entry(newsTag).Entity;
@@ -63,6 +69,11 @@ namespace NewsParser.DAL.NewsTags
         /// <param name="newsTags">List of NewsTag</param>
         public void AddNewsTags(IEnumerable<NewsTag> newsTags)
         {
+            if (newsTags == null)
+            {
+                throw new ArgumentNullException(nameof(newsTags), "News tags collection cannot be null");
+            }
+
             _dbContext.NewsTags.AddRange(newsTags);
             _dbContext.SaveChanges();
         }

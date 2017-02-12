@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace NewsParser.DAL.Models
@@ -21,5 +22,8 @@ namespace NewsParser.DAL.Models
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime DateUpdated { get; set; }
+
+        public List<UserNews> News { get; set; }
+        public List<UserNewsSource> NewsSources { get; set; } 
     }
 }
