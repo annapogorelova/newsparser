@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NewsParser.BL.News;
+using NewsParser.BL.NewsSources;
 using NewsParser.BL.NewsTags;
 using NewsParser.BL.Users;
 using NewsParser.DAL.NewsTags;
@@ -20,14 +21,12 @@ namespace NewsParser.Parser
     public class FeedParser : IFeedParser
     {
         private readonly INewsBusinessService _newsBusinessService;
-        private readonly INewsTagBusinessService _newsTagBusinessService;
-        private readonly IUserBusinessService _userBusinessService;
+        private readonly INewsSourceBusinessService _newsSourceBusinessService;
 
-        public FeedParser(INewsTagBusinessService newsTagBusinessService, IUserBusinessService userBusinessService, INewsBusinessService newsBusinessService)
+        public FeedParser(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService)
         {
-            _newsTagBusinessService = newsTagBusinessService;
-            _userBusinessService = userBusinessService;
             _newsBusinessService = newsBusinessService;
+            _newsSourceBusinessService = newsSourceBusinessService;
         }
 
         /// <summary>
@@ -45,6 +44,8 @@ namespace NewsParser.Parser
                 XElement xmlItems = XElement.Parse(result);
                 List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
                 ParseNewsSourceRss(xmlElements, newsSource);
+                newsSource.DateFeedUpdated = DateTime.UtcNow;
+                _newsSourceBusinessService.UpdateNewsSource(newsSource);
             }
             catch (Exception e)
             {
