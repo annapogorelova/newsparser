@@ -22,8 +22,7 @@ namespace NewsParser.DAL.Models
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime DateUpdated { get; set; }
-
-        public List<UserNews> News { get; set; }
+        
         public List<UserNewsSource> NewsSources { get; set; } 
     }
 }

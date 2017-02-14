@@ -122,42 +122,6 @@ namespace NewsParser.DAL.Repositories.News
         }
 
         /// <summary>
-        /// Inserts a UserNews record that connects user and news item
-        /// </summary>
-        /// <param name="newsItemId">News item id</param>
-        /// <param name="userId">User id</param>
-        public void AddNewsItemToUser(int newsItemId, int userId)
-        {
-            _dbContext.UserNews.Add(new UserNews()
-            {
-                NewsItemId = newsItemId,
-                UserId = userId
-            });
-            _dbContext.SaveChanges();
-        }
-
-        /// <summary>
-        /// Inserts a range of UserNews items that connect a user to a range of news
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="news">IEnumerable of NewsItem</param>
-        public void AddNewsToUser(int userId, IEnumerable<NewsItem> news)
-        {
-            if (news == null)
-            {
-                throw new ArgumentNullException(nameof(news), "News collection cannot be null");
-            }
-
-            var userNews = news.Select(n => new UserNews()
-            {
-                NewsItemId = n.Id,
-                UserId = userId
-            });
-            _dbContext.UserNews.AddRange(userNews);
-            _dbContext.SaveChanges();
-        }
-
-        /// <summary>
         /// Deletes a news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>

@@ -46,28 +46,7 @@ namespace NewsParser.BL.News
         /// <param name="newsItem">NewsItem object</param>
         /// <returns>NewsItem object</returns>
         NewsItem AddNewsItem(NewsItem newsItem);
-
-        /// <summary>
-        /// Add a news item to user
-        /// </summary>
-        /// <param name="newsItemId">News item id</param>
-        /// <param name="userId">User id</param>
-        void AddNewsItemToUser(int newsItemId, int userId);
-
-        /// <summary>
-        /// Add a collection of news to user
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="news">List of NewsItem</param>
-        void AddNewsToUser(int userId, List<NewsItem> news);
-
-        /// <summary>
-        /// Adds a list of news to the source's subscribed users
-        /// </summary>
-        /// <param name="newsSourceId">News source id</param>
-        /// <param name="news">List of NewsItem</param>
-        void AddNewsToSource(int newsSourceId, List<NewsItem> news);
-
+        
         /// <summary>
         /// Adds a tag to news item
         /// </summary>

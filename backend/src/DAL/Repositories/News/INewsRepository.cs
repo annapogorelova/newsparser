@@ -69,21 +69,7 @@ namespace NewsParser.DAL.Repositories.News
         /// <param name="newsItemId">News item id</param>
         /// <param name="tagId">Tag id</param>
         void AddNewsItemTag(int newsItemId, int tagId);
-
-        /// <summary>
-        /// Inserts a UserNews record that connects user and news item
-        /// </summary>
-        /// <param name="newsItemId">News item id</param>
-        /// <param name="userId">User id</param>
-        void AddNewsItemToUser(int newsItemId, int userId);
-
-        /// <summary>
-        /// Inserts a range of UserNews items that connect a user to a range of news
-        /// </summary>
-        /// <param name="userId">User id</param>
-        /// <param name="news">IEnumerable of NewsItem</param>
-        void AddNewsToUser(int userId, IEnumerable<NewsItem> news);
-
+        
         /// <summary>
         /// Deletes a news item
         /// </summary>

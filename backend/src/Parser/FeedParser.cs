@@ -85,8 +85,6 @@ namespace NewsParser.Parser
                     _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, tags);
                 }
             }
-
-            _newsBusinessService.AddNewsToSource(newsSource.Id, addedNewsItems);
         }
 
         /// <summary>

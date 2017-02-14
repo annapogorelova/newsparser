@@ -12,23 +12,11 @@ namespace NewsParser.DAL
         public DbSet<NewsSource> NewsSources { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
-        public DbSet<UserNews> UserNews { get; set; }
         public DbSet<UserNewsSource> UserSources { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<UserNews>().ToTable("UserNews");
-
-            modelBuilder.Entity<UserNews>()
-                .HasOne(un => un.User)
-                .WithMany(u => u.News)
-                .HasForeignKey(un => un.UserId);
-
-            modelBuilder.Entity<UserNews>()
-                .HasOne(un => un.NewsItem)
-                .WithMany(n => n.NewsItemUsers)
-                .HasForeignKey(un => un.NewsItemId);
 
             modelBuilder.Entity<UserNewsSource>()
                 .HasOne(ns => ns.User)

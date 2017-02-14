@@ -46,8 +46,8 @@ namespace NewsParser.BL.News
 
             if (userId.HasValue)
             {
-                news = news.Include(n => n.NewsItemUsers)
-                    .Where(n => n.NewsItemUsers.Any(u => u.UserId == userId.Value));
+                news = news.Include(n => n.Source).ThenInclude(n => n.Users)
+                    .Where(n => n.Source.Users.Any(u => u.UserId == userId.Value));
             }
 
             return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);
@@ -82,65 +82,6 @@ namespace NewsParser.BL.News
             catch (Exception e)
             {
                 throw new BusinessLayerException("Failed to add a news item", e);
-            }
-        }
-
-        public void AddNewsItemToUser(int newsItemId, int userId)
-        {
-            var newsItem = GetNewsItemById(newsItemId);
-            if (newsItem == null)
-            {
-                throw new ArgumentException($"News item with id {newsItemId} does not exist");
-            }
-
-            var user = _userRepository.GetUserById(userId);
-            if (user == null)
-            {
-                throw new ArgumentException($"User with id {userId} does not exist");
-            }
-
-            try
-            {
-                _newsRepository.AddNewsItemToUser(newsItemId, userId);
-            }
-            catch (Exception e)
-            {
-                throw new BusinessLayerException($"Failed to add news item with id {newsItemId} to user with id {userId}", e);
-            }
-        }
-
-        public void AddNewsToUser(int userId, List<NewsItem> news)
-        {
-            if (news == null || !news.Any())
-            {
-                return;
-            }
-
-            var user = _userRepository.GetUserById(userId);
-            if (user == null)
-            {
-                throw new ArgumentException($"User with id {userId} does not exist");
-            }
-
-            try
-            {
-                _newsRepository.AddNewsToUser(userId, news);
-            }
-            catch (Exception e)
-            {
-                throw new BusinessLayerException($"Failed adding news to user with id {userId}", e);
-            }
-        }
-
-        public void AddNewsToSource(int newsSourceId, List<NewsItem> news)
-        {
-            var userIds = _userRepository.GetUsersByNewsSource(newsSourceId).Select(u => u.Id).ToList();
-            if (userIds.Any())
-            {
-                foreach (var userId in userIds)
-                {
-                    AddNewsToUser(userId, news);
-                }
             }
         }
 
