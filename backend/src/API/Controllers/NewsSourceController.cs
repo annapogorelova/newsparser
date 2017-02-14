@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
 using System.Linq;
-using NewsParser.BL.NewsSources;
+using NewsParser.BL.Services.NewsSources;
 
 namespace NewsParser.API.Controllers
 {

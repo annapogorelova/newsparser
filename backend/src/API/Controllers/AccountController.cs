@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
-using NewsParser.BL.Users;
+using NewsParser.BL.Services.Users;
 
 namespace NewsParser.API.Controllers
 {

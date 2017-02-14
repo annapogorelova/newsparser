@@ -2,7 +2,7 @@
 using System.Linq;
 using NewsParser.DAL.Models;
 
-namespace NewsParser.BL.NewsTags
+namespace NewsParser.BL.Services.NewsTags
 {
     /// <summary>
     /// Provides a business layer functionality for NewsTag data access

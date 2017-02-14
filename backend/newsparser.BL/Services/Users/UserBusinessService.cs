@@ -3,7 +3,7 @@ using System.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
 
-namespace NewsParser.BL.Users
+namespace NewsParser.BL.Services.Users
 {
     public class UserBusinessService: IUserBusinessService
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.NewsTags;
 
-namespace NewsParser.BL.NewsTags
+namespace NewsParser.BL.Services.NewsTags
 {
     public class NewsTagBusinessService: INewsTagBusinessService
     {

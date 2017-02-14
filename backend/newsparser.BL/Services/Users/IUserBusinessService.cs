@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NewsParser.DAL.Models;
 
-namespace NewsParser.BL.Users
+namespace NewsParser.BL.Services.Users
 {
     /// <summary>
     /// Provides functionality for accessing the User entity data

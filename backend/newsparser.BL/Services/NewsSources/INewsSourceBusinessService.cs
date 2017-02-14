@@ -2,7 +2,7 @@
 using System.Linq;
 using NewsParser.DAL.Models;
 
-namespace NewsParser.BL.NewsSources
+namespace NewsParser.BL.Services.NewsSources
 {
     /// <summary>
     /// Provides a business layer functionality for NewsSource data access

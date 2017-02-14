@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.NewsTags;
 using NewsParser.DAL.Repositories.Users;
 
-namespace NewsParser.BL.News
+namespace NewsParser.BL.Services.News
 {
     /// <summary>
     /// Implementation of INewsBusinessService using INewsRepository

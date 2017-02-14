@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NewsParser.DAL.Models;
 using NewsParser.Parser;
-using NewsParser.BL.NewsSources;
+using NewsParser.BL.Services.NewsSources;
 using System.Linq;
 
 namespace NewsParser.Scheduler

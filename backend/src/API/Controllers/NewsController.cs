@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
-using NewsParser.BL.News;
+using NewsParser.BL.Services.News;
 using NewsParser.DAL.Models;
 using System.Linq;
 

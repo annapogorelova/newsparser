@@ -6,12 +6,8 @@ using NewsParser.DAL.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using NewsParser.BL.News;
-using NewsParser.BL.NewsSources;
-using NewsParser.BL.NewsTags;
-using NewsParser.BL.Users;
-using NewsParser.DAL.NewsTags;
-using NewsParser.DAL.Repositories.Users;
+using NewsParser.BL.Services.News;
+using NewsParser.BL.Services.NewsSources;
 
 namespace NewsParser.Parser
 {

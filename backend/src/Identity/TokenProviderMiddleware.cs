@@ -4,8 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using NewsParser.BL.Users;
-using NewsParser.DAL.Repositories.Users;
+using NewsParser.BL.Services.Users;
 using Newtonsoft.Json;
 
 namespace NewsParser.Identity

@@ -6,7 +6,7 @@ using NewsParser.DAL.Repositories.NewsSources;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.Repositories.Users;
 
-namespace NewsParser.BL.NewsSources
+namespace NewsParser.BL.Services.NewsSources
 {
     public class NewsSourceBusinessService: INewsSourceBusinessService
     {
