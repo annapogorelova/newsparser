@@ -68,11 +68,6 @@ namespace newsparser.scheduler
             ServiceLocator.Instance = app.ApplicationServices;
 
             InitializeJobScheduler();
-
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
         }
 
         private void RegisterServices(IServiceCollection services)
