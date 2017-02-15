@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NewsParser.Parser
+namespace NewsParser.FeedParser
 {
     /// <summary>
     /// Class represents the exception to be thrown by FeedParser

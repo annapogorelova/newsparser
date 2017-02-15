@@ -1,9 +1,10 @@
 ﻿using FluentScheduler;
-using Microsoft.Extensions.DependencyInjection;
 using NewsParser.DAL.Models;
-using NewsParser.Parser;
+using NewsParser.FeedParser;
 using NewsParser.BL.Services.NewsSources;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using newsparser.scheduler;
 
 namespace NewsParser.Scheduler
 {

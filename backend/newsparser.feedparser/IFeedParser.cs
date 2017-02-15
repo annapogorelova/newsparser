@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using NewsParser.DAL.Models;
 
-namespace NewsParser.Parser
+namespace NewsParser.FeedParser
 {
     public interface IFeedParser
     {

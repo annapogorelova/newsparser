@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using FluentScheduler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,11 +19,9 @@ using NewsParser.DAL.NewsTags;
 using NewsParser.DAL.Repositories.News;
 using NewsParser.DAL.Repositories.NewsSources;
 using NewsParser.DAL.Repositories.Users;
+using NewsParser.FeedParser;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
-using NewsParser.Parser;
-using NewsParser.Scheduler;
-using static System.Int32;
 
 namespace NewsParser
 {
@@ -112,8 +109,6 @@ namespace NewsParser
 
             ServiceLocator.Instance = app.ApplicationServices;
 
-            InitializeJobScheduler();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -179,13 +174,7 @@ namespace NewsParser
             services.AddSingleton<IUserBusinessService, UserBusinessService>();
 
             // Feed parser
-            services.AddSingleton<IFeedParser, FeedParser>();
-        }
-
-        private void InitializeJobScheduler()
-        {
-            int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateInterval"]);
-            JobManager.Initialize(new JobRegistry(feedUpdateInterval));
+            services.AddSingleton<IFeedParser, FeedParser.FeedParser>();
         }
     }
 }

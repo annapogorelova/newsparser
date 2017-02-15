@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 
-namespace NewsParser.Parser
+namespace NewsParser.FeedParser
 {
     /// <summary>
     /// Class contains methods for parsing the news from the specified sources
