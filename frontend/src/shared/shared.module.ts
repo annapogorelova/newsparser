@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {PagerService} from './services/pager/pager.service';
 import {NavigatorService} from './services/navigator/navigator.service';
 import {Router, ActivatedRoute} from '@angular/router';
+import {RefreshButtonComponent} from './components/refresh-button/refresh-button.component';
 
 @NgModule({
     imports: [ BrowserModule ],
@@ -19,12 +20,13 @@ import {Router, ActivatedRoute} from '@angular/router';
         },
         {
             provide: NavigatorService,
-            useFactory: (router: Router, activatedRoute: ActivatedRoute) => new NavigatorService(router, activatedRoute),
+            useFactory: (router: Router, activatedRoute: ActivatedRoute) =>
+                new NavigatorService(router, activatedRoute),
             deps: [Router, ActivatedRoute]
         }
     ],
-    declarations: [ PageNotFoundComponent, GoTopComponent ],
-    exports: [ PageNotFoundComponent, GoTopComponent ]
+    declarations: [ PageNotFoundComponent, GoTopComponent, RefreshButtonComponent ],
+    exports: [ PageNotFoundComponent, GoTopComponent, RefreshButtonComponent ]
 })
 
 export class SharedModule {}

@@ -1,0 +1,17 @@
+refresh-button .refresh {
+    width: 45px;
+    height: 45px;
+    line-height: 20px;
+    text-decoration: none;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 3px 3px 3px 3px;
+    cursor: pointer;
+}
+
+refresh-button .refresh:hover, .refresh:focus {
+    background-color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    color: white;
+}

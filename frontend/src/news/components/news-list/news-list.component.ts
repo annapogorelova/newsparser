@@ -8,6 +8,10 @@ import {ActivatedRoute} from '@angular/router';
     templateUrl: './news-list.component.html',
     styles: [require('./news-list.component.css').toString()]
 })
+
+/**
+ * Component represents a list of news
+ */
 export class NewsListComponent  {
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
@@ -17,6 +21,10 @@ export class NewsListComponent  {
                 private navigator: NavigatorService, @Inject(ActivatedRoute) private route:ActivatedRoute,){
     }
 
+    /**
+     * Calls the api GET method to get the list of news
+     * @param params
+     */
     loadNews = (params: any) => {
         this.loadingInProgress = true;
         this.apiService.get('news', params).then(news => this.handleLoadedNews(news));
@@ -33,6 +41,9 @@ export class NewsListComponent  {
         });
     }
 
+    /**
+     * Initializes the pager and source params from url query params
+     */
     initializeRequestParams = () => {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
@@ -45,6 +56,10 @@ export class NewsListComponent  {
                 this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
     };
 
+    /**
+     * Updates pager and navigation according to loaded data
+     * @param data
+     */
     handleLoadedNews = (data: any) => {
         if(!data.length){
             this.hasMoreItems = false;
@@ -57,19 +72,40 @@ export class NewsListComponent  {
         this.loadingInProgress = false;
     };
 
-    getRequestParams = () => {
+    /**
+     * Returns current request params in form of object
+     * @param refresh - sets the 'refresh' param
+     * @returns {{pageIndex: number, pageSize: number, sourceId: number, refresh: boolean}}
+     */
+    getRequestParams = (refresh: boolean = false) => {
         return {
             pageIndex: this.pager.getNextPageStartIndex(),
             pageSize: this.pager.getPageSize(),
-            sourceId: this.selectedSourceId
+            sourceId: this.selectedSourceId,
+            refresh: refresh
         };
     };
 
+    /**
+     * Load the fresh list of news
+     * (without launching the RSS sources refresh action on server)
+     */
     reload = () => {
         this.pager.reset();
         this.loadNews(this.getRequestParams());
     };
 
+    /**
+     * Load the fresh list of news (launches the RSS sources refresh on server)
+     */
+    refresh = () =>{
+        this.pager.reset();
+        this.loadNews(this.getRequestParams(true));
+    };
+
+    /**
+     * Load next page of news
+     */
     loadMore = () => {
         if(this.loadingInProgress){
             return;
@@ -77,6 +113,10 @@ export class NewsListComponent  {
         this.loadNews(this.getRequestParams());
     };
 
+    /**
+     * Set selected source
+     * @param source - source object
+     */
     selectSource = (source: any) => {
         this.selectedSourceId = source.id;
         this.reload();
@@ -86,6 +126,10 @@ export class NewsListComponent  {
         return this.pager.getItems().length;
     };
 
+    /**
+     * Listens to user scrolling the page and loads the next page
+     * of data when user reaches the bottom
+     */
     @HostListener("window:scroll", [])
     onWindowScroll = () => {
         var userScrollPosition = window.innerHeight + window.scrollY;

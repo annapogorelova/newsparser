@@ -1,3 +1,11 @@
+<div class="row" *ngIf="!loadingInProgress">
+    <div class="col-md-2"></div>
+    <div class="col-md-10">
+        <div class="refresh-button-container">
+            <refresh-button [refreshHandler]="refresh"></refresh-button>
+        </div>
+    </div>
+</div>
 <div class="row" *ngIf="hasItems()">
     <div class="col-md-2"></div>
     <div class="col-md-10">
@@ -49,8 +57,11 @@
 </div>
 <div class="row" *ngIf="!hasItems()">
     <div class="col-md-12">
-        <div *ngIf="!hasItems()" class="no-news-text">
+        <div *ngIf="!hasItems() && !loadingInProgress" class="no-news-text">
             <h5>No News</h5>
+        </div>
+        <div *ngIf="!hasItems() && loadingInProgress" class="no-news-text">
+            <h5>Loading...</h5>
         </div>
     </div>
 </div>

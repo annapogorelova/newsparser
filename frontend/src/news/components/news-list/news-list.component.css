@@ -79,3 +79,8 @@ div.news-item-tag-container {
 .news-item-source span {
     cursor: pointer;
 }
+
+.refresh-button-container {
+    display: table;
+    margin: auto;
+}
