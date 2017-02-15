@@ -1,6 +1,8 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerService} from '../../../shared/services/pager/pager.service';
+import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     templateUrl: './news-list.component.html',
@@ -9,19 +11,49 @@ import {PagerService} from '../../../shared/services/pager/pager.service';
 export class NewsListComponent  {
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
-    public selectedSource: any = null;
+    public selectedSourceId: number = null;
 
-    constructor(private apiService: ApiService, private pager: PagerService){
-        this.loadingInProgress = true;
-        var requestParams = { pageIndex: this.pager.getNextPageStartIndex(), pageSize: this.pager.getPageSize() };
-        this.apiService.get('news', requestParams).then(news => this.handleLoadedNews(news));
+    constructor(private apiService: ApiService, private pager: PagerService,
+                private navigator: NavigatorService, @Inject(ActivatedRoute) private route:ActivatedRoute,){
     }
+
+    loadNews = (params: any) => {
+        this.loadingInProgress = true;
+        this.apiService.get('news', params).then(news => this.handleLoadedNews(news));
+    };
+
+    ngOnInit(){
+        window.scrollTo(0, 0);
+        this.initializeRequestParams();
+
+        this.loadNews({
+            pageIndex: 0,
+            pageSize: this.pager.getNumberOfItemsToPreload(),
+            sourceId: this.selectedSourceId
+        });
+    }
+
+    initializeRequestParams = () => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page: string) =>
+                parseInt(page) ? this.pager.setPage(parseInt(page)) : this.pager.setPage(1));
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['source'])
+            .subscribe((sourceId: string) =>
+                this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
+    };
 
     handleLoadedNews = (data: any) => {
         if(!data.length){
             this.hasMoreItems = false;
         }
         this.pager.appendItems(data);
+        this.navigator.setQueryParam('page', this.pager.getPageNumber());
+        if(this.selectedSourceId != null){
+            this.navigator.setQueryParam('source', this.selectedSourceId);
+        }
         this.loadingInProgress = false;
     };
 
@@ -29,26 +61,24 @@ export class NewsListComponent  {
         return {
             pageIndex: this.pager.getNextPageStartIndex(),
             pageSize: this.pager.getPageSize(),
-            sourceId: this.selectedSource != null ? this.selectedSource.id : null
+            sourceId: this.selectedSourceId
         };
     };
 
     reload = () => {
         this.pager.reset();
-        this.loadingInProgress = true;
-        this.apiService.get('news', this.getRequestParams()).then(news => this.handleLoadedNews(news));
+        this.loadNews(this.getRequestParams());
     };
 
     loadMore = () => {
         if(this.loadingInProgress){
             return;
         }
-        this.loadingInProgress = true;
-        this.apiService.get('news', this.getRequestParams()).then(news => this.handleLoadedNews(news));
+        this.loadNews(this.getRequestParams());
     };
 
-    selectSource = (source: number) => {
-        this.selectedSource = source;
+    selectSource = (source: any) => {
+        this.selectedSourceId = source.id;
         this.reload();
     };
 

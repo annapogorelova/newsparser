@@ -48,6 +48,16 @@ export class PagerService {
     };
 
     /**
+     * Get the number of items to preload based on current page and current number of items
+     * Ex.: User requests page 5, but items.length is 10, page size =>
+     * we need to preload 5*10 - 10 = 40 items to reach the 5th page
+     * @returns {number}
+     */
+    getNumberOfItemsToPreload = () => {
+        return this.pageNumber * this.pageSize - this.items.length;
+    };
+
+    /**
      * Get the size of list's page
      * @returns {number} The size of list's page
      */
@@ -68,6 +78,13 @@ export class PagerService {
      * @returns {number} Page number
      */
     getPageNumber = () => {
-        return Math.ceil(this.items.length/this.pageSize);
+        return this.items.length ? Math.ceil(this.items.length/this.pageSize) : 1;
+    };
+
+    /**
+     * Sets the page number
+     */
+    setPage = (page: number) => {
+        this.pageNumber = page;
     };
 }
