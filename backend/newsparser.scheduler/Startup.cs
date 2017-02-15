@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using newsparser.feedparser;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.BL.Services.NewsTags;
@@ -84,8 +85,9 @@ namespace newsparser.scheduler
             services.AddSingleton<INewsTagBusinessService, NewsTagBusinessService>();
             services.AddSingleton<IUserBusinessService, UserBusinessService>();
 
-            // Feed parser
-            services.AddSingleton<IFeedParser, FeedParser>();
+            // Feed parser and updater
+            services.AddSingleton<IFeedParser, RssParser>();
+            services.AddSingleton<IFeedUpdater, FeedUpdater>();
         }
 
         private void InitializeJobScheduler()

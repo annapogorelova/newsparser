@@ -14,12 +14,12 @@ namespace NewsParser.FeedParser
     /// <summary>
     /// Class contains methods for parsing the news from the specified sources
     /// </summary>
-    public class FeedParser : IFeedParser
+    public class RssParser : IFeedParser
     {
         private readonly INewsBusinessService _newsBusinessService;
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
 
-        public FeedParser(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService)
+        public RssParser(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService)
         {
             _newsBusinessService = newsBusinessService;
             _newsSourceBusinessService = newsSourceBusinessService;

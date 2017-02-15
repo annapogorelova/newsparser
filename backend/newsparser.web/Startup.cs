@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using newsparser.feedparser;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.BL.Services.NewsTags;
@@ -173,8 +174,9 @@ namespace NewsParser
             services.AddSingleton<INewsTagBusinessService, NewsTagBusinessService>();
             services.AddSingleton<IUserBusinessService, UserBusinessService>();
 
-            // Feed parser
-            services.AddSingleton<IFeedParser, FeedParser.FeedParser>();
+            // Feed parser and updater
+            services.AddSingleton<IFeedParser, RssParser>();
+            services.AddSingleton<IFeedUpdater, FeedUpdater>();
         }
     }
 }
