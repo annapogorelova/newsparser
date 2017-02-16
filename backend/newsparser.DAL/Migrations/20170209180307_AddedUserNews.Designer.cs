@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NewsParser.DAL;
 
-namespace NewsParser.Migrations
+namespace NewsParser.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20170209180307_AddedUserNews")]

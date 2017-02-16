@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NewsParser.DAL;
 
 namespace NewsParser.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20170213130928_AddedDateFeedUpdatedToSource")]
-    partial class AddedDateFeedUpdatedToSource
+    [Migration("20170216094431_AddSourceIsUpdating")]
+    partial class AddSourceIsUpdating
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,6 +52,8 @@ namespace NewsParser.DAL.Migrations
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<DateTime>("DateFeedUpdated");
+
+                    b.Property<bool>("IsUpdating");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -127,24 +130,6 @@ namespace NewsParser.DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NewsParser.DAL.Models.UserNews", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("NewsItemId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsItemId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserNews");
-                });
-
             modelBuilder.Entity("NewsParser.DAL.Models.UserNewsSource", b =>
                 {
                     b.Property<int>("Id")
@@ -181,19 +166,6 @@ namespace NewsParser.DAL.Migrations
                     b.HasOne("NewsParser.DAL.Models.NewsTag", "Tag")
                         .WithMany("TagNewsItems")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NewsParser.DAL.Models.UserNews", b =>
-                {
-                    b.HasOne("NewsParser.DAL.Models.NewsItem", "NewsItem")
-                        .WithMany("NewsItemUsers")
-                        .HasForeignKey("NewsItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NewsParser.DAL.Models.User", "User")
-                        .WithMany("News")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

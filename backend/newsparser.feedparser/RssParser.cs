@@ -17,12 +17,10 @@ namespace NewsParser.FeedParser
     public class RssParser : IFeedParser
     {
         private readonly INewsBusinessService _newsBusinessService;
-        private readonly INewsSourceBusinessService _newsSourceBusinessService;
 
-        public RssParser(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService)
+        public RssParser(INewsBusinessService newsBusinessService)
         {
             _newsBusinessService = newsBusinessService;
-            _newsSourceBusinessService = newsSourceBusinessService;
         }
 
         /// <summary>
@@ -40,8 +38,6 @@ namespace NewsParser.FeedParser
                 XElement xmlItems = XElement.Parse(result);
                 List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
                 ParseNewsSourceRss(xmlElements, newsSource);
-                newsSource.DateFeedUpdated = DateTime.UtcNow;
-                _newsSourceBusinessService.UpdateNewsSource(newsSource);
             }
             catch (Exception e)
             {
@@ -59,27 +55,34 @@ namespace NewsParser.FeedParser
         {
             var addedNewsItems = new List<NewsItem>();
 
-            foreach (var rssItem in xmlElements)
+            try
             {
-                var rssItemDescription = rssItem.Element("description").Value;
-                var tags = ExtractRssItemTags(rssItem);
-
-                var newsItem = new NewsItem
+                foreach (var rssItem in xmlElements)
                 {
-                    SourceId = newsSource.Id,
-                    Title = rssItem.Element("title").Value,
-                    Description = CleanHtmlString(rssItemDescription),
-                    DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
-                    LinkToSource = rssItem.Element("link").Value,
-                    ImageUrl = ExtractFirstImage(rssItemDescription)
-                };
+                    var rssItemDescription = rssItem.Element("description").Value;
+                    var tags = ExtractRssItemTags(rssItem);
 
-                if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
-                {
-                    var addedNewsItem = _newsBusinessService.AddNewsItem(newsItem);
-                    addedNewsItems.Add(addedNewsItem);
-                    _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, tags);
+                    var newsItem = new NewsItem
+                    {
+                        SourceId = newsSource.Id,
+                        Title = rssItem.Element("title").Value,
+                        Description = CleanHtmlString(rssItemDescription),
+                        DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
+                        LinkToSource = rssItem.Element("link").Value,
+                        ImageUrl = ExtractFirstImage(rssItemDescription)
+                    };
+
+                    if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
+                    {
+                        var addedNewsItem = _newsBusinessService.AddNewsItem(newsItem);
+                        addedNewsItems.Add(addedNewsItem);
+                        _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, tags);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                throw new FeedParsingException("Failed to parse source", e);
             }
         }
 

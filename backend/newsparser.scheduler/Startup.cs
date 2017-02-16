@@ -52,7 +52,7 @@ namespace newsparser.scheduler
             var connection = Configuration.GetConnectionString("SchedulerDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connection);
+                options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
         }
 

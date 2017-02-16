@@ -64,7 +64,7 @@ namespace NewsParser
             var connection = Configuration.GetConnectionString("AppDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connection);
+                options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
 
             services.AddCors(options =>

@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NewsParser.DAL.Migrations
 {
-    public partial class AddedDateFeedUpdatedToSource : Migration
+    public partial class AddSourceIsUpdating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DateFeedUpdated",
+            migrationBuilder.AddColumn<bool>(
+                name: "IsUpdating",
                 table: "NewsSources",
                 nullable: false,
-                defaultValue: DateTime.UtcNow);
+                defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "DateFeedUpdated",
+                name: "IsUpdating",
                 table: "NewsSources");
         }
     }

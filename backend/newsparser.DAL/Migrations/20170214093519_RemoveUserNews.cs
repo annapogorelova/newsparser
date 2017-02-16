@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace NewsParser.Migrations
+namespace NewsParser.DAL.Migrations
 {
     public partial class RemoveUserNews : Migration
     {

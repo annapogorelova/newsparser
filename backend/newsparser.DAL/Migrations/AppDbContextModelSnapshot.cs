@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NewsParser.DAL;
 
-namespace NewsParser.Migrations
+namespace NewsParser.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -51,6 +51,8 @@ namespace NewsParser.Migrations
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<DateTime>("DateFeedUpdated");
+
+                    b.Property<bool>("IsUpdating");
 
                     b.Property<string>("Name")
                         .IsRequired()

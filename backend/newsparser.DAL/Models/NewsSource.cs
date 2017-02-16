@@ -14,6 +14,8 @@ namespace NewsParser.DAL.Models
         [Required, MaxLength(100)]
         public string RssUrl { get; set; }
 
+        public bool IsUpdating { get; set; }
+
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime DateFeedUpdated { get; set; }
 
