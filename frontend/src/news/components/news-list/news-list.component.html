@@ -1,8 +1,8 @@
-<div class="row" *ngIf="!loadingInProgress">
+<div class="row" *ngIf="hasItems()">
     <div class="col-md-2"></div>
     <div class="col-md-10">
         <div class="refresh-button-container">
-            <refresh-button [refreshHandler]="refresh"></refresh-button>
+            <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
         </div>
     </div>
 </div>

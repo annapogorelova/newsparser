@@ -10,7 +10,7 @@ refresh-button .refresh {
     cursor: pointer;
 }
 
-refresh-button .refresh:hover, .refresh:focus {
+refresh-button .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {
     background-color: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     color: white;

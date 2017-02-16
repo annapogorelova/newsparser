@@ -1,4 +1,5 @@
 <button type="button" class="refresh"
-        (click)="refresh()">
-    <i class="fa fa-refresh" aria-hidden="true"></i>
+        (click)="refresh()"
+        [disabled]="isSpinning">
+    <i class="fa fa-refresh" [ngClass]="{'fa-spin': isSpinning}" aria-hidden="true"></i>
 </button>

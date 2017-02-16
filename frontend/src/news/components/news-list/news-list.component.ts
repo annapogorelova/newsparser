@@ -15,6 +15,7 @@ import {ActivatedRoute} from '@angular/router';
 export class NewsListComponent  {
     public hasMoreItems: boolean = true;
     public loadingInProgress: boolean = false;
+    public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
 
     constructor(private apiService: ApiService, private pager: PagerService,
@@ -70,6 +71,7 @@ export class NewsListComponent  {
             this.navigator.setQueryParam('source', this.selectedSourceId);
         }
         this.loadingInProgress = false;
+        this.refreshInProgress = false;
     };
 
     /**
@@ -99,7 +101,11 @@ export class NewsListComponent  {
      * Load the fresh list of news (launches the RSS sources refresh on server)
      */
     refresh = () =>{
-        this.pager.reset();
+        if(this.refreshInProgress){
+            return;
+        }
+        this.refreshInProgress = true;
+        this.pager.reset(false);
         this.loadNews(this.getRequestParams(true));
     };
 

@@ -10,7 +10,17 @@ import {Component, Input} from '@angular/core';
  * A refresh button that executes user refresh handler
  */
 export class RefreshButtonComponent {
+    /**
+     * user defined refresh handler
+     * @type {any}
+     */
     @Input() refreshHandler: any = null;
+
+    /**
+     * flag to apply the spinning animation
+     * @type {boolean}
+     */
+    @Input() isSpinning: boolean = false;
 
     /**
      * Function executes custom refresh handler if specified
