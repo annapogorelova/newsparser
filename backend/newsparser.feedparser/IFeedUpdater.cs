@@ -1,4 +1,6 @@
-﻿namespace newsparser.feedparser
+﻿using System.Threading.Tasks;
+
+namespace newsparser.feedparser
 {
     /// <summary>
     /// Interface contains a declaration of methods for updating the RSS feed
@@ -8,12 +10,16 @@
         /// <summary>
         /// Updates all feed
         /// </summary>
-        void UpdateFeed();
+        /// <param name="userId">User id. If specified only this user sources will be updated</param>
+        /// <param name="sourceId">Source to update id. If specified, only this source will be updated</param>
+        void UpdateFeed(int? userId = null, int? sourceId = null);
 
         /// <summary>
-        /// Updates specific source
+        /// Updates all feed (async mode)
         /// </summary>
-        /// <param name="sourceId">Source id</param>
-        void UpdateSource(int sourceId);
+        /// <param name="userId">User id. If specified only this user sources will be updated</param>
+        /// <param name="sourceId">Source to update id.If specified, only this source will be updated</param>
+        /// <returns>Task</returns>
+        Task UpdateFeedAsync(int? userId = null, int? sourceId = null);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using NewsParser.BL.Services.NewsSources;
+using NewsParser.DAL.Models;
 using NewsParser.FeedParser;
 
 namespace newsparser.feedparser
@@ -18,24 +20,35 @@ namespace newsparser.feedparser
             _feedParser = feedParser;
         }
 
-        public void UpdateFeed()
+        public void UpdateFeed(int? userId = null, int? sourceId = null)
         {
-            var newsSources = _newsSourceBusinessService.GetNewsSources(true).ToList();
-            foreach (var newsSource in newsSources)
+            if (sourceId == null)
             {
-                _feedParser.ParseNewsSource(newsSource).Wait();
+                var newsSources = GetNewsSources(userId).ToList();
+                foreach (var newsSource in newsSources)
+                {
+                    _feedParser.ParseNewsSource(newsSource).Wait();
+                }
             }
         }
 
-        public void UpdateSource(int sourceId)
+        public async Task UpdateFeedAsync(int? userId = null, int? sourceId = null)
         {
-            var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-            if (newsSource == null)
+            if (sourceId == null)
             {
-                throw new FeedParsingException($"Source with id {sourceId} does not exist");
+                var newsSources = GetNewsSources(userId).ToList();
+                foreach (var newsSource in newsSources)
+                {
+                    await _feedParser.ParseNewsSource(newsSource);
+                }
             }
+        }
 
-            _feedParser.ParseNewsSource(newsSource).Wait();
+        private IQueryable<NewsSource> GetNewsSources(int? userId)
+        {
+            return userId != null
+                   ? _newsSourceBusinessService.GetUserNewsSources(userId.Value)
+                   : _newsSourceBusinessService.GetNewsSources(true);
         }
     }
 }
