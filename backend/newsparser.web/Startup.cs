@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,7 +57,7 @@ namespace NewsParser
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-            
+
             // Registering dependencies
             RegisterDependencies(services);
 
@@ -73,7 +74,17 @@ namespace NewsParser
                     builder => builder.AllowAnyOrigin());
             });
 
-            services.AddMvc();
+            int defaultCacheDuration =
+                int.Parse(Configuration.GetSection("AppConfig").GetSection("Cache")["DefaultCacheDuration"]);
+
+            services.AddMvc(options =>
+                options.CacheProfiles.Add("Default",
+                    new CacheProfile
+                    {
+                        Duration = 60 * defaultCacheDuration,
+                        Location = ResponseCacheLocation.Client
+                    })
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

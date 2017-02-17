@@ -10,6 +10,7 @@ namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [ResponseCache(CacheProfileName = "Default")]
     public class NewsSourcesController: Controller
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
