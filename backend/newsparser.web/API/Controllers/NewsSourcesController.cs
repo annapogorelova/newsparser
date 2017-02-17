@@ -10,11 +10,11 @@ namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class NewsSourceController: Controller
+    public class NewsSourcesController: Controller
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
 
-        public NewsSourceController(INewsSourceBusinessService newsSourceBusinessService)
+        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
         }
@@ -22,12 +22,13 @@ namespace NewsParser.API.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            var newsSources = _newsSourceBusinessService.GetNewsSources().ToList();
+            var userId = 2;
+            var newsSources = _newsSourceBusinessService.GetUserNewsSources(userId).ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
             return new JsonResult(newsSourcesModels);
         }
 
-        [HttpGet]
+        [HttpGet("/newssources/{id}")]
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
