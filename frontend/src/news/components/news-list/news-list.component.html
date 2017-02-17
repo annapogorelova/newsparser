@@ -1,15 +1,14 @@
 <div class="row" *ngIf="hasItems()">
-    <div class="col-md-2"></div>
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="refresh-button-container">
             <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
         </div>
     </div>
 </div>
-<div class="row" *ngIf="hasItems()">
-    <div class="col-md-2"></div>
-    <div class="col-md-10">
-        <div class="news-container" infinite-scroll
+<div class="row">
+    <news-sources [selectHandler]="selectSource" [initialSelectedSourceId]="selectedSourceId"></news-sources>
+    <div class="col-md-12">
+        <div *ngIf="hasItems()" class="news-container" infinite-scroll
              [infiniteScrollDistance]="4"
              [infiniteScrollThrottle]="300"
              [infiniteScrollDisabled]="!hasMoreItems"
@@ -48,8 +47,8 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="loadingInProgress">
-                Loading...
+            <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+                <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
             </div>
         </div>
     </div>
@@ -57,11 +56,11 @@
 </div>
 <div class="row" *ngIf="!hasItems()">
     <div class="col-md-12">
-        <div *ngIf="!hasItems() && !loadingInProgress" class="no-news-text">
+        <div *ngIf="!hasItems() && !loadingInProgress" class="no-news-text-container">
             <h5>No News</h5>
         </div>
-        <div *ngIf="!hasItems() && loadingInProgress" class="no-news-text">
-            <h5>Loading...</h5>
+        <div *ngIf="!hasItems() && loadingInProgress" class="loading-icon-container">
+            <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
         </div>
     </div>
 </div>

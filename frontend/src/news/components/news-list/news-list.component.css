@@ -48,13 +48,26 @@ div.news-item-info-container {
     margin: 5px 0 5px 0;
 }
 
-.no-news-text {
-    text-align: center;
+.no-news-text-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }
 
-.no-news-text h5 {
+.no-news-text-container h5 {
     line-height: 200px;
     vertical-align: middle;
+}
+
+.loading-more-icon-container {
+    display: table;
+    margin: auto;
+}
+
+.loading-icon-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }
 
 div.news-item-tag-container {

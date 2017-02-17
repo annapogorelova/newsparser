@@ -1,0 +1,19 @@
+news-sources .news-sources-container {
+    position: fixed;
+    max-width: 100px;
+    top: 10%;
+    left: 20px;
+}
+
+news-sources .news-source-item {
+    cursor: pointer;
+}
+
+news-sources .news-source-item.selected {
+    background-color: #014681;
+}
+
+news-sources .news-source-item-container {
+    display: inline-block;
+    padding-right: 5px;
+}
