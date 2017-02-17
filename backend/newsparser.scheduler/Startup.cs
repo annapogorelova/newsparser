@@ -74,20 +74,20 @@ namespace newsparser.scheduler
         private void RegisterServices(IServiceCollection services)
         {
             // Data repositories
-            services.AddSingleton<INewsRepository, NewsRepository>();
-            services.AddSingleton<INewsSourceRepository, NewsSourceRepository>();
-            services.AddSingleton<INewsTagRepository, NewsTagRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddTransient<INewsRepository, NewsRepository>();
+            services.AddTransient<INewsSourceRepository, NewsSourceRepository>();
+            services.AddTransient<INewsTagRepository, NewsTagRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             // Business layer services
-            services.AddSingleton<INewsBusinessService, NewsBusinessService>();
-            services.AddSingleton<INewsSourceBusinessService, NewsSourceBusinessService>();
-            services.AddSingleton<INewsTagBusinessService, NewsTagBusinessService>();
-            services.AddSingleton<IUserBusinessService, UserBusinessService>();
+            services.AddTransient<INewsBusinessService, NewsBusinessService>();
+            services.AddTransient<INewsSourceBusinessService, NewsSourceBusinessService>();
+            services.AddTransient<INewsTagBusinessService, NewsTagBusinessService>();
+            services.AddTransient<IUserBusinessService, UserBusinessService>();
 
             // Feed parser and updater
-            services.AddSingleton<IFeedParser, RssParser>();
-            services.AddSingleton<IFeedUpdater, FeedUpdater>();
+            services.AddTransient<IFeedParser, RssParser>();
+            services.AddTransient<IFeedUpdater, FeedUpdater>();
         }
 
         private void InitializeJobScheduler()
