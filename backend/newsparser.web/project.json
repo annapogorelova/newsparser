@@ -31,7 +31,8 @@
     "AutoMapper": "5.2.0",
     "newsparser.DAL": "1.0.0",
     "newsparser.BL": "1.0.0",
-    "newsparser.feedparser": "1.0.0"
+    "newsparser.feedparser": "1.0.0",
+    "Serilog.Extensions.Logging.File": "1.0.0"
   },
 
   "tools": {

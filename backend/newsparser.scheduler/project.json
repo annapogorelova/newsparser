@@ -13,7 +13,9 @@
     "newsparser.BL": "1.0.0",
     "newsparser.feedparser": "1.0.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0"
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0",
+    "Serilog.Extensions.Logging.File": "1.0.0"
   },
 
   "tools": {

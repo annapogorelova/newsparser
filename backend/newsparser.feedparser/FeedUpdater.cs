@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.FeedParser;
@@ -14,11 +15,13 @@ namespace newsparser.feedparser
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly IFeedParser _feedParser;
+        private readonly ILogger<FeedUpdater> _log;
 
-        public FeedUpdater(INewsSourceBusinessService newsSourceBusinessService, IFeedParser feedParser)
+        public FeedUpdater(INewsSourceBusinessService newsSourceBusinessService, IFeedParser feedParser, ILogger<FeedUpdater> log)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
             _feedParser = feedParser;
+            _log = log;
         }
 
         public void UpdateFeed(int? userId = null, int? sourceId = null)
@@ -27,6 +30,7 @@ namespace newsparser.feedparser
             {
                 if (sourceId == null)
                 {
+                    _log.LogInformation("Started updating news sources");
                     var newsSources = GetNewsSources(userId).ToList();
                     foreach (var newsSource in newsSources)
                     {
@@ -38,15 +42,21 @@ namespace newsparser.feedparser
                         _feedParser.ParseNewsSource(newsSource).Wait();
                         SetNewsSourceUpdatingState(newsSource, false);
                     }
+
+                    _log.LogInformation("Finished updating news sources");
                 }
                 else
                 {
+                    _log.LogInformation($"Started updating news source {sourceId.Value}");
                     UpdateSource(sourceId.Value).Wait();
+                    _log.LogInformation($"Finished updating news source {sourceId.Value}");
                 }
             }
             catch (FeedParsingException e)
             {
-                throw new FeedUpdatingException("Failed updating feed", e);
+                string errorMessage = $"Failed updating feed: {e.Message}";
+                _log.LogError(errorMessage);
+                throw new FeedUpdatingException(errorMessage, e);
             }
         }
 
@@ -56,6 +66,7 @@ namespace newsparser.feedparser
             {
                 if (sourceId == null)
                 {
+                    _log.LogInformation("Started updating news sources");
                     var newsSources = GetNewsSources(userId).ToList();
                     foreach (var newsSource in newsSources)
                     {
@@ -66,16 +77,21 @@ namespace newsparser.feedparser
                         SetNewsSourceUpdatingState(newsSource, true);
                         await _feedParser.ParseNewsSource(newsSource);
                         SetNewsSourceUpdatingState(newsSource, false);
+                        _log.LogInformation("Finished updating news sources");
                     }
                 }
                 else
                 {
+                    _log.LogInformation($"Started updating news source {sourceId.Value}");
                     await UpdateSource(sourceId.Value);
+                    _log.LogInformation($"Finished updating news source {sourceId.Value}");
                 }
             }
             catch (FeedParsingException e)
             {
-                throw new FeedUpdatingException("Failed updating feed", e);
+                string errorMessage = $"Failed updating feed: {e.Message}";
+                _log.LogError(errorMessage);
+                throw new FeedUpdatingException(errorMessage, e);
             }
         }
 

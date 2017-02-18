@@ -24,6 +24,7 @@ using NewsParser.DAL.Repositories.Users;
 using NewsParser.FeedParser;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
+using Serilog;
 
 namespace NewsParser
 {
@@ -90,8 +91,12 @@ namespace NewsParser
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddDebug();
+            }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory.AddFile("logs/newsparser.web-{Date}.txt");
 
             app.UseApplicationInsightsRequestTelemetry();
 
