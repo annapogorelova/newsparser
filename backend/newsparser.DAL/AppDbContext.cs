@@ -5,6 +5,8 @@ namespace NewsParser.DAL
 {
     public class AppDbContext: DbContext
     {
+        public AppDbContext() { }
+
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options) { }
 
         public DbSet<User> Users { get; set; }
@@ -12,7 +14,13 @@ namespace NewsParser.DAL
         public DbSet<NewsSource> NewsSources { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
-        public DbSet<UserNewsSource> UserSources { get; set; } 
+        public DbSet<UserNewsSource> UserSources { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=localhost;Database=NewsParserDb;uid=sa;password=picasso;MultipleActiveResultSets=true;");
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
