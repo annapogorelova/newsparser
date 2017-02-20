@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.FeedParser;
@@ -14,12 +16,15 @@ namespace newsparser.feedparser
     public class FeedUpdater: IFeedUpdater
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
+        private readonly INewsBusinessService _newsBusinessService;
         private readonly IFeedParser _feedParser;
         private readonly ILogger<FeedUpdater> _log;
 
-        public FeedUpdater(INewsSourceBusinessService newsSourceBusinessService, IFeedParser feedParser, ILogger<FeedUpdater> log)
+        public FeedUpdater(INewsSourceBusinessService newsSourceBusinessService, 
+            INewsBusinessService newsBusinessService, IFeedParser feedParser, ILogger<FeedUpdater> log)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
+            _newsBusinessService = newsBusinessService;
             _feedParser = feedParser;
             _log = log;
         }
@@ -39,7 +44,8 @@ namespace newsparser.feedparser
                             continue;
                         }
                         SetNewsSourceUpdatingState(newsSource, true);
-                        _feedParser.ParseNewsSource(newsSource).Wait();
+                        var news = _feedParser.ParseNewsSource(newsSource).Result;
+                        SaveNewsItems(newsSource.Id, news);
                         SetNewsSourceUpdatingState(newsSource, false);
                     }
 
@@ -57,6 +63,30 @@ namespace newsparser.feedparser
                 string errorMessage = $"Failed updating feed: {e.Message}";
                 _log.LogError(errorMessage);
                 throw new FeedUpdatingException(errorMessage, e);
+            }
+        }
+
+        public async Task<NewsSource> AddNewsSource(string rssUrl, int? userId = null)
+        {
+            if (string.IsNullOrEmpty(rssUrl))
+            {
+                throw new ArgumentNullException(nameof(rssUrl), "RSS url cannot be null or empty");
+            }
+
+            try
+            {
+                var newsSource = await _feedParser.ParseRssSource(rssUrl);
+                var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
+
+                if (userId.HasValue)
+                {
+                    _newsSourceBusinessService.AddNewsSourceToUser(addedNewsSource.Id, userId.Value);
+                }
+                return addedNewsSource;
+            }
+            catch (Exception e)
+            {
+                throw new FeedUpdatingException($"Failed to get RSS {rssUrl} source info", e);
             }
         }
 
@@ -125,6 +155,26 @@ namespace newsparser.feedparser
             newsSource.IsUpdating = isUpdating;
             newsSource.DateFeedUpdated = DateTime.UtcNow;
             _newsSourceBusinessService.UpdateNewsSource(newsSource);
+        }
+
+        private void SaveNewsItems(int sourceId, List<NewsItemParseModel> newsItems)
+        {
+            foreach (var newsItem in newsItems)
+            {
+                if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
+                {
+                    var addedNewsItem = _newsBusinessService.AddNewsItem(new NewsItem()
+                    {
+                        SourceId = sourceId,
+                        DateAdded = newsItem.DateAdded,
+                        Description = newsItem.Description,
+                        ImageUrl = newsItem.ImageUrl,
+                        LinkToSource = newsItem.LinkToSource,
+                        Title = newsItem.Title
+                    });
+                    _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, newsItem.Categories);
+                }
+            }
         }
     }
 }

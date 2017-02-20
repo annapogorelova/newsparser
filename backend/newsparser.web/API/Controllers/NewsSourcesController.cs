@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using newsparser.feedparser;
 using NewsParser.BL.Services.NewsSources;
+using NewsParser.DAL.Models;
 
 namespace NewsParser.API.Controllers
 {
@@ -14,10 +19,12 @@ namespace NewsParser.API.Controllers
     public class NewsSourcesController: Controller
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
+        private readonly IFeedUpdater _feedUpdater;
 
-        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService)
+        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService, IFeedUpdater feedUpdater)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
+            _feedUpdater = feedUpdater;
         }
 
         [HttpGet]
@@ -34,6 +41,39 @@ namespace NewsParser.API.Controllers
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
             return new JsonResult(Mapper.Map<NewsSourceApiModel>(newsSource));
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Post([FromBody]NewsSourceCreateModel newsSourceModel)
+        {
+            if (_newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl) != null)
+            {
+                return MakeResponse(HttpStatusCode.BadRequest, new { Message = "News source already exists" });
+            }
+
+            try
+            {
+                var userId = 2;
+                var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, userId);
+                var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
+                return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);
+            }
+            catch (Exception e)
+            {
+                return MakeResponse(HttpStatusCode.InternalServerError, $"Failed to create a news source; {e.Message}");
+            }
+        }
+
+        private JsonResult MakeResponse(HttpStatusCode statusCode, object data)
+        {
+            Response.StatusCode = (int) statusCode;
+            return new JsonResult(data);
+        }
+
+        private JsonResult MakeResponse(HttpStatusCode statusCode, string message)
+        {
+            Response.StatusCode = (int)statusCode;
+            return new JsonResult( new { Message = message });
         }
     }
 }

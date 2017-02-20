@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.NewsSources;
@@ -11,10 +10,12 @@ namespace NewsParser.BL.Services.NewsSources
     public class NewsSourceBusinessService: INewsSourceBusinessService
     {
         private readonly INewsSourceRepository _newsSourceRepository;
+        private readonly IUserRepository _userRepository;
 
-        public NewsSourceBusinessService(INewsSourceRepository newsSourceRepository)
+        public NewsSourceBusinessService(INewsSourceRepository newsSourceRepository, IUserRepository userRepository)
         {
             _newsSourceRepository = newsSourceRepository;
+            _userRepository = userRepository;
         }
 
         public IQueryable<NewsSource> GetNewsSources(bool hasUsers = false)
@@ -35,7 +36,7 @@ namespace NewsParser.BL.Services.NewsSources
             return _newsSourceRepository.GetNewsSourceById(id);
         }
 
-        public void AddNewsSource(NewsSource newsSource)
+        public NewsSource AddNewsSource(NewsSource newsSource)
         {
             if (newsSource == null)
             {
@@ -50,7 +51,11 @@ namespace NewsParser.BL.Services.NewsSources
 
             try
             {
-                _newsSourceRepository.AddNewsSource(newsSource);
+                if (newsSource.Name.Length > 100)
+                {
+                    newsSource.Name = $"{newsSource.Name.Substring(0, 97)}...";
+                }
+                return _newsSourceRepository.AddNewsSource(newsSource);
             }
             catch (Exception e)
             {
@@ -95,6 +100,33 @@ namespace NewsParser.BL.Services.NewsSources
             catch (Exception e)
             {
                 throw new BusinessLayerException($"Failed to delete news source with id {newsSource.Id}", e);
+            }
+        }
+
+        public NewsSource GetNewsSourceByUrl(string rssUrl)
+        {
+            return _newsSourceRepository.GetNewsSourceByUrl(rssUrl);
+        }
+
+        public void AddNewsSourceToUser(int sourceId, int userId)
+        {
+            if (_userRepository.GetUserById(userId) == null)
+            {
+                throw new BusinessLayerException($"User with id {userId} does not exist");
+            }
+
+            if (GetNewsSourceById(sourceId) == null)
+            {
+                throw new BusinessLayerException($"News source with id {sourceId} does not exist");
+            }
+
+            try
+            {
+                _newsSourceRepository.AddNewsSourceToUser(sourceId, userId);
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLayerException($"Failed adding news source {sourceId} to user {userId}", e);
             }
         }
     }

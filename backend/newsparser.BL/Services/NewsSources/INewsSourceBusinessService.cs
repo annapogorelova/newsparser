@@ -32,10 +32,25 @@ namespace NewsParser.BL.Services.NewsSources
         NewsSource GetNewsSourceById(int id);
 
         /// <summary>
+        /// Get news source by RSS url
+        /// </summary>
+        /// <param name="rssUrl">News source rss url</param>
+        /// <returns>NewsSource object</returns>
+        NewsSource GetNewsSourceByUrl(string rssUrl);
+
+        /// <summary>
         /// Insert a news source
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
-        void AddNewsSource(NewsSource newsSource);
+        /// <returns>NewsSource object</returns>
+        NewsSource AddNewsSource(NewsSource newsSource);
+
+        /// <summary>
+        /// Adds a news source to user
+        /// </summary>
+        /// <param name="sourceId">News source id</param>
+        /// <param name="userId">User id</param>
+        void AddNewsSourceToUser(int sourceId, int userId);
 
         /// <summary>
         /// Updates a news source

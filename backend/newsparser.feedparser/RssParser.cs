@@ -6,8 +6,7 @@ using NewsParser.DAL.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using NewsParser.BL.Services.News;
-using NewsParser.BL.Services.NewsSources;
+using newsparser.feedparser;
 
 namespace NewsParser.FeedParser
 {
@@ -16,32 +15,65 @@ namespace NewsParser.FeedParser
     /// </summary>
     public class RssParser : IFeedParser
     {
-        private readonly INewsBusinessService _newsBusinessService;
-
-        public RssParser(INewsBusinessService newsBusinessService)
-        {
-            _newsBusinessService = newsBusinessService;
-        }
-
         /// <summary>
         /// Parses news source's RSS and saves new news into database
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>Async Task object</returns>
-        public async Task ParseNewsSource(NewsSource newsSource)
+        public async Task<List<NewsItemParseModel>> ParseNewsSource(NewsSource newsSource)
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                string result = await httpClient.GetStringAsync(newsSource.RssUrl);
-
-                XElement xmlItems = XElement.Parse(result);
+                XElement xmlItems = await GetRssXml(newsSource.RssUrl);
                 List<XElement> xmlElements = xmlItems.Descendants("item").ToList();
-                ParseNewsSourceRss(xmlElements, newsSource);
+                return ParseNewsSourceRss(xmlElements);
             }
             catch (Exception e)
             {
                 throw new FeedParsingException("Failed to parse RSS feed", e);
+            }
+        }
+
+        /// <summary>
+        /// Get the basic info of RSS source (channel name, etc.)
+        /// </summary>
+        /// <param name="rssUrl">RSS url</param>
+        /// <returns>Task</returns>
+        public async Task<NewsSource> ParseRssSource(string rssUrl)
+        {
+            try
+            {
+                XElement xmlItems = await GetRssXml(rssUrl);
+                string sourceName = xmlItems.Descendants("channel")?.First()?.Element("title")?.Value;
+                var newsSource = new NewsSource
+                {
+                    RssUrl = rssUrl,
+                    Name = sourceName ?? "Unknown"
+                };
+                return newsSource;
+            }
+            catch (Exception e)
+            {
+                throw new FeedParsingException("Failed to parse RSS feed", e);
+            }
+        }
+
+        /// <summary>
+        /// Get the RSS channel xml
+        /// </summary>
+        /// <param name="rssUrl">Rss url</param>
+        /// <returns>XElement</returns>
+        private async Task<XElement> GetRssXml(string rssUrl)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                string result = await httpClient.GetStringAsync(rssUrl);
+                return XElement.Parse(result);
+            }
+            catch (Exception e)
+            {
+                throw new FeedParsingException($"Failed to parse RSS {rssUrl} source", e);
             }
         }
 
@@ -51,34 +83,30 @@ namespace NewsParser.FeedParser
         /// <param name="xmlElements">The list of XML elements of RSS feed</param>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>List of NewsItem</returns>
-        private void ParseNewsSourceRss(List<XElement> xmlElements, NewsSource newsSource)
+        private List<NewsItemParseModel> ParseNewsSourceRss(List<XElement> xmlElements)
         {
-            var addedNewsItems = new List<NewsItem>();
+            var newsItems = new List<NewsItemParseModel>();
 
             try
             {
                 foreach (var rssItem in xmlElements)
                 {
                     var rssItemDescription = rssItem.Element("description").Value;
-                    var tags = ExtractRssItemTags(rssItem);
-
-                    var newsItem = new NewsItem
-                    {
-                        SourceId = newsSource.Id,
+                    
+                    var newsItem = new NewsItemParseModel
+                    {                       
                         Title = rssItem.Element("title").Value,
                         Description = CleanHtmlString(rssItemDescription),
                         DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
                         LinkToSource = rssItem.Element("link").Value,
-                        ImageUrl = ExtractFirstImage(rssItemDescription)
+                        ImageUrl = ExtractFirstImage(rssItemDescription),
+                        Categories = ExtractRssItemTags(rssItem)
                     };
 
-                    if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
-                    {
-                        var addedNewsItem = _newsBusinessService.AddNewsItem(newsItem);
-                        addedNewsItems.Add(addedNewsItem);
-                        _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, tags);
-                    }
+                    newsItems.Add(newsItem);
                 }
+
+                return newsItems;
             }
             catch (Exception e)
             {

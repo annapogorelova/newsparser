@@ -39,7 +39,8 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// Inserts a news source
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
-        void AddNewsSource(NewsSource newsSource);
+        /// <returns>NewsSource object</returns>
+        NewsSource AddNewsSource(NewsSource newsSource);
 
         /// <summary>
         /// Updates a news source
@@ -52,5 +53,12 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
         void DeleteNewsSource(NewsSource newsSource);
+
+        /// <summary>
+        /// Adds a news source to user
+        /// </summary>
+        /// <param name="sourceId">News source id</param>
+        /// <param name="userId">User id</param>
+        void AddNewsSourceToUser(int sourceId, int userId);
     }
 }

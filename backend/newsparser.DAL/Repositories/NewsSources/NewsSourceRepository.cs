@@ -56,7 +56,8 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// Inserts a news source
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
-        public void AddNewsSource(NewsSource newsSource)
+        /// <returns>NewsSource object</returns>
+        public NewsSource AddNewsSource(NewsSource newsSource)
         {
             if (newsSource == null)
             {
@@ -65,6 +66,7 @@ namespace NewsParser.DAL.Repositories.NewsSources
 
             _dbContext.NewsSources.Add(newsSource);
             _dbContext.SaveChanges();
+            return _dbContext.Entry(newsSource).Entity;
         }
 
         /// <summary>
@@ -94,6 +96,12 @@ namespace NewsParser.DAL.Repositories.NewsSources
             }
 
             _dbContext.NewsSources.Remove(newsSource);
+            _dbContext.SaveChanges();
+        }
+
+        public void AddNewsSourceToUser(int sourceId, int userId)
+        {
+            _dbContext.UserSources.Add(new UserNewsSource { SourceId = sourceId, UserId = userId });
             _dbContext.SaveChanges();
         }
     }
