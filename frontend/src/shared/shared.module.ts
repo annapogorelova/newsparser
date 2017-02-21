@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule, ErrorHandler} from '@angular/core';
 import { ApiService } from './services/api/api.service';
 import { AuthService } from './services/auth/auth.service';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -9,6 +9,7 @@ import {PagerService} from './services/pager/pager.service';
 import {NavigatorService} from './services/navigator/navigator.service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {RefreshButtonComponent} from './components/refresh-button/refresh-button.component';
+import {ApiErrorHandler} from './services/api/api-error-handler';
 
 @NgModule({
     imports: [ BrowserModule ],
@@ -23,7 +24,8 @@ import {RefreshButtonComponent} from './components/refresh-button/refresh-button
             useFactory: (router: Router, activatedRoute: ActivatedRoute) =>
                 new NavigatorService(router, activatedRoute),
             deps: [Router, ActivatedRoute]
-        }
+        },
+        ApiErrorHandler
     ],
     declarations: [ PageNotFoundComponent, GoTopComponent, RefreshButtonComponent ],
     exports: [ PageNotFoundComponent, GoTopComponent, RefreshButtonComponent ]
