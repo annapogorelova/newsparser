@@ -24,6 +24,16 @@ export class NavigatorService {
      */
     setQueryParam = (name: string, value: any): Promise<boolean> => {
         this.queryParams[name] = value;
-        return this.router.navigate([], {queryParams: this.queryParams});
+        return this.navigate([], {queryParams: this.queryParams});
+    };
+
+    /**
+     * Navigate to route with a specifies params
+     * @param route - route to navigate to
+     * @param params - query params
+     * @returns {Promise<boolean>}
+     */
+    navigate = (route: any = [], params: any = {}) => {
+        return this.router.navigate(route, params);
     };
 }
