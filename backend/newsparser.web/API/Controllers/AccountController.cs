@@ -9,7 +9,7 @@ namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly IUserBusinessService _userBusinessService;
 

@@ -6,7 +6,7 @@ namespace NewsParser.API.Controllers
     /// <summary>
     /// Base controller class that contains common api controller methods
     /// </summary>
-    public class BaseController: Controller
+    public abstract class BaseController: Controller
     {
         /// <summary>
         /// Create a response with status and data object

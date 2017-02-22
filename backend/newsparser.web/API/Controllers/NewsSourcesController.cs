@@ -16,7 +16,7 @@ namespace NewsParser.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ResponseCache(CacheProfileName = "Default")]
-    public class NewsSourcesController: Controller
+    public class NewsSourcesController: BaseController
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly IFeedUpdater _feedUpdater;
@@ -63,18 +63,6 @@ namespace NewsParser.API.Controllers
             {
                 return MakeResponse(HttpStatusCode.InternalServerError, $"Failed to create a news source; {e.Message}");
             }
-        }
-
-        private JsonResult MakeResponse(HttpStatusCode statusCode, object data)
-        {
-            Response.StatusCode = (int) statusCode;
-            return new JsonResult(data);
-        }
-
-        private JsonResult MakeResponse(HttpStatusCode statusCode, string message)
-        {
-            Response.StatusCode = (int)statusCode;
-            return new JsonResult( new { Message = message });
         }
     }
 }
