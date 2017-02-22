@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
+import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
+import {PagerService} from '../../../shared/services/pager/pager.service';
 
 @Component({
     selector: 'user-subscriptions',
@@ -11,28 +13,36 @@ import {ApiService} from '../../../shared/services/api/api.service';
  * Component for editing the list of news sources
  */
 export class UserSubscriptionsComponent {
-    public newsSources: any = [];
     public loadingInProgress: boolean = false;
     public unsubscribeInProgress: boolean = false;
+    public pager: PagerService = null;
+    public hasMoreItems: boolean = true;
 
-    constructor(private apiService: ApiService){
-        this.loadNewsSources();
+    constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider){
+        this.pager = this.pagerProvider.getInstance(0, 30);
     }
 
-    loadNewsSources = () => {
+    ngOnInit() {
+        this.loadNewsSources({pageIndex: 0, pageSize: this.pager.getPageSize()});
+    }
+
+    loadNewsSources = (params: any) => {
         this.loadingInProgress = true;
-        this.apiService.get('subscription')
+        this.apiService.get('subscription', params)
             .then(newsSources => this.handleLoadedNewsSources(newsSources))
             .catch(error => this.handleErrorResponse(error));
     };
 
     hasItems = () => {
-        return this.newsSources.length;
+        return this.pager.getItems().length;
     };
 
     handleLoadedNewsSources = (data: any) => {
+        if(!data.length){
+            this.hasMoreItems = false;
+        }
         this.loadingInProgress = false;
-        this.newsSources = this.newsSources.concat(data);
+        this.pager.appendItems(data);
     };
 
     handleErrorResponse = (error: any) => {
@@ -52,5 +62,19 @@ export class UserSubscriptionsComponent {
 
     handleSubscriptionDeleteError = (error: any) => {
         this.unsubscribeInProgress = false;
+    };
+
+    getRequestParams = () => {
+        return {
+            pageIndex: this.pager.getNextPageStartIndex(),
+            pageSize: this.pager.getPageSize()
+        };
+    };
+
+    loadMore = () => {
+        if(this.loadingInProgress){
+            return;
+        }
+        this.loadNewsSources(this.getRequestParams());
     };
 }

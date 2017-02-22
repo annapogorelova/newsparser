@@ -20,7 +20,7 @@ export class AvailableNewsSourcesComponent {
     public pager: PagerService = null;
 
     constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider){
-        this.pager = this.pagerProvider.getInstance();
+        this.pager = this.pagerProvider.getInstance(0, 30);
     }
 
     ngOnInit(){
@@ -72,6 +72,7 @@ export class AvailableNewsSourcesComponent {
 
     onSubscribed = () => {
         this.subscriptionInProgress = false;
+        alert('Subscribed');
     };
 
     getRequestParams = () => {

@@ -13,7 +13,7 @@ available-news-sources li.list-group-item {
 }
 
 available-news-sources .news-sources-list {
-    max-height: 500px;
+    max-height: 450px;
     overflow: auto;
 }
 

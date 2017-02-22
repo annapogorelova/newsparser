@@ -11,7 +11,22 @@ user-subscriptions .list-heading {
     padding-bottom: 15px;
 }
 
+user-subscriptions li.list-group-item {
+    padding: 5px 5px 5px 5px;
+}
+
 user-subscriptions .loading-icon-container {
+    text-align: center;
     top: 50%;
     left: 50%;
+}
+
+user-subscriptions .loading-more-icon-container {
+    display: table;
+    margin: auto;
+}
+
+user-subscriptions .news-sources-list {
+    max-height: 450px;
+    overflow: auto;
 }
