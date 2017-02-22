@@ -15,7 +15,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
         {
             CreateMap<NewsItem, NewsItemApiModel>()
                 .ForMember(d => d.Source, opt => opt.MapFrom(s => 
-                    AutoMapper.Mapper.Map<NewsSourceApiListModel>(s.Source)))
+                    AutoMapper.Mapper.Map<NewsSourceApiModel>(s.Source)))
                 .ForMember(d => d.Tags, opt => opt.MapFrom(s => 
                     AutoMapper.Mapper.Map<List<NewsTagApiModel>>(s.NewsItemTags.Select(t => t.Tag))));
         }

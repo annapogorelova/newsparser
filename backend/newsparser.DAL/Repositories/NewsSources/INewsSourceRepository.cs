@@ -60,5 +60,12 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// <param name="sourceId">News source id</param>
         /// <param name="userId">User id</param>
         void AddNewsSourceToUser(int sourceId, int userId);
+
+        /// <summary>
+        /// Delete news source from user
+        /// </summary>
+        /// <param name="sourceId">News source id</param>
+        /// <param name="userId">User id</param>
+        void DeleteUserNewsSource(int sourceId, int userId);
     }
 }

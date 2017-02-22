@@ -26,6 +26,13 @@ namespace NewsParser.BL.Services.NewsSources
                 newsSources;
         }
 
+        public IQueryable<NewsSource> GetAvailableNewsSources(int userId)
+        {
+            return _newsSourceRepository.GetNewsSources()
+                    .Include(s => s.Users)
+                    .Where(s => s.Users.All(u => u.UserId != userId));
+        }
+
         public IQueryable<NewsSource> GetUserNewsSources(int userId)
         {
             return _newsSourceRepository.GetNewsSourcesByUser(userId);
@@ -128,6 +135,43 @@ namespace NewsParser.BL.Services.NewsSources
             {
                 throw new BusinessLayerException($"Failed adding news source {sourceId} to user {userId}", e);
             }
+        }
+
+        public void DeleteUserNewsSource(int sourceId, int userId)
+        {
+            if (_userRepository.GetUserById(userId) == null)
+            {
+                throw new BusinessLayerException($"User with id {userId} does not exist");
+            }
+
+            if (GetNewsSourceById(sourceId) == null)
+            {
+                throw new BusinessLayerException($"News source with id {sourceId} does not exist");
+            }
+
+            try
+            {
+                _newsSourceRepository.DeleteUserNewsSource(sourceId, userId);
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLayerException($"Failed deleting news source {sourceId} from user {userId}", e);
+            }
+        }
+
+        public IQueryable<NewsSource> GetNewsSourcesPage(string search = null, int pageIndex = 0, int pageSize = 0, 
+            int? userId = null)
+        {
+            var newsSources = userId.HasValue ? 
+                GetAvailableNewsSources(userId.Value) :
+                GetNewsSources();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                newsSources = newsSources.Where(s => s.Name.Contains(search));
+            }
+
+            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
         }
     }
 }

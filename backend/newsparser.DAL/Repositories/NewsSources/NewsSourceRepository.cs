@@ -104,5 +104,18 @@ namespace NewsParser.DAL.Repositories.NewsSources
             _dbContext.UserSources.Add(new UserNewsSource { SourceId = sourceId, UserId = userId });
             _dbContext.SaveChanges();
         }
+
+        public void DeleteUserNewsSource(int sourceId, int userId)
+        {
+            var userNewsSource =
+                _dbContext.UserSources.FirstOrDefault(us => us.SourceId == sourceId && us.UserId == userId);
+            if (userNewsSource == null)
+            {
+                throw new NullReferenceException($"UserNewsSource with user id {userId} and source id {sourceId} does not exist");
+            }
+
+            _dbContext.UserSources.Remove(userNewsSource);
+            _dbContext.SaveChanges();
+        }
     }
 }

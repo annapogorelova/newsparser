@@ -18,6 +18,23 @@ namespace NewsParser.BL.Services.NewsSources
         IQueryable<NewsSource> GetNewsSources(bool hasUsers = false);
 
         /// <summary>
+        /// Get news sources that are available for the user specified
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>IQueryable of NewsSource</returns>
+        IQueryable<NewsSource> GetAvailableNewsSources(int userId);
+
+        /// <summary>
+        /// Get a page of available news sources
+        /// </summary>
+        /// <param name="search">Search term</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="userId">User id to select available news sources for</param>
+        /// <returns>IQueryable of NewsSource</returns>
+        IQueryable<NewsSource> GetNewsSourcesPage(string search = null, int pageIndex = 0, int pageSize = 0, int? userId = null);
+
+        /// <summary>
         /// Get news source by user
         /// </summary>
         /// <param name="userId">User id</param>
@@ -63,5 +80,12 @@ namespace NewsParser.BL.Services.NewsSources
         /// </summary>
         /// <param name="id">News source id</param>
         void DeleteNewsSource(int id);
+
+        /// <summary>
+        /// Delete news source from user
+        /// </summary>
+        /// <param name="sourceId">News source id</param>
+        /// <param name="userId">User id</param>
+        void DeleteUserNewsSource(int sourceId, int userId);
     }
 }

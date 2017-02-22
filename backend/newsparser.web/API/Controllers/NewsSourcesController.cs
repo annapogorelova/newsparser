@@ -28,10 +28,11 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet]
-        public JsonResult Get()
+        public JsonResult Get(string search = null, int pageIndex = 0, int pageSize = 5)
         {
+            // TODO: remove hadrcode
             var userId = 2;
-            var newsSources = _newsSourceBusinessService.GetUserNewsSources(userId).ToList();
+            var newsSources = _newsSourceBusinessService.GetNewsSourcesPage(search, pageIndex, pageSize, userId).ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
             return new JsonResult(newsSourcesModels);
         }

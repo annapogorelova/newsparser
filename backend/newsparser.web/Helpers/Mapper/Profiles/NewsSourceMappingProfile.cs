@@ -12,9 +12,6 @@ namespace NewsParser.Helpers.Mapper.Profiles
         public NewsSourceMappingProfile()
         {
             CreateMap<NewsSource, NewsSourceApiModel>();
-
-            CreateMap<NewsSource, NewsSourceApiListModel>()
-                .ForMember(d => d.WebsiteUrl, opt => opt.MapFrom(s => s.RssUrl));
         }
     }
 }

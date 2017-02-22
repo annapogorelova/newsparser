@@ -14,7 +14,7 @@ namespace NewsParser.API.Models
         public DateTime DateAdded { get; set; }
         public string LinkToSource { get; set; }
         public string ImageUrl { get; set; }
-        public NewsSourceApiListModel Source { get; set; }        
+        public NewsSourceApiModel Source { get; set; }        
         public List<NewsTagApiModel> Tags { get; set; } 
     }
 }
