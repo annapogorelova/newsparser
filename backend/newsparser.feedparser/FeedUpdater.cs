@@ -146,7 +146,7 @@ namespace newsparser.feedparser
         private IQueryable<NewsSource> GetNewsSources(int? userId)
         {
             return userId != null
-                   ? _newsSourceBusinessService.GetUserNewsSources(userId.Value)
+                   ? _newsSourceBusinessService.GetUserNewsSourcesPage(userId.Value)
                    : _newsSourceBusinessService.GetNewsSources(true);
         }
 

@@ -33,9 +33,16 @@ namespace NewsParser.BL.Services.NewsSources
                     .Where(s => s.Users.All(u => u.UserId != userId));
         }
 
-        public IQueryable<NewsSource> GetUserNewsSources(int userId)
+        public IQueryable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 0, string search = null)
         {
-            return _newsSourceRepository.GetNewsSourcesByUser(userId);
+            var newsSources = _newsSourceRepository.GetNewsSourcesByUser(userId);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                newsSources = newsSources.Where(s => s.Name.Contains(search));
+            }
+
+            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
         } 
 
         public NewsSource GetNewsSourceById(int id)
@@ -159,7 +166,7 @@ namespace NewsParser.BL.Services.NewsSources
             }
         }
 
-        public IQueryable<NewsSource> GetNewsSourcesPage(string search = null, int pageIndex = 0, int pageSize = 0, 
+        public IQueryable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 0, string search = null,
             int? userId = null)
         {
             var newsSources = userId.HasValue ? 

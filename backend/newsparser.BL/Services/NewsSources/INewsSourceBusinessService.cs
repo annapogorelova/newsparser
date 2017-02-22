@@ -32,14 +32,17 @@ namespace NewsParser.BL.Services.NewsSources
         /// <param name="pageSize">Page size</param>
         /// <param name="userId">User id to select available news sources for</param>
         /// <returns>IQueryable of NewsSource</returns>
-        IQueryable<NewsSource> GetNewsSourcesPage(string search = null, int pageIndex = 0, int pageSize = 0, int? userId = null);
+        IQueryable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 0, string search = null, int? userId = null);
 
         /// <summary>
         /// Get news source by user
         /// </summary>
         /// <param name="userId">User id</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="search">Search string</param>
         /// <returns>IQueryable of news sources</returns>
-        IQueryable<NewsSource> GetUserNewsSources(int userId);
+        IQueryable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 0, string search = null);
 
         /// <summary>
         /// Get news source by id
