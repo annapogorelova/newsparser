@@ -1,10 +1,10 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {CanActivateAuth} from '../shared/services/auth/can-activate';
-import {NewsSourcesListComponent} from './components/news-sources-list/news-sources-list.component';
+import {UserSubscriptionsComponent} from './components/user-subscriptions/user-subscriptions.component';
 
 const newsRoutes: Routes = [
-    {path: 'news-sources', component: NewsSourcesListComponent, canActivate: [CanActivateAuth]}
+    {path: 'news-sources', component: UserSubscriptionsComponent, canActivate: [CanActivateAuth]}
 ];
 
 export const NewsSourcesRoutingProviders: any[] = [];

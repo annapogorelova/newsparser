@@ -2,15 +2,15 @@ import {Component} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 
 @Component({
-    selector: 'news-sources-list',
-    templateUrl: 'news-sources-list.component.html',
-    styles: [require('./news-sources-list.component.css').toString()]
+    selector: 'user-subscriptions',
+    templateUrl: 'user-subscriptions.component.html',
+    styles: [require('./user-subscriptions.component.css').toString()]
 })
 
 /**
  * Component for editing the list of news sources
  */
-export class NewsSourcesListComponent {
+export class UserSubscriptionsComponent {
     public newsSources: any = [];
     public loadingInProgress: boolean = false;
     public unsubscribeInProgress: boolean = false;
@@ -21,7 +21,7 @@ export class NewsSourcesListComponent {
 
     loadNewsSources = () => {
         this.loadingInProgress = true;
-        this.apiService.get('newsSources')
+        this.apiService.get('subscription')
             .then(newsSources => this.handleLoadedNewsSources(newsSources))
             .catch(error => this.handleErrorResponse(error));
     };
