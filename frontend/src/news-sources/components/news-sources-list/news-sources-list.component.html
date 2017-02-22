@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h3 class="list-heading">Your news sources</h3>
+            <add-news-source></add-news-source>
+            <div *ngIf="hasItems()">
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let newsSource of newsSources">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{newsSource.name}}</h5>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-danger" (click)="unsubscribe(newsSource)"
+                                    [disabled]="unsubscribeInProgress">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small>{{newsSource.rssUrl}}</small>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="!hasItems() && !loadingInProgress">
+                <h5>No News Sources</h5>
+            </div>
+            <div *ngIf="!hasItems() && loadingInProgress" class="loading-icon-container">
+                <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>

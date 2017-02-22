@@ -1,66 +1,72 @@
-<div class="row" *ngIf="hasItems()">
-    <div class="col-md-12">
-        <div class="refresh-button-container">
-            <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
+<div class="news-container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <div *ngIf="hasItems()" class="refresh-button-container">
+                <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <news-sources [selectHandler]="selectSource" [initialSelectedSourceId]="selectedSourceId"></news-sources>
-    <div class="col-md-12">
-        <div *ngIf="hasItems()" class="news-container" infinite-scroll
-             [infiniteScrollDistance]="4"
-             [infiniteScrollThrottle]="300"
-             [infiniteScrollDisabled]="!hasMoreItems"
-             (scrolled)="loadMore()">
-            <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
-                <div class="news-item-content list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="news-item-info-container">
-                        <div class="mb-1 pull-right">
-                            <small>{{newsItem.dateAdded | date}}</small>
-                            <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
-                                <span class="badge badge-primary badge-pill">{{newsItem.source.name}}</span>
-                            </h4>
+    <div class="row">
+        <div class="col-md-2">
+            <news-sources [selectHandler]="selectSource" [initialSelectedSourceId]="selectedSourceId"></news-sources>
+        </div>
+        <div class="col-md-10">
+            <div *ngIf="hasItems()" class="news-container" infinite-scroll
+                 [infiniteScrollDistance]="4"
+                 [infiniteScrollThrottle]="300"
+                 [infiniteScrollDisabled]="!hasMoreItems"
+                 (scrolled)="loadMore()">
+                <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
+                    <div class="news-item-content list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="news-item-info-container">
+                            <div class="mb-1 pull-right">
+                                <small>{{newsItem.dateAdded | date}}</small>
+                                <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
+                                    <span class="badge badge-primary badge-pill">{{newsItem.source.name}}</span>
+                                </h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="news-item-header">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">
-                                <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
-                                    {{newsItem.title}}
-                                </a>
-                            </h5>
+                        <div class="news-item-header">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
+                                        {{newsItem.title}}
+                                    </a>
+                                </h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="news-image-container" *ngIf="newsItem.imageUrl"
-                         [ngStyle]="{'background-image': 'url(' + newsItem.imageUrl + ')'}">
-                    </div>
-                    <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
-                    <div class="news-item-footer">
-                        <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
-                            <h6>
-                                <span class="badge badge-default badge-pill">
-                                    {{tag.name}}
-                                </span>
-                            </h6>
+                        <div class="news-image-container" *ngIf="newsItem.imageUrl"
+                             [ngStyle]="{'background-image': 'url(' + newsItem.imageUrl + ')'}">
+                        </div>
+                        <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
+                        <div class="news-item-footer">
+                            <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
+                                <h6>
+                                    <span class="badge badge-default badge-pill">
+                                        {{tag.name}}
+                                    </span>
+                                </h6>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+                    <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                </div>
             </div>
-            <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+        </div>
+        <go-top-button [scrollYDistance]="250"></go-top-button>
+    </div>
+    <div class="row" *ngIf="!hasItems()">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <div *ngIf="!hasItems() && !loadingInProgress">
+                <h5>No News</h5>
+            </div>
+            <div *ngIf="!hasItems() && loadingInProgress" class="loading-icon-container">
                 <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
             </div>
-        </div>
-    </div>
-    <go-top-button [scrollYDistance]="250"></go-top-button>
-</div>
-<div class="row" *ngIf="!hasItems()">
-    <div class="col-md-12">
-        <div *ngIf="!hasItems() && !loadingInProgress" class="no-news-text-container">
-            <h5>No News</h5>
-        </div>
-        <div *ngIf="!hasItems() && loadingInProgress" class="loading-icon-container">
-            <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
         </div>
     </div>
 </div>

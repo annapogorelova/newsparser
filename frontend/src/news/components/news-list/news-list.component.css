@@ -1,43 +1,47 @@
-div.news-item {
+news-list div.news-container {
+    margin-top: 10px;
+}
+
+news-list div.news-item {
     margin: 10px 0 10px 0;
     font-size: small;
 }
 
-.news-item p, br {
+news-list .news-item p, br {
     padding-bottom: 0;
 }
 
-.news-item h2, h3, h4, h5 {
+news-list .news-item h2, h3, h4, h5 {
     font-size: 1rem;
     padding: 5px 0 5px 0;
     margin: 0;
 }
 
-.news-item-source {
+news-list .news-item-source {
     display: inline-block;
 }
 
-.news-item-footer {
+news-list .news-item-footer {
     padding-top: 10px;
 }
 
-.news-item-footer h6 {
+news-list .news-item-footer h6 {
     margin: 0;
 }
 
-div.news-item-content * {
+news-list div.news-item-content * {
     max-width: 100%;
 }
 
-div.news-item-content img {
+news-list div.news-item-content img {
     padding: 5px;
 }
 
-div.news-item-info-container {
+news-list div.news-item-info-container {
     width: 100%;
 }
 
-.news-image-container {
+news-list .news-image-container {
     width: 100%;
     overflow: hidden;
     min-height: 120px;
@@ -48,52 +52,42 @@ div.news-item-info-container {
     margin: 5px 0 5px 0;
 }
 
-.no-news-text-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-}
-
-.no-news-text-container h5 {
-    line-height: 200px;
-    vertical-align: middle;
-}
-
-.loading-more-icon-container {
+news-list .loading-more-icon-container {
     display: table;
     margin: auto;
 }
 
-.loading-icon-container {
+news-list .loading-icon-container {
     position: fixed;
     top: 50%;
     left: 50%;
 }
 
-div.news-item-tag-container {
+news-list div.news-item-tag-container {
     display: inline-block;
     padding-left: 5px;
     padding-bottom: 5px;
 }
 
-.news-item-content.list-group-item-action:focus,
-.news-item-content.list-group-item-action:hover {
+news-list .news-item-content.list-group-item-action:focus,
+news-list .news-item-content.list-group-item-action:hover {
     background-color: white;
 }
 
-.news-item-link {
+news-list .news-item-link {
     color: #636c72;
 }
 
-.news-item-link:hover {
+news-list .news-item-link:hover {
     color: #636c72;
 }
 
-.news-item-source span {
+news-list .news-item-source span {
     cursor: pointer;
 }
 
-.refresh-button-container {
+news-list .refresh-button-container {
     display: table;
     margin: auto;
+    padding-bottom: 10px;
 }

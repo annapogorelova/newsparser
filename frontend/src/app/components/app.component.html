@@ -10,6 +10,9 @@
             <li class="nav-item" *ngIf="authService.isAuthenticated()">
                 <a class="nav-link" routerLink="/news" routerLinkActive="active">News</a>
             </li>
+            <li class="nav-item" *ngIf="authService.isAuthenticated()">
+                <a class="nav-link" routerLink="/news-sources" routerLinkActive="active">News Sources</a>
+            </li>
         </ul>
         <div class="navbar-nav">
             <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" (click)="signOut()">
@@ -22,6 +25,6 @@
         </div>
     </div>
 </nav>
-<div class="container">
+<div class="container-fluid">
     <router-outlet></router-outlet>
 </div>

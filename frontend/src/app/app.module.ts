@@ -8,10 +8,11 @@ import { AppRoutingProviders, AppRouting } from './app.routing';
 import { AccountModule } from '../account/account.module';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NewsSourcesModule} from '../news-sources/news-sources.module';
 
 
 @NgModule({
-  imports: [ BrowserModule, SharedModule, HttpModule, NewsModule, AccountModule, AppRouting,
+  imports: [ BrowserModule, SharedModule, HttpModule, NewsModule, NewsSourcesModule, AccountModule, AppRouting,
     LocalStorageModule.withConfig({
       prefix: 'news-app',
       storageType: 'localStorage'

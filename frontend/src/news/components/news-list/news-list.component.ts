@@ -5,6 +5,7 @@ import {NavigatorService} from '../../../shared/services/navigator/navigator.ser
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
+    selector: 'news-list',
     templateUrl: './news-list.component.html',
     styles: [require('./news-list.component.css').toString()]
 })
@@ -35,11 +36,14 @@ export class NewsListComponent  {
         window.scrollTo(0, 0);
         this.initializeRequestParams();
 
-        this.loadNews({
-            pageIndex: 0,
-            pageSize: this.pager.getNumberOfItemsToPreload(),
-            sourceId: this.selectedSourceId
-        });
+        var itemsToPreload = this.pager.getNumberOfItemsToPreload();
+        if(itemsToPreload){
+            this.loadNews({
+                pageIndex: 0,
+                pageSize: itemsToPreload,
+                sourceId: this.selectedSourceId
+            });
+        }
     }
 
     /**
@@ -49,12 +53,19 @@ export class NewsListComponent  {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page: string) =>
-                parseInt(page) ? this.pager.setPage(parseInt(page)) : this.pager.setPage(1));
+                !isNaN(parseInt(page)) ? this.pager.setPage(parseInt(page)) : this.setInitialPage());
 
         this.route.queryParams
             .map((queryParams) => queryParams['source'])
             .subscribe((sourceId: string) =>
                 this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
+
+
+    };
+
+    private setInitialPage = () => {
+        this.pager.setPage(1)
+        this.navigator.setQueryParam('page', 1);
     };
 
     /**
@@ -67,9 +78,7 @@ export class NewsListComponent  {
         }
         this.pager.appendItems(data);
         this.navigator.setQueryParam('page', this.pager.getPageNumber());
-        if(this.selectedSourceId != null){
-            this.navigator.setQueryParam('source', this.selectedSourceId);
-        }
+        this.navigator.setQueryParam('source', this.selectedSourceId);
         this.loadingInProgress = false;
         this.refreshInProgress = false;
     };

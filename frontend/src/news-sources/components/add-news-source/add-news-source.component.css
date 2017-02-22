@@ -1,0 +1,7 @@
+add-news-source button[type=submit] {
+    cursor: pointer;
+}
+
+add-news-source div.input-group {
+    padding: 8px 0 8px 0;
+}

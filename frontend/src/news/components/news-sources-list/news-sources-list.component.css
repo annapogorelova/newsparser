@@ -1,10 +1,3 @@
-news-sources .news-sources-container {
-    position: fixed;
-    max-width: 100px;
-    top: 10%;
-    left: 20px;
-}
-
 news-sources .news-source-item {
     cursor: pointer;
 }

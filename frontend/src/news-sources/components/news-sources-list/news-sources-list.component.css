@@ -1,0 +1,18 @@
+news-sources-list .container {
+    margin-top: 10px;
+}
+
+news-sources-list button {
+    cursor: pointer;
+}
+
+news-sources-list .list-heading {
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+news-sources-list .loading-icon-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
