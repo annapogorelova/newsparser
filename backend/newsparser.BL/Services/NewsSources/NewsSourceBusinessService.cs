@@ -60,7 +60,7 @@ namespace NewsParser.BL.Services.NewsSources
             var existingNewsSource = _newsSourceRepository.GetNewsSourceByUrl(newsSource.RssUrl);
             if (existingNewsSource != null)
             {
-                throw new BusinessLayerException($"News source width RSS url {newsSource.RssUrl} already exists");
+                throw new BusinessLayerException($"News source with RSS url {newsSource.RssUrl} already exists");
             }
 
             try
