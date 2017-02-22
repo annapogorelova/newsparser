@@ -3,6 +3,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerService} from '../../../shared/services/pager/pager.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
+import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 
 @Component({
     selector: 'news-list',
@@ -18,9 +19,11 @@ export class NewsListComponent  {
     public loadingInProgress: boolean = false;
     public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
+    public pager: PagerService = null;
 
-    constructor(private apiService: ApiService, private pager: PagerService,
-                private navigator: NavigatorService, @Inject(ActivatedRoute) private route:ActivatedRoute,){
+    constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider,
+                private navigator: NavigatorService, @Inject(ActivatedRoute) private route:ActivatedRoute){
+        this.pager = this.pagerProvider.getInstance();
     }
 
     /**

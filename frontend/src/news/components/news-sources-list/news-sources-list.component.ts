@@ -22,7 +22,7 @@ export class NewsSourcesListComponent {
     }
 
     loadNewsSources = () => {
-        this.apiService.get('newsSources').then(newsSources => this.handleLoadedNewsSources(newsSources));
+        this.apiService.get('subscription').then(newsSources => this.handleLoadedNewsSources(newsSources));
     };
 
     handleLoadedNewsSources = (data: any) => {
