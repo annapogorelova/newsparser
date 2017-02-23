@@ -2,7 +2,8 @@
     <div class="news-source-item-container" *ngFor="let newsSource of newsSources">
         <span class="news-source-item badge badge-pill badge-primary"
               [class.selected]="selectedSourceId == newsSource.id"
-              (click)="onSelect(newsSource)">
+              (click)="onSelect(newsSource)"
+              [attr.title]="newsSource.name">
             {{newsSource.name}}
         </span>
     </div>

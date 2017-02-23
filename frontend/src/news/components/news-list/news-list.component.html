@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-10">
-            <div *ngIf="hasItems()" class="refresh-button-container">
+            <div class="refresh-button-container">
                 <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
             </div>
         </div>
@@ -12,7 +12,7 @@
             <news-sources [selectHandler]="selectSource" [initialSelectedSourceId]="selectedSourceId"></news-sources>
         </div>
         <div class="col-md-10">
-            <div *ngIf="hasItems()" class="news-container" infinite-scroll
+            <div class="news-container" infinite-scroll
                  [infiniteScrollDistance]="4"
                  [infiniteScrollThrottle]="300"
                  [infiniteScrollDisabled]="!hasMoreItems"
@@ -51,22 +51,16 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+                <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
                     <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                </div>
+                <div class="loading-status">
+                    <i *ngIf="!hasItems() && loadingInProgress"
+                       class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                    <h5 *ngIf="!hasItems() && !loadingInProgress" >No News</h5>
                 </div>
             </div>
         </div>
         <go-top-button [scrollYDistance]="250"></go-top-button>
-    </div>
-    <div class="row" *ngIf="!hasItems()">
-        <div class="col-md-2"></div>
-        <div class="col-md-10">
-            <div *ngIf="!hasItems() && !loadingInProgress">
-                <h5>No News</h5>
-            </div>
-            <div *ngIf="!hasItems() && loadingInProgress" class="loading-icon-container">
-                <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
-            </div>
-        </div>
     </div>
 </div>
