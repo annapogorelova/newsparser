@@ -15,7 +15,7 @@ namespace NewsParser.BL.Services.NewsTags
             _newsTagRepository = newsTagRepository;
         }
 
-        public IQueryable<NewsTag> GetNewsTags()
+        public IEnumerable<NewsTag> GetNewsTags()
         {
             return _newsTagRepository.GetNewsTags();
         }

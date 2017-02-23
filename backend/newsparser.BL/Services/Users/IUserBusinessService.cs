@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.Users
@@ -11,15 +11,15 @@ namespace NewsParser.BL.Services.Users
         /// <summary>
         /// Get users
         /// </summary>
-        /// <returns>IQueryable of User</returns>
-        IQueryable<User> GetUsers();
+        /// <returns>IEnumerable of User</returns>
+        IEnumerable<User> GetUsers();
 
         /// <summary>
         /// Get users by news source id
         /// </summary>
         /// <param name="newsSourceId">News source id</param>
-        /// <returns>IQueryable of User</returns>
-        IQueryable<User> GetUsersByNewsSource(int newsSourceId);
+        /// <returns>IEnumerable of User</returns>
+        IEnumerable<User> GetUsersByNewsSource(int newsSourceId);
 
         /// <summary>
         /// Get user by id

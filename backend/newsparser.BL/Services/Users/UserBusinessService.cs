@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
 
@@ -14,12 +14,12 @@ namespace NewsParser.BL.Services.Users
             _userRepository = userRepository;
         }
 
-        public IQueryable<User> GetUsers()
+        public IEnumerable<User> GetUsers()
         {
             return _userRepository.GetUsers();
         }
 
-        public IQueryable<User> GetUsersByNewsSource(int newsSourceId)
+        public IEnumerable<User> GetUsersByNewsSource(int newsSourceId)
         {
             return _userRepository.GetUsersByNewsSource(newsSourceId);
         }

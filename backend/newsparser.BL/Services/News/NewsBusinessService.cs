@@ -5,7 +5,6 @@ using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.News;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.NewsTags;
-using NewsParser.DAL.Repositories.Users;
 
 namespace NewsParser.BL.Services.News
 {
@@ -16,16 +15,14 @@ namespace NewsParser.BL.Services.News
     {
         private readonly INewsRepository _newsRepository;
         private readonly INewsTagRepository _newsTagRepository;
-        private readonly IUserRepository _userRepository;
 
-        public NewsBusinessService(INewsRepository newsRepository, INewsTagRepository newsTagRepository, IUserRepository userRepository)
+        public NewsBusinessService(INewsRepository newsRepository, INewsTagRepository newsTagRepository)
         {
             _newsRepository = newsRepository;
             _newsTagRepository = newsTagRepository;
-            _userRepository = userRepository;
         }
 
-        public IQueryable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, int? userId = null)
+        public IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, int? userId = null)
         {
             if (pageIndex < 0)
             {
@@ -53,7 +50,7 @@ namespace NewsParser.BL.Services.News
             return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);
         }
 
-        public IQueryable<NewsItem> GetNewsBySource(int sourceId)
+        public IEnumerable<NewsItem> GetNewsBySource(int sourceId)
         {
             return _newsRepository.GetNewsBySource(sourceId);
         }

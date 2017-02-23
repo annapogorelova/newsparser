@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.NewsSources
@@ -14,15 +13,15 @@ namespace NewsParser.BL.Services.NewsSources
         /// </summary>
         /// <param name="hasUsers">By default false; 
         /// If true - query will include only news sources with at least one subscribed user</param>
-        /// <returns>IQueryable of NewsSource</returns>
-        IQueryable<NewsSource> GetNewsSources(bool hasUsers = false);
+        /// <returns>IEnumerable of NewsSource</returns>
+        IEnumerable<NewsSource> GetNewsSources(bool hasUsers = false);
 
         /// <summary>
         /// Get news sources that are available for the user specified
         /// </summary>
         /// <param name="userId">User id</param>
-        /// <returns>IQueryable of NewsSource</returns>
-        IQueryable<NewsSource> GetAvailableNewsSources(int userId);
+        /// <returns>IEnumerable of NewsSource</returns>
+        IEnumerable<NewsSource> GetAvailableNewsSources(int userId);
 
         /// <summary>
         /// Get a page of available news sources
@@ -31,8 +30,8 @@ namespace NewsParser.BL.Services.NewsSources
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="userId">User id to select available news sources for</param>
-        /// <returns>IQueryable of NewsSource</returns>
-        IQueryable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 0, string search = null, int? userId = null);
+        /// <returns>IEnumerable of NewsSource</returns>
+        IEnumerable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 5, string search = null, int? userId = null);
 
         /// <summary>
         /// Get news source by user
@@ -41,8 +40,8 @@ namespace NewsParser.BL.Services.NewsSources
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="search">Search string</param>
-        /// <returns>IQueryable of news sources</returns>
-        IQueryable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 0, string search = null);
+        /// <returns>IEnumerable of news sources</returns>
+        IEnumerable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 5, string search = null);
 
         /// <summary>
         /// Get news source by id

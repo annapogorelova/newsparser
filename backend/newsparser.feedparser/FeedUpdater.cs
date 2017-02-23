@@ -143,7 +143,7 @@ namespace newsparser.feedparser
             SetNewsSourceUpdatingState(newsSource, false);
         }
 
-        private IQueryable<NewsSource> GetNewsSources(int? userId)
+        private IEnumerable<NewsSource> GetNewsSources(int? userId)
         {
             return userId != null
                    ? _newsSourceBusinessService.GetUserNewsSourcesPage(userId.Value)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.NewsTags
@@ -12,8 +11,8 @@ namespace NewsParser.BL.Services.NewsTags
         /// <summary>
         /// Get news tags
         /// </summary>
-        /// <returns>IQueryable of NewsTag</returns>
-        IQueryable<NewsTag> GetNewsTags();
+        /// <returns>IEnumerable of NewsTag</returns>
+        IEnumerable<NewsTag> GetNewsTags();
 
         /// <summary>
         /// Get news tag by id

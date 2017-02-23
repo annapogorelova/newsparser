@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.NewsSources;
@@ -18,7 +19,7 @@ namespace NewsParser.BL.Services.NewsSources
             _userRepository = userRepository;
         }
 
-        public IQueryable<NewsSource> GetNewsSources(bool hasUsers = false)
+        public IEnumerable<NewsSource> GetNewsSources(bool hasUsers = false)
         {
             var newsSources = _newsSourceRepository.GetNewsSources();
             return hasUsers ?
@@ -26,14 +27,14 @@ namespace NewsParser.BL.Services.NewsSources
                 newsSources;
         }
 
-        public IQueryable<NewsSource> GetAvailableNewsSources(int userId)
+        public IEnumerable<NewsSource> GetAvailableNewsSources(int userId)
         {
             return _newsSourceRepository.GetNewsSources()
                     .Include(s => s.Users)
                     .Where(s => s.Users.All(u => u.UserId != userId));
         }
 
-        public IQueryable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 0, string search = null)
+        public IEnumerable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 5, string search = null)
         {
             var newsSources = _newsSourceRepository.GetNewsSourcesByUser(userId);
 
@@ -43,7 +44,22 @@ namespace NewsParser.BL.Services.NewsSources
             }
 
             return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
-        } 
+        }
+
+        public IEnumerable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 5, string search = null,
+            int? userId = null)
+        {
+            var newsSources = userId.HasValue ?
+                GetAvailableNewsSources(userId.Value) :
+                GetNewsSources();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                newsSources = newsSources.Where(s => s.Name.Contains(search));
+            }
+
+            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
+        }
 
         public NewsSource GetNewsSourceById(int id)
         {
@@ -164,21 +180,6 @@ namespace NewsParser.BL.Services.NewsSources
             {
                 throw new BusinessLayerException($"Failed deleting news source {sourceId} from user {userId}", e);
             }
-        }
-
-        public IQueryable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 0, string search = null,
-            int? userId = null)
-        {
-            var newsSources = userId.HasValue ? 
-                GetAvailableNewsSources(userId.Value) :
-                GetNewsSources();
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                newsSources = newsSources.Where(s => s.Name.Contains(search));
-            }
-
-            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
         }
     }
 }

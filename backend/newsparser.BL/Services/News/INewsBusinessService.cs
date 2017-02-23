@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.News
@@ -16,15 +15,15 @@ namespace NewsParser.BL.Services.News
         /// <param name="pageSize">Page size</param>
         /// <param name="sourceId">Source id</param>
         /// <param name="userId">User id</param>
-        /// <returns>IQueryable of NewsItem</returns>
-        IQueryable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, int? userId = null);
+        /// <returns>IEnumerable of NewsItem</returns>
+        IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, int? userId = null);
 
         /// <summary>
         /// Get news by source
         /// </summary>
         /// <param name="sourceId">Source id</param>
-        /// <returns>IQueryable of NewsItem</returns>
-        IQueryable<NewsItem> GetNewsBySource(int sourceId);
+        /// <returns>IEnumerable of NewsItem</returns>
+        IEnumerable<NewsItem> GetNewsBySource(int sourceId);
 
         /// <summary>
         /// Get news item by id
