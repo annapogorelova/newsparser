@@ -44,7 +44,7 @@ export class PagerService {
      * @returns {number} The start index for items to be fetched
      */
     getNextPageStartIndex = () => {
-        return this.pageNumber * this.pageSize;
+        return this.items.length;
     };
 
     /**
