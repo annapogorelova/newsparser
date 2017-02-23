@@ -32,7 +32,9 @@ export class NewsListComponent  {
      */
     loadNews = (params: any) => {
         this.loadingInProgress = true;
-        this.apiService.get('news', params).then(news => this.handleLoadedNews(news));
+        this.apiService.get('news', params)
+            .then(news => this.handleLoadedNews(news))
+            .catch(error => this.handleLoadError(error));
     };
 
     ngOnInit(){
@@ -86,6 +88,11 @@ export class NewsListComponent  {
         this.refreshInProgress = false;
     };
 
+    handleLoadError = (error: any) => {
+        this.loadingInProgress = false;
+        this.refreshInProgress = false;
+    };
+
     /**
      * Returns current request params in form of object
      * @param refresh - sets the 'refresh' param
@@ -117,8 +124,8 @@ export class NewsListComponent  {
             return;
         }
         this.refreshInProgress = true;
-        this.pager.reset(false);
-        this.loadNews(this.getRequestParams(true));
+        this.pager.reset();
+        this.loadNews({pageIndex: 0, pageSize: this.pager.getPageSize(), refresh: true, sourceId: this.selectedSourceId});
     };
 
     /**
