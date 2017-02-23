@@ -22,7 +22,8 @@ export class NewsSourcesListComponent {
     }
 
     loadNewsSources = () => {
-        this.apiService.get('subscription').then(newsSources => this.handleLoadedNewsSources(newsSources));
+        this.apiService.get('subscription', {pageIndex: 0, pageSize: 30})
+            .then(newsSources => this.handleLoadedNewsSources(newsSources));
     };
 
     handleLoadedNewsSources = (data: any) => {
