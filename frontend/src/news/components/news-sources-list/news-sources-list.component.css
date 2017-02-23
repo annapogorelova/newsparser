@@ -15,6 +15,12 @@ news-sources .news-source-item {
 
 @media (min-width: 800px) {
     news-sources .news-source-item {
+        max-width: 85px;
+    }
+}
+
+@media (min-width: 850px) {
+    news-sources .news-source-item {
         max-width: 90px;
     }
 }
