@@ -21,16 +21,24 @@ news-list .news-item-source {
     display: inline-block;
 }
 
+news-list div.news-item-content * {
+    max-width: 100%;
+}
+
+news-list .news-item-source span {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 70%;
+}
+
 news-list .news-item-footer {
     padding-top: 10px;
 }
 
 news-list .news-item-footer h6 {
     margin: 0;
-}
-
-news-list div.news-item-content * {
-    max-width: 100%;
 }
 
 news-list div.news-item-content img {

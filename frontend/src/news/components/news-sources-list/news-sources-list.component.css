@@ -9,19 +9,19 @@ news-sources .news-source-item {
 
 @media (min-width: 768px) {
     news-sources .news-source-item {
-        max-width: 85px;
+        max-width: 80px;
     }
 }
 
 @media (min-width: 800px) {
     news-sources .news-source-item {
-        max-width: 95px;
+        max-width: 90px;
     }
 }
 
 @media (min-width: 900px) {
     news-sources .news-source-item {
-        max-width: 110px;
+        max-width: 105px;
     }
 }
 
