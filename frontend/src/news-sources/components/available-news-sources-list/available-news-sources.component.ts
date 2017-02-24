@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
+import {AppSettings} from '../../../app/app.settings';
 
 /**
  * Component for listing the news sources available for user
@@ -18,7 +19,7 @@ export class AvailableNewsSourcesComponent extends BaseListComponent{
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider){
-        super(apiService, pagerProvider.getInstance(1, 30), 'newsSources');
+        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE), 'newsSources');
     }
 
     ngOnInit(){

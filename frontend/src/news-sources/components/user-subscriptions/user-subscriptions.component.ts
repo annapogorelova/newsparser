@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
+import {AppSettings} from '../../../app/app.settings';
 
 @Component({
     selector: 'user-subscriptions',
@@ -17,7 +18,7 @@ export class UserSubscriptionsComponent extends BaseListComponent{
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider){
-        super(apiService, pagerProvider.getInstance(1, 30), 'subscription')
+        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE), 'subscription')
     }
 
     ngOnInit() {
