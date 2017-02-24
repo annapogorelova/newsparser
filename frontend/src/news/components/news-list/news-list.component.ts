@@ -1,9 +1,9 @@
 import {Component, HostListener, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
-import {PagerService} from '../../../shared/services/pager/pager.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
+import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
 
 @Component({
     selector: 'news-list',
@@ -14,28 +14,16 @@ import {PagerServiceProvider} from '../../../shared/services/pager/pager.service
 /**
  * Component represents a list of news
  */
-export class NewsListComponent  {
-    public hasMoreItems: boolean = true;
-    public loadingInProgress: boolean = false;
+export class NewsListComponent extends BaseListComponent{
     public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
-    public pager: PagerService = null;
 
-    constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider,
-                private navigator: NavigatorService, @Inject(ActivatedRoute) private route:ActivatedRoute){
-        this.pager = this.pagerProvider.getInstance();
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider,
+                private navigator: NavigatorService,
+                @Inject(ActivatedRoute) private route:ActivatedRoute){
+        super(apiService, pagerProvider.getInstance(), 'news');
     }
-
-    /**
-     * Calls the api GET method to get the list of news
-     * @param params
-     */
-    loadNews = (params: any) => {
-        this.loadingInProgress = true;
-        this.apiService.get('news', params)
-            .then(news => this.handleLoadedNews(news))
-            .catch(error => this.handleLoadError(error));
-    };
 
     ngOnInit(){
         window.scrollTo(0, 0);
@@ -43,11 +31,7 @@ export class NewsListComponent  {
 
         var itemsToPreload = this.pager.getNumberOfItemsToPreload();
         if(itemsToPreload){
-            this.loadNews({
-                pageIndex: 0,
-                pageSize: itemsToPreload,
-                sourceId: this.selectedSourceId
-            });
+            this.loadData(this.getRequestParams());
         }
     }
 
@@ -64,33 +48,11 @@ export class NewsListComponent  {
             .map((queryParams) => queryParams['source'])
             .subscribe((sourceId: string) =>
                 this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
-
-
     };
 
     private setInitialPage = () => {
-        this.pager.setPage(1)
+        this.pager.setPage(1);
         this.navigator.setQueryParam('page', 1);
-    };
-
-    /**
-     * Updates pager and navigation according to loaded data
-     * @param data
-     */
-    handleLoadedNews = (data: any) => {
-        if(!data.length){
-            this.hasMoreItems = false;
-        }
-        this.pager.appendItems(data);
-        this.navigator.setQueryParam('page', this.pager.getPageNumber());
-        this.navigator.setQueryParam('source', this.selectedSourceId);
-        this.loadingInProgress = false;
-        this.refreshInProgress = false;
-    };
-
-    handleLoadError = (error: any) => {
-        this.loadingInProgress = false;
-        this.refreshInProgress = false;
     };
 
     /**
@@ -100,8 +62,6 @@ export class NewsListComponent  {
      */
     getRequestParams = (refresh: boolean = false) => {
         return {
-            pageIndex: this.pager.getNextPageStartIndex(),
-            pageSize: this.pager.getPageSize(),
             sourceId: this.selectedSourceId,
             refresh: refresh
         };
@@ -112,8 +72,9 @@ export class NewsListComponent  {
      * (without launching the RSS sources refresh action on server)
      */
     reload = () => {
-        this.pager.reset();
-        this.loadNews(this.getRequestParams());
+        this.reloadData(this.getRequestParams())
+            .then(this.setUrlQueryParams)
+            .catch(() => console.log('Reload failed'));
     };
 
     /**
@@ -125,17 +86,27 @@ export class NewsListComponent  {
         }
         this.refreshInProgress = true;
         this.pager.reset();
-        this.loadNews({pageIndex: 0, pageSize: this.pager.getPageSize(), refresh: true, sourceId: this.selectedSourceId});
+        this.loadData(this.getRequestParams(true))
+            .then(this.onRefresh)
+            .catch(this.onRefresh);
+    };
+
+    onRefresh = () => {
+        this.refreshInProgress = false;
     };
 
     /**
      * Load next page of news
      */
     loadMore = () => {
-        if(this.loadingInProgress){
-            return;
-        }
-        this.loadNews(this.getRequestParams());
+        this.loadMoreData(this.getRequestParams())
+            .then(this.setUrlQueryParams)
+            .catch(() => console.log('Loading more failed'));
+    };
+
+    setUrlQueryParams = () => {
+        this.navigator.setQueryParam('page', this.pager.getPageNumber());
+        this.navigator.setQueryParam('source', this.selectedSourceId);
     };
 
     /**
@@ -147,10 +118,6 @@ export class NewsListComponent  {
         this.reload();
     };
 
-    hasItems = () => {
-        return this.pager.getItems().length;
-    };
-
     /**
      * Listens to user scrolling the page and loads the next page
      * of data when user reaches the bottom
@@ -158,7 +125,8 @@ export class NewsListComponent  {
     @HostListener("window:scroll", [])
     onWindowScroll = () => {
         var userScrollPosition = window.innerHeight + window.scrollY;
-        if (userScrollPosition >= document.body.offsetHeight && this.hasMoreItems){
+        if (userScrollPosition >= document.body.offsetHeight &&
+            this.hasMoreItems && !this.loadingInProgress){
             this.loadMore();
         }
     };

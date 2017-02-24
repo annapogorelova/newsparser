@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
-import {PagerService} from '../../../shared/services/pager/pager.service';
+import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
 
 @Component({
     selector: 'user-subscriptions',
@@ -12,42 +12,17 @@ import {PagerService} from '../../../shared/services/pager/pager.service';
 /**
  * Component for editing the list of news sources
  */
-export class UserSubscriptionsComponent {
-    public loadingInProgress: boolean = false;
+export class UserSubscriptionsComponent extends BaseListComponent{
     public unsubscribeInProgress: boolean = false;
-    public pager: PagerService = null;
-    public hasMoreItems: boolean = true;
 
-    constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider){
-        this.pager = this.pagerProvider.getInstance(0, 30);
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider){
+        super(apiService, pagerProvider.getInstance(1, 30), 'subscription')
     }
 
     ngOnInit() {
-        this.loadNewsSources({pageIndex: 0, pageSize: this.pager.getPageSize()});
+        this.loadData({});
     }
-
-    loadNewsSources = (params: any) => {
-        this.loadingInProgress = true;
-        this.apiService.get('subscription', params)
-            .then(newsSources => this.handleLoadedNewsSources(newsSources))
-            .catch(error => this.handleErrorResponse(error));
-    };
-
-    hasItems = () => {
-        return this.pager.getItems().length;
-    };
-
-    handleLoadedNewsSources = (data: any) => {
-        if(!data.length){
-            this.hasMoreItems = false;
-        }
-        this.loadingInProgress = false;
-        this.pager.appendItems(data);
-    };
-
-    handleErrorResponse = (error: any) => {
-        this.loadingInProgress = false;
-    };
 
     unsubscribe = (newsSource: any) => {
         this.unsubscribeInProgress = true;
@@ -62,19 +37,5 @@ export class UserSubscriptionsComponent {
 
     handleSubscriptionDeleteError = (error: any) => {
         this.unsubscribeInProgress = false;
-    };
-
-    getRequestParams = () => {
-        return {
-            pageIndex: this.pager.getNextPageStartIndex(),
-            pageSize: this.pager.getPageSize()
-        };
-    };
-
-    loadMore = () => {
-        if(this.loadingInProgress){
-            return;
-        }
-        this.loadNewsSources(this.getRequestParams());
     };
 }

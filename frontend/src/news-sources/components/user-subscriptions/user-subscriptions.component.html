@@ -8,7 +8,7 @@
                  [infiniteScrollThrottle]="300"
                  [infiniteScrollDisabled]="!hasMoreItems"
                  [scrollWindow]="false"
-                 (scrolled)="loadMore()">
+                 (scrolled)="loadMoreData()">
                 <ul class="list-group">
                     <li class="list-group-item" *ngFor="let newsSource of pager.getItems()">
                         <div class="d-flex w-100 justify-content-between">

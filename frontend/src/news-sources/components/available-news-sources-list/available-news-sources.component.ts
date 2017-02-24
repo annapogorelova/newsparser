@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
-import {PagerService} from '../../../shared/services/pager/pager.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
+import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
 
 /**
  * Component for listing the news sources available for user
@@ -12,24 +12,21 @@ import {PagerServiceProvider} from '../../../shared/services/pager/pager.service
     styles: [require('./available-news-sources.component.css').toString()]
 })
 
-export class AvailableNewsSourcesComponent {
-    public loadingInProgress: boolean = false
-    public hasMoreItems: boolean = true;
+export class AvailableNewsSourcesComponent extends BaseListComponent{
     public search: string = null;
     public subscriptionInProgress: boolean = false;
-    public pager: PagerService = null;
 
-    constructor(private apiService: ApiService, private pagerProvider: PagerServiceProvider){
-        this.pager = this.pagerProvider.getInstance(0, 30);
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider){
+        super(apiService, pagerProvider.getInstance(1, 30), 'newsSources');
     }
 
     ngOnInit(){
-        this.loadNewsSources({pageIndex: 0, pageSize: this.pager.getPageSize(), search: null});
+        this.loadMoreData(this.getRequestParams());
     }
 
     reload = () => {
-        this.pager.reset();
-        this.loadNewsSources({pageIndex: 0, pageSize: this.pager.getPageSize(), search: this.search});
+        return this.reloadData(this.getRequestParams());
     };
 
     searchNewsSource = (event: any) => {
@@ -38,29 +35,6 @@ export class AvailableNewsSourcesComponent {
         }
 
         this.reload();
-    };
-
-    hasItems = () => {
-        return this.pager.getItems().length;
-    };
-
-    loadNewsSources = (params: any) => {
-        this.loadingInProgress = true;
-        this.apiService.get('newssources', params)
-            .then(data => this.handleLoadedNewsSources(data))
-            .catch(error => this.handleLoadingError(error));
-    };
-
-    handleLoadedNewsSources = (data: any) => {
-        if(!data.length){
-            this.hasMoreItems = false;
-        }
-        this.pager.appendItems(data);
-        this.loadingInProgress = false;
-    };
-
-    handleLoadingError = (error: any) => {
-        this.loadingInProgress = false;
     };
 
     subscribe = (newsSource: any) => {
@@ -77,17 +51,12 @@ export class AvailableNewsSourcesComponent {
 
     getRequestParams = () => {
         return {
-            pageIndex: this.pager.getNextPageStartIndex(),
-            pageSize: this.pager.getPageSize(),
             search: this.search
         };
     };
 
     loadMore = () => {
-        if(this.loadingInProgress){
-            return;
-        }
-        this.loadNewsSources(this.getRequestParams());
+        return this.loadMoreData(this.getRequestParams());
     };
 
     onSubscribedError = (error: any) => {

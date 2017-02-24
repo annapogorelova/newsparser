@@ -5,12 +5,12 @@ import {PageNotFoundComponent} from './components/page-not-found/page-not-found.
 import {CanActivateAuth} from './services/auth/can-activate';
 import {GoTopComponent} from './components/go-top-button/go-top-button.component';
 import {BrowserModule} from '@angular/platform-browser';
-import {PagerService} from './services/pager/pager.service';
 import {NavigatorService} from './services/navigator/navigator.service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {RefreshButtonComponent} from './components/refresh-button/refresh-button.component';
 import {ApiErrorHandler} from './services/api/api-error-handler';
 import {PagerServiceProvider} from './services/pager/pager.service.provider';
+import {BaseListComponent} from './components/base-list/base-list.component';
 
 @NgModule({
     imports: [BrowserModule],
@@ -25,8 +25,8 @@ import {PagerServiceProvider} from './services/pager/pager.service.provider';
         },
         ApiErrorHandler
     ],
-    declarations: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent],
-    exports: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent]
+    declarations: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent],
+    exports: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent]
 })
 
 export class SharedModule {
