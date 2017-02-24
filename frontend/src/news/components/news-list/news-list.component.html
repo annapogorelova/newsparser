@@ -23,7 +23,8 @@
                             <div class="mb-1 pull-right">
                                 <small>{{newsItem.dateAdded | date}}</small>
                                 <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
-                                    <span class="badge badge-primary badge-pill">{{newsItem.source.name}}</span>
+                                    <span class="badge badge-primary badge-pill"
+                                        [attr.title]="newsItem.source.name">{{newsItem.source.name}}</span>
                                 </h4>
                             </div>
                         </div>
