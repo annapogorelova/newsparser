@@ -23,11 +23,11 @@ export class AvailableNewsSourcesComponent extends BaseListComponent{
     }
 
     ngOnInit(){
-        this.loadMoreData(this.getRequestParams());
+        this.loadData(this.getRequestParams(), true);
     }
 
     reload = () => {
-        return this.reloadData(this.getRequestParams());
+        return this.reloadData(this.getRequestParams(), true);
     };
 
     searchNewsSource = (event: any) => {
@@ -47,6 +47,7 @@ export class AvailableNewsSourcesComponent extends BaseListComponent{
 
     onSubscribed = () => {
         this.subscriptionInProgress = false;
+        this.reload();
         alert('Subscribed');
     };
 

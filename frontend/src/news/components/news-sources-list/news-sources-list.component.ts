@@ -1,5 +1,8 @@
 import {Component, Inject, Input} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
+import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
+import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
+import {AppSettings} from '../../../app/app.settings';
 
 @Component({
     selector: 'news-sources',
@@ -10,24 +13,23 @@ import {ApiService} from '../../../shared/services/api/api.service';
 /**
  * Component for displaying the list of news sources
  */
-export class NewsSourcesListComponent {
-    public newsSources: any = [{name: 'All', id: null}];
+export class NewsSourcesListComponent extends BaseListComponent {
     public selectedSourceId: number;
 
     @Input() selectHandler: any = null;
     @Input() initialSelectedSourceId: any = null;
 
-    constructor(private apiService: ApiService){
-        this.loadNewsSources();
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
+        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE), 'subscription');
     }
 
-    loadNewsSources = () => {
-        this.apiService.get('subscription', {pageIndex: 0, pageSize: 30})
-            .then(newsSources => this.handleLoadedNewsSources(newsSources));
-    };
+    ngOnInit(){
+        this.pager.appendItems([{name: 'All', id: null}]);
+        this.loadData({}, true).then(this.handleLoadedNewsSources);
+    }
 
-    handleLoadedNewsSources = (data: any) => {
-        this.newsSources = this.newsSources.concat(data);
+    handleLoadedNewsSources = () => {
         this.selectedSourceId = this.initialSelectedSourceId;
     };
 

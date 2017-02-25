@@ -1,15 +1,18 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import {AppSettings} from '../../../app/app.settings';
-import {LocalStorageService} from 'angular-2-local-storage';
 import {ApiErrorHandler} from './api-error-handler';
+import {CacheService} from '../cache/cache.service';
 
 /**
  * Class is a wrapper for HTTP GET, PUT, POST, DELETE methods
  */
 @Injectable()
-export class ApiService{
-    constructor(private http: Http, private localStorageService: LocalStorageService, private errorHandler: ApiErrorHandler) { }
+export class ApiService {
+    constructor(private http: Http,
+                private cacheService: CacheService,
+                private errorHandler: ApiErrorHandler) {
+    }
 
     /**
      * HTTP GET
@@ -18,13 +21,28 @@ export class ApiService{
      * @param headers - custom request headers
      * @returns {Promise<any>}
      */
-    get = (url: string, params: any = null, headers: any = null) => {
-        var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({ headers: requestHeaders, search: this.initializeParams(params) });
+    get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
+        var absoluteUrl = this.getAbsoluteUrl(url);
 
-        return this.http.get(this.getAbsoluteUrl(url), requestOptions)
-                .map(this.extractData)
-                .catch(this.errorHandler.handleResponse).toPromise();
+        var cacheKey = this.cacheService.getCacheKey(absoluteUrl, params);
+        var cachedData = this.cacheService.get(cacheKey);
+        if (cachedData && !refresh) {
+            return Promise.resolve(cachedData);
+        }
+
+        if(cachedData){
+            this.cacheService.remove(cacheKey);
+        }
+
+        var requestHeaders = this.initializeHeaders(headers);
+        var requestOptions = new RequestOptions({
+            headers: requestHeaders,
+            search: this.initializeParams(params, refresh)
+        });
+
+        return this.http.get(absoluteUrl, requestOptions)
+            .map(response => this.extractData(response, true))
+            .catch(this.errorHandler.handleResponse).toPromise();
     };
 
     /**
@@ -46,14 +64,14 @@ export class ApiService{
      * @param headers - cusrom request headers
      * @returns {Promise<any>}
      */
-    post = (url: string, params: any, headers: any = null) =>{
+    post = (url: string, params: any, headers: any = null) => {
         var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({ headers: requestHeaders });
+        var requestOptions = new RequestOptions({headers: requestHeaders});
 
         return this.http.post(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
-                .map(this.extractData)
-                .catch(this.errorHandler.handleResponse)
-                .toPromise();
+            .map(response => this.extractData(response, false))
+            .catch(this.errorHandler.handleResponse)
+            .toPromise();
     };
 
     /**
@@ -65,11 +83,11 @@ export class ApiService{
      */
     delete = (url: string, id: number, headers: any = null) => {
         var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({ headers: requestHeaders });
+        var requestOptions = new RequestOptions({headers: requestHeaders});
         var requestUrl = this.getAbsoluteUrl(url) + '?id=' + id;
 
         return this.http.delete(requestUrl, requestOptions)
-            .map(this.extractData)
+            .map(response => this.extractData(response, false))
             .catch(this.errorHandler.handleResponse)
             .toPromise();
     };
@@ -79,9 +97,13 @@ export class ApiService{
      * @param response - Response
      * @returns {any|{}}
      */
-    private extractData(response: Response) {
+    private extractData = (response: Response, cache: boolean = false) => {
+        let maxAge = 300;
         let body = response.json();
-        return body || { };
+        if (cache) {
+            this.cacheService.set(response.url, body, maxAge);
+        }
+        return body || {};
     };
 
     /**
@@ -98,7 +120,7 @@ export class ApiService{
      * @param body
      * @returns {any|{}}
      */
-    private initializeBody = (body?:any) => {
+    private initializeBody = (body?: any) => {
         return body || {};
     };
 
@@ -109,12 +131,12 @@ export class ApiService{
      */
     private initializeHeaders = (customHeaders: Headers): Headers => {
         var headers = new Headers(customHeaders);
-        if(!headers.has('Content-Type')){
-            headers.append('Content-Type', 'application/json' );
+        if (!headers.has('Content-Type')) {
+            headers.append('Content-Type', 'application/json');
         }
 
-        var authToken = this.localStorageService.get('auth');
-        if(authToken){
+        var authToken = this.cacheService.get('auth');
+        if (authToken) {
             headers.append('Authorization', `Bearer ${authToken}`);
         }
 
@@ -126,11 +148,15 @@ export class ApiService{
      * @param params
      * @returns {URLSearchParams}
      */
-    private initializeParams = (params: any): URLSearchParams => {
+    private initializeParams = (params: any, refresh: boolean = false): URLSearchParams => {
         var searchParams = new URLSearchParams();
 
-        for(var key in params){
+        for (var key in params) {
             searchParams.set(key, params[key]);
+        }
+
+        if (refresh) {
+            searchParams.set('autotimestamp', Date.now().toString());
         }
 
         return searchParams;

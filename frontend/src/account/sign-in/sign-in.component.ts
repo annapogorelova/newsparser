@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {Router} from '@angular/router';
-import { LocalStorageService } from 'angular-2-local-storage';
 import {AuthService} from '../../shared/services/auth/auth.service';
+import {CacheService} from '../../shared/services/cache/cache.service';
 
 @Component({
     templateUrl: 'sign-in.component.html',
@@ -10,8 +10,9 @@ export class SignInComponent  {
     public email = '';
     public password = '';
 
-    constructor(@Inject(Router) private router: Router, private authService: AuthService,
-                private localStorageService: LocalStorageService){
+    constructor(@Inject(Router) private router: Router,
+                private authService: AuthService,
+                private cacheService: CacheService){
 
     }
 
@@ -20,7 +21,8 @@ export class SignInComponent  {
     };
 
     private handleAuth = (auth: any) => {
-        this.localStorageService.set('auth', auth.access_token)
+        debugger;
+        this.cacheService.set('auth', auth.access_token);
         this.router.navigate(['/news']);
     };
 

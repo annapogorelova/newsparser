@@ -22,7 +22,7 @@ export class UserSubscriptionsComponent extends BaseListComponent{
     }
 
     ngOnInit() {
-        this.loadData({});
+        this.loadData({}, true);
     }
 
     unsubscribe = (newsSource: any) => {
@@ -34,6 +34,7 @@ export class UserSubscriptionsComponent extends BaseListComponent{
 
     handleSubscriptionDelete = (response: any) => {
         this.unsubscribeInProgress = false;
+        this.reloadData({}, true);
     };
 
     handleSubscriptionDeleteError = (error: any) => {

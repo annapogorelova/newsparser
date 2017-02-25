@@ -11,6 +11,7 @@ import {RefreshButtonComponent} from './components/refresh-button/refresh-button
 import {ApiErrorHandler} from './services/api/api-error-handler';
 import {PagerServiceProvider} from './services/pager/pager.service.provider';
 import {BaseListComponent} from './components/base-list/base-list.component';
+import {CacheService} from './services/cache/cache.service';
 
 @NgModule({
     imports: [BrowserModule],
@@ -23,7 +24,8 @@ import {BaseListComponent} from './components/base-list/base-list.component';
                 new NavigatorService(router, activatedRoute),
             deps: [Router, ActivatedRoute]
         },
-        ApiErrorHandler
+        ApiErrorHandler,
+        CacheService
     ],
     declarations: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent],
     exports: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent]

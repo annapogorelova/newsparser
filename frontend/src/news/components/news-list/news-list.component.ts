@@ -31,7 +31,7 @@ export class NewsListComponent extends BaseListComponent{
 
         var itemsToPreload = this.pager.getNumberOfItemsToPreload();
         if(itemsToPreload){
-            this.loadData(this.getRequestParams());
+            this.loadData(this.getRequestParams(), true);
         }
     }
 
@@ -86,7 +86,7 @@ export class NewsListComponent extends BaseListComponent{
         }
         this.refreshInProgress = true;
         this.pager.reset();
-        this.loadData(this.getRequestParams(true))
+        this.loadData(this.getRequestParams(true), true)
             .then(this.onRefresh)
             .catch(this.onRefresh);
     };

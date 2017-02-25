@@ -26,7 +26,6 @@
     "@angular/platform-browser-dynamic": "~2.4.0",
     "@angular/router": "~3.4.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.19",
-    "angular-2-local-storage": "^1.0.1",
     "angular-in-memory-web-api": "~0.2.4",
     "angular2-infinite-scroll": "^0.3.0",
     "bootstrap": "^4.0.0-alpha.6",

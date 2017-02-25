@@ -50,12 +50,13 @@ export class BaseListComponent {
     /**
      * Basic method to call api GET for data
      * @param params
+     * @param refresh
      * @returns {Promise<TResult|T>}
      */
-    public loadData = (params: any) => {
+    public loadData = (params: any, refresh: boolean = false) => {
         this.loadingInProgress = true;
         var mergedParams = this.mergeRequestParams(params);
-        return this.apiService.get(this.apiRoute, mergedParams)
+        return this.apiService.get(this.apiRoute, mergedParams, null, refresh)
             .then(data => this.onLoaded(data))
             .catch(error => this.onError(error));
     };
@@ -74,16 +75,17 @@ export class BaseListComponent {
     };
 
     /**
-     * Reload data from first page
+     * Reload data from the first page
      * @param params
+     * @param refresh
      * @returns {any}
      */
-    protected reloadData = (params: any) => {
+    protected reloadData = (params: any, refresh: boolean = false) => {
         if(this.loadingInProgress){
             return Promise.reject({});
         }
         this.pager.reset();
-        return this.loadData(params);
+        return this.loadData(params, refresh);
     };
 
     /**

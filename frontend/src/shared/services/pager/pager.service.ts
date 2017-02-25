@@ -16,7 +16,8 @@ export class PagerService {
      * @param {number} pageSize - Size of the list's page
      */
     constructor(pageNumber?: number, pageSize?: number){
-        this.reset(pageNumber, pageSize);
+        this.reset(pageNumber);
+        this.pageSize = pageSize || AppSettings.DEFAULT_PAGE_SIZE;
     };
 
     /**
@@ -24,9 +25,8 @@ export class PagerService {
      * @param {number} pageNumber - Initial page index for list
      * @param {number} pageSize - Size of the list's page
      */
-    reset = (pageNumber: number = 1, pageSize: number = AppSettings.DEFAULT_PAGE_SIZE) => {
+    reset = (pageNumber: number = 1) => {
         this.pageNumber = pageNumber;
-        this.pageSize = pageSize;
         this.items = [];
     };
 

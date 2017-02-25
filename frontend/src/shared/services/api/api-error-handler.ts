@@ -1,15 +1,15 @@
 import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
-import {LocalStorageService} from 'angular-2-local-storage';
 import {NavigatorService} from '../navigator/navigator.service';
 import {Inject} from '@angular/core';
+import {CacheService} from '../cache/cache.service';
 
 /**
  * Class contains functionality to handle http request errors
  */
 export class ApiErrorHandler {
-    constructor(@Inject(LocalStorageService) private localStorageService: LocalStorageService,
-                @Inject(NavigatorService) private navigator: NavigatorService){}
+    constructor(@Inject(NavigatorService) private navigator: NavigatorService,
+                @Inject(CacheService) private cacheService: CacheService){}
 
     /**
      * General method for handling http errors
@@ -31,7 +31,7 @@ export class ApiErrorHandler {
      * Handles the 401 status
      */
     private handleUnauthorizedError = () => {
-        this.localStorageService.clearAll();
+        this.cacheService.clear();
         this.navigator.navigate(['/sign-in']);
     };
 }
