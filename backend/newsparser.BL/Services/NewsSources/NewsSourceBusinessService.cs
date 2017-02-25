@@ -40,7 +40,7 @@ namespace NewsParser.BL.Services.NewsSources
 
             if (!string.IsNullOrEmpty(search))
             {
-                newsSources = newsSources.Where(s => s.Name.Contains(search));
+                newsSources = newsSources.Where(s => s.Name.ToLower().Contains(search.ToLower()));
             }
 
             return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
@@ -55,7 +55,7 @@ namespace NewsParser.BL.Services.NewsSources
 
             if (!string.IsNullOrEmpty(search))
             {
-                newsSources = newsSources.Where(s => s.Name.Contains(search));
+                newsSources = newsSources.Where(s => s.Name.ToLower().Contains(search.ToLower()));
             }
 
             return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
