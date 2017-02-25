@@ -21,7 +21,6 @@ export class SignInComponent  {
     };
 
     private handleAuth = (auth: any) => {
-        debugger;
         this.cacheService.set('auth', auth.access_token);
         this.router.navigate(['/news']);
     };
