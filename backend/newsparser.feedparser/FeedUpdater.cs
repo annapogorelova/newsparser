@@ -139,7 +139,8 @@ namespace newsparser.feedparser
             }
 
             SetNewsSourceUpdatingState(newsSource, true);
-            await _feedParser.ParseNewsSource(newsSource);
+            var news = await _feedParser.ParseNewsSource(newsSource);
+            SaveNewsItems(newsSource.Id, news);
             SetNewsSourceUpdatingState(newsSource, false);
         }
 
