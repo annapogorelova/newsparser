@@ -1,14 +1,5 @@
-user-subscriptions .news-sources-container {
-    margin-top: 10px;
-}
-
 user-subscriptions button {
     cursor: pointer;
-}
-
-user-subscriptions .list-heading {
-    text-align: center;
-    padding-bottom: 15px;
 }
 
 user-subscriptions li.list-group-item {

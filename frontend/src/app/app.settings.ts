@@ -3,4 +3,5 @@ export class AppSettings {
     public static DEFAULT_GO_TOP_HEIGHT = 200;
     public static DEFAULT_PAGE_SIZE = 10; // number of items to load for collection GET
     public static NEWS_SOURCES_PAGE_SIZE = 30; // number of news sources per page
+    public static DEFAULT_SEARCH_PLACEHOLDER_TEXT = 'Type to search...';
 }

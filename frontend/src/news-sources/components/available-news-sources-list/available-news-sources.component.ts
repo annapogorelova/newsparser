@@ -30,11 +30,8 @@ export class AvailableNewsSourcesComponent extends BaseListComponent{
         return this.reloadData(this.getRequestParams(), true);
     };
 
-    searchNewsSource = (event: any) => {
-        if(event.keyCode > 8 && event.keyCode < 48){
-            return;
-        }
-
+    searchNewsSource = (search: string) => {
+        this.search = search;
         this.reload();
     };
 

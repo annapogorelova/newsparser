@@ -13,7 +13,8 @@ import {AppSettings} from '../../../app/app.settings';
 /**
  * Component for editing the list of news sources
  */
-export class UserSubscriptionsComponent extends BaseListComponent{
+export class UserSubscriptionsComponent extends BaseListComponent {
+    public search: string = null;
     public unsubscribeInProgress: boolean = false;
 
     constructor(@Inject(ApiService) apiService: ApiService,
@@ -22,8 +23,27 @@ export class UserSubscriptionsComponent extends BaseListComponent{
     }
 
     ngOnInit() {
-        this.loadData({}, true);
+        this.loadData(this.getRequestParams(), true);
     }
+
+    reload = () => {
+        return this.reloadData(this.getRequestParams(), true);
+    };
+
+    loadMore = () => {
+        return this.loadMoreData(this.getRequestParams());
+    };
+
+    searchNewsSource = (search: string) => {
+        this.search = search;
+        this.reload();
+    };
+
+    getRequestParams = () => {
+        return {
+            search: this.search
+        };
+    };
 
     unsubscribe = (newsSource: any) => {
         this.unsubscribeInProgress = true;

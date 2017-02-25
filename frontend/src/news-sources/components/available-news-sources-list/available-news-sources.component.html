@@ -1,15 +1,7 @@
 <div class="available-news-sources-container">
     <div class="row">
         <div class="col-md-12">
-            <div class="search-container">
-                <div class="input-group input-group-sm">
-                    <input name="search" type="text" class="form-control form-control-sm"
-                           (keyup)="searchNewsSource($event)"
-                           [(ngModel)]="search"
-                           placeholder="Type news source name..."
-                           required="true"/>
-                </div>
-            </div>
+            <search [searchCallback]="searchNewsSource" [placeholderCaption]="'Type news source name...'"></search>
         </div>
     </div>
     <div class="row">

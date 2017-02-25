@@ -1,0 +1,9 @@
+<div class="search-container">
+    <div class="input-group input-group-sm">
+        <input name="search" type="text" class="form-control form-control-sm"
+               (keyup)="onKeyUp($event)"
+               [(ngModel)]="search"
+               [attr.placeholder]="placeholderCaption"
+               required="true"/>
+    </div>
+</div>

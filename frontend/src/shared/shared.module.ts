@@ -12,9 +12,11 @@ import {ApiErrorHandler} from './services/api/api-error-handler';
 import {PagerServiceProvider} from './services/pager/pager.service.provider';
 import {BaseListComponent} from './components/base-list/base-list.component';
 import {CacheService} from './services/cache/cache.service';
+import {SearchComponent} from './components/search/search.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
-    imports: [BrowserModule],
+    imports: [BrowserModule, FormsModule],
     providers: [
         ApiService, AuthService, CanActivateAuth,
         PagerServiceProvider,
@@ -27,8 +29,8 @@ import {CacheService} from './services/cache/cache.service';
         ApiErrorHandler,
         CacheService
     ],
-    declarations: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent],
-    exports: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent]
+    declarations: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent, SearchComponent],
+    exports: [PageNotFoundComponent, GoTopComponent, RefreshButtonComponent, BaseListComponent, SearchComponent]
 })
 
 export class SharedModule {
