@@ -23,10 +23,9 @@ export class ApiService {
      */
     get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
         var absoluteUrl = this.getAbsoluteUrl(url);
-
-        var cacheKey = this.cacheService.getCacheKey(absoluteUrl, params);
+        var cacheKey = this.cacheService.getCacheKey(absoluteUrl, params, ['refresh']);
         var cachedData = this.cacheService.get(cacheKey);
-        if (cachedData && !refresh) {
+        if (!refresh && cachedData) {
             return Promise.resolve(cachedData);
         }
 
@@ -100,8 +99,10 @@ export class ApiService {
     private extractData = (response: Response, cache: boolean = false) => {
         let maxAge = 300;
         let body = response.json();
-        if (cache) {
-            this.cacheService.set(response.url, body, maxAge);
+        if (cache && body) {
+            // TODO: maybe customize this
+            var cacheKey = response.url.replace(/&autotimestamp=([^&]*)/, '').replace(/&refresh=([^&]*)/, '');
+            this.cacheService.set(cacheKey, body, maxAge);
         }
         return body || {};
     };

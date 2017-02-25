@@ -55,8 +55,8 @@ export class CacheService {
      * @param params
      * @returns {string}
      */
-    getCacheKey(url: string, params: any = {}){
-        return params ? `${url}?${this.getJoinedUrlParams(params)}` : url;
+    getCacheKey(url: string, params: any = {}, skipParams: Array<string> = []){
+        return params ? `${url}?${this.getJoinedUrlParams(params, skipParams)}` : url;
     };
 
     /**
@@ -64,10 +64,10 @@ export class CacheService {
      * @param params
      * @returns {string}
      */
-    private getJoinedUrlParams(params: any = {}) {
+    private getJoinedUrlParams(params: any = {}, skipParams: Array<string> = []) {
         var propNames = Object.getOwnPropertyNames(params);
         var result = propNames.map(function(name){
-            if(params[name] !== null){
+            if(params[name] !== null && skipParams.indexOf(name) == -1){
                 return [name, params[name]].join('=');
             }
 
