@@ -6,8 +6,10 @@ using NewsParser.API.Models;
 using NewsParser.BL.Services.News;
 using NewsParser.DAL.Models;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using newsparser.feedparser;
+using NewsParser.BL.Services.NewsSources;
 
 namespace NewsParser.API.Controllers
 {
@@ -17,11 +19,14 @@ namespace NewsParser.API.Controllers
     public class NewsController : BaseController
     {
         private readonly INewsBusinessService _newsBusinessService;
+        private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly IFeedUpdater _feedUpdater;
 
-        public NewsController(INewsBusinessService newsBusinessService, IFeedUpdater feedUpdater)
+        public NewsController(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService, 
+            IFeedUpdater feedUpdater)
         {
             _newsBusinessService = newsBusinessService;
+            _newsSourceBusinessService = newsSourceBusinessService;
             _feedUpdater = feedUpdater;
         }
 
@@ -32,6 +37,14 @@ namespace NewsParser.API.Controllers
             var userId = 2;
             if (refresh)
             {
+                if (sourceId.HasValue)
+                {
+                    var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId.Value);
+                    if (newsSource.IsUpdating)
+                    {
+                        return MakeResponse(HttpStatusCode.Forbidden, "News source is already updating");
+                    }
+                }
                 await _feedUpdater.UpdateFeedAsync(userId, sourceId);
             }
             var news = _newsBusinessService.GetNewsPage(pageIndex, pageSize, sourceId, userId).ToList();
