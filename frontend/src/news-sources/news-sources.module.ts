@@ -7,10 +7,12 @@ import {AddNewsSourceComponent} from './components/add-news-source/add-news-sour
 import {FormsModule} from '@angular/forms';
 import {AvailableNewsSourcesComponent} from './components/available-news-sources-list/available-news-sources.component';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
+import {NewsSourcesSettingsComponent} from './components/news-sources-settings/news-sources-settings.component';
 
 @NgModule({
     imports: [NewsSourcesRouting, BrowserModule, SharedModule, FormsModule, InfiniteScrollModule],
-    declarations: [UserSubscriptionsComponent, AddNewsSourceComponent, AvailableNewsSourcesComponent],
+    declarations: [NewsSourcesSettingsComponent, UserSubscriptionsComponent, AddNewsSourceComponent,
+        AvailableNewsSourcesComponent],
     providers: [NewsSourcesRoutingProviders]
 })
 export class NewsSourcesModule {}
