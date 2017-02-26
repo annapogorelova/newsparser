@@ -121,31 +121,14 @@ namespace NewsParser.FeedParser
         /// <returns>Cleaned html string</returns>
         private string CleanHtmlString(string html)
         {
-            string cleanHtmlString = RemoveLineBreakes(html);
-            cleanHtmlString = RemoveImages(cleanHtmlString);
-            return cleanHtmlString;
-        }
+            string cleanHtmlString = Regex.Replace(html, "<.*?>", string.Empty, RegexOptions.IgnoreCase);
+            if (cleanHtmlString.Length < 500)
+            {
+                return cleanHtmlString;
+            }
 
-        /// <summary>
-        /// Removes line breaks in html string
-        /// </summary>
-        /// <param name="html">Html string</param>
-        /// <returns>Cleaned html string</returns>
-        private string RemoveLineBreakes(string html)
-        {
-            var regex = new Regex(@"([\b\s]*<[\b\s]*[b][r][\s]*/?[\b\s]*>)", RegexOptions.IgnoreCase);
-            return regex.Replace(html, string.Empty);
-        }
-
-        /// <summary>
-        /// Removes img tags from html string
-        /// </summary>
-        /// <param name="html">Html string</param>
-        /// <returns>Cleaned html string</returns>
-        private string RemoveImages(string html)
-        {
-            var regex = new Regex(@"<img.+?/?>", RegexOptions.IgnoreCase);
-            return regex.Replace(html, string.Empty);
+            var croppedHtmlString = cleanHtmlString.Substring(0, 500);
+            return $"{croppedHtmlString.Substring(0, croppedHtmlString.LastIndexOf(' '))}...";
         }
 
         /// <summary>
