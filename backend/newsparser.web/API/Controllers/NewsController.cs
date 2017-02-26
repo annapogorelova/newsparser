@@ -31,7 +31,7 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get(int? sourceId = null, int pageIndex = 0, int pageSize = 5, bool refresh = false)
+        public async Task<JsonResult> Get(int? sourceId = null, int pageIndex = 0, int pageSize = 5, bool refresh = false, string search = null)
         {
             //Hardcoded for now
             var userId = 2;
@@ -52,7 +52,7 @@ namespace NewsParser.API.Controllers
                     await _feedUpdater.UpdateFeedAsync(userId);
                 }
             }
-            var news = _newsBusinessService.GetNewsPage(pageIndex, pageSize, sourceId, userId).ToList();
+            var news = _newsBusinessService.GetNewsPage(pageIndex, pageSize, sourceId, userId, search).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);
             return new JsonResult(newsModels);
         }
