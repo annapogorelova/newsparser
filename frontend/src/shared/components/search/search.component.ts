@@ -11,9 +11,10 @@ import {AppSettings} from '../../../app/app.settings';
  * Component for handling the new sources search
  */
 export class SearchComponent {
-    public search: string = null;
-
     constructor(){}
+
+    @Input()
+    private search: string = null;
 
     @Input()
     private searchCallback: any = null;

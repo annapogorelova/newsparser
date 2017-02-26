@@ -17,6 +17,7 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list.
 export class NewsListComponent extends BaseListComponent{
     public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
+    private search: string = null;
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider,
@@ -48,6 +49,10 @@ export class NewsListComponent extends BaseListComponent{
             .map((queryParams) => queryParams['source'])
             .subscribe((sourceId: string) =>
                 this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['search'])
+            .subscribe((search: string) => this.search = search);
     };
 
     private setInitialPage = () => {
@@ -63,6 +68,7 @@ export class NewsListComponent extends BaseListComponent{
     getRequestParams = (refresh: boolean = false) => {
         return {
             sourceId: this.selectedSourceId,
+            search: this.search,
             refresh: refresh
         };
     };
@@ -71,8 +77,8 @@ export class NewsListComponent extends BaseListComponent{
      * Load the fresh list of news
      * (without launching the RSS sources refresh action on server)
      */
-    reload = () => {
-        this.reloadData(this.getRequestParams())
+    reload = (refresh: boolean = false) => {
+        this.reloadData(this.getRequestParams(), refresh)
             .then(this.setUrlQueryParams)
             .catch(() => console.log('Reload failed'));
     };
@@ -116,6 +122,12 @@ export class NewsListComponent extends BaseListComponent{
     selectSource = (source: any) => {
         this.selectedSourceId = source.id;
         this.reload();
+    };
+
+    searchNews = (search: string) => {
+        this.search = search;
+        this.navigator.setQueryParam('search', this.search);
+        this.reload(true);
     };
 
     /**
