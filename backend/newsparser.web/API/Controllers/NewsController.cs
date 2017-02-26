@@ -44,8 +44,13 @@ namespace NewsParser.API.Controllers
                     {
                         return MakeResponse(HttpStatusCode.Forbidden, "News source is already updating");
                     }
+
+                    await _feedUpdater.UpdateSourceAsync(sourceId.Value, userId);
                 }
-                await _feedUpdater.UpdateFeedAsync(userId, sourceId);
+                else
+                {
+                    await _feedUpdater.UpdateFeedAsync(userId);
+                }
             }
             var news = _newsBusinessService.GetNewsPage(pageIndex, pageSize, sourceId, userId).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);

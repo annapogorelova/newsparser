@@ -1,4 +1,5 @@
-﻿using FluentScheduler;
+﻿using System.Threading.Tasks;
+using FluentScheduler;
 using NewsParser.FeedParser;
 using Microsoft.Extensions.DependencyInjection;
 using newsparser.feedparser;
@@ -9,7 +10,7 @@ namespace NewsParser.Scheduler
     /// <summary>
     /// Class represents a job that's to be scheduled to update RSS feed
     /// </summary>
-    public class FeedUpdateJob: IJob
+    public class FeedUpdateJob : IJob
     {
         private readonly IFeedUpdater _feedUpdater;
         private readonly object _feedUpadteLock = new object();
@@ -25,7 +26,7 @@ namespace NewsParser.Scheduler
             {
                 try
                 {
-                    _feedUpdater.UpdateFeed();
+                    _feedUpdater.UpdateFeedAsync().Wait();
                 }
                 catch (FeedParsingException e)
                 {
