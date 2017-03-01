@@ -63,6 +63,12 @@
                 </div>
             </div>
         </div>
-        <go-top-button [scrollYDistance]="250"></go-top-button>
+        <go-top-button [animate]="true"
+                       [speed]="100"
+                       [acceleration]="10"
+                       [scrollDistance]="250"
+                       [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+                       [styles]="{'height': '65px'}"
+        ></go-top-button>
     </div>
 </div>
