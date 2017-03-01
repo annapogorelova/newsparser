@@ -23,7 +23,7 @@ namespace NewsParser.BL.Services.News
         }
 
         public IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, 
-            int? userId = null, string search = null)
+            int? userId = null, string search = null, string tag = null)
         {
             if (pageIndex < 0)
             {
@@ -55,6 +55,11 @@ namespace NewsParser.BL.Services.News
                     news.Where(
                         n => n.Title.ToLower().Contains(searchTerm)
                         || n.Description.ToLower().Contains(searchTerm));
+            }
+
+            if (!string.IsNullOrEmpty(tag))
+            {
+                news = news.Where(n => n.NewsItemTags.Select(nt => nt.Tag).Any(t => t.Name == tag));
             }
 
             return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);

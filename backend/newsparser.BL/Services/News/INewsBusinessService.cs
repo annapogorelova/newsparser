@@ -16,9 +16,10 @@ namespace NewsParser.BL.Services.News
         /// <param name="sourceId">Source id</param>
         /// <param name="userId">User id</param>
         /// <param name="search">Search string</param>
+        /// <param name="tag">Tag name</param>
         /// <returns>IEnumerable of NewsItem</returns>
         IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, 
-            int? userId = null, string search = null);
+            int? userId = null, string search = null, string tag = null);
 
         /// <summary>
         /// Get news by source
