@@ -84,7 +84,7 @@ news-list .news-item-link:hover {
     color: #636c72;
 }
 
-news-list .news-item-source span {
+news-list .news-item-source span, .news-item-tag-container span {
     cursor: pointer;
 }
 

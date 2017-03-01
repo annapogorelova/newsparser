@@ -17,6 +17,7 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list.
 export class NewsListComponent extends BaseListComponent{
     public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
+    public selectedTag: string = null;
     private search: string = null;
 
     constructor(@Inject(ApiService) apiService: ApiService,
@@ -43,7 +44,7 @@ export class NewsListComponent extends BaseListComponent{
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page: string) =>
-                !isNaN(parseInt(page)) ? this.pager.setPage(parseInt(page)) : this.setInitialPage());
+                !isNaN(parseInt(page)) ? this.pager.setPage(parseInt(page)) : this.pager.setPage(1));
 
         this.route.queryParams
             .map((queryParams) => queryParams['source'])
@@ -53,11 +54,10 @@ export class NewsListComponent extends BaseListComponent{
         this.route.queryParams
             .map((queryParams) => queryParams['search'])
             .subscribe((search: string) => this.search = search);
-    };
 
-    private setInitialPage = () => {
-        this.pager.setPage(1);
-        this.navigator.setQueryParam('page', 1);
+        this.route.queryParams
+            .map((queryParams) => queryParams['tag'])
+            .subscribe((tag: string) => this.selectedTag = tag);
     };
 
     /**
@@ -69,6 +69,7 @@ export class NewsListComponent extends BaseListComponent{
         return {
             sourceId: this.selectedSourceId,
             search: this.search,
+            tag: this.selectedTag,
             refresh: refresh
         };
     };
@@ -78,6 +79,7 @@ export class NewsListComponent extends BaseListComponent{
      * (without launching the RSS sources refresh action on server)
      */
     reload = (refresh: boolean = false) => {
+        window.scrollTo(0, 0);
         this.reloadData(this.getRequestParams(), refresh)
             .then(this.setUrlQueryParams)
             .catch(() => console.log('Reload failed'));
@@ -113,6 +115,8 @@ export class NewsListComponent extends BaseListComponent{
     setUrlQueryParams = () => {
         this.navigator.setQueryParam('page', this.pager.getPageNumber());
         this.navigator.setQueryParam('source', this.selectedSourceId);
+        this.navigator.setQueryParam('search', this.search);
+        this.navigator.setQueryParam('tag', this.selectedTag);
     };
 
     /**
@@ -121,6 +125,11 @@ export class NewsListComponent extends BaseListComponent{
      */
     selectSource = (source: any) => {
         this.selectedSourceId = source.id;
+        this.reload();
+    };
+
+    selectTag = (tag: any) => {
+        this.selectedTag = tag.name;
         this.reload();
     };
 
