@@ -3,7 +3,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
-import {BaseListComponent} from '../../../shared/components/base-list/base-list.component';
+import {BaseListComponent} from '../../../shared/components/base-list/base-list';
 
 @Component({
     selector: 'news-list',
@@ -15,6 +15,7 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list.
  * Component represents a list of news
  */
 export class NewsListComponent extends BaseListComponent{
+    protected apiRoute: string = 'news';
     public refreshInProgress: boolean = false;
     public selectedSourceId: number = null;
     public selectedTag: string = null;
@@ -24,7 +25,7 @@ export class NewsListComponent extends BaseListComponent{
                 @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider,
                 private navigator: NavigatorService,
                 @Inject(ActivatedRoute) private route:ActivatedRoute){
-        super(apiService, pagerProvider.getInstance(), 'news');
+        super(apiService, pagerProvider.getInstance());
     }
 
     ngOnInit(){
@@ -88,7 +89,7 @@ export class NewsListComponent extends BaseListComponent{
     /**
      * Load the fresh list of news (launches the RSS sources refresh on server)
      */
-    refresh = () =>{
+    refresh = (event: any) =>{
         if(this.refreshInProgress){
             return;
         }
@@ -125,6 +126,11 @@ export class NewsListComponent extends BaseListComponent{
      */
     selectSource = (source: any) => {
         this.selectedSourceId = source.id;
+        this.reload();
+    };
+
+    onSelectSource = (event: any) => {
+        this.selectedSourceId = event.source.id;
         this.reload();
     };
 

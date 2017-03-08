@@ -1,0 +1,28 @@
+<div *ngIf="useSearch">
+    <search [searchCallback]="searchNewsSource" [placeholderCaption]="'Type news source name...'"></search>
+</div>
+<div *ngIf="useRefresh">
+    <refresh-button (onRefresh)="reload($event)"></refresh-button>
+</div>
+<div *ngIf="hasItems()" class="news-sources-list" infinite-scroll
+     [infiniteScrollDistance]="3"
+     [infiniteScrollThrottle]="300"
+     [infiniteScrollDisabled]="!hasMoreItems"
+     [scrollWindow]="false"
+     (scrolled)="loadMore()">
+    <div class="news-source-item-container" *ngFor="let newsSource of pager.getItems()">
+            <span class="news-source-item badge badge-pill badge-primary"
+                  [class.selected]="selectedSourceId == newsSource.id"
+                  (click)="selectNewsSource(newsSource)"
+                  [attr.title]="newsSource.name">
+                {{newsSource.name}}
+            </span>
+    </div>
+    <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+        <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
+    </div>
+</div>
+<div *ngIf="!hasItems()" class="loading-status-container">
+    <h5 *ngIf="!loadingInProgress">No News Sources</h5>
+    <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
+</div>

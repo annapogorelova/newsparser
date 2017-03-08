@@ -4,12 +4,12 @@ import {NewsRouting, NewsRoutingProviders} from './news.routing';
 import {BrowserModule} from '@angular/platform-browser';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {SharedModule} from '../shared/shared.module';
-import {NewsSourcesListComponent} from './components/news-sources-list/news-sources-list.component';
 import {FormsModule} from '@angular/forms';
+import {NewsSourcesModule} from '../news-sources/news-sources.module';
 
 @NgModule({
-    imports: [NewsRouting, BrowserModule, InfiniteScrollModule, SharedModule, FormsModule],
-    declarations: [NewsListComponent, NewsSourcesListComponent],
+    imports: [NewsRouting, BrowserModule, InfiniteScrollModule, SharedModule, FormsModule, NewsSourcesModule],
+    declarations: [NewsListComponent],
     providers: [NewsRoutingProviders]
 })
 export class NewsModule {

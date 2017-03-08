@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'refresh-button',
@@ -11,10 +11,10 @@ import {Component, Input} from '@angular/core';
  */
 export class RefreshButtonComponent {
     /**
-     * user defined refresh handler
+     * Event fires user defined refresh handler
      * @type {any}
      */
-    @Input() refreshHandler: any = null;
+    @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * flag to apply the spinning animation
@@ -26,8 +26,6 @@ export class RefreshButtonComponent {
      * Function executes custom refresh handler if specified
      */
     refresh = () => {
-        if(this.refreshHandler){
-            this.refreshHandler();
-        }
+        this.onRefresh.emit({});
     };
 }

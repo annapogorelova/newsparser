@@ -18,8 +18,13 @@ news-sources .news-source-item-container {
     max-width: 100%;
 }
 
-news-sources .news-sources-container {
-    border: #cdcdcd medium solid;
-    border-radius: 10px;
-    padding: 5px 5px 5px 5px;
+news-sources .loading-more-icon-container {
+    display: table;
+    margin: auto;
+}
+
+news-sources .loading-status-container, .loading-status-container h5 {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50vh;
 }

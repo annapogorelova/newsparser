@@ -9,7 +9,6 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {RefreshButtonComponent} from './components/refresh-button/refresh-button.component';
 import {ApiErrorHandler} from './services/api/api-error-handler';
 import {PagerServiceProvider} from './services/pager/pager.service.provider';
-import {BaseListComponent} from './components/base-list/base-list.component';
 import {CacheService} from './services/cache/cache.service';
 import {SearchComponent} from './components/search/search.component';
 import {FormsModule} from '@angular/forms';
@@ -29,8 +28,8 @@ import {GoTopButtonModule} from 'ng2-go-top-button';
         ApiErrorHandler,
         CacheService
     ],
-    declarations: [PageNotFoundComponent, RefreshButtonComponent, BaseListComponent, SearchComponent],
-    exports: [PageNotFoundComponent, RefreshButtonComponent, BaseListComponent, SearchComponent, GoTopButtonModule]
+    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent],
+    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule]
 })
 
 export class SharedModule {

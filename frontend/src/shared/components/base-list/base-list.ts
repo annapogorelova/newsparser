@@ -1,16 +1,15 @@
-import {Component} from '@angular/core';
 import {ApiService} from '../../services/api/api.service';
 import {PagerService} from '../../services/pager/pager.service';
-
-@Component({
-    templateUrl: './base-list.component.html'
-})
 
 /**
  * Component contains methods to manipulate the lists data,
  * to be extended by specific list components
  */
-export class BaseListComponent {
+export abstract class BaseListComponent {
+    /**
+     * Api route to make requests to
+     */
+    protected abstract apiRoute: string;
     /**
      * Flag is used to prevent simultaneous data loading
      */
@@ -22,8 +21,7 @@ export class BaseListComponent {
     protected hasMoreItems: boolean = true;
 
     constructor(protected apiService: ApiService,
-                protected pager: PagerService,
-                private apiRoute: string){
+                protected pager: PagerService){
     }
 
     /**
@@ -53,7 +51,7 @@ export class BaseListComponent {
      * @param refresh
      * @returns {Promise<TResult|T>}
      */
-    public loadData = (params: any, refresh: boolean = false) => {
+    protected loadData = (params: any, refresh: boolean = false) => {
         this.loadingInProgress = true;
         var mergedParams = this.mergeRequestParams(params);
         return this.apiService.get(this.apiRoute, mergedParams, null, refresh)

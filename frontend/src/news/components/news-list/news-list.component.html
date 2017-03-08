@@ -3,13 +3,15 @@
         <div class="col-md-2"></div>
         <div class="col-md-10">
             <div class="refresh-button-container">
-                <refresh-button [refreshHandler]="refresh" [isSpinning]="refreshInProgress"></refresh-button>
+                <refresh-button (onRefresh)="refresh($event)" [isSpinning]="refreshInProgress"></refresh-button>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-2">
-            <news-sources [selectHandler]="selectSource" [initialSelectedSourceId]="selectedSourceId"></news-sources>
+            <div class="news-sources-container">
+                <news-sources (onSelect)="onSelectSource($event)" [subscribed]="true"></news-sources>
+            </div>
         </div>
         <div class="col-md-10">
             <search [searchCallback]="searchNews" [search]="search"></search>
