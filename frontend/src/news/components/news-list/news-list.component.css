@@ -21,10 +21,6 @@ news-list .news-item-source {
     display: inline-block;
 }
 
-news-list div.news-item-content * {
-    max-width: 100%;
-}
-
 news-list .news-item-source span {
     max-width: 200px;
     overflow: hidden;
@@ -50,9 +46,9 @@ news-list div.news-item-info-container {
 }
 
 news-list .news-image-container {
-    width: 100%;
     overflow: hidden;
-    min-height: 120px;
+    min-width: 100%;
+    min-height: 150px;
     opacity: 0.5;
     display: block;
     background-size: cover;

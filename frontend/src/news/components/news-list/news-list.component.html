@@ -21,36 +21,48 @@
                  [infiniteScrollDisabled]="!hasMoreItems"
                  (scrolled)="loadMore()">
                 <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
-                    <div class="news-item-content list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="news-item-info-container">
-                            <div class="mb-1 pull-right">
-                                <small>{{newsItem.dateAdded | date}}</small>
-                                <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
-                                    <span class="badge badge-primary badge-pill"
-                                        [attr.title]="newsItem.source.name">{{newsItem.source.name}}</span>
-                                </h4>
+                    <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="news-image-container"
+                                     [ngStyle]="{'background-image': newsItem.imageUrl ?
+                                     'url(' + newsItem.imageUrl + ')' :
+                                     'url(\'../../../../public/images/no-image.jpg\')'}">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="news-item-info-container">
+                                    <div class="mb-1 pull-right">
+                                        <small>{{newsItem.dateAdded | date}}</small>
+                                        <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
+                                        <span class="badge badge-primary badge-pill"
+                                              [attr.title]="newsItem.source.name">{{newsItem.source.name}}</span>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="news-item-header">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">
+                                            <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
+                                                {{newsItem.title}}
+                                            </a>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
                             </div>
                         </div>
-                        <div class="news-item-header">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">
-                                    <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
-                                        {{newsItem.title}}
-                                    </a>
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="news-image-container" *ngIf="newsItem.imageUrl"
-                             [ngStyle]="{'background-image': 'url(' + newsItem.imageUrl + ')'}">
-                        </div>
-                        <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
-                        <div class="news-item-footer">
-                            <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
-                                <h6>
-                                    <span class="badge badge-default badge-pill" (click)="selectTag(tag)">
+                        <div class="row" *ngIf="newsItem.tags.length">
+                            <div class="col-md-12">
+                                <div class="news-item-footer">
+                                    <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
+                                        <h6>
+                                        <span class="badge badge-default badge-pill" (click)="selectTag(tag)">
                                         {{tag.name}}
-                                    </span>
-                                </h6>
+                                        </span>
+                                        </h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -61,7 +73,7 @@
                 <div class="loading-status">
                     <i *ngIf="!hasItems() && loadingInProgress"
                        class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
-                    <h5 *ngIf="!hasItems() && !loadingInProgress" >No News</h5>
+                    <h5 *ngIf="!hasItems() && !loadingInProgress">No News</h5>
                 </div>
             </div>
         </div>
