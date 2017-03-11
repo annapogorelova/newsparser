@@ -22,8 +22,8 @@ namespace NewsParser.BL.Services.News
             _newsTagRepository = newsTagRepository;
         }
 
-        public IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, int? sourceId = null, 
-            int? userId = null, string search = null, string tag = null)
+        public IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5,
+            int? userId = null, string search = null, int[] sourcesIds = null, string[] tags = null)
         {
             if (pageIndex < 0)
             {
@@ -37,9 +37,9 @@ namespace NewsParser.BL.Services.News
 
             var news = _newsRepository.GetNews();
 
-            if (sourceId.HasValue)
+            if (sourcesIds != null)
             {
-                news = news.Where(n => n.SourceId == sourceId.Value);
+                news = news.Where(n => sourcesIds.Any(s => s == n.SourceId));
             }
 
             if (userId.HasValue)
@@ -57,9 +57,11 @@ namespace NewsParser.BL.Services.News
                         || n.Description.ToLower().Contains(searchTerm));
             }
 
-            if (!string.IsNullOrEmpty(tag))
+            if (tags != null)
             {
-                news = news.Where(n => n.NewsItemTags.Select(nt => nt.Tag).Any(t => t.Name == tag));
+                news = news.Where(n => tags.Any(tag => 
+                    n.NewsItemTags.Select(nt => nt.Tag)
+                    .Any(t => string.Equals(t.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
             }
 
             return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);

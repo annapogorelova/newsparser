@@ -7,10 +7,6 @@ using NewsParser.BL.Services.News;
 using NewsParser.DAL.Models;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using newsparser.feedparser;
-using NewsParser.BL.Services.NewsSources;
 
 namespace NewsParser.API.Controllers
 {
@@ -20,41 +16,31 @@ namespace NewsParser.API.Controllers
     public class NewsController : BaseController
     {
         private readonly INewsBusinessService _newsBusinessService;
-        private readonly INewsSourceBusinessService _newsSourceBusinessService;
-        private readonly IFeedUpdater _feedUpdater;
 
-        public NewsController(INewsBusinessService newsBusinessService, INewsSourceBusinessService newsSourceBusinessService, 
-            IFeedUpdater feedUpdater)
+        public NewsController(INewsBusinessService newsBusinessService)
         {
             _newsBusinessService = newsBusinessService;
-            _newsSourceBusinessService = newsSourceBusinessService;
-            _feedUpdater = feedUpdater;
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get(int? sourceId = null, int pageIndex = 0, int pageSize = 5, bool refresh = false, 
-            string search = null, string tag = null)
+        public JsonResult Get(NewsListSelectModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return MakeResponse(HttpStatusCode.BadRequest, "Invalid request data");
+            }
+
             //Hardcoded for now
             var userId = 2;
-            if (refresh)
-            {
-                if (sourceId.HasValue)
-                {
-                    var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId.Value);
-                    if (newsSource.IsUpdating)
-                    {
-                        return MakeResponse(HttpStatusCode.Forbidden, "News source is already updating");
-                    }
-
-                    await _feedUpdater.UpdateSourceAsync(sourceId.Value, userId);
-                }
-                else
-                {
-                    await _feedUpdater.UpdateFeedAsync(userId);
-                }
-            }
-            var news = _newsBusinessService.GetNewsPage(pageIndex, pageSize, sourceId, userId, search, tag).ToList();
+            var news = _newsBusinessService.GetNewsPage
+                (
+                model.PageIndex,
+                model.PageSize,
+                userId,
+                model.Search,
+                model.Sources?.Select(int.Parse).ToArray(),
+                model.Tags
+                ).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);
             return new JsonResult(newsModels);
         }

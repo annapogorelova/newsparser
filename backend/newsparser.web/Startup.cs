@@ -22,9 +22,9 @@ using NewsParser.DAL.Repositories.News;
 using NewsParser.DAL.Repositories.NewsSources;
 using NewsParser.DAL.Repositories.Users;
 using NewsParser.FeedParser;
+using NewsParser.Helpers.Extensions;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
-using Serilog;
 
 namespace NewsParser
 {
@@ -78,13 +78,18 @@ namespace NewsParser
             int defaultCacheDuration =
                 int.Parse(Configuration.GetSection("AppConfig").GetSection("Cache")["DefaultCacheDuration"]);
 
+            services.AddResponseCaching();
+
             services.AddMvc(options =>
-                options.CacheProfiles.Add("Default",
-                    new CacheProfile
-                    {
-                        Duration = 60 * defaultCacheDuration,
-                        Location = ResponseCacheLocation.Client
-                    })
+                {
+                    options.CacheProfiles.Add("Default",
+                        new CacheProfile
+                        {
+                            Duration = 60 * defaultCacheDuration,
+                            Location = ResponseCacheLocation.Client
+                        });
+                    options.UseCommaDelimitedArrayModelBinding();
+                }
             );
         }
 
@@ -115,6 +120,8 @@ namespace NewsParser
             }
 
             app.UseApplicationInsightsExceptionTelemetry();
+
+            app.UseResponseCaching();
 
             app.UseStaticFiles();
 
