@@ -10,7 +10,9 @@
     <div class="row">
         <div class="col-md-2">
             <div class="news-sources-container">
-                <news-sources (onSelect)="onSelectSource($event)" [subscribed]="true"></news-sources>
+                <news-sources (onSelect)="onSelectSource($event)"
+                              [subscribed]="true"
+                              [initiallySelectedSources]="selectedSources"></news-sources>
             </div>
         </div>
         <div class="col-md-10">
@@ -34,7 +36,7 @@
                                 <div class="news-item-info-container">
                                     <div class="mb-1 pull-right">
                                         <small>{{newsItem.dateAdded | date}}</small>
-                                        <h4 class="news-item-source" (click)="selectSource(newsItem.source)">
+                                        <h4 class="news-item-source">
                                         <span class="badge badge-primary badge-pill"
                                               [attr.title]="newsItem.source.name">{{newsItem.source.name}}</span>
                                         </h4>

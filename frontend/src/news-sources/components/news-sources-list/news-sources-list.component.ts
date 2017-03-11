@@ -14,11 +14,11 @@ import {AppSettings} from '../../../app/app.settings';
  * Component for displaying the list of news sources
  */
 export class NewsSourcesListComponent extends BaseListComponent{
-    public selectedSourceId: number;
     protected apiRoute: string;
     private search: string = null;
+    public selectedSources: Array<any> = [];
 
-    @Input() initialSelectedSourceId: any = null;
+    @Input() initiallySelectedSources: Array<any> = [];
     @Input() useSearch: boolean = false;
     @Input() subscribed: boolean = false;
 
@@ -31,16 +31,20 @@ export class NewsSourcesListComponent extends BaseListComponent{
 
     ngOnInit(){
         this.apiRoute = this.subscribed ? 'subscription' : 'newssources';
-        this.loadData({}, true).then(this.handleLoadedNewsSources);
+        this.loadData({}, true).then(() => this.handleLoadedNewsSources());
     }
 
     handleLoadedNewsSources = () => {
-        this.selectedSourceId = this.initialSelectedSourceId;
+        this.selectedSources = this.initiallySelectedSources;
     };
 
     selectNewsSource = (source: any) => {
-        this.selectedSourceId = source.id;
+        this.selectedSources.push(source.id);
         this.onSelect.emit({source: source});
+    };
+
+    isSourceSelected = (source: any) => {
+        return this.selectedSources.indexOf(source.id) !== -1;
     };
 
     reload = () => {

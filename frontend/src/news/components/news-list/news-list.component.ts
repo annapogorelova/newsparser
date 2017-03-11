@@ -17,8 +17,8 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list'
 export class NewsListComponent extends BaseListComponent{
     protected apiRoute: string = 'news';
     public refreshInProgress: boolean = false;
-    public selectedSourceId: number = null;
-    public selectedTag: string = null;
+    public selectedSources: Array<number> = [];
+    public selectedTags: Array<string> = [];
     private search: string = null;
 
     constructor(@Inject(ApiService) apiService: ApiService,
@@ -31,7 +31,6 @@ export class NewsListComponent extends BaseListComponent{
     ngOnInit(){
         window.scrollTo(0, 0);
         this.initializeRequestParams();
-
         var itemsToPreload = this.pager.getNumberOfItemsToPreload();
         if(itemsToPreload){
             this.loadData(this.getRequestParams(), true);
@@ -48,30 +47,28 @@ export class NewsListComponent extends BaseListComponent{
                 !isNaN(parseInt(page)) ? this.pager.setPage(parseInt(page)) : this.pager.setPage(1));
 
         this.route.queryParams
-            .map((queryParams) => queryParams['source'])
-            .subscribe((sourceId: string) =>
-                this.selectedSourceId = sourceId ? parseInt(sourceId) : null);
+            .map((queryParams) => queryParams['sources'])
+            .subscribe((sources: string) =>
+                this.selectedSources = sources ? sources.split(',').map(id => parseInt(id)) : []);
 
         this.route.queryParams
             .map((queryParams) => queryParams['search'])
             .subscribe((search: string) => this.search = search);
 
         this.route.queryParams
-            .map((queryParams) => queryParams['tag'])
-            .subscribe((tag: string) => this.selectedTag = tag);
+            .map((queryParams) => queryParams['tags'])
+            .subscribe((tags: string) => this.selectedTags = tags ? tags.split(',') : []);
     };
 
     /**
      * Returns current request params in form of object
-     * @param refresh - sets the 'refresh' param
      * @returns {{pageIndex: number, pageSize: number, sourceId: number, refresh: boolean}}
      */
-    getRequestParams = (refresh: boolean = false) => {
+    getRequestParams = () => {
         return {
-            sourceId: this.selectedSourceId,
+            sources: this.selectedSources,
             search: this.search,
-            tag: this.selectedTag,
-            refresh: refresh
+            tags: this.selectedTags
         };
     };
 
@@ -82,60 +79,34 @@ export class NewsListComponent extends BaseListComponent{
     reload = (refresh: boolean = false) => {
         window.scrollTo(0, 0);
         this.reloadData(this.getRequestParams(), refresh)
-            .then(this.setUrlQueryParams)
+            .then(() => this.setUrlQueryParams())
             .catch(() => console.log('Reload failed'));
     };
 
-    /**
-     * Load the fresh list of news (launches the RSS sources refresh on server)
-     */
-    refresh = (event: any) =>{
-        if(this.refreshInProgress){
-            return;
-        }
-        this.refreshInProgress = true;
-        this.pager.reset();
-        this.loadData(this.getRequestParams(true), true)
-            .then(this.onRefresh)
-            .catch(this.onRefresh);
+    refresh = (event: any) => {
+        this.reload(true);
     };
 
-    onRefresh = () => {
-        this.refreshInProgress = false;
-    };
-
-    /**
-     * Load next page of news
-     */
     loadMore = () => {
         this.loadMoreData(this.getRequestParams())
-            .then(this.setUrlQueryParams)
+            .then(() => this.setUrlQueryParams())
             .catch(() => console.log('Loading more failed'));
     };
 
     setUrlQueryParams = () => {
         this.navigator.setQueryParam('page', this.pager.getPageNumber());
-        this.navigator.setQueryParam('source', this.selectedSourceId);
+        this.navigator.setQueryParam('sources', this.selectedSources.join(','));
         this.navigator.setQueryParam('search', this.search);
-        this.navigator.setQueryParam('tag', this.selectedTag);
-    };
-
-    /**
-     * Set selected source
-     * @param source - source object
-     */
-    selectSource = (source: any) => {
-        this.selectedSourceId = source.id;
-        this.reload();
+        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
     };
 
     onSelectSource = (event: any) => {
-        this.selectedSourceId = event.source.id;
+        this.selectedSources.push(event.source.id);
         this.reload();
     };
 
     selectTag = (tag: any) => {
-        this.selectedTag = tag.name;
+        this.selectedTags.push(tag.name);
         this.reload();
     };
 
