@@ -36,7 +36,7 @@ namespace NewsParser.BL.Services.NewsSources
 
         public IEnumerable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 5, string search = null)
         {
-            var newsSources = _newsSourceRepository.GetNewsSourcesByUser(userId);
+            var newsSources = GetNewsSourcesByUser(userId);
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -180,6 +180,11 @@ namespace NewsParser.BL.Services.NewsSources
             {
                 throw new BusinessLayerException($"Failed deleting news source {sourceId} from user {userId}", e);
             }
+        }
+
+        public IEnumerable<NewsSource> GetNewsSourcesByUser(int userId)
+        {
+            return _newsSourceRepository.GetNewsSourcesByUser(userId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NewsParser.DAL.Models;
 
 namespace newsparser.feedparser
@@ -11,31 +12,29 @@ namespace newsparser.feedparser
         /// <summary>
         /// Updates all feed
         /// </summary>
-        /// <param name="userId">User id. If specified only this user sources will be updated</param>
-        void UpdateFeed(int? userId = null);
+        /// <param name="newsSources">News sources to update</param>
+        void UpdateFeed(IEnumerable<NewsSource> newsSources);
 
         /// <summary>
         /// Updates all feed (async mode)
         /// </summary>
-        /// <param name="userId">User id. If specified only this user sources will be updated</param>
+        /// <param name="newsSources">News sources to update</param>
         /// <returns>Task</returns>
-        Task UpdateFeedAsync(int? userId = null);
+        Task UpdateFeedAsync(IEnumerable<NewsSource> newsSources);
 
         /// <summary>
         /// Updates a single news source
         /// </summary>
         /// <param name="sourceId">Source id</param>
-        /// <param name="userId">User id</param>
         /// <returns></returns>
-        void UpdateSource(int sourceId, int? userId = null);
+        void UpdateSource(int sourceId);
 
         /// <summary>
         /// Updates a single news source (async)
         /// </summary>
         /// <param name="sourceId">Source id</param>
-        /// <param name="userId">User id</param>
         /// <returns></returns>
-        Task UpdateSourceAsync(int sourceId, int? userId = null);
+        Task UpdateSourceAsync(int sourceId);
 
         /// <summary>
         /// Adds the news source by RSS url

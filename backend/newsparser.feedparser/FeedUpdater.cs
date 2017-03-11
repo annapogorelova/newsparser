@@ -29,16 +29,15 @@ namespace newsparser.feedparser
             _log = log;
         }
 
-        public void UpdateFeed(int? userId = null)
+        public void UpdateFeed(IEnumerable<NewsSource> newsSources)
         {
-            var newsSources = GetNewsSources(userId).ToList();
             _log.LogInformation("Started updating news sources");
 
             foreach (var newsSource in newsSources)
             {
                 try
                 {
-                    UpdateSourceAsync(newsSource.Id, userId).Wait();
+                    UpdateSourceAsync(newsSource.Id).Wait();
                 }
                 catch (Exception e)
                 {
@@ -51,16 +50,15 @@ namespace newsparser.feedparser
             _log.LogInformation("Finished updating news sources");
         }
 
-        public async Task UpdateFeedAsync(int? userId = null)
+        public async Task UpdateFeedAsync(IEnumerable<NewsSource> newsSources)
         {
-            var newsSources = GetNewsSources(userId).ToList();
             _log.LogInformation("Started updating news sources");
 
             foreach (var newsSource in newsSources)
             {
                 try
                 {
-                    await UpdateSourceAsync(newsSource.Id, userId);
+                    await UpdateSourceAsync(newsSource.Id);
                 }
                 catch (Exception e)
                 {
@@ -73,20 +71,11 @@ namespace newsparser.feedparser
             _log.LogInformation("Finished updating news sources");
         }
 
-        public async Task UpdateSourceAsync(int sourceId, int? userId = null)
+        public async Task UpdateSourceAsync(int sourceId)
         {
             try
             {
                 var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-
-                if (userId != null && newsSource.Users != null && newsSource.Users.All(u => u.UserId != userId.Value))
-                {
-                    string message = ($"Failed updating the feed: user with id {userId.Value} " +
-                                      $"is not subscribed to source with id {sourceId}");
-                    _log.LogError(message);
-                    throw new FeedUpdatingException(message);
-                }
-
                 if (newsSource == null)
                 {
                     string message = $"Failed updating the feed: source with id {sourceId} does not exist";
@@ -113,19 +102,11 @@ namespace newsparser.feedparser
             }
         }
 
-        public void UpdateSource(int sourceId, int? userId = null)
+        public void UpdateSource(int sourceId)
         {
             try
             {
                 var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-
-                if (userId != null && newsSource.Users.All(u => u.UserId != userId.Value))
-                {
-                    string message = ($"Failed updating the feed: user with id {userId.Value} " +
-                                      $"is not subscribed to source with id {sourceId}");
-                    _log.LogError(message);
-                    throw new FeedUpdatingException(message);
-                }
 
                 if (newsSource == null)
                 {
@@ -175,13 +156,6 @@ namespace newsparser.feedparser
             {
                 throw new FeedUpdatingException($"Failed to get RSS {rssUrl} source info", e);
             }
-        }
-
-        private IEnumerable<NewsSource> GetNewsSources(int? userId)
-        {
-            return userId != null
-                   ? _newsSourceBusinessService.GetUserNewsSourcesPage(userId.Value)
-                   : _newsSourceBusinessService.GetNewsSources(true);
         }
 
         private void SetNewsSourceUpdatingState(NewsSource newsSource, bool isUpdating)
