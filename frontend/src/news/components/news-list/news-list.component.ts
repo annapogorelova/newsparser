@@ -51,6 +51,7 @@ export class NewsListComponent extends BaseListComponent{
             .subscribe((sources: string) =>
                 this.selectedSources = sources ? sources.split(',').map(id => parseInt(id)) : []);
 
+        debugger;
         this.route.queryParams
             .map((queryParams) => queryParams['search'])
             .subscribe((search: string) => this.search = search);
@@ -79,7 +80,7 @@ export class NewsListComponent extends BaseListComponent{
     reload = (refresh: boolean = false) => {
         window.scrollTo(0, 0);
         this.reloadData(this.getRequestParams(), refresh)
-            .then(() => this.setUrlQueryParams())
+            .then(() => this.setPageUrlQueryParam())
             .catch(() => console.log('Reload failed'));
     };
 
@@ -89,24 +90,23 @@ export class NewsListComponent extends BaseListComponent{
 
     loadMore = () => {
         this.loadMoreData(this.getRequestParams())
-            .then(() => this.setUrlQueryParams())
+            .then(() => this.setPageUrlQueryParam())
             .catch(() => console.log('Loading more failed'));
     };
 
-    setUrlQueryParams = () => {
+    setPageUrlQueryParam = () => {
         this.navigator.setQueryParam('page', this.pager.getPageNumber());
-        this.navigator.setQueryParam('sources', this.selectedSources.join(','));
-        this.navigator.setQueryParam('search', this.search);
-        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
     };
 
     onSelectSource = (event: any) => {
         this.selectedSources.push(event.source.id);
+        this.navigator.setQueryParam('sources', this.selectedSources.join(','));
         this.reload();
     };
 
     selectTag = (tag: any) => {
         this.selectedTags.push(tag.name);
+        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reload();
     };
 

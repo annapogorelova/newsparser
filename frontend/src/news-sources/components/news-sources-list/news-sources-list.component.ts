@@ -35,7 +35,7 @@ export class NewsSourcesListComponent extends BaseListComponent{
     }
 
     handleLoadedNewsSources = () => {
-        this.selectedSources = this.initiallySelectedSources;
+        this.selectedSources = this.selectedSources.concat(this.initiallySelectedSources);
     };
 
     selectNewsSource = (source: any) => {
@@ -48,7 +48,11 @@ export class NewsSourcesListComponent extends BaseListComponent{
     };
 
     reload = () => {
-        return this.reloadData(this.getRequestParams(), true);
+        return this.reloadData(this.getRequestParams(), true).then(() => this.onReload());
+    };
+
+    onReload = () => {
+        this.selectedSources = [];
     };
 
     loadMore = () => {
