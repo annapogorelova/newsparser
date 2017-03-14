@@ -51,7 +51,6 @@ export class NewsListComponent extends BaseListComponent{
             .subscribe((sources: string) =>
                 this.selectedSources = sources ? sources.split(',').map(id => parseInt(id)) : []);
 
-        debugger;
         this.route.queryParams
             .map((queryParams) => queryParams['search'])
             .subscribe((search: string) => this.search = search);
