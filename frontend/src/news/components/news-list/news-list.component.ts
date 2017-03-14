@@ -17,7 +17,7 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list'
 export class NewsListComponent extends BaseListComponent{
     protected apiRoute: string = 'news';
     public refreshInProgress: boolean = false;
-    public selectedSources: Array<number> = [];
+    public selectedSourcesIds: Array<number> = [];
     public selectedTags: Array<string> = [];
     private search: string = null;
 
@@ -49,7 +49,7 @@ export class NewsListComponent extends BaseListComponent{
         this.route.queryParams
             .map((queryParams) => queryParams['sources'])
             .subscribe((sources: string) =>
-                this.selectedSources = sources ? sources.split(',').map(id => parseInt(id)) : []);
+                this.selectedSourcesIds = sources ? sources.split(',').map(id => parseInt(id)) : []);
 
         this.route.queryParams
             .map((queryParams) => queryParams['search'])
@@ -66,7 +66,7 @@ export class NewsListComponent extends BaseListComponent{
      */
     getRequestParams = () => {
         return {
-            sources: this.selectedSources,
+            sources: this.selectedSourcesIds,
             search: this.search,
             tags: this.selectedTags
         };
@@ -98,8 +98,16 @@ export class NewsListComponent extends BaseListComponent{
     };
 
     onSelectSource = (event: any) => {
-        this.selectedSources.push(event.source.id);
-        this.navigator.setQueryParam('sources', this.selectedSources.join(','));
+        this.selectedSourcesIds.push(event.source.id);
+        this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
+        this.reload();
+    };
+
+    onDeselectSource = (event: any) => {
+        this.selectedSourcesIds = this.selectedSourcesIds.filter(function (item) {
+            return item !== event.source.id;
+        });
+        this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
         this.reload();
     };
 

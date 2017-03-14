@@ -11,8 +11,9 @@
         <div class="col-md-2">
             <div class="news-sources-container">
                 <news-sources (onSelect)="onSelectSource($event)"
+                              (onDeselect)="onDeselectSource($event)"
                               [subscribed]="true"
-                              [initiallySelectedSources]="selectedSources"></news-sources>
+                              [initiallySelectedSourcesIds]="selectedSourcesIds"></news-sources>
             </div>
         </div>
         <div class="col-md-10">

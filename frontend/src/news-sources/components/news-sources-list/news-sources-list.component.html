@@ -13,7 +13,8 @@
     <div class="news-source-item-container" *ngFor="let newsSource of pager.getItems()">
             <span class="news-source-item badge badge-pill badge-primary"
                   [class.selected]="isSourceSelected(newsSource)"
-                  (click)="selectNewsSource(newsSource)"
+                  (click)="isSourceSelected(newsSource) ?
+                        deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
                   [attr.title]="newsSource.name">
                 {{newsSource.name}}
             </span>

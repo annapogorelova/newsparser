@@ -16,13 +16,14 @@ import {AppSettings} from '../../../app/app.settings';
 export class NewsSourcesListComponent extends BaseListComponent{
     protected apiRoute: string;
     private search: string = null;
-    public selectedSources: Array<any> = [];
+    public selectedSourcesIds: Array<any> = [];
 
-    @Input() initiallySelectedSources: Array<any> = [];
+    @Input() initiallySelectedSourcesIds: Array<any> = [];
     @Input() useSearch: boolean = false;
     @Input() subscribed: boolean = false;
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
@@ -35,16 +36,23 @@ export class NewsSourcesListComponent extends BaseListComponent{
     }
 
     handleLoadedNewsSources = () => {
-        this.selectedSources = this.selectedSources.concat(this.initiallySelectedSources);
+        this.selectedSourcesIds = this.selectedSourcesIds.concat(this.initiallySelectedSourcesIds);
     };
 
     selectNewsSource = (source: any) => {
-        this.selectedSources.push(source.id);
+        this.selectedSourcesIds.push(source.id);
         this.onSelect.emit({source: source});
     };
 
+    deselectNewsSource = (source: any) => {
+        this.selectedSourcesIds = this.selectedSourcesIds.filter(function (item) {
+            return item !== source.id;
+        });
+        this.onDeselect.emit({source: source});
+    };
+
     isSourceSelected = (source: any) => {
-        return this.selectedSources.indexOf(source.id) !== -1;
+        return this.selectedSourcesIds.indexOf(source.id) !== -1;
     };
 
     reload = () => {
@@ -52,7 +60,7 @@ export class NewsSourcesListComponent extends BaseListComponent{
     };
 
     onReload = () => {
-        this.selectedSources = [];
+        this.selectedSourcesIds = [];
     };
 
     loadMore = () => {
