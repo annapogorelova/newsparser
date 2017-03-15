@@ -13,6 +13,7 @@ import {CacheService} from './services/cache/cache.service';
 import {SearchComponent} from './components/search/search.component';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
+import {TagListComponent} from './components/tags-list/tags-list.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -28,8 +29,8 @@ import {GoTopButtonModule} from 'ng2-go-top-button';
         ApiErrorHandler,
         CacheService
     ],
-    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent],
-    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule]
+    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, TagListComponent],
+    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule, TagListComponent]
 })
 
 export class SharedModule {

@@ -1,0 +1,6 @@
+<div class="tag-container" *ngFor="let tag of tags">
+    <span class="tag-item badge badge-pill badge-default" (click)="deselectTag(tag)">
+        #{{tag}}
+    </span>
+</div>
+<div *ngIf="!tags.length" class="no-tags-text">No tags selected</div>

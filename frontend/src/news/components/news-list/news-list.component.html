@@ -9,11 +9,25 @@
     </div>
     <div class="row">
         <div class="col-md-2">
-            <div class="news-sources-container">
-                <news-sources (onSelect)="onSelectSource($event)"
-                              (onDeselect)="onDeselectSource($event)"
-                              [subscribed]="true"
-                              [initiallySelectedSourcesIds]="selectedSourcesIds"></news-sources>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Sources</h5>
+                    <div class="news-sources-container">
+                        <news-sources (onSelect)="onSelectSource($event)"
+                                      (onDeselect)="onDeselectSource($event)"
+                                      [subscribed]="true"
+                                      [initiallySelectedSourcesIds]="selectedSourcesIds"></news-sources>
+                    </div>
+                </div>
+            </div>
+            <div class="row tags-container">
+                <div class="col-md-12">
+                    <h5>Tags</h5>
+                    <div class="tags-list-container">
+                        <tags-list (onDeselect)="onDeselectTag($event)"
+                                      [tags]="selectedTags"></tags-list>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-10">

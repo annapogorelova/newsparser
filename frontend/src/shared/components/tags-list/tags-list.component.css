@@ -1,0 +1,20 @@
+tags-list .tag-container {
+    display: inline-block;
+    padding-right: 5px;
+    max-width: 100%;
+}
+
+tags-list .tag-item {
+    cursor: pointer;
+    max-width: 200px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 70%;
+    max-width: 100%;
+}
+
+tags-list .no-tags-text {
+    text-align: center;
+    vertical-align: middle;
+}

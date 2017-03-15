@@ -96,8 +96,12 @@ news-list .loading-status, .loading-status h5 {
     line-height: 50vh;
 }
 
-news-list .news-sources-container {
+news-list .news-sources-container, .tags-list-container {
     border: #cdcdcd medium solid;
     border-radius: 10px;
     padding: 5px 5px 5px 5px;
+}
+
+news-list .row.tags-container {
+    margin-top: 10px;
 }

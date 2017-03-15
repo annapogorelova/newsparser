@@ -115,7 +115,19 @@ export class NewsListComponent extends BaseListComponent{
         this.reload();
     };
 
+    onDeselectTag = (event: any) => {
+        this.selectedTags = this.selectedTags.filter(function(tag){
+            return tag !== event.tag;
+        });
+
+        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
+        this.reload();
+    };
+
     selectTag = (tag: any) => {
+        if(this.selectedTags.indexOf(tag) !== -1){
+            return;
+        }
         this.selectedTags.push(tag.name);
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reload();
