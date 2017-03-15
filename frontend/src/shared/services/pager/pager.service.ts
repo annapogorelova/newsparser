@@ -7,26 +7,28 @@ import {AppSettings} from '../../../app/app.settings';
 @Injectable()
 export class PagerService {
     private items: Array<any> = [];
-    private pageNumber: number;
+    private page: number;
     private pageSize: number;
+    private offset: number;
 
     /**
      * Initializes a pager
      * @param {number} pageNumber - Initial page number for list
-     * @param {number} pageSize - Size of the list's page
+     * @param {number} pageSize - pageSize of the list's page
      */
-    constructor(pageNumber?: number, pageSize?: number){
-        this.reset(pageNumber);
+    constructor(page?: number, pageSize?: number){
+        this.reset(page);
         this.pageSize = pageSize || AppSettings.DEFAULT_PAGE_SIZE;
     };
 
     /**
      * Resets a pager
-     * @param {number} pageNumber - Initial page index for list
-     * @param {number} pageSize - Size of the list's page
+     * @param {number} page - Initial page index for list
+     * @param {number} offset - Data array start index
      */
-    reset = (pageNumber: number = 1) => {
-        this.pageNumber = pageNumber;
+    reset = (page: number = 1, offset: number = 0) => {
+        this.page = page;
+        this.offset = offset;
         this.items = [];
     };
 
@@ -36,30 +38,22 @@ export class PagerService {
      */
     appendItems = (newItems: Array<any>) => {
         this.items = this.items.concat(newItems);
-        this.pageNumber = this.getPageNumber();
+        this.offset = this.items.length;
+        this.setPage(this.calculatePage());
+        return this.items;
     };
 
     /**
      * Get the start index for the next page of list
      * @returns {number} The start index for items to be fetched
      */
-    getNextPageStartIndex = () => {
-        return this.items.length;
+    getOffset = () => {
+        return this.offset;
     };
 
     /**
-     * Get the number of items to preload based on current page and current number of items
-     * Ex.: User requests page 5, but items.length is 10, page size =>
-     * we need to preload 5*10 - 10 = 40 items to reach the 5th page
-     * @returns {number}
-     */
-    getNumberOfItemsToPreload = () => {
-        return this.pageNumber * this.pageSize - this.items.length;
-    };
-
-    /**
-     * Get the size of list's page
-     * @returns {number} The size of list's page
+     * Get the pageSize of list's page
+     * @returns {number} The pageSize of list's page
      */
     getPageSize = () => {
         return this.pageSize;
@@ -74,17 +68,32 @@ export class PagerService {
     };
 
     /**
-     * Get the page number (1, 2 etc.)
-     * @returns {number} Page number
-     */
-    getPageNumber = () => {
-        return this.items.length ? Math.ceil(this.items.length/this.pageSize) : 1;
-    };
-
-    /**
      * Sets the page number
      */
     setPage = (page: number) => {
-        this.pageNumber = page;
+        this.page = page;
+    };
+
+    /**
+     * Returns the page number
+     * @returns {number}
+     */
+    getPage = () => {
+        return this.page;
+    };
+
+    /**
+     * Get the page number (1, 2 etc.)
+     * @returns {number} Page number
+     */
+    calculatePage = () => {
+        return Math.ceil(this.items.length/this.pageSize);
+    };
+
+    /**
+     * Calculate the page pageSize based on the page specified
+     */
+    calculatePageSize = (page: number = 1) => {
+        return page * this.pageSize;
     };
 }

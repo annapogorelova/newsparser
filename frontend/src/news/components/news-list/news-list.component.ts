@@ -31,10 +31,14 @@ export class NewsListComponent extends BaseListComponent{
     ngOnInit(){
         window.scrollTo(0, 0);
         this.initializeRequestParams();
-        var itemsToPreload = this.pager.getNumberOfItemsToPreload();
-        if(itemsToPreload){
-            this.loadData(this.getRequestParams(), true);
-        }
+    }
+
+    ngAfterViewInit() {
+        var preloadPageParams = {
+            pageSize: this.pager.calculatePageSize(this.pager.getPage())
+        };
+        var requestParams = Object.assign(preloadPageParams, this.getRequestParams());
+        this.loadData(requestParams, true);
     }
 
     /**
@@ -94,7 +98,7 @@ export class NewsListComponent extends BaseListComponent{
     };
 
     setPageUrlQueryParam = () => {
-        this.navigator.setQueryParam('page', this.pager.getPageNumber());
+        this.navigator.setQueryParam('page', this.pager.getPage());
     };
 
     onSelectSource = (event: any) => {

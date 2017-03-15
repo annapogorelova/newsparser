@@ -30,7 +30,7 @@ export abstract class BaseListComponent {
      */
     private getBaseRequestParams = () => {
         return {
-            pageIndex: this.pager.getNextPageStartIndex(),
+            pageIndex: this.pager.getOffset(),
             pageSize: this.pager.getPageSize()
         };
     };
