@@ -17,4 +17,9 @@ tags-list .tag-item {
 tags-list .no-tags-text {
     text-align: center;
     vertical-align: middle;
+    font-size: 0.8em;
+}
+
+tags-list .tag-input-container {
+    padding: 5px 0 5px 0;
 }

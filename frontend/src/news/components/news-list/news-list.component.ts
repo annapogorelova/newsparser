@@ -38,7 +38,7 @@ export class NewsListComponent extends BaseListComponent{
             pageSize: this.pager.calculatePageSize(this.pager.getPage())
         };
         var requestParams = Object.assign(preloadPageParams, this.getRequestParams());
-        this.loadData(requestParams, true);
+        this.loadData(requestParams);
     }
 
     /**
@@ -128,7 +128,7 @@ export class NewsListComponent extends BaseListComponent{
         if(this.selectedTags.indexOf(tag) !== -1){
             return;
         }
-        this.selectedTags.push(tag.name);
+        this.selectedTags.push(tag);
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reload();
     };

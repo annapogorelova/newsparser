@@ -25,6 +25,7 @@
                     <h5>Tags</h5>
                     <div class="tags-list-container">
                         <tags-list (onDeselect)="onDeselectTag($event)"
+                                   (onTagAdded)="selectTag($event)"
                                       [tags]="selectedTags"></tags-list>
                     </div>
                 </div>
@@ -74,8 +75,8 @@
                                 <div class="news-item-footer">
                                     <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
                                         <h6>
-                                        <span class="badge badge-default badge-pill" (click)="selectTag(tag)">
-                                        {{tag.name}}
+                                        <span class="badge badge-default" (click)="selectTag(tag)">
+                                            {{tag}}
                                         </span>
                                         </h6>
                                     </div>
