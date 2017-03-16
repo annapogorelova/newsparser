@@ -59,9 +59,9 @@ namespace NewsParser.BL.Services.News
 
             if (tags != null)
             {
-                news = news.Where(n => tags.Any(tag => 
-                    n.NewsItemTags.Select(nt => nt.Tag)
-                    .Any(t => string.Equals(t.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
+                news =
+                    news.Where(n => n.NewsItemTags.Any(nt => tags.Any(tag =>
+                        string.Equals(nt.Tag.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
             }
 
             return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);
