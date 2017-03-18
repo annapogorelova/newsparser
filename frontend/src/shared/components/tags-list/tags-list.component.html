@@ -1,7 +1,3 @@
-<div class="tag-input-container">
-    <input name="tagName" type="text" class="form-control form-control-sm"
-           [(ngModel)]="tagName" placeholder="Type a tag" (keyup.enter)="onTagEnter()"/>
-</div>
 <div class="tag-container" *ngFor="let tag of tags">
     <span class="tag-item badge badge-default" (click)="deselectTag(tag)">
         #{{tag}}

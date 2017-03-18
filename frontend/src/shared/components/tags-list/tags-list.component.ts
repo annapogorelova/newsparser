@@ -18,24 +18,7 @@ export class TagListComponent {
      */
     @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
 
-    /**
-     * Tag text input event
-     * @type {EventEmitter<any>}
-     */
-    @Output() onTagAdded: EventEmitter<any> = new EventEmitter<any>();
-
-    /**
-     * Input tag name
-     * @type {any}
-     */
-    public tagName: string = null;
-
     deselectTag = (tag: any) => {
         this.onDeselect.emit({tag: tag});
-    };
-
-    onTagEnter = () => {
-        this.onTagAdded.emit(this.tagName);
-        this.tagName = null;
     };
 }
