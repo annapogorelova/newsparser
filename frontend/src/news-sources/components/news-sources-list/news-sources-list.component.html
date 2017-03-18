@@ -10,14 +10,13 @@
      [infiniteScrollDisabled]="!hasMoreItems"
      [scrollWindow]="false"
      (scrolled)="loadMore()">
-    <div class="news-source-item-container" *ngFor="let newsSource of items">
-            <span class="news-source-item badge badge-primary"
-                  [class.selected]="isSourceSelected(newsSource)"
-                  (click)="isSourceSelected(newsSource) ?
-                        deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
-                  [attr.title]="newsSource.name">
-                {{newsSource.name}}
-            </span>
+    <div class="list-group">
+        <a *ngFor="let newsSource of items" class="news-source-item list-group-item list-group-item-action"
+           [class.active]="isSourceSelected(newsSource)"
+           (click)="isSourceSelected(newsSource) ? deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
+           [attr.title]="newsSource.name">
+            {{newsSource.name}}
+        </a>
     </div>
     <div *ngIf="loadingInProgress" class="loading-more-icon-container">
         <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
