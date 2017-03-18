@@ -59,6 +59,10 @@ news-sources .paging-button[disabled] {
     opacity: 0.7;
 }
 
+news-sources .paging {
+    padding-top: 5px;
+}
+
 news-sources .paging div {
     display: inline;
 }
