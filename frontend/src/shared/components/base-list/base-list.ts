@@ -5,7 +5,7 @@ import {PagerService} from '../../services/pager/pager.service';
  * Component contains methods to manipulate the lists data,
  * to be extended by specific list components
  */
-export abstract class BaseListComponent {
+export abstract class BaseList {
     /**
      * Api route to make requests to
      */
@@ -20,6 +20,12 @@ export abstract class BaseListComponent {
      */
     protected hasMoreItems: boolean = true;
 
+    /**
+     * List items
+     * @type {Array}
+     */
+    protected items: Array<any> = [];
+
     constructor(protected apiService: ApiService,
                 protected pager: PagerService){
     }
@@ -28,7 +34,7 @@ export abstract class BaseListComponent {
      * Get paging request params
      * @returns {{pageIndex: number, pageSize: number}}
      */
-    private getBaseRequestParams = () => {
+    private getPagingParams = () => {
         return {
             pageIndex: this.pager.getOffset(),
             pageSize: this.pager.getPageSize()
@@ -38,10 +44,10 @@ export abstract class BaseListComponent {
     /**
      * Merge paging request params with child component's request params
      * @param params
-     * @returns {{pageIndex: number, pageSize: number}&U}
+     * @returns {{pageIndex: number, pageSize: number}}
      */
     private mergeRequestParams = (params: any) => {
-        var baseParams = this.getBaseRequestParams();
+        var baseParams = this.getPagingParams();
         return Object.assign(baseParams, params);
     };
 
@@ -69,6 +75,7 @@ export abstract class BaseListComponent {
             return Promise.reject({});
         }
 
+        this.pager.setPage(this.pager.getPage() + 1);
         return this.loadData(params);
     };
 
@@ -83,6 +90,7 @@ export abstract class BaseListComponent {
             return Promise.reject({});
         }
         this.pager.reset();
+        this.resetItems();
         return this.loadData(params, refresh);
     };
 
@@ -90,12 +98,15 @@ export abstract class BaseListComponent {
      * Basic loading success callback
      * @param data
      */
-    protected onLoaded = (data: any) => {
-        if(!data.length){
+    protected onLoaded = (response: any) => {
+        if(!response.data.length){
             this.hasMoreItems = false;
         }
 
-        this.pager.appendItems(data);
+        this.items = this.items.concat(response.data);
+        if(response.total){
+            this.pager.setTotal(response.total);
+        }
         this.loadingInProgress = false;
     };
 
@@ -112,6 +123,10 @@ export abstract class BaseListComponent {
      * @returns {number}
      */
     protected hasItems = () => {
-        return this.pager.getItems().length;
+        return this.items.length;
+    };
+
+    protected resetItems = () => {
+        this.items = [];
     };
 }

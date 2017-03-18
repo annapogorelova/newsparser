@@ -38,7 +38,7 @@
                  [infiniteScrollThrottle]="300"
                  [infiniteScrollDisabled]="!hasMoreItems"
                  (scrolled)="loadMore()">
-                <div class="news-item list-group" *ngFor="let newsItem of pager.getItems()">
+                <div class="news-item list-group" *ngFor="let newsItem of items">
                     <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
                         <div class="row">
                             <div class="col-md-4">

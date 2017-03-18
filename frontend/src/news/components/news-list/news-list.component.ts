@@ -3,7 +3,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
-import {BaseListComponent} from '../../../shared/components/base-list/base-list';
+import {BaseList} from '../../../shared/components/base-list/base-list';
 
 @Component({
     selector: 'news-list',
@@ -14,7 +14,7 @@ import {BaseListComponent} from '../../../shared/components/base-list/base-list'
 /**
  * Component represents a list of news
  */
-export class NewsListComponent extends BaseListComponent{
+export class NewsListComponent extends BaseList{
     protected apiRoute: string = 'news';
     public refreshInProgress: boolean = false;
     public selectedSourcesIds: Array<number> = [];
@@ -35,7 +35,8 @@ export class NewsListComponent extends BaseListComponent{
 
     ngAfterViewInit() {
         var preloadPageParams = {
-            pageSize: this.pager.calculatePageSize(this.pager.getPage())
+            pageIndex: 0,
+            pageSize: this.pager.getPage() * this.pager.getPageSize()
         };
         var requestParams = Object.assign(preloadPageParams, this.getRequestParams());
         this.loadData(requestParams);

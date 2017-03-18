@@ -1,8 +1,8 @@
 import {Component, Inject, Input, Output, EventEmitter} from '@angular/core';
-import {BaseListComponent} from '../../../shared/components/base-list/base-list';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {AppSettings} from '../../../app/app.settings';
+import {PagedList} from '../../../shared/components/base-list/paged-list';
 
 @Component({
     selector: 'news-sources',
@@ -13,7 +13,7 @@ import {AppSettings} from '../../../app/app.settings';
 /**
  * Component for displaying the list of news sources
  */
-export class NewsSourcesListComponent extends BaseListComponent{
+export class NewsSourcesListComponent extends PagedList{
     protected apiRoute: string;
     private search: string = null;
     public selectedSourcesIds: Array<any> = [];
@@ -27,12 +27,12 @@ export class NewsSourcesListComponent extends BaseListComponent{
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
-        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
+        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE), 'newsSources');
     }
 
     ngOnInit(){
         this.apiRoute = this.subscribed ? 'subscription' : 'newssources';
-        this.loadData({}, true).then(() => this.handleLoadedNewsSources());
+        this.loadPage({}).then(() => this.handleLoadedNewsSources());
     }
 
     handleLoadedNewsSources = () => {
@@ -56,7 +56,7 @@ export class NewsSourcesListComponent extends BaseListComponent{
     };
 
     reload = () => {
-        return this.reloadData(this.getRequestParams(), true).then(() => this.onReload());
+        return this.reloadPage(this.getRequestParams()).then(() => this.onReload());
     };
 
     onReload = () => {
@@ -76,5 +76,13 @@ export class NewsSourcesListComponent extends BaseListComponent{
         return {
             search: this.search
         };
+    };
+
+    nextPage() {
+        super.nextPage(this.getRequestParams());
+    };
+
+    prevPage() {
+        super.prevPage(this.getRequestParams());
     };
 }

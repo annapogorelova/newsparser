@@ -6,10 +6,9 @@ import {AppSettings} from '../../../app/app.settings';
  */
 @Injectable()
 export class PagerService {
-    private items: Array<any> = [];
     private page: number;
     private pageSize: number;
-    private offset: number;
+    private total?: number;
 
     /**
      * Initializes a pager
@@ -24,31 +23,33 @@ export class PagerService {
     /**
      * Resets a pager
      * @param {number} page - Initial page index for list
-     * @param {number} offset - Data array start index
      */
-    reset = (page: number = 1, offset: number = 0) => {
+    reset = (page: number = 1) => {
         this.page = page;
-        this.offset = offset;
-        this.items = [];
     };
 
     /**
-     * Appends new page of items to the list
-     * @param {Array<any>} newItems - array of new items
+     * Get total amount of list items
+     * @returns {number}
      */
-    appendItems = (newItems: Array<any>) => {
-        this.items = this.items.concat(newItems);
-        this.offset = this.items.length;
-        this.setPage(this.calculatePage());
-        return this.items;
+    getTotal = () => {
+        return this.total;
     };
 
     /**
-     * Get the start index for the next page of list
+     * Set total amount of list items
+     * @param total
+     */
+    setTotal = (total: number) => {
+        this.total = total;
+    };
+
+    /**
+     * Get the list offset for the next page
      * @returns {number} The start index for items to be fetched
      */
     getOffset = () => {
-        return this.offset;
+        return this.page === 1 ? 0 : (this.page - 1) * this.pageSize;
     };
 
     /**
@@ -57,14 +58,6 @@ export class PagerService {
      */
     getPageSize = () => {
         return this.pageSize;
-    };
-
-    /**
-     * Get the items array
-     * @returns {Array<any>} Items array
-     */
-    getItems = () => {
-        return this.items;
     };
 
     /**
@@ -83,17 +76,12 @@ export class PagerService {
     };
 
     /**
-     * Get the page number (1, 2 etc.)
-     * @returns {number} Page number
+     * Get the number of pages available (only if total is present)
+     * @returns {number}
      */
-    calculatePage = () => {
-        return Math.ceil(this.items.length/this.pageSize);
-    };
-
-    /**
-     * Calculate the page pageSize based on the page specified
-     */
-    calculatePageSize = (page: number = 1) => {
-        return page * this.pageSize;
+    getPagesAmount = () => {
+        if(this.total !== undefined){
+            return Math.ceil(this.total/this.pageSize);
+        }
     };
 }

@@ -28,3 +28,37 @@ news-sources .loading-status-container, .loading-status-container h5 {
     vertical-align: middle;
     line-height: 50vh;
 }
+
+news-sources .paging {
+    text-align: center;
+}
+
+news-sources .paging-button {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-decoration: none;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    padding: 0;
+    border-radius: 3px 3px 3px 3px;
+}
+
+news-sources .paging-button:not([disabled]) {
+    cursor: pointer;
+}
+
+news-sources .paging-button:hover:not([disabled]), .paging-button:focus:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    color: white;
+}
+
+news-sources .paging-button[disabled] {
+    opacity: 0.7;
+}
+
+news-sources .paging div {
+    display: inline;
+}
