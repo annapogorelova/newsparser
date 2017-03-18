@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {AppSettings} from '../../../app/app.settings';
 
 @Component({
@@ -17,10 +17,9 @@ export class SearchComponent {
     private search: string = null;
 
     @Input()
-    private searchCallback: any = null;
-
-    @Input()
     private placeholderCaption: string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
+
+    @Output() onSearch: EventEmitter<any> = new EventEmitter<any>();
 
     onKeyUp = (event: any) => {
         // Prevent action triggering when user hits functional buttons
@@ -28,8 +27,6 @@ export class SearchComponent {
             return;
         }
 
-        if(this.searchCallback){
-            this.searchCallback(this.search);
-        }
+        this.onSearch.emit({inputValue: this.search});
     };
 }

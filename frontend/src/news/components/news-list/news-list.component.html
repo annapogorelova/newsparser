@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-md-10">
-            <search [searchCallback]="searchNews" [search]="search"></search>
+            <search (onSearch)="searchNews($event.inputValue)" [search]="search"></search>
             <div class="news-container" infinite-scroll
                  [infiniteScrollDistance]="4"
                  [infiniteScrollThrottle]="300"
