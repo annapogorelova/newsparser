@@ -30,7 +30,10 @@ namespace NewsParser.Scheduler
                 try
                 {
                     var newsSourcs = _newsSourceBusinessService.GetNewsSources(true).ToList();
-                    _feedUpdater.UpdateFeedAsync(newsSourcs).Wait();
+                    foreach (var newsSource in newsSourcs)
+                    {
+                        _feedUpdater.UpdateSource(newsSource.Id);
+                    }
                 }
                 catch (FeedParsingException e)
                 {
