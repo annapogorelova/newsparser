@@ -31,9 +31,10 @@ namespace NewsParser.API.Controllers
         public JsonResult Get(int pageIndex = 0, int pageSize = 5, string search = null)
         {
             var userId = 2;
-            var newsSources = _newsSourceBusinessService.GetUserNewsSourcesPage(userId, pageIndex, pageSize, search).ToList();
+            int total;
+            var newsSources = _newsSourceBusinessService.GetUserNewsSourcesPage(out total, userId, pageIndex, pageSize, search).ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
-            return new JsonResult(newsSourcesModels);
+            return new JsonResult(new { data = newsSourcesModels, total});
         }
 
         [HttpPost]

@@ -42,7 +42,7 @@ namespace NewsParser.API.Controllers
                 model.Tags
                 ).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);
-            return new JsonResult(newsModels);
+            return new JsonResult(new { data = newsModels });
         }
     }
 }

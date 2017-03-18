@@ -32,9 +32,10 @@ namespace NewsParser.API.Controllers
         {
             // TODO: remove hadrcode
             var userId = 2;
-            var newsSources = _newsSourceBusinessService.GetNewsSourcesPage(pageIndex, pageSize, search, userId).ToList();
+            int total;
+            var newsSources = _newsSourceBusinessService.GetNewsSourcesPage(out total, pageIndex, pageSize, search, userId).ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
-            return new JsonResult(newsSourcesModels);
+            return new JsonResult(new { data = newsSourcesModels, total });
         }
 
         [HttpGet("/newssources/{id}")]

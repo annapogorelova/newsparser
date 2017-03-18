@@ -34,7 +34,7 @@ namespace NewsParser.BL.Services.NewsSources
                     .Where(s => s.Users.All(u => u.UserId != userId));
         }
 
-        public IEnumerable<NewsSource> GetUserNewsSourcesPage(int userId, int pageIndex = 0, int pageSize = 5, string search = null)
+        public IEnumerable<NewsSource> GetUserNewsSourcesPage(out int total, int userId, int pageIndex = 0, int pageSize = 5, string search = null)
         {
             var newsSources = GetNewsSourcesByUser(userId);
 
@@ -43,10 +43,11 @@ namespace NewsParser.BL.Services.NewsSources
                 newsSources = newsSources.Where(s => s.Name.ToLower().Contains(search.ToLower()));
             }
 
+            total = newsSources.Count();
             return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
         }
 
-        public IEnumerable<NewsSource> GetNewsSourcesPage(int pageIndex = 0, int pageSize = 5, string search = null,
+        public IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null,
             int? userId = null)
         {
             var newsSources = userId.HasValue ?
@@ -58,6 +59,7 @@ namespace NewsParser.BL.Services.NewsSources
                 newsSources = newsSources.Where(s => s.Name.ToLower().Contains(search.ToLower()));
             }
 
+            total = newsSources.Count();
             return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
         }
 
