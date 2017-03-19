@@ -91,6 +91,7 @@ export abstract class BaseList {
         }
         this.pager.reset();
         this.resetItems();
+        this.hasMoreItems = true;
         return this.loadData(params, refresh);
     };
 

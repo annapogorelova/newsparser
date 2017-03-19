@@ -14,13 +14,13 @@ import {BaseList} from '../../../shared/components/base-list/base-list';
  * Component for displaying the list of news sources
  */
 export class NewsSourcesListComponent extends BaseList {
-    protected apiRoute: string;
+    protected apiRoute: string = 'newsSources';
     private search: string = null;
     public selectedSourcesIds: Array<any> = [];
 
     @Input() initiallySelectedSourcesIds: Array<any> = [];
     @Input() useSearch: boolean = false;
-    @Input() subscribed: boolean = false;
+    @Input() onlySubscribed: boolean = false;
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
@@ -31,8 +31,7 @@ export class NewsSourcesListComponent extends BaseList {
     }
 
     ngOnInit(){
-        this.apiRoute = this.subscribed ? 'subscription' : 'newssources';
-        this.loadData({}).then(() => this.handleLoadedNewsSources());
+        this.loadData(this.getRequestParams(), true).then(() => this.handleLoadedNewsSources());
     }
 
     handleLoadedNewsSources = () => {
@@ -51,12 +50,18 @@ export class NewsSourcesListComponent extends BaseList {
         this.onDeselect.emit({source: source});
     };
 
-    isSourceSelected = (source: any) => {
+    isSelected = (source: any) => {
         return this.selectedSourcesIds.indexOf(source.id) !== -1;
     };
 
+    isSubscribed = (source: any) => {
+        if(!this.onlySubscribed && source.isSubscribed){
+            return true;
+        }
+    };
+
     reload = () => {
-        return this.reloadData(this.getRequestParams()).then(() => this.onReload());
+        return this.reloadData(this.getRequestParams(), true).then(() => this.onReload());
     };
 
     onReload = () => {
@@ -74,7 +79,8 @@ export class NewsSourcesListComponent extends BaseList {
 
     getRequestParams = () => {
         return {
-            search: this.search
+            search: this.search,
+            subscribed: this.onlySubscribed
         };
     };
 }

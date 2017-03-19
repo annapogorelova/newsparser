@@ -12,7 +12,6 @@ import {ApiService} from '../../../shared/services/api/api.service';
  */
 export class SubscriptionsComponent {
     @ViewChild('subscriptionsList') subscriptionsList: any;
-    @ViewChild('availableSourcesList') availableSourcesList: any;
 
     constructor(@Inject(ApiService) private apiService: ApiService) {}
 
@@ -31,7 +30,6 @@ export class SubscriptionsComponent {
      */
     onSubscribed = () => {
         this.subscriptionsList.reload();
-        this.availableSourcesList.reload();
     };
 
     /**
@@ -57,7 +55,6 @@ export class SubscriptionsComponent {
      */
     handleUbsubscribed = () => {
         this.subscriptionsList.reload();
-        this.availableSourcesList.reload();
     };
 
     /**

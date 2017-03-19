@@ -1,24 +1,21 @@
 <div class="news-sources-settings-container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <add-news-source></add-news-source>
         </div>
+        <div class="col-md-2"></div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <h3 class="list-heading">Your news sources</h3>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <news-sources #subscriptionsList
-                          (onSelect)="unsubscribe($event)"
                           [useSearch]="true"
-                          [subscribed]="true">
-            </news-sources>
-        </div>
-        <div class="col-md-6">
-            <h3 class="list-heading">Available news sources</h3>
-            <news-sources #availableSourcesList
+                          [onlySubscribed]="false"
                           (onSelect)="subscribe($event)"
-                          [useSearch]="true">
+                          (onDeselect)="unsubscribe($event)">
             </news-sources>
         </div>
+        <div class="col-md-2"></div>
     </div>
 </div>

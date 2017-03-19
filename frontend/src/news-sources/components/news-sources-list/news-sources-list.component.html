@@ -12,10 +12,12 @@
      (scrolled)="loadMore()">
     <div class="list-group">
         <a *ngFor="let newsSource of items" class="news-source-item list-group-item list-group-item-action"
-           [class.active]="isSourceSelected(newsSource)"
-           (click)="isSourceSelected(newsSource) ? deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
+           [class.active]="isSelected(newsSource)"
+           (click)="(isSelected(newsSource) || isSubscribed(newsSource)) ?
+                deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
            [attr.title]="newsSource.name">
             {{newsSource.name}}
+            <i class="fa fa-check pull-right" *ngIf="isSubscribed(newsSource)"></i>
         </a>
     </div>
     <div *ngIf="loadingInProgress" class="loading-more-icon-container">
