@@ -7,8 +7,13 @@ import { AuthService } from '../../shared/services/auth/auth.service';
 })
 export class AppComponent  {
   public isNavbarCollapsed = true;
+  public minContentHeight: number;
 
   constructor(private authService: AuthService){}
+
+  ngOnInit(){
+    this.minContentHeight = window.screen.height;
+  }
 
   signOut = () => {
     this.authService.signOut()
