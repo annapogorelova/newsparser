@@ -27,16 +27,6 @@ namespace NewsParser.API.Controllers
             _log = log;
         }
 
-        [HttpGet]
-        public JsonResult Get(int pageIndex = 0, int pageSize = 5, string search = null)
-        {
-            var userId = 2;
-            int total;
-            var newsSources = _newsSourceBusinessService.GetUserNewsSourcesPage(out total, userId, pageIndex, pageSize, search).ToList();
-            var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
-            return new JsonResult(new { data = newsSourcesModels, total});
-        }
-
         [HttpPost]
         public JsonResult Post([FromBody]CreateSubscriptionModel model)
         {

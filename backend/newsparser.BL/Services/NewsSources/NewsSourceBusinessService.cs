@@ -21,9 +21,9 @@ namespace NewsParser.BL.Services.NewsSources
 
         public IEnumerable<NewsSource> GetNewsSources(bool hasUsers = false)
         {
-            var newsSources = _newsSourceRepository.GetNewsSources();
+            var newsSources = _newsSourceRepository.GetNewsSources().Include(n => n.Users);
             return hasUsers ?
-                newsSources.Include(n => n.Users).Where(n => n.Users.Any()) :
+                newsSources.Where(n => n.Users.Any()) :
                 newsSources;
         }
 
@@ -34,24 +34,11 @@ namespace NewsParser.BL.Services.NewsSources
                     .Where(s => s.Users.All(u => u.UserId != userId));
         }
 
-        public IEnumerable<NewsSource> GetUserNewsSourcesPage(out int total, int userId, int pageIndex = 0, int pageSize = 5, string search = null)
-        {
-            var newsSources = GetNewsSourcesByUser(userId);
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                newsSources = newsSources.Where(s => s.Name.ToLower().Contains(search.ToLower()));
-            }
-
-            total = newsSources.Count();
-            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
-        }
-
         public IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null,
-            int? userId = null)
+            bool subscribed = false, int? userId = null)
         {
-            var newsSources = userId.HasValue ?
-                GetAvailableNewsSources(userId.Value) :
+            var newsSources = subscribed && userId.HasValue ?
+                GetNewsSourcesByUser(userId.Value) :
                 GetNewsSources();
 
             if (!string.IsNullOrEmpty(search))

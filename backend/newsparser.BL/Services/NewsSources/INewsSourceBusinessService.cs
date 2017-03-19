@@ -37,20 +37,10 @@ namespace NewsParser.BL.Services.NewsSources
         /// <param name="search">Search term</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
+        /// <param name="subscribed">If true and userId present only user subscribed sources will be returned, otherwise - all</param>
         /// <param name="userId">User id to select available news sources for</param>
         /// <returns>IEnumerable of NewsSource</returns>
-        IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null, int? userId = null);
-
-        /// <summary>
-        /// Get news source by user
-        /// </summary>
-        /// <param name="total">Total count of filtered news sources</param>
-        /// <param name="userId">User id</param>
-        /// <param name="pageIndex">Page index</param>
-        /// <param name="pageSize">Page size</param>
-        /// <param name="search">Search string</param>
-        /// <returns>IEnumerable of news sources</returns>
-        IEnumerable<NewsSource> GetUserNewsSourcesPage(out int total, int userId, int pageIndex = 0, int pageSize = 5, string search = null);
+        IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null, bool subscribed = false, int? userId = null);
 
         /// <summary>
         /// Get news source by id
