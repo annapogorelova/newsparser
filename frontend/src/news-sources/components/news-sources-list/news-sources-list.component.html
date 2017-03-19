@@ -22,20 +22,6 @@
         <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
     </div>
 </div>
-<div class="row" *ngIf="hasItems() && pager.getPagesAmount() > 1">
-    <div class="col-md-12">
-        <div class="paging">
-            <button [disabled]="isFirstPage()" type="button" class="paging-button"
-                    (click)="prevPage()">
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            </button>
-            <button [disabled]="isLastPage()" type="button" class="paging-button"
-                    (click)="nextPage()">
-                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </button>
-        </div>
-    </div>
-</div>
 <div *ngIf="!hasItems()" class="loading-status-container">
     <h5 *ngIf="!loadingInProgress">No News Sources</h5>
     <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>

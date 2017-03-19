@@ -18,6 +18,11 @@ news-sources .news-source-item-container {
     max-width: 100%;
 }
 
+news-sources .news-sources-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 news-sources .loading-more-icon-container {
     display: table;
     margin: auto;

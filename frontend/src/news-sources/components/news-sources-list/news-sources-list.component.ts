@@ -2,7 +2,7 @@ import {Component, Inject, Input, Output, EventEmitter} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {AppSettings} from '../../../app/app.settings';
-import {PagedList} from '../../../shared/components/base-list/paged-list';
+import {BaseList} from '../../../shared/components/base-list/base-list';
 
 @Component({
     selector: 'news-sources',
@@ -13,7 +13,7 @@ import {PagedList} from '../../../shared/components/base-list/paged-list';
 /**
  * Component for displaying the list of news sources
  */
-export class NewsSourcesListComponent extends PagedList{
+export class NewsSourcesListComponent extends BaseList {
     protected apiRoute: string;
     private search: string = null;
     public selectedSourcesIds: Array<any> = [];
@@ -27,12 +27,12 @@ export class NewsSourcesListComponent extends PagedList{
 
     constructor(@Inject(ApiService) apiService: ApiService,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
-        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE), 'newsSources');
+        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
     }
 
     ngOnInit(){
         this.apiRoute = this.subscribed ? 'subscription' : 'newssources';
-        this.loadPage({}).then(() => this.handleLoadedNewsSources());
+        this.loadData({}).then(() => this.handleLoadedNewsSources());
     }
 
     handleLoadedNewsSources = () => {
@@ -56,7 +56,7 @@ export class NewsSourcesListComponent extends PagedList{
     };
 
     reload = () => {
-        return this.reloadPage(this.getRequestParams()).then(() => this.onReload());
+        return this.reloadData(this.getRequestParams()).then(() => this.onReload());
     };
 
     onReload = () => {
@@ -76,13 +76,5 @@ export class NewsSourcesListComponent extends PagedList{
         return {
             search: this.search
         };
-    };
-
-    nextPage() {
-        super.nextPage(this.getRequestParams());
-    };
-
-    prevPage() {
-        super.prevPage(this.getRequestParams());
     };
 }
