@@ -1,7 +1,7 @@
 refresh-button .refresh {
     width: 45px;
     height: 45px;
-    line-height: 20px;
+    line-height: 35px;
     text-decoration: none;
     color: white;
     background: rgba(0, 0, 0, 0.3);
@@ -11,7 +11,8 @@ refresh-button .refresh {
 }
 
 refresh-button .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.3);
     text-decoration: none;
     color: white;
+    outline: none;
 }

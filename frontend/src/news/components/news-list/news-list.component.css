@@ -88,12 +88,6 @@ news-list .news-item-tag-container span {
     cursor: pointer;
 }
 
-news-list .refresh-button-container {
-    display: table;
-    margin: auto;
-    padding-bottom: 10px;
-}
-
 news-list .loading-status, .loading-status h5 {
     text-align: center;
     vertical-align: middle;
@@ -108,4 +102,19 @@ news-list .tags-list-container {
 
 news-list .row.tags-container {
     margin-top: 10px;
+}
+
+news-list .refresh-button-container {
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+    right: 0;
+    z-index: 100;
+    margin: 0;
+}
+
+news-list .refresh-button-container button {
+    width: 35px;
+    height: 65px;
+    border-radius: 3px 0 0 3px;
 }
