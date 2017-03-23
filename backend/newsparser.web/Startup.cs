@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,6 +32,8 @@ using NewsParser.Identity;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
+[assembly: UserSecretsId("aspnet-NewsParser-efbcbdd7-8b7c-4c71-8de1-e5e49002dd0f")]
+
 namespace NewsParser
 {
     public static class ServiceLocator
@@ -47,6 +50,11 @@ namespace NewsParser
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
 
             if (env.IsDevelopment())
             {
@@ -151,7 +159,7 @@ namespace NewsParser
 
         private void ConfigureJwtAuthentication(IApplicationBuilder app)
         {
-            var secretKey = Configuration.GetSection("Security")["secretKey"];
+            var secretKey = Configuration["Authentication:SecretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -187,7 +195,7 @@ namespace NewsParser
 
         private void ConfigureIdentityServices(IServiceCollection services)
         {
-            var secretKey = Configuration.GetSection("Security")["SecretKey"];
+            var secretKey = Configuration["Authentication:SecretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var tokenLifetime = int.Parse(Configuration.GetSection("Security")["TokenLifetimeMinutes"]);
 
