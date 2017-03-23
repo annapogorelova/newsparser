@@ -33,7 +33,11 @@
     "newsparser.BL": "1.0.0",
     "newsparser.feedparser": "1.0.0",
     "Serilog.Extensions.Logging.File": "1.0.0",
-    "Microsoft.AspNetCore.ResponseCaching": "1.1.0"
+    "Microsoft.AspNetCore.ResponseCaching": "1.1.0",
+    "OpenIddict": "1.0.0-*",
+    "OpenIddict.Mvc": "1.0.0-*",
+    "AspNet.Security.OAuth.Validation": "1.0.0-alpha3-final",
+    "OpenIddict.EntityFrameworkCore": "1.0.0-*"
   },
 
   "tools": {

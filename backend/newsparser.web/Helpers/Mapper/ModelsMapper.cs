@@ -15,7 +15,7 @@ namespace NewsParser.Helpers.Mapper
         public static void Congifure()
         {
             AutoMapper.Mapper.Initialize(ConfigAction);
-            AutoMapper.Mapper.AssertConfigurationIsValid();
+            //AutoMapper.Mapper.AssertConfigurationIsValid();
         }
 
         public static Action<IMapperConfigurationExpression> ConfigAction = cfg =>

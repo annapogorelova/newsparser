@@ -1,7 +1,12 @@
 ﻿using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.DotNet.Cli.Utils.CommandParsing;
+using Microsoft.Extensions.DependencyInjection;
 using NewsParser.API.Models;
 using NewsParser.DAL.Models;
+using NewsParser.Identity;
 
 namespace NewsParser.Helpers.Mapper.Profiles
 {
@@ -19,9 +24,10 @@ namespace NewsParser.Helpers.Mapper.Profiles
 
         private void SetSubscribedState(NewsSource newsSource, NewsSourceApiModel model)
         {
-            // TODO: GetCurrentUser
-            int userId = 2;
-            model.IsSubscribed = newsSource.Users.Any(u => u.UserId == userId);
+            var userManager = ServiceLocator.Instance.GetService<UserManager<ApplicationUser>>();
+            var httpContextAccessor = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
+            var user = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
+            model.IsSubscribed = newsSource.Users.Any(u => u.UserId == user.GetId());
         }
     }
 }

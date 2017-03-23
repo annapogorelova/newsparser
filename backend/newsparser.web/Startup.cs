@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +28,8 @@ using NewsParser.FeedParser;
 using NewsParser.Helpers.Extensions;
 using NewsParser.Helpers.Mapper;
 using NewsParser.Identity;
+using OpenIddict.Core;
+using OpenIddict.Models;
 
 namespace NewsParser
 {
@@ -67,7 +72,10 @@ namespace NewsParser
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
+                options.UseOpenIddict<int>();
             });
+
+            ConfigureIdentityServices(services);
 
             services.AddCors(options =>
             {
@@ -127,11 +135,11 @@ namespace NewsParser
 
             ModelsMapper.Congifure();
 
-            ConfigureAuthentication(app);
-
             app.UseCors("CorsPolicy");
 
             ServiceLocator.Instance = app.ApplicationServices;
+
+            ConfigureJwtAuthentication(app);
 
             app.UseMvc(routes =>
             {
@@ -141,28 +149,26 @@ namespace NewsParser
             });
         }
 
-        private void ConfigureAuthentication(IApplicationBuilder app)
+        private void ConfigureJwtAuthentication(IApplicationBuilder app)
         {
-            // Add JWT generation endpoint:
-            // secretKey contains a secret passphrase only your server knows
             var secretKey = Configuration.GetSection("Security")["secretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             var tokenValidationParameters = new TokenValidationParameters
             {
-                // The signing key must match!
+                NameClaimType = OpenIdConnectConstants.Claims.Name,
+                ValidateAudience = false,
+                ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
-                ValidateLifetime = true,
-                ValidateIssuer = true,
-                ValidIssuer = "http://localhost:50451",
-                ValidateAudience = false
+                ValidateLifetime = true
             };
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
                 TokenValidationParameters = tokenValidationParameters,
                 Events = new JwtBearerEvents
                 {
@@ -174,13 +180,40 @@ namespace NewsParser
                 }
             });
 
-            var options = new TokenProviderOptions
-            {
-                Issuer = "http://localhost:50451",
-                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
-            };
+            app.UseIdentity();
 
-            app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
+            app.UseOpenIddict();
+        }
+
+        private void ConfigureIdentityServices(IServiceCollection services)
+        {
+            var secretKey = Configuration.GetSection("Security")["SecretKey"];
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+            var tokenLifetime = int.Parse(Configuration.GetSection("Security")["TokenLifetimeMinutes"]);
+
+            services.AddIdentity<ApplicationUser, Role>()
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore>()
+                .AddRoleStore<RoleStore>();
+
+            services.AddOpenIddict(options =>
+            {
+                options.AllowAuthorizationCodeFlow();
+                options.AllowPasswordFlow();
+                options.EnableTokenEndpoint("/api/token");
+                options.EnableAuthorizationEndpoint("/api/authorize");
+                options.UseJsonWebTokens();
+                options.DisableHttpsRequirement();
+                options.AddMvcBinders();
+                options.AddSigningKey(signingKey);
+                options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));
+            });
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+                options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+            });
         }
 
         private void RegisterDependencies(IServiceCollection services)
@@ -200,6 +233,13 @@ namespace NewsParser
             // Feed parser and updater
             services.AddTransient<IFeedParser, RssParser>();
             services.AddTransient<IFeedUpdater, FeedUpdater>();
+
+            services.AddScoped<IRoleStore<Role>, RoleStore>();
+            services.AddScoped<IUserStore<ApplicationUser>, UserStore>();
+            services.AddScoped<IOpenIddictApplicationStore<OpenIddictApplication>, ApplicationStore>();
+            services.AddScoped<IOpenIddictTokenStore<OpenIddictToken>, TokenStore>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

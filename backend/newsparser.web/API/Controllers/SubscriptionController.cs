@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using AutoMapper;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsParser.API.Models;
 using NewsParser.BL.Services.NewsSources;
+using NewsParser.Identity;
 
 namespace NewsParser.API.Controllers
 {
@@ -20,20 +20,24 @@ namespace NewsParser.API.Controllers
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly ILogger<SubscriptionController> _log;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SubscriptionController(INewsSourceBusinessService newsSourceBusinessService, ILogger<SubscriptionController> log)
+        public SubscriptionController(INewsSourceBusinessService newsSourceBusinessService, 
+            ILogger<SubscriptionController> log,
+            UserManager<ApplicationUser> userManager)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
             _log = log;
+            _userManager = userManager;
         }
 
         [HttpPost]
-        public JsonResult Post([FromBody]CreateSubscriptionModel model)
+        public async Task<JsonResult> Post([FromBody]CreateSubscriptionModel model)
         {
-            var userId = 2;
             try
             {
-                _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, userId);
+                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, user.GetId());
                 return MakeResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
             }
             catch (Exception e)
@@ -44,12 +48,12 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpDelete]
-        public JsonResult Delete(int id)
+        public async Task<JsonResult> Delete(int id)
         {
-            var userId = 2;
             try
             {
-                _newsSourceBusinessService.DeleteUserNewsSource(id, userId);
+                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
                 return MakeResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
             }
             catch (Exception e)

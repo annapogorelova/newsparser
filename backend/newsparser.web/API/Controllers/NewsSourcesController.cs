@@ -7,9 +7,11 @@ using NewsParser.API.Models;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using newsparser.feedparser;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
+using NewsParser.Identity;
 
 namespace NewsParser.API.Controllers
 {
@@ -20,21 +22,24 @@ namespace NewsParser.API.Controllers
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly IFeedUpdater _feedUpdater;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService, IFeedUpdater feedUpdater)
+        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService, 
+            IFeedUpdater feedUpdater, 
+            UserManager<ApplicationUser> userManager)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
             _feedUpdater = feedUpdater;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public JsonResult Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
+        public async Task<JsonResult> Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
         {
-            // TODO: remove hadrcode
-            var userId = 2;
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             int total;
             var newsSources = _newsSourceBusinessService
-                .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, userId)
+                .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())
                 .ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
             return new JsonResult(new { data = newsSourcesModels, total });
@@ -57,8 +62,8 @@ namespace NewsParser.API.Controllers
 
             try
             {
-                var userId = 2;
-                var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, userId);
+                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
                 var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
                 return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);
             }
