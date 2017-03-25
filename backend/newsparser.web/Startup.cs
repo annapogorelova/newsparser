@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -199,7 +201,25 @@ namespace NewsParser
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var tokenLifetime = int.Parse(Configuration.GetSection("Security")["TokenLifetimeMinutes"]);
 
-            services.AddIdentity<ApplicationUser, Role>()
+            services.AddIdentity<ApplicationUser, Role>(config =>
+                {
+                    config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                    {
+                        OnRedirectToLogin = ctx =>
+                        {
+                            if (ctx.Request.Path.StartsWithSegments("/api") &&
+                                ctx.Response.StatusCode == (int)HttpStatusCode.OK)
+                            {
+                                ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            }
+                            else
+                            {
+                                ctx.Response.Redirect(ctx.RedirectUri);
+                            }
+                            return Task.FromResult(0);
+                        }
+                    };
+                })
                 .AddDefaultTokenProviders()
                 .AddUserStore<UserStore>()
                 .AddRoleStore<RoleStore>();
