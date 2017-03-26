@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL
@@ -35,6 +36,13 @@ namespace NewsParser.DAL
                 .HasOne(ns => ns.NewsSource)
                 .WithMany(u => u.Users)
                 .HasForeignKey(ns => ns.SourceId);
+
+            modelBuilder.Entity<UserSocialId>().ToTable("UserSocialIds");
+
+            modelBuilder.Entity<UserSocialId>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.UserSocialIds)
+                .HasForeignKey(s => s.UserId);
 
             modelBuilder.Entity<NewsItem>().ToTable("News");
 
