@@ -8,7 +8,7 @@ namespace newsparser.DAL.Models
     /// </summary>
     public enum SocialAuthProvider
     {
-        Facebook,
+        Facebook = 1,
         Google
     }
 

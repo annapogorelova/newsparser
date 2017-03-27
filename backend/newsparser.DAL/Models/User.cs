@@ -27,5 +27,11 @@ namespace NewsParser.DAL.Models
         public List<UserNewsSource> NewsSources { get; set; }
 
         public List<UserSocialId> UserSocialIds { get; set; }
+
+        public User()
+        {
+            NewsSources = new List<UserNewsSource>();
+            UserSocialIds = new List<UserSocialId>();
+        }
     }
 }

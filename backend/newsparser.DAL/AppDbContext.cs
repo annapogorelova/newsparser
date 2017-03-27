@@ -16,6 +16,7 @@ namespace NewsParser.DAL
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
         public DbSet<UserNewsSource> UserSources { get; set; }
+        public DbSet<UserSocialId> UserSocialIds { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
