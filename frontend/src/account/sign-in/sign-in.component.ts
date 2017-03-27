@@ -4,7 +4,8 @@ import {AuthService} from '../../shared/services/auth/auth.service';
 import {CacheService} from '../../shared/services/cache/cache.service';
 
 @Component({
-    templateUrl: 'sign-in.component.html',
+    templateUrl: './sign-in.component.html',
+    styleUrls: ['/sign-in.component.css']
 })
 export class SignInComponent  {
     public email = '';

@@ -8,7 +8,7 @@ import {BaseList} from '../../../shared/components/base-list/base-list';
 @Component({
     selector: 'news-list',
     templateUrl: './news-list.component.html',
-    styles: [require('./news-list.component.css').toString()]
+    styleUrls: ['./news-list.component.css']
 })
 
 /**

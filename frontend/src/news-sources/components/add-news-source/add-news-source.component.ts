@@ -7,7 +7,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 @Component({
     selector: 'add-news-source',
     templateUrl: 'add-news-source.component.html',
-    styles: [require('./add-news-source.component.css').toString()]
+    styleUrls: ['./add-news-source.component.css']
 })
 
 export class AddNewsSourceComponent {

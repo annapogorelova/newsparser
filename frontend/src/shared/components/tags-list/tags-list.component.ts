@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 @Component({
     selector: 'tags-list',
     templateUrl: 'tags-list.component.html',
-    styles: [require('./tags-list.component.css').toString()]
+    styleUrls: ['./tags-list.component.css']
 })
 
 /**

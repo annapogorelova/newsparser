@@ -4,7 +4,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 @Component({
     selector: 'news-sources-settings',
     templateUrl: 'subscriptions.component.html',
-    styles: [require('./subscriptions.component.css').toString()]
+    styleUrls: ['./subscriptions.component.css']
 })
 
 /**

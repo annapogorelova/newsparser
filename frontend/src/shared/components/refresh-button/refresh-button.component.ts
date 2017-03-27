@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 @Component({
     selector: 'refresh-button',
     templateUrl: './refresh-button.component.html',
-    styles: [require('./refresh-button.component.css').toString()]
+    styleUrls: ['./refresh-button.component.css']
 })
 
 /**

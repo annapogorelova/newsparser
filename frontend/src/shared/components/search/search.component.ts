@@ -4,7 +4,7 @@ import {AppSettings} from '../../../app/app.settings';
 @Component({
     selector: 'search',
     templateUrl: 'search.component.html',
-    styles: [require('./search.component.css').toString()]
+    styleUrls: ['./search.component.css']
 })
 
 /**
