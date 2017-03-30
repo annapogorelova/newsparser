@@ -7,11 +7,10 @@ using NewsParser.API.Models;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using newsparser.feedparser;
+using NewsParser.Auth;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
-using NewsParser.Identity;
 
 namespace NewsParser.API.Controllers
 {
@@ -21,22 +20,23 @@ namespace NewsParser.API.Controllers
     public class NewsSourcesController: BaseController
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
+        private readonly IAuthService _authService;
         private readonly IFeedUpdater _feedUpdater;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NewsSourcesController(INewsSourceBusinessService newsSourceBusinessService, 
-            IFeedUpdater feedUpdater, 
-            UserManager<ApplicationUser> userManager)
+        public NewsSourcesController(
+            INewsSourceBusinessService newsSourceBusinessService,
+            IAuthService authService,
+            IFeedUpdater feedUpdater)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
+            _authService = authService;
             _feedUpdater = feedUpdater;
-            _userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
+        public JsonResult Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
         {
-            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            var user = _authService.FindUserByName(HttpContext.User.Identity.Name);
             int total;
             var newsSources = _newsSourceBusinessService
                 .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())
@@ -62,7 +62,7 @@ namespace NewsParser.API.Controllers
 
             try
             {
-                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                var user = _authService.FindUserByName(HttpContext.User.Identity.Name);
                 var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
                 var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
                 return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);

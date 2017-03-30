@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
-namespace NewsParser.Identity
+namespace NewsParser.Identity.Stores
 {
     public class TokenStore: IOpenIddictTokenStore<OpenIddictToken>
     {

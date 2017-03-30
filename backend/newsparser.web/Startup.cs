@@ -15,9 +15,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using newsparser.feedparser;
+using NewsParser.Auth;
+using NewsParser.Auth.ExternalAuth;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.BL.Services.NewsTags;
@@ -30,7 +31,8 @@ using NewsParser.DAL.Repositories.Users;
 using NewsParser.FeedParser;
 using NewsParser.Helpers.Extensions;
 using NewsParser.Helpers.Mapper;
-using NewsParser.Identity;
+using NewsParser.Identity.Models;
+using NewsParser.Identity.Stores;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
@@ -151,6 +153,8 @@ namespace NewsParser
 
             ConfigureJwtAuthentication(app);
 
+            ConfigureSocialAuthProviders(app);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -235,12 +239,22 @@ namespace NewsParser
                 options.AddMvcBinders();
                 options.AddSigningKey(signingKey);
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));
+                options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
             });
 
             services.Configure<IdentityOptions>(options =>
             {
                 options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
                 options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+            });
+        }
+
+        private void ConfigureSocialAuthProviders(IApplicationBuilder app)
+        {
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId = Configuration["Authentication:Facebook:AppId"],
+                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
             });
         }
 
@@ -268,6 +282,9 @@ namespace NewsParser
             services.AddScoped<IOpenIddictTokenStore<OpenIddictToken>, TokenStore>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<IExternalAuthService, ExternalAuthService>();
+            services.AddTransient<IAuthService, AuthService>();
         }
     }
 }

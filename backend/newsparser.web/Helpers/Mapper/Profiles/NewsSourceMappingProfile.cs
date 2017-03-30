@@ -2,11 +2,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.DotNet.Cli.Utils.CommandParsing;
 using Microsoft.Extensions.DependencyInjection;
 using NewsParser.API.Models;
 using NewsParser.DAL.Models;
-using NewsParser.Identity;
+using NewsParser.Identity.Models;
 
 namespace NewsParser.Helpers.Mapper.Profiles
 {

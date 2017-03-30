@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.Users
@@ -34,7 +35,17 @@ namespace NewsParser.BL.Services.Users
         /// <param name="email">User's email</param>
         /// <returns>User object</returns>
         User GetUserByEmail(string email);
-        
+
+        /// <summary>
+        /// Get user by social id
+        /// </summary>
+        /// <param name="socialId">User social id</param>
+        /// <param name="provider">Social authentication provider (Facebook/Google+)</param>
+        /// <returns>User object</returns>
+        User GetUserBySocialId(string socialId, ExternalAuthProvider provider);
+
+        bool UserExists(User user);
+    
         /// <summary>
         /// Insert user
         /// </summary>

@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using NewsParser.Identity.Models;
 
-namespace NewsParser.Identity
+namespace NewsParser.Identity.Stores
 {
     public class RoleStore: IRoleStore<Role>
     {

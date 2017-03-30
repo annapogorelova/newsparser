@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsParser.API.Models;
 using NewsParser.BL.Services.NewsSources;
-using NewsParser.Identity;
+using NewsParser.Identity.Models;
 
 namespace NewsParser.API.Controllers
 {

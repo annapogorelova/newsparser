@@ -16,7 +16,7 @@ namespace NewsParser.DAL
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
         public DbSet<UserNewsSource> UserSources { get; set; }
-        public DbSet<UserSocialId> UserSocialIds { get; set; }
+        public DbSet<UserExternalId> UserExternalIds { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,11 +38,11 @@ namespace NewsParser.DAL
                 .WithMany(u => u.Users)
                 .HasForeignKey(ns => ns.SourceId);
 
-            modelBuilder.Entity<UserSocialId>().ToTable("UserSocialIds");
+            modelBuilder.Entity<UserExternalId>().ToTable("UserExternalIds");
 
-            modelBuilder.Entity<UserSocialId>()
+            modelBuilder.Entity<UserExternalId>()
                 .HasOne(s => s.User)
-                .WithMany(u => u.UserSocialIds)
+                .WithMany(u => u.UserExternalIds)
                 .HasForeignKey(s => s.UserId);
 
             modelBuilder.Entity<NewsItem>().ToTable("News");

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.Repositories.Users
@@ -21,6 +22,14 @@ namespace NewsParser.DAL.Repositories.Users
         /// <param name="email">User email</param>
         /// <returns>User object</returns>
         User GetUserByEmail(string email);
+
+        /// <summary>
+        /// Get user by social id
+        /// </summary>
+        /// <param name="socialId">User social id</param>
+        /// <param name="provider">Social authentication provider (Facebook/Google+)</param>
+        /// <returns>User object</returns>
+        User GetUserBySocialId(string socialId, ExternalAuthProvider provider);
 
         /// <summary>
         /// Get all users

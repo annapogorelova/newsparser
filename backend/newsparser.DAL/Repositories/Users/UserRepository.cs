@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.Repositories.Users
@@ -103,6 +104,21 @@ namespace NewsParser.DAL.Repositories.Users
 
             _dbContext.Remove(user);
             _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Get user by social id
+        /// </summary>
+        /// <param name="socialId">User social id</param>
+        /// <param name="provider">Social authentication provider (Facebook/Google+)</param>
+        /// <returns>User object</returns>
+        public User GetUserBySocialId(string socialId, ExternalAuthProvider provider)
+        {
+            return
+                _dbContext.Users.Include(u => u.UserExternalIds).FirstOrDefault(
+                    u =>
+                        u.UserExternalIds.Any(
+                            s => s.ExternalId.ToLower() == socialId.ToLower() && s.AuthProvider == provider));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +7,7 @@ using NewsParser.BL.Services.News;
 using NewsParser.DAL.Models;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using NewsParser.BL.Services.Users;
-using NewsParser.Identity;
+using NewsParser.Auth;
 
 namespace NewsParser.API.Controllers
 {
@@ -21,23 +17,23 @@ namespace NewsParser.API.Controllers
     public class NewsController : BaseController
     {
         private readonly INewsBusinessService _newsBusinessService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthService _authService;
 
-        public NewsController(INewsBusinessService newsBusinessService, UserManager<ApplicationUser> userManager)
+        public NewsController(INewsBusinessService newsBusinessService, IAuthService authService)
         {
             _newsBusinessService = newsBusinessService;
-            _userManager = userManager;
+            _authService = authService;
         }
 
         [HttpGet]
-        public async Task<JsonResult> Get(NewsListSelectModel model)
+        public JsonResult Get(NewsListSelectModel model)
         {
             if (!ModelState.IsValid)
             {
                 return MakeResponse(HttpStatusCode.BadRequest, "Invalid request data");
             }
-            
-            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+
+            var user = _authService.GetCurrentUser();
             var news = _newsBusinessService.GetNewsPage
                 (
                 model.PageIndex,

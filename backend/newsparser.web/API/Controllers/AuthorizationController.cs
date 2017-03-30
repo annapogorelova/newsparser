@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
-using AspNet.Security.OpenIdConnect.Server;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NewsParser.Identity;
+using newsparser.DAL.Models;
+using NewsParser.Auth;
+using NewsParser.Auth.ExternalAuth;
+using NewsParser.Identity.Models;
 
 namespace NewsParser.API.Controllers
 {
@@ -17,29 +15,48 @@ namespace NewsParser.API.Controllers
     /// </summary>
     public class AuthorizationController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IExternalAuthService _externalAuthService;
+        private readonly IAuthService _authService;
 
-        public AuthorizationController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AuthorizationController(
+            SignInManager<ApplicationUser> signInManager,
+            IExternalAuthService externalAuthService,
+            IAuthService authService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
-
+            _externalAuthService = externalAuthService;
+            _authService = authService;
         }
 
         [HttpPost("~/api/token"), Produces("application/json")]
-        public async Task<IActionResult> Token(OpenIdConnectRequest request)
+        public IActionResult Token(OpenIdConnectRequest request)
         {
-            if (!request.IsPasswordGrantType())
+            if (request.GrantType == "urn:ietf:params:oauth:grant-type:facebook_access_token")
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
-                    ErrorDescription = "The specified grant type is not supported."
-                });
+                return HandleFacebookAuth(request).Result;
             }
 
-            var user = await _userManager.FindByNameAsync(request.Username);
+            if (request.IsPasswordGrantType())
+            {
+                return HandleTokenAuth(request).Result;
+            }
+
+            return BadRequest(new OpenIdConnectResponse
+            {
+                Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
+                ErrorDescription = "The specified grant type is not supported."
+            });
+        }
+
+        /// <summary>
+        /// Handles username/password authentication
+        /// </summary>
+        /// <param name="request">Request</param>
+        /// <returns>Sign in action result</returns>
+        private async Task<IActionResult> HandleTokenAuth(OpenIdConnectRequest request)
+        {
+            var user = _authService.FindUserByName(request.Username);
             if (user == null)
             {
                 return BadRequest(new OpenIdConnectResponse
@@ -58,7 +75,7 @@ namespace NewsParser.API.Controllers
                 });
             }
 
-            if (!await _userManager.CheckPasswordAsync(user, request.Password))
+            if (!_authService.CheckUserPassword(user, request.Password))
             {
                 return BadRequest(new OpenIdConnectResponse
                 {
@@ -67,28 +84,54 @@ namespace NewsParser.API.Controllers
                 });
             }
 
-            var principal = await _signInManager.CreateUserPrincipalAsync(user);
+            var principal = await _authService.GetUserPrincipalAsync(user);
+            var ticket = _authService.GetAuthTicket(principal);
+            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+        }
 
-            foreach (var claim in principal.Claims)
+        /// <summary>
+        /// Handles Facebook social authentication
+        /// </summary>
+        /// <param name="request">Request</param>
+        /// <returns>Sign in action result</returns>
+        private async Task<IActionResult> HandleFacebookAuth(OpenIdConnectRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Assertion))
             {
-                claim.SetDestinations(OpenIdConnectConstants.Destinations.AccessToken,
-                                          OpenIdConnectConstants.Destinations.IdentityToken);
+                return BadRequest(new OpenIdConnectResponse
+                {
+                    Error = OpenIdConnectConstants.Errors.InvalidRequest,
+                    ErrorDescription = "The mandatory 'assertion' parameter was missing."
+                });
             }
 
-            var ticket = new AuthenticationTicket(
-                principal,
-                new AuthenticationProperties(),
-                OpenIdConnectServerDefaults.AuthenticationScheme);
-
-            var scopes = new[]
+            try
             {
-                OpenIdConnectConstants.Scopes.OpenId,
-                OpenIdConnectConstants.Scopes.Email
-            }.Intersect(request.GetScopes());
+                var externalUser = await _externalAuthService.VerifyFacebookTokenAsync(request.Assertion);
+                if (!externalUser.IsVerified)
+                {
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
+                        ErrorDescription = "Facebook user is not verified."
+                    });
+                }
 
-            ticket.SetScopes(scopes);
-            
-            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+                var user = _authService.FindUserBySocialId(externalUser.ExternalId, ExternalAuthProvider.Facebook) ??
+                                   await _authService.SaveExternalUserAsync(externalUser, ExternalAuthProvider.Facebook);
+
+                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
+                var ticket = _authService.GetAuthTicket(principal);
+                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new OpenIdConnectResponse
+                {
+                    Error = OpenIdConnectConstants.Errors.ServerError,
+                    ErrorDescription = "Failed to authenticate Facebook user."
+                });
+            }
         }
     }
 }

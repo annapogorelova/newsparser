@@ -6,22 +6,22 @@ namespace newsparser.DAL.Models
     /// <summary>
     /// Social authentication providers
     /// </summary>
-    public enum SocialAuthProvider
+    public enum ExternalAuthProvider
     {
         Facebook = 1,
         Google
     }
 
-    public class UserSocialId
+    public class UserExternalId
     {
         public int Id { get; set; }
 
         public int UserId { get; set; }
 
-        public SocialAuthProvider AuthProvider { get; set; }
+        public ExternalAuthProvider AuthProvider { get; set; }
 
         [Required]
-        public string SocialId { get; set; }
+        public string ExternalId { get; set; }
 
         public User User { get; set; }
     }

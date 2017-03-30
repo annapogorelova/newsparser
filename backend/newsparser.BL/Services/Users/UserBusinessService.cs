@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
 
@@ -38,13 +40,12 @@ namespace NewsParser.BL.Services.Users
         {
             if (user == null)
             {
-                throw new ArgumentNullException(nameof(user), $"User cannot be null");
+                throw new ArgumentNullException(nameof(user), "User cannot be null");
             }
 
-            var existingUser = _userRepository.GetUserByEmail(user.Email);
-            if (existingUser != null)
+            if (UserExists(user))
             {
-                throw new BusinessLayerException($"User with email {user.Email} already exists");
+                throw new BusinessLayerException("User already exists");
             }
 
             try
@@ -95,6 +96,28 @@ namespace NewsParser.BL.Services.Users
             {
                 throw new BusinessLayerException($"Failed deleting user with id {id}", e);
             }
+        }
+
+        public User GetUserBySocialId(string socialId, ExternalAuthProvider provider)
+        {
+            return _userRepository.GetUserBySocialId(socialId, provider);
+        }
+
+        public bool UserExists(User user)
+        {
+            User existingUser = null;
+
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                existingUser = _userRepository.GetUserByEmail(user.Email);
+            }
+            else if (user.UserExternalIds.Any())
+            {
+                var userSocialId = user.UserExternalIds.FirstOrDefault();
+                existingUser = _userRepository.GetUserBySocialId(userSocialId.ExternalId, userSocialId.AuthProvider);
+            }
+
+            return existingUser != null;
         }
     }
 }

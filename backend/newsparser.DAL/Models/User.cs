@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using newsparser.DAL.Models;
 
 namespace NewsParser.DAL.Models
@@ -22,16 +23,16 @@ namespace NewsParser.DAL.Models
         public string Password { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
-        public DateTime DateUpdated { get; set; }
+        public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
         
         public List<UserNewsSource> NewsSources { get; set; }
 
-        public List<UserSocialId> UserSocialIds { get; set; }
+        public List<UserExternalId> UserExternalIds { get; set; }
 
         public User()
         {
             NewsSources = new List<UserNewsSource>();
-            UserSocialIds = new List<UserSocialId>();
+            UserExternalIds = new List<UserExternalId>();
         }
     }
 }
