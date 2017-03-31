@@ -21,6 +21,7 @@ export class NewsSourcesListComponent extends BaseList {
     @Input() initiallySelectedSourcesIds: Array<any> = [];
     @Input() useSearch: boolean = false;
     @Input() onlySubscribed: boolean = false;
+    @Input() noDataText: string = 'No news sources';
 
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
