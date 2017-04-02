@@ -89,7 +89,7 @@ namespace NewsParser.Auth
             return user;
         }
 
-        public async Task<ApplicationUser> SaveExternalUserAsync(ExternalUser externalUser, ExternalAuthProvider authProvider)
+        public async Task<ApplicationUser> CreateExternalUserAsync(ExternalUser externalUser, ExternalAuthProvider authProvider)
         {
             var user = AutoMapper.Mapper.Map<ExternalUser, ApplicationUser>(externalUser);
             user.ExternalIds = new List<ExternalIdModel>
@@ -102,23 +102,48 @@ namespace NewsParser.Auth
             };
 
             await _userStore.CreateAsync(user, CancellationToken.None);
-            return FindUserBySocialId(externalUser.ExternalId, authProvider); ;
+            return FindUserByExternalId(externalUser.ExternalId, authProvider);
         }
 
-        public ApplicationUser FindUserBySocialId(string socialId, ExternalAuthProvider provider)
+        public async Task<ApplicationUser> UpdateExternalUserAsync(ApplicationUser applicationUser, ExternalUser externalUser, ExternalAuthProvider authProvider)
+        {
+            AutoMapper.Mapper.Map(externalUser, applicationUser);
+            if (
+                !applicationUser.ExternalIds.Any(
+                    e => e.ExternalId == externalUser.ExternalId && e.AuthProvider == externalUser.AuthProvider))
+            {
+                applicationUser.ExternalIds.Add(new ExternalIdModel
+                {
+                    ExternalId = externalUser.ExternalId,
+                    AuthProvider = authProvider
+                });
+            }
+
+            await _userStore.UpdateAsync(applicationUser, CancellationToken.None);
+            return FindUserByExternalId(externalUser.ExternalId, authProvider);
+        }
+
+        public ApplicationUser FindUserByExternalId(string socialId, ExternalAuthProvider provider)
         {
             var existingUser = _userBusinessService.GetUserBySocialId(socialId, provider);
             return existingUser != null ? AutoMapper.Mapper.Map<User, ApplicationUser>(existingUser) : null;
         }
 
-        public ApplicationUser FindUserByName(string username)
+        public ApplicationUser FindUserByEmail(string email)
         {
-            return _userManager.FindByNameAsync(username).Result;
+            return _userManager.FindByNameAsync(email).Result;
         }
 
         public bool CheckUserPassword(ApplicationUser user, string password)
         {
             return _userManager.CheckPasswordAsync(user, password).Result;
+        }
+
+        public ApplicationUser FindExternalUser(ExternalUser user)
+        {
+            return !string.IsNullOrEmpty(user.Email) ? 
+                FindUserByEmail(user.Email) : 
+                FindUserByExternalId(user.ExternalId, user.AuthProvider);
         }
     }
 }

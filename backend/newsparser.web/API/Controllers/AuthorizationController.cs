@@ -37,6 +37,11 @@ namespace NewsParser.API.Controllers
                 return HandleFacebookAuth(request).Result;
             }
 
+            if (request.GrantType == "urn:ietf:params:oauth:grant-type:google_access_token")
+            {
+                return HandleGoogleAuth(request).Result;
+            }
+
             if (request.IsPasswordGrantType())
             {
                 return HandleTokenAuth(request).Result;
@@ -56,7 +61,7 @@ namespace NewsParser.API.Controllers
         /// <returns>Sign in action result</returns>
         private async Task<IActionResult> HandleTokenAuth(OpenIdConnectRequest request)
         {
-            var user = _authService.FindUserByName(request.Username);
+            var user = _authService.FindUserByEmail(request.Username);
             if (user == null)
             {
                 return BadRequest(new OpenIdConnectResponse
@@ -66,6 +71,7 @@ namespace NewsParser.API.Controllers
                 });
             }
 
+            //?
             if (!await _signInManager.CanSignInAsync(user))
             {
                 return BadRequest(new OpenIdConnectResponse
@@ -107,7 +113,7 @@ namespace NewsParser.API.Controllers
 
             try
             {
-                var externalUser = await _externalAuthService.VerifyFacebookTokenAsync(request.Assertion);
+                var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Facebook);
                 if (!externalUser.IsVerified)
                 {
                     return BadRequest(new OpenIdConnectResponse
@@ -117,8 +123,69 @@ namespace NewsParser.API.Controllers
                     });
                 }
 
-                var user = _authService.FindUserBySocialId(externalUser.ExternalId, ExternalAuthProvider.Facebook) ??
-                                   await _authService.SaveExternalUserAsync(externalUser, ExternalAuthProvider.Facebook);
+                var user = _authService.FindExternalUser(externalUser);
+
+                if (user == null)
+                {
+                    await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
+                }
+                else
+                {
+                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
+                }
+
+                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
+                var ticket = _authService.GetAuthTicket(principal);
+                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new OpenIdConnectResponse
+                {
+                    Error = OpenIdConnectConstants.Errors.ServerError,
+                    ErrorDescription = "Failed to authenticate Facebook user."
+                });
+            }
+        }
+
+        /// <summary>
+        /// Handles Google social authentication
+        /// </summary>
+        /// <param name="request">Request</param>
+        /// <returns>Sign in action result</returns>
+        private async Task<IActionResult> HandleGoogleAuth(OpenIdConnectRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Assertion))
+            {
+                return BadRequest(new OpenIdConnectResponse
+                {
+                    Error = OpenIdConnectConstants.Errors.InvalidRequest,
+                    ErrorDescription = "The mandatory 'assertion' parameter was missing."
+                });
+            }
+
+            try
+            {
+                var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Google);
+                if (!externalUser.IsVerified)
+                {
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
+                        ErrorDescription = "Facebook user is not verified."
+                    });
+                }
+
+                var user = _authService.FindExternalUser(externalUser);
+
+                if (user == null)
+                {
+                    await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
+                }
+                else
+                {
+                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
+                }
 
                 var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
                 var ticket = _authService.GetAuthTicket(principal);

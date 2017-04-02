@@ -20,11 +20,15 @@ namespace NewsParser.Auth
 
         ApplicationUser GetCurrentUser();
 
-        Task<ApplicationUser> SaveExternalUserAsync(ExternalUser externalUser, ExternalAuthProvider authProvider);
+        Task<ApplicationUser> CreateExternalUserAsync(ExternalUser externalUser, ExternalAuthProvider authProvider);
 
-        ApplicationUser FindUserBySocialId(string socialId, ExternalAuthProvider provider);
+        Task<ApplicationUser> UpdateExternalUserAsync(ApplicationUser applicationUser, ExternalUser externalUser, ExternalAuthProvider authProvider);
 
-        ApplicationUser FindUserByName(string username);
+        ApplicationUser FindUserByExternalId(string socialId, ExternalAuthProvider provider);
+
+        ApplicationUser FindUserByEmail(string email);
+
+        ApplicationUser FindExternalUser(ExternalUser user);
 
         bool CheckUserPassword(ApplicationUser user, string password);
     }

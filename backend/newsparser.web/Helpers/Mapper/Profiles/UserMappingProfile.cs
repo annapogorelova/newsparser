@@ -20,7 +20,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
             CreateMap<ExternalIdModel, UserExternalId>();
 
             CreateMap<ApplicationUser, User>()
-                .ForMember(u => u.Id, opt => opt.Ignore())
+                .ForMember(u => u.Id, opt => opt.MapFrom(a => a.GetId()))
                 .ForMember(u => u.Password, opt => opt.MapFrom(a => a.PasswordHash ?? string.Empty))
                 .ForMember(u => u.UserExternalIds, opt => opt.MapFrom(a => AutoMapper.Mapper.Map<List<ExternalIdModel>, List<UserExternalId>>(a.ExternalIds)));
 
@@ -36,6 +36,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
                         new List<ExternalIdModel>()));
 
             CreateMap<ExternalUser, ApplicationUser>()
+                .ForMember(a => a.Id, opt => opt.Ignore())
                 .ForMember(a => a.PasswordHash, opt => opt.Ignore());
         }
     }

@@ -35,7 +35,7 @@ namespace NewsParser.DAL.Repositories.Users
         /// <returns>User object</returns>
         public User GetUserByEmail(string email)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            return _dbContext.Users.Include(u => u.UserExternalIds).FirstOrDefault(u => u.Email == email);
         }
 
         /// <summary>

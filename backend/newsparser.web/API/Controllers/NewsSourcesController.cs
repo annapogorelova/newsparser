@@ -36,7 +36,7 @@ namespace NewsParser.API.Controllers
         [HttpGet]
         public JsonResult Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
         {
-            var user = _authService.FindUserByName(HttpContext.User.Identity.Name);
+            var user = _authService.FindUserByEmail(HttpContext.User.Identity.Name);
             int total;
             var newsSources = _newsSourceBusinessService
                 .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())
@@ -62,7 +62,7 @@ namespace NewsParser.API.Controllers
 
             try
             {
-                var user = _authService.FindUserByName(HttpContext.User.Identity.Name);
+                var user = _authService.FindUserByEmail(HttpContext.User.Identity.Name);
                 var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
                 var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
                 return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);

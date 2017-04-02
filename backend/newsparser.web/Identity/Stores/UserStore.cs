@@ -124,7 +124,13 @@ namespace NewsParser.Identity.Stores
 
             try
             {
-                _userBusinessService.UpdateUser(Mapper.Map<ApplicationUser, User>(user));
+                var existingUser = _userBusinessService.GetUserById(user.GetId());
+                if (existingUser == null)
+                {
+                    throw new IdentityException($"User with id {user.GetId()} does not exist");
+                }
+                Mapper.Map(user, existingUser);
+                _userBusinessService.UpdateUser(existingUser);
                 return Task.FromResult(IdentityResult.Success);
             }
             catch (BusinessLayerException e)

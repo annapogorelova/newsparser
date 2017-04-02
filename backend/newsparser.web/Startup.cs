@@ -153,7 +153,7 @@ namespace NewsParser
 
             ConfigureJwtAuthentication(app);
 
-            ConfigureSocialAuthProviders(app);
+            ConfigureExternalAuthProviders(app);
 
             app.UseMvc(routes =>
             {
@@ -238,8 +238,9 @@ namespace NewsParser
                 options.DisableHttpsRequirement();
                 options.AddMvcBinders();
                 options.AddSigningKey(signingKey);
-                options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));
+                options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));;
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
+                options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:google_access_token");
             });
 
             services.Configure<IdentityOptions>(options =>
@@ -249,12 +250,18 @@ namespace NewsParser
             });
         }
 
-        private void ConfigureSocialAuthProviders(IApplicationBuilder app)
+        private void ConfigureExternalAuthProviders(IApplicationBuilder app)
         {
             app.UseFacebookAuthentication(new FacebookOptions()
             {
                 AppId = Configuration["Authentication:Facebook:AppId"],
                 AppSecret = Configuration["Authentication:Facebook:AppSecret"]
+            });
+
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = Configuration["Authentication:Google:ClientId"],
+                ClientSecret = Configuration["Authentication:Google:ClientSecret"]
             });
         }
 
@@ -282,6 +289,7 @@ namespace NewsParser
             services.AddScoped<IOpenIddictTokenStore<OpenIddictToken>, TokenStore>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddTransient<IExternalAuthService, ExternalAuthService>();
             services.AddTransient<IAuthService, AuthService>();

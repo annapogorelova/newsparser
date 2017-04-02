@@ -1,8 +1,11 @@
-﻿namespace NewsParser.Auth.ExternalAuth
+﻿using newsparser.DAL.Models;
+
+namespace NewsParser.Auth.ExternalAuth
 {
     public class ExternalUser
     {
         public string ExternalId { get; set; }
+        public ExternalAuthProvider AuthProvider { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
