@@ -1,10 +1,10 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {AuthService} from '../../shared/services/auth/auth.service';
-import * as SocialAuthService from "angular2-social-login";
+import {AuthService} from '../../../shared/services/auth/auth.service';
+import {ExternalAuthService} from '../../../shared/modules/external-auth/external-auth.service';
 
 @Component({
-    templateUrl: './external-sign-in.component.html',
-    styleUrls: ['./external-sign-in.component.css'],
+    templateUrl: 'external-sign-in.component.html',
+    styleUrls: ['external-sign-in.component.css'],
     selector: 'external-sign-in'
 })
 
@@ -19,11 +19,11 @@ export class ExternalSignInComponent  {
     @Output() onSignedIn: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private authService: AuthService,
-                public socialAuthService: SocialAuthService.AuthService){
+                public externalAuthService: ExternalAuthService){
     }
 
     signIn = () => {
-        this.socialAuthService.login(this.provider).subscribe(data => this.handleExternalAuth(data));
+        this.externalAuthService.login(this.provider).then(data => this.handleExternalAuth(data));
     };
 
     private handleExternalAuth = (data: any) => {

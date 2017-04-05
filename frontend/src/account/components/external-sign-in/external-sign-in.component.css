@@ -1,9 +1,10 @@
 external-sign-in .social-button {
     margin-bottom: 10px;
-    width: 230px;
+    width: 100%;
     cursor: pointer;
 }
 
 external-sign-in .social-button i {
     float: left;
+    padding-right: 10px;
 }

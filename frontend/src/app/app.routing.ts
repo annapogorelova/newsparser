@@ -1,9 +1,8 @@
 import {Routes, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import {NewsListComponent} from '../news/components/news-list/news-list.component';
-import {SignInComponent} from '../account/sign-in/sign-in.component';
+import {SignInComponent} from '../account/components/sign-in/sign-in.component';
 import {CanActivateAuth} from '../shared/services/auth/can-activate';
-import {RegisterComponent} from '../account/register/register.component';
+import {RegisterComponent} from '../account/components/register/register.component';
 import {PageNotFoundComponent} from '../shared/components/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [

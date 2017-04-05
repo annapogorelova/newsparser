@@ -1,0 +1,12 @@
+sign-in .sign-in-form {
+    padding-bottom: 10px;
+    min-width: 230px;
+}
+
+sign-in .btn-full-length {
+    width: 100%;
+}
+
+sign-in button {
+    cursor: pointer;
+}

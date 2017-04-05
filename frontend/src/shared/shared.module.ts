@@ -14,6 +14,7 @@ import {SearchComponent} from './components/search/search.component';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {TagListComponent} from './components/tags-list/tags-list.component';
+import {ExternalAuthModule} from './modules/external-auth/external-auth.module';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -30,7 +31,8 @@ import {TagListComponent} from './components/tags-list/tags-list.component';
         CacheService
     ],
     declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, TagListComponent],
-    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule, TagListComponent]
+    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule,
+        TagListComponent, ExternalAuthModule]
 })
 
 export class SharedModule {

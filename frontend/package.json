@@ -31,7 +31,6 @@
     "@types/core-js": "^0.9.41",
     "angular-in-memory-web-api": "~0.2.4",
     "angular2-infinite-scroll": "^0.3.0",
-    "angular2-social-login": "^2.1.0",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "ng2-go-top-button": "^1.0.5",

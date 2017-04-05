@@ -1,11 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../../shared/services/auth/auth.service';
-import {CacheService} from '../../shared/services/cache/cache.service';
+import {AuthService} from '../../../shared/services/auth/auth.service';
+import {CacheService} from '../../../shared/services/cache/cache.service';
 
 @Component({
-    templateUrl: './sign-in.component.html',
-    styleUrls: ['/sign-in.component.css'],
+    templateUrl: 'sign-in.component.html',
+    styleUrls: ['./sign-in.component.css'],
     selector: 'sign-in'
 })
 export class SignInComponent  {
