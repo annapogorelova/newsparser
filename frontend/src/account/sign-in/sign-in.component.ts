@@ -5,7 +5,8 @@ import {CacheService} from '../../shared/services/cache/cache.service';
 
 @Component({
     templateUrl: './sign-in.component.html',
-    styleUrls: ['/sign-in.component.css']
+    styleUrls: ['/sign-in.component.css'],
+    selector: 'sign-in'
 })
 export class SignInComponent  {
     public email = '';
@@ -21,7 +22,7 @@ export class SignInComponent  {
         this.router.navigate(['/register']);
     };
 
-    private handleAuth = (auth: any) => {
+    handleAuth = (auth: any) => {
         this.cacheService.set('auth', auth.access_token);
         this.router.navigate(['/news']);
     };

@@ -1,0 +1,9 @@
+external-sign-in .social-button {
+    margin-bottom: 10px;
+    width: 230px;
+    cursor: pointer;
+}
+
+external-sign-in .social-button i {
+    float: left;
+}

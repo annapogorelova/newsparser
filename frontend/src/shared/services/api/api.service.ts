@@ -57,6 +57,18 @@ export class ApiService {
     };
 
     /**
+     * HTTP GET customized to get auth token using external auth provider
+     * @param accessToken
+     * @param provider
+     * @returns {Promise<T>}
+     */
+    getExternalAuth = (accessToken: string, provider: string) => {
+        var requestBody = `grant_type=urn:ietf:params:oauth:grant-type:${provider}_access_token&assertion=${encodeURIComponent(accessToken)}`;
+        var requestHeaders = {'Content-Type': 'application/x-www-form-urlencoded'};
+        return this.post('token', requestBody, requestHeaders);
+    };
+
+    /**
      * HTTP POST method
      * @param url - request url
      * @param params - request body
