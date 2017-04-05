@@ -127,7 +127,7 @@ namespace NewsParser.API.Controllers
 
                 if (user == null)
                 {
-                    await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
+                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
                 }
                 else
                 {
@@ -180,7 +180,7 @@ namespace NewsParser.API.Controllers
 
                 if (user == null)
                 {
-                    await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
+                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
                 }
                 else
                 {

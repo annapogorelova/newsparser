@@ -131,7 +131,8 @@ namespace NewsParser.Auth
 
         public ApplicationUser FindUserByEmail(string email)
         {
-            return _userManager.FindByNameAsync(email).Result;
+            var user = _userBusinessService.GetUserByEmail(email);
+            return AutoMapper.Mapper.Map<User, ApplicationUser>(user);
         }
 
         public bool CheckUserPassword(ApplicationUser user, string password)
