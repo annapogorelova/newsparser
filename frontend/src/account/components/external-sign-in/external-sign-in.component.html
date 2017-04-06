@@ -1,5 +1,5 @@
 <div>
-    <button class="btn social-button {{buttonClass}}" type="button" (click)="signIn('facebook')">
+    <button class="btn social-button {{buttonClass}}" type="button" (click)="signIn('facebook')" [disabled]="signinInProgress">
         <i class="{{buttonIcon}}" aria-hidden="true"></i>
         Sign in with {{provider}}
     </button>

@@ -11,6 +11,7 @@ import {CacheService} from '../../../shared/services/cache/cache.service';
 export class SignInComponent  {
     public email = '';
     public password = '';
+    public signinInProgress = false;
 
     constructor(@Inject(Router) private router: Router,
                 private authService: AuthService,
@@ -23,11 +24,19 @@ export class SignInComponent  {
     };
 
     handleAuth = (auth: any) => {
+        this.signinInProgress = false;
         this.cacheService.set('auth', auth.access_token);
         this.router.navigate(['/news']);
     };
 
+    handleFailedAuth = () => {
+        this.signinInProgress = false;
+    };
+
     signIn = () => {
-        this.authService.signIn(this.email, this.password).then(auth => this.handleAuth(auth));
+        this.signinInProgress = true;
+        this.authService.signIn(this.email, this.password)
+            .then(auth => this.handleAuth(auth))
+            .catch(() => this.handleFailedAuth());
     };
 }

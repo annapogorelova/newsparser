@@ -12,6 +12,8 @@ import {ExternalAuthService} from '../../../shared/modules/external-auth/externa
  * Component for signing in via external auth providers
  */
 export class ExternalSignInComponent  {
+    public signinInProgress = false;
+
     @Input() provider: string;
     @Input() buttonIcon: string;
     @Input() buttonClass: string;
@@ -23,14 +25,23 @@ export class ExternalSignInComponent  {
     }
 
     signIn = () => {
-        this.externalAuthService.login(this.provider).then(data => this.handleExternalAuth(data));
+        this.externalAuthService.login(this.provider)
+            .then(data => this.handleExternalAuth(data));
     };
 
     private handleExternalAuth = (data: any) => {
-        this.authService.externalSignIn(data['token'], this.provider).then(auth => this.handleAuth(auth));
+        this.signinInProgress = true;
+        this.authService.externalSignIn(data['token'], this.provider)
+            .then(auth => this.handleAuth(auth))
+            .catch(() => this.handleFailedAuth());
+    };
+
+    private handleFailedAuth = () => {
+        this.signinInProgress = false;
     };
 
     private handleAuth = (auth: any) => {
+        this.signinInProgress = false;
         this.onSignedIn.emit(auth);
     };
 }
