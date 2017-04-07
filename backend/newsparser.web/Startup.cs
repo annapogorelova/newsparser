@@ -35,6 +35,7 @@ using NewsParser.Identity.Models;
 using NewsParser.Identity.Stores;
 using OpenIddict.Core;
 using OpenIddict.Models;
+using MySQL.Data.EntityFrameworkCore.Extensions;
 
 [assembly: UserSecretsId("aspnet-NewsParser-efbcbdd7-8b7c-4c71-8de1-e5e49002dd0f")]
 
@@ -83,8 +84,7 @@ namespace NewsParser
             var connection = Configuration.GetConnectionString("AppDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
-                options.UseOpenIddict<int>();
+                options.UseMySQL(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
 
             ConfigureIdentityServices(services);

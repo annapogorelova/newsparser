@@ -41,7 +41,8 @@
     "OpenIddict": "1.0.0-*",
     "OpenIddict.EntityFrameworkCore": "1.0.0-*",
     "OpenIddict.Mvc": "1.0.0-*",
-    "Serilog.Extensions.Logging.File": "1.0.0"
+    "Serilog.Extensions.Logging.File": "1.0.0",
+    "MySql.Data.EntityFrameworkCore": "7.0.7-m61"
   },
 
   "tools": {

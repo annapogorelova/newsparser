@@ -15,7 +15,9 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
-    "Serilog.Extensions.Logging.File": "1.0.0"
+    "Serilog.Extensions.Logging.File": "1.0.0",
+    "MySql.Data.EntityFrameworkCore": "7.0.7-m61"
+
   },
 
   "tools": {

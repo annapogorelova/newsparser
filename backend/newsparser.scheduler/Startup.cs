@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MySQL.Data.EntityFrameworkCore.Extensions;
 using newsparser.feedparser;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
@@ -52,7 +53,7 @@ namespace newsparser.scheduler
             var connection = Configuration.GetConnectionString("SchedulerDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
+                options.UseMySQL(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
         }
 
