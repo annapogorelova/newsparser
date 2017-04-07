@@ -37,8 +37,6 @@ using OpenIddict.Core;
 using OpenIddict.Models;
 using MySQL.Data.EntityFrameworkCore.Extensions;
 
-[assembly: UserSecretsId("aspnet-NewsParser-efbcbdd7-8b7c-4c71-8de1-e5e49002dd0f")]
-
 namespace NewsParser
 {
     public static class ServiceLocator
