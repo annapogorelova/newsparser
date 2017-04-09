@@ -1,25 +1,24 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{848CBF83-8544-4E96-ACA5-8841DC2F2CB8}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.web", "newsparser.web\newsparser.web.xproj", "{B11A8488-77DA-4BD6-B73E-4207BB4E5DC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.web", "newsparser.web\newsparser.web.csproj", "{B11A8488-77DA-4BD6-B73E-4207BB4E5DC8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.DAL", "newsparser.DAL\newsparser.DAL.xproj", "{FACA61B0-D7A9-4754-A643-6DC534E2B1BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.DAL", "newsparser.DAL\newsparser.DAL.csproj", "{FACA61B0-D7A9-4754-A643-6DC534E2B1BF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.BL", "newsparser.BL\newsparser.BL.xproj", "{DDDECBE3-4909-47BA-91A5-C47621794246}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.BL", "newsparser.BL\newsparser.BL.csproj", "{DDDECBE3-4909-47BA-91A5-C47621794246}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.scheduler", "newsparser.scheduler\newsparser.scheduler.xproj", "{E2017178-92B8-4C08-A9FA-E2336253FCB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.scheduler", "newsparser.scheduler\newsparser.scheduler.csproj", "{E2017178-92B8-4C08-A9FA-E2336253FCB6}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.feedparser", "newsparser.feedparser\newsparser.feedparser.xproj", "{87326E33-2AA3-4ABF-A681-8FED35A00020}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.feedparser", "newsparser.feedparser\newsparser.feedparser.csproj", "{87326E33-2AA3-4ABF-A681-8FED35A00020}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "newsparser.DAL.scaffolder", "newsparser.DAL.scaffolder\newsparser.DAL.scaffolder.xproj", "{37B347B2-CC67-4A0B-870F-35F538FE67B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newsparser.DAL.scaffolder", "newsparser.DAL.scaffolder\newsparser.DAL.scaffolder.csproj", "{37B347B2-CC67-4A0B-870F-35F538FE67B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

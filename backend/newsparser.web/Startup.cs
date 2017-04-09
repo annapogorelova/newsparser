@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -35,8 +34,7 @@ using NewsParser.Identity.Models;
 using NewsParser.Identity.Stores;
 using OpenIddict.Core;
 using OpenIddict.Models;
-
-[assembly: UserSecretsId("aspnet-NewsParser-efbcbdd7-8b7c-4c71-8de1-e5e49002dd0f")]
+using MySQL.Data.EntityFrameworkCore.Extensions;
 
 namespace NewsParser
 {
@@ -66,6 +64,8 @@ namespace NewsParser
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
             Configuration = builder.Build();
+
+            Console.WriteLine(Configuration["Authentication:SecretKey"]);
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -83,8 +83,7 @@ namespace NewsParser
             var connection = Configuration.GetConnectionString("AppDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("newsparser.DAL"));
-                options.UseOpenIddict<int>();
+                options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
 
             ConfigureIdentityServices(services);

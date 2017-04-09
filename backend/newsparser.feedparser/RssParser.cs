@@ -122,12 +122,13 @@ namespace NewsParser.FeedParser
         private string CleanHtmlString(string html)
         {
             string cleanHtmlString = Regex.Replace(html, "<.*?>", string.Empty, RegexOptions.IgnoreCase);
+            cleanHtmlString = Regex.Replace(cleanHtmlString, @"\t|\n|\r", string.Empty);
             if (cleanHtmlString.Length < 500)
             {
                 return cleanHtmlString;
             }
 
-            var croppedHtmlString = cleanHtmlString.Substring(0, 500);
+            var croppedHtmlString = cleanHtmlString.Substring(0, 497);
             return $"{croppedHtmlString.Substring(0, croppedHtmlString.LastIndexOf(' '))}...";
         }
 

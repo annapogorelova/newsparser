@@ -20,13 +20,14 @@ namespace NewsParser.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=NewsParserDb;uid=sa;password=picasso;MultipleActiveResultSets=true;");
+            optionsBuilder.UseMySql("server=localhost;userid=root;pwd=tolochko;port=3306;database=news_parser_db;sslmode=none;charset=utf8;");
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<User>().ToTable("users");
+
+            modelBuilder.Entity<UserNewsSource>().ToTable("user_sources");
 
             modelBuilder.Entity<UserNewsSource>()
                 .HasOne(ns => ns.User)
@@ -38,23 +39,23 @@ namespace NewsParser.DAL
                 .WithMany(u => u.Users)
                 .HasForeignKey(ns => ns.SourceId);
 
-            modelBuilder.Entity<UserExternalId>().ToTable("UserExternalIds");
+            modelBuilder.Entity<UserExternalId>().ToTable("user_external_ids");
 
             modelBuilder.Entity<UserExternalId>()
                 .HasOne(s => s.User)
                 .WithMany(u => u.UserExternalIds)
                 .HasForeignKey(s => s.UserId);
 
-            modelBuilder.Entity<NewsItem>().ToTable("News");
+            modelBuilder.Entity<NewsItem>().ToTable("news");
 
             modelBuilder.Entity<NewsItem>()
                 .HasOne(n => n.Source)
                 .WithMany(s => s.News)
                 .HasForeignKey(n => n.SourceId);
 
-            modelBuilder.Entity<NewsTag>().ToTable("NewsTags");
+            modelBuilder.Entity<NewsTag>().ToTable("news_tags");
 
-            modelBuilder.Entity<NewsTagsNews>().ToTable("NewsTagsNews");
+            modelBuilder.Entity<NewsTagsNews>().ToTable("news_tags_news");
 
             modelBuilder.Entity<NewsTagsNews>()
                 .HasOne(nt => nt.Tag)
@@ -65,7 +66,7 @@ namespace NewsParser.DAL
                 .WithMany(t => t.NewsItemTags)
                 .HasForeignKey(nt => nt.NewsItemId);
 
-            modelBuilder.Entity<NewsSource>().ToTable("NewsSources");
+            modelBuilder.Entity<NewsSource>().ToTable("news_sources");
         }
     }
 }
