@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
@@ -10,19 +9,16 @@
     <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
-
   <ItemGroup>
     <None Update="wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="../newsparser.BL/newsparser.BL.csproj" />
     <ProjectReference Include="../newsparser.DAL/newsparser.DAL.csproj" />
     <ProjectReference Include="../newsparser.feedparser/newsparser.feedparser.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Validation" Version="1.0.0-alpha3-final" />
     <PackageReference Include="AutoMapper" Version="5.2.0" />
@@ -54,19 +50,18 @@
     <PackageReference Include="OpenIddict" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict.Mvc" Version="1.0.0-*" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="1.1.1-*" />
+    <PackageReference Include="MySqlConnector" Version="0.16.2" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.0" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="7.0.7-m61" />
   </ItemGroup>
-
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="bower install" />
     <Exec Command="dotnet bundle" />
   </Target>
-
   <ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
   </ItemGroup>
-
 </Project>

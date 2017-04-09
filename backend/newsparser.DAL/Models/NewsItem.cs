@@ -9,14 +9,18 @@ namespace NewsParser.DAL.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(255)]
         public string Title { get; set; }
 
         [Required]
+        [MaxLength(500)]
         public string Description { get; set; }
 
+        [MaxLength(255)]
         public string ImageUrl { get; set; }
 
         [Required]
+        [MaxLength(255)]
         public string LinkToSource { get; set; }
         
         public int SourceId { get; set; }

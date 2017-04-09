@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySQL.Data.EntityFrameworkCore.Extensions;
 using newsparser.DAL.Models;
 using NewsParser.DAL.Models;
 
@@ -21,7 +20,7 @@ namespace NewsParser.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=localhost;userid=root;pwd=tolochko;port=3306;database=news_parser_db;sslmode=none;");
+            optionsBuilder.UseMySql("server=localhost;userid=root;pwd=tolochko;port=3306;database=news_parser_db;sslmode=none;charset=utf8;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

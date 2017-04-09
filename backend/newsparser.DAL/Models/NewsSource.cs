@@ -8,10 +8,10 @@ namespace NewsParser.DAL.Models
     {
         public int Id { get; set; }
 
-        [Required, MaxLength(30)]
+        [Required, MaxLength(100)]
         public string Name { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required, MaxLength(255)]
         public string RssUrl { get; set; }
 
         public bool IsUpdating { get; set; }

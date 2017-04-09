@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace newsparser.DAL.Migrations
@@ -13,12 +12,12 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateFeedUpdated = table.Column<DateTime>(nullable: false),
                     IsUpdating = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    RssUrl = table.Column<string>(maxLength: 100, nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    RssUrl = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +29,7 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -43,7 +42,7 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
@@ -61,13 +60,13 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     DateAdded = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    LinkToSource = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    ImageUrl = table.Column<string>(maxLength: 255, nullable: true),
+                    LinkToSource = table.Column<string>(maxLength: 255, nullable: false),
                     SourceId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
+                    Title = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,7 +84,7 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     AuthProvider = table.Column<int>(nullable: false),
                     ExternalId = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
@@ -106,7 +105,7 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     SourceId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -132,7 +131,7 @@ namespace newsparser.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
                     NewsItemId = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                 },

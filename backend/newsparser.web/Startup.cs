@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -65,6 +64,8 @@ namespace NewsParser
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
             Configuration = builder.Build();
+
+            Console.WriteLine(Configuration["Authentication:SecretKey"]);
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -82,7 +83,7 @@ namespace NewsParser
             var connection = Configuration.GetConnectionString("AppDbContext");
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySQL(connection, b => b.MigrationsAssembly("newsparser.DAL"));
+                options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             });
 
             ConfigureIdentityServices(services);

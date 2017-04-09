@@ -14,7 +14,7 @@ namespace newsparser.DAL.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+                .HasAnnotation("ProductVersion", "1.1.1");
 
             modelBuilder.Entity("NewsParser.DAL.Models.NewsItem", b =>
                 {
@@ -24,17 +24,21 @@ namespace newsparser.DAL.Migrations
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<string>("Description")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(500);
 
-                    b.Property<string>("ImageUrl");
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(255);
 
                     b.Property<string>("LinkToSource")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.Property<int>("SourceId");
 
                     b.Property<string>("Title")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -56,11 +60,11 @@ namespace newsparser.DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(100);
 
                     b.Property<string>("RssUrl")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 

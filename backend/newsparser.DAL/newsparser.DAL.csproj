@@ -15,8 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="1.1.1" />
-    <PackageReference Include="MySql.Data.Core" Version="7.0.4-ir-191" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="7.0.7-m61" />
+    <PackageReference Include="MySqlConnector" Version="0.16.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="1.1.1-*" />
     <PackageReference Include="SapientGuardian.EntityFrameworkCore.MySql" Version="7.1.21" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
   </ItemGroup>
