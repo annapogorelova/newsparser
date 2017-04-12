@@ -8,8 +8,6 @@ namespace NewsParser.Identity.Models
     /// </summary>
     public class ApplicationUser: IdentityUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public List<ExternalIdModel> ExternalIds { get; set; }
 
         public int GetId()

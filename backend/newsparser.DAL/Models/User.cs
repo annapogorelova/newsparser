@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using newsparser.DAL.Models;
 
 namespace NewsParser.DAL.Models
@@ -9,12 +8,6 @@ namespace NewsParser.DAL.Models
     public class User
     {
         public int Id { get; set; }
-
-        [Required, MaxLength(50)]
-        public string FirstName { get; set; }
-
-        [Required, MaxLength(50)]
-        public string LastName { get; set; }
 
         [MaxLength(50)]
         public string Email { get; set; }

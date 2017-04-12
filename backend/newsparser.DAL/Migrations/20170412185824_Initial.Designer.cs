@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using NewsParser.DAL;
+using newsparser.DAL.Models;
 
 namespace newsparser.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20170409102014_Initial")]
+    [Migration("20170412185824_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,14 +114,6 @@ namespace newsparser.DAL.Migrations
                     b.Property<DateTime>("DateUpdated");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("Password")

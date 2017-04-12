@@ -115,14 +115,6 @@ namespace newsparser.DAL.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(50);
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(2147483647);

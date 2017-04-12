@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace newsparser.DAL.Migrations
@@ -46,8 +47,6 @@ namespace newsparser.DAL.Migrations
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(maxLength: 2147483647, nullable: false)
                 },
                 constraints: table =>

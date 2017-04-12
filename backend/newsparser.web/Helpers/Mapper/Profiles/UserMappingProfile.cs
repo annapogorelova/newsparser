@@ -12,8 +12,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
     {
         public UserMappingProfile()
         {
-            CreateMap<User, UserApiModel>()
-                .ForMember(d => d.Name, opt => opt.MapFrom(s => $"{s.FirstName} {s.LastName}"));
+            CreateMap<User, UserApiModel>();
 
             CreateMap<UserExternalId, ExternalIdModel>();
 
@@ -26,8 +25,8 @@ namespace NewsParser.Helpers.Mapper.Profiles
 
             CreateMap<User, ApplicationUser>()
                 .ForMember(a => a.Id, opt => opt.MapFrom(u => u.Id.ToString()))
-                .ForMember(a => a.NormalizedEmail, opt => opt.MapFrom(u => u.Email))
-                .ForMember(a => a.NormalizedUserName, opt => opt.MapFrom(u => u.Email))
+                .ForMember(a => a.NormalizedEmail, opt => opt.MapFrom(u => u.Email.ToUpper()))
+                .ForMember(a => a.NormalizedUserName, opt => opt.MapFrom(u => u.Email.ToUpper()))
                 .ForMember(a => a.PasswordHash, opt => opt.MapFrom(u => u.Password))
                 .ForMember(a => a.UserName, opt => opt.MapFrom(u => u.Email))
                 .ForMember(a => a.ExternalIds, opt => opt.MapFrom(u => 

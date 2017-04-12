@@ -87,9 +87,7 @@ namespace NewsParser.DAL
                 DateAdded = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow,
                 Password = "AQAAAAEAACcQAAAAEIuIbDmD0yrdqLtSGiiWobFEBFK7bdlrJEPnornIOA+RGlTB8yoYwDOX/Cbr2viTlw==", //hash for "tolochko" word
-                Email = "anya.pogorelova@gmail.com",
-                FirstName = "Anna",
-                LastName = "Pohorielova"
+                Email = "anya.pogorelova@gmail.com"
             });
         }
 
