@@ -127,11 +127,11 @@ namespace NewsParser.API.Controllers
 
                 if (user == null)
                 {
-                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
+                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Facebook);
                 }
                 else
                 {
-                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
+                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Facebook);
                 }
 
                 var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
@@ -187,7 +187,7 @@ namespace NewsParser.API.Controllers
                     await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
                 }
 
-                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
+                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Google);
                 var ticket = _authService.GetAuthTicket(principal);
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
             }
