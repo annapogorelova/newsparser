@@ -12,6 +12,7 @@ namespace newsparser.scheduler
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseUrls("http://0.0.0.0:50452")
                 .Build();
 
             host.Run();
