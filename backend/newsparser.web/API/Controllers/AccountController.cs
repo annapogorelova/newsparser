@@ -1,9 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
-using NewsParser.BL.Services.Users;
+using NewsParser.Auth;
 
 namespace NewsParser.API.Controllers
 {
@@ -11,20 +12,26 @@ namespace NewsParser.API.Controllers
     [Route("api/[controller]")]
     public class AccountController : BaseController
     {
-        private readonly IUserBusinessService _userBusinessService;
+        private readonly IAuthService _authService;
 
-        public AccountController(IUserBusinessService userBusinessService)
+        public AccountController(IAuthService authService)
         {
-            _userBusinessService = userBusinessService;
+            _authService = authService;
         }
 
         [HttpGet]
         public JsonResult Get()
         {
-            string userEmail = HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = _userBusinessService.GetUserByEmail(userEmail);
-            var userModel = Mapper.Map<UserApiModel>(user);
-            return new JsonResult(new { User = userModel });
+            try
+            {
+                var user = _authService.GetCurrentUser();
+                var userModel = Mapper.Map<UserApiModel>(user);
+                return new JsonResult(new { User = userModel });
+            }
+            catch 
+            {
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to find the user");
+            }
         }
     }
 }
