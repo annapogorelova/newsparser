@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using newsparser.DAL.Models;
 using NewsParser.Auth.ExternalAuth;
 using NewsParser.Identity.Models;
@@ -28,8 +29,12 @@ namespace NewsParser.Auth
 
         ApplicationUser FindUserByEmail(string email);
 
-        ApplicationUser FindExternalUser(ExternalUser user);
-
         bool CheckUserPassword(ApplicationUser user, string password);
+
+        Task<IdentityResult> CreateAsync(string email, string password);
+
+        Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user);
+
+        Task<IdentityResult> ConfirmEmail(ApplicationUser user, string confirmationToken);
     }
 }

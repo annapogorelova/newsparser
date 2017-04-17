@@ -123,7 +123,15 @@ namespace NewsParser.API.Controllers
                     });
                 }
 
-                var user = _authService.FindExternalUser(externalUser);
+                if(string.IsNullOrEmpty(externalUser.Email)){
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
+                        ErrorDescription = "Email is required."
+                    });
+                }
+
+                var user = _authService.FindUserByEmail(externalUser.Email);
 
                 if (user == null)
                 {
@@ -176,7 +184,7 @@ namespace NewsParser.API.Controllers
                     });
                 }
 
-                var user = _authService.FindExternalUser(externalUser);
+                var user = _authService.FindUserByEmail(externalUser.Email);
 
                 if (user == null)
                 {

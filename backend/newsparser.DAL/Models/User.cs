@@ -15,6 +15,8 @@ namespace NewsParser.DAL.Models
         [Required, MaxLength(int.MaxValue)]
         public string Password { get; set; }
 
+        public bool EmailConfirmed { get; set; }
+
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
         

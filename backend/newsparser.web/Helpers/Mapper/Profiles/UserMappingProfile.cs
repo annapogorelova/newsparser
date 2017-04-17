@@ -12,7 +12,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
     {
         public UserMappingProfile()
         {
-            CreateMap<ApplicationUser, UserApiModel>()
+            CreateMap<ApplicationUser, AccountApiModel>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(u => u.GetId()));
 
             CreateMap<UserExternalId, ExternalIdModel>();

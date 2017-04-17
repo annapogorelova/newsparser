@@ -34,7 +34,7 @@ using NewsParser.Identity.Models;
 using NewsParser.Identity.Stores;
 using OpenIddict.Core;
 using OpenIddict.Models;
-using MySQL.Data.EntityFrameworkCore.Extensions;
+using NewsParser.Services;
 
 namespace NewsParser
 {
@@ -206,6 +206,18 @@ namespace NewsParser
 
             services.AddIdentity<ApplicationUser, Role>(config =>
                 {
+                    config.Password.RequireUppercase = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                    config.Password.RequireDigit = false;
+                    config.Password.RequiredLength = 8;
+
+                    config.SignIn.RequireConfirmedEmail = true;
+                    config.User.RequireUniqueEmail = true;
+
+                    config.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+                    config.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+
                     config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
                     {
                         OnRedirectToLogin = ctx =>
@@ -240,12 +252,6 @@ namespace NewsParser
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));;
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:google_access_token");
-            });
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
-                options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
             });
         }
 
@@ -292,6 +298,8 @@ namespace NewsParser
 
             services.AddTransient<IExternalAuthService, ExternalAuthService>();
             services.AddTransient<IAuthService, AuthService>();
+
+            services.AddTransient<IMailService, MailService>();
         }
     }
 }

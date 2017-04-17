@@ -17,7 +17,8 @@ namespace NewsParser.Identity.Stores
     /// Class contains implementation of <see cref="IUserPasswordStore{TUser}"/> 
     /// using <see cref="IUserBusinessService"/>
     /// </summary>
-    public class UserStore: IUserPasswordStore<ApplicationUser>
+    public class UserStore: IUserPasswordStore<ApplicationUser>, 
+                            IUserEmailStore<ApplicationUser>
     {
         private readonly IUserBusinessService _userBusinessService;
         private readonly Dictionary<string, ExternalAuthProvider> _authProvidersAliases;
@@ -43,58 +44,37 @@ namespace NewsParser.Identity.Stores
 
         public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrEmpty(user.Email))
-            {
-                return Task.FromResult(user.Email);
-            }
+            return Task.FromResult(user.Email);
+            
+            // if (!string.IsNullOrEmpty(user.Email))
+            // {
+            //     return Task.FromResult(user.Email);
+            // }
 
-            var userSocialId = user.ExternalIds.FirstOrDefault();
-            if (userSocialId != null)
-            {
-                return Task.FromResult(user.ExternalIds.FirstOrDefault().NormalizedExternalId);
-            }
+            // var userSocialId = user.ExternalIds.FirstOrDefault();
+            // if (userSocialId != null)
+            // {
+            //     return Task.FromResult(user.ExternalIds.FirstOrDefault().NormalizedExternalId);
+            // }
 
-            throw new IdentityException("Failed to get unique username");
+            // throw new IdentityException("Failed to get unique username");
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var existingUser = _userBusinessService.GetUserByEmail(user.Email);
-            if (existingUser == null)
-            {
-                throw new ArgumentException("User does not exist", nameof(user));
-            }
-
-            if (_userBusinessService.GetUserByEmail(userName) != null)
-            {
-                throw new ArgumentException($"Email '{userName}' is already taken", nameof(userName));
-            }
-
-            try
-            {
-                existingUser.Email = userName;
-                _userBusinessService.AddUser(existingUser);
-                return Task.FromResult(IdentityResult.Success);
-            }
-            catch (BusinessLayerException e)
-            {
-                throw new IdentityException("Identity: failed to create user", e);
-            }
+            user.Email = userName;
+            return Task.CompletedTask;
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return GetUserNameAsync(user, cancellationToken);
+            return Task.FromResult(user.Email.ToLower());
         }
 
         public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            user.Email = normalizedName.ToLower();
+            return Task.CompletedTask;
         }
 
         public Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
@@ -176,14 +156,11 @@ namespace NewsParser.Identity.Stores
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             var user = _userBusinessService.GetUserByEmail(normalizedUserName);
-            if (user != null)
-            {
-                return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
-            }
+            return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
 
-            var parsedSocialId = ParseSocialId(normalizedUserName);
-            user = _userBusinessService.GetUserBySocialId(parsedSocialId.Item1, parsedSocialId.Item2);
-            return user != null ? Task.FromResult(Mapper.Map<User, ApplicationUser>(user)) : null;
+            // var parsedSocialId = ParseSocialId(normalizedUserName);
+            // user = _userBusinessService.GetUserBySocialId(parsedSocialId.Item1, parsedSocialId.Item2);
+            // return user != null ? Task.FromResult(Mapper.Map<User, ApplicationUser>(user)) : null;
         }
 
         public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
@@ -202,12 +179,50 @@ namespace NewsParser.Identity.Stores
             return Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
         }
 
-        private Tuple<string, ExternalAuthProvider> ParseSocialId(string socialId)
+        public Task SetEmailAsync(ApplicationUser user, string email, CancellationToken cancellationToken)
         {
-            string id = socialId.Split(':')[1];
-            string providerAlias = socialId.Split(':')[0];
-            ExternalAuthProvider provider = _authProvidersAliases[providerAlias.ToLower()];
-            return new Tuple<string, ExternalAuthProvider>(id, provider);
+            user.Email = email.ToLower();
+            return Task.CompletedTask;
         }
+
+        public Task<string> GetEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.EmailConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        public Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            return FindByNameAsync(normalizedEmail, cancellationToken);
+        }
+
+        public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email.ToLower());
+        }
+
+        public Task SetNormalizedEmailAsync(ApplicationUser user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            user.Email = normalizedEmail.ToLower();
+            return Task.CompletedTask;
+        }
+
+        // private Tuple<string, ExternalAuthProvider> ParseSocialId(string socialId)
+        // {
+        //     string id = socialId.Split(':')[1];
+        //     string providerAlias = socialId.Split(':')[0];
+        //     ExternalAuthProvider provider = _authProvidersAliases[providerAlias.ToLower()];
+        //     return new Tuple<string, ExternalAuthProvider>(id, provider);
+        // }
     }
 }

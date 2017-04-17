@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -145,6 +146,21 @@ namespace NewsParser.Auth
             return !string.IsNullOrEmpty(user.Email) ? 
                 FindUserByEmail(user.Email) : 
                 FindUserByExternalId(user.ExternalId, user.AuthProvider);
+        }
+
+        public Task<IdentityResult> CreateAsync(string email, string password)
+        {
+            return _userManager.CreateAsync(new ApplicationUser(){ Email = email, UserName = email }, password);
+        }
+
+        public Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
+        {
+            return _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public Task<IdentityResult> ConfirmEmail(ApplicationUser user, string confirmationToken)
+        {
+            return _userManager.ConfirmEmailAsync(user, confirmationToken);
         }
     }
 }
