@@ -80,6 +80,11 @@ namespace NewsParser.API.Controllers
                     return MakeResponse(HttpStatusCode.BadRequest, "Account does not exist");
                 }
 
+                if(user.EmailConfirmed)
+                {
+                    return MakeResponse(HttpStatusCode.Forbidden, "Account has already been confirmed");
+                }
+
                 var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
                 if (result.Succeeded)
                 {
