@@ -1,13 +1,16 @@
 import {NgModule}      from '@angular/core';
 import {SignInComponent} from './components/sign-in/sign-in.component';
-import {RegisterComponent} from "./components/register/register.component";
+import {RegisterComponent} from './components/register/register.component';
 import {FormsModule} from '@angular/forms';
 import {ExternalSignInComponent} from './components/external-sign-in/external-sign-in.component';
 import {AppSettings} from '../app/app.settings';
 import {ExternalAuthModule} from '../shared/modules/external-auth/external-auth.module';
-import {AccountConfirmationComponent} from "./components/confirmation/account-confirmation.component";
-import {SharedModule} from "../shared/shared.module";
-import {BrowserModule} from "@angular/platform-browser";
+import {AccountConfirmationComponent} from './components/account-confirmation/account-confirmation.component';
+import {SharedModule} from '../shared/shared.module';
+import {BrowserModule} from '@angular/platform-browser';
+import {AccountRoutingProviders, AccountRouting} from './account.routing';
+import {PasswordRemindComponent} from './components/password-remind/password-remind.component';
+import {PasswordResetComponent} from './components/password-reset/password-reset.component';
 
 let authProviders = {
     google: {
@@ -20,10 +23,11 @@ let authProviders = {
 };
 
 @NgModule({
-    imports: [FormsModule, BrowserModule, ExternalAuthModule.initWithProviders(authProviders), SharedModule],
+    imports: [FormsModule, BrowserModule, ExternalAuthModule.initWithProviders(authProviders),
+        SharedModule, AccountRouting],
     declarations: [SignInComponent, RegisterComponent, ExternalSignInComponent,
-        AccountConfirmationComponent],
-    exports: [SignInComponent, RegisterComponent, AccountConfirmationComponent]
+        AccountConfirmationComponent, PasswordRemindComponent, PasswordResetComponent],
+    providers: [AccountRoutingProviders]
 })
 
 export class AccountModule {}

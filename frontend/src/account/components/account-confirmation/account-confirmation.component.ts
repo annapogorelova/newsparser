@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../../../shared/services/api/api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
@@ -17,8 +17,8 @@ export class AccountConfirmationComponent implements OnInit {
     public errorMessage: string;
 
     public constructor(private apiService: ApiService,
-                       private route:ActivatedRoute,
-                       private router:Router){}
+                       private route: ActivatedRoute,
+                       private router: Router){}
 
     ngOnInit(){
         this.route.queryParams
