@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div *ngIf="confirmationSucceeded">
+                <p>You have successfully confirmed your account! You can sign in now.</p>
+                <a href="#" class="btn btn-success btn-md" routerLink="/sign-in">Sign In</a>
+            </div>
+            <div *ngIf="confirmationFailed">
+                <p *ngIf="!errorMessage">Account confirmation failed.</p>
+                <p *ngIf="errorMessage">{{errorMessage}}</p>
+                <a *ngIf="showSignInButton" href="#" class="btn btn-success btn-md" routerLink="/sign-in">Sign In</a>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>

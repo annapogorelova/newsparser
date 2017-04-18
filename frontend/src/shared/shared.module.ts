@@ -15,6 +15,7 @@ import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {TagListComponent} from './components/tags-list/tags-list.component';
 import {ExternalAuthModule} from './modules/external-auth/external-auth.module';
+import {EqualityValidator} from "./directives/equality-validator.directive";
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -30,9 +31,10 @@ import {ExternalAuthModule} from './modules/external-auth/external-auth.module';
         ApiErrorHandler,
         CacheService
     ],
-    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, TagListComponent],
+    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent,
+        TagListComponent, EqualityValidator],
     exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule,
-        TagListComponent, ExternalAuthModule]
+        TagListComponent, ExternalAuthModule, EqualityValidator]
 })
 
 export class SharedModule {

@@ -3,6 +3,7 @@ import {Response} from '@angular/http';
 import {NavigatorService} from '../navigator/navigator.service';
 import {Inject} from '@angular/core';
 import {CacheService} from '../cache/cache.service';
+import {HttpError} from "./http-error";
 
 /**
  * Class contains functionality to handle http request errors
@@ -24,7 +25,7 @@ export class ApiErrorHandler {
         }
 
         let body = response.json();
-        return Observable.throw(new Error(body.message));
+        return Observable.throw(new HttpError(body.message, response.status));
     };
 
     /**
