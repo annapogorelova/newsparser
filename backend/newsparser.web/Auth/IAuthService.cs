@@ -35,6 +35,10 @@ namespace NewsParser.Auth
 
         Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user);
 
+        Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user);
+
         Task<IdentityResult> ConfirmEmail(ApplicationUser user, string confirmationToken);
+
+        Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string passwordResetToken, string newPassword);
     }
 }

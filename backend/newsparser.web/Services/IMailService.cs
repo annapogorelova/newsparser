@@ -23,5 +23,13 @@ namespace NewsParser.Services
         /// <param name="confirmationToken">Account confirmation token</param>
         /// <returns></returns>
         Task SendAccountConfirmationEmail(string email, string confirmationToken);
+
+        /// <summary>
+        /// Sends the password reset email to the specified address
+        /// </summary>
+        /// <param name="email">Receiver email address</param>
+        /// <param name="confirmationToken">Password reset token</param>
+        /// <returns></returns>
+        Task SendPasswordResetEmail(string email, string passwordResetToken);
     }
 }

@@ -3,15 +3,12 @@ using System.ComponentModel.DataAnnotations;
 namespace NewsParser.API.Models
 {
     /// <summary>
-    /// Class contains properties for creating a user
+    /// Class contains a properties for the password reset request
     /// </summary>
-    public class CreateAccountModel
+    public class PasswordResetRequestModel
     {
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
-        [Required]
-        public string Password { get; set; }
     }
 }

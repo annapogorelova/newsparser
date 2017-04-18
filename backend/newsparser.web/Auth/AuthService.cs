@@ -162,5 +162,16 @@ namespace NewsParser.Auth
         {
             return _userManager.ConfirmEmailAsync(user, confirmationToken);
         }
+
+        public Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
+        {
+            return _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string passwordResetToken, 
+            string newPassword)
+        {
+            return _userManager.ResetPasswordAsync(user, passwordResetToken, newPassword);
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace NewsParser.Services
         public Task SendAccountConfirmationEmail(string email, string confirmationToken)
         {
             string websiteUrl = _config["WebsiteUrl"];
-            string confirmationLink = $"{websiteUrl}/confirmation?confirmationToken={confirmationToken}&email={email}";
+            string confirmationLink = $"{websiteUrl}/account-confirmation?confirmationToken={confirmationToken}&email={email}";
             string mailContent = $@"Congratulations! You have created an account on NewsParser.
                 Please confirm your account by following <a href='{confirmationLink}'>this link</a>.";
             
@@ -41,6 +41,16 @@ namespace NewsParser.Services
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
+        }
+
+        public Task SendPasswordResetEmail(string email, string passwordResetToken)
+        {
+            string websiteUrl = _config["WebsiteUrl"];
+            string resetPasswordLink = $"{websiteUrl}/password-reset?passwordResetToken={passwordResetToken}&email={email}";
+            string mailContent = $@"You have requested a password reset on NewsParser.
+                Please set a new password by following <a href='{resetPasswordLink}'>this link</a>.";
+            
+            return SendEmail(email, "Password reset", mailContent);
         }
 
         private MimeMessage CreateHtmlMessage(string email, string subject, string htmlContent)
