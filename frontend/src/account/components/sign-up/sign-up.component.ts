@@ -5,11 +5,11 @@ import {ApiService} from "../../../shared/services/api/api.service";
  * Component contains functionality for creating user account
  */
 @Component({
-    templateUrl: 'register.component.html',
-    styleUrls: ['register.component.css'],
-    selector: 'register'
+    templateUrl: 'sign-up.component.html',
+    styleUrls: ['sign-up.component.css'],
+    selector: 'sign-up'
 })
-export class RegisterComponent  {
+export class SignUpComponent  {
     public user: any = {
         email: '',
         password: '',

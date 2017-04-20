@@ -1,6 +1,6 @@
 import {NgModule}      from '@angular/core';
 import {SignInComponent} from './components/sign-in/sign-in.component';
-import {RegisterComponent} from './components/register/register.component';
+import {SignUpComponent} from './components/sign-up/sign-up.component';
 import {FormsModule} from '@angular/forms';
 import {ExternalSignInComponent} from './components/external-sign-in/external-sign-in.component';
 import {AppSettings} from '../app/app.settings';
@@ -25,7 +25,7 @@ let authProviders = {
 @NgModule({
     imports: [FormsModule, BrowserModule, ExternalAuthModule.initWithProviders(authProviders),
         SharedModule, AccountRouting],
-    declarations: [SignInComponent, RegisterComponent, ExternalSignInComponent,
+    declarations: [SignInComponent, SignUpComponent, ExternalSignInComponent,
         AccountConfirmationComponent, PasswordRemindComponent, PasswordResetComponent],
     providers: [AccountRoutingProviders]
 })

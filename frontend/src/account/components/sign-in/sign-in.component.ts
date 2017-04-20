@@ -9,9 +9,11 @@ import {CacheService} from '../../../shared/services/cache/cache.service';
     selector: 'sign-in'
 })
 export class SignInComponent  {
-    public email = '';
-    public password = '';
-    public signinInProgress = false;
+    public email: string;
+    public password: string;
+    public signinInProgress: boolean;
+    public signinFailed: boolean;
+    public errorMessage: string;
 
     constructor(@Inject(Router) private router: Router,
                 private authService: AuthService,
@@ -19,24 +21,22 @@ export class SignInComponent  {
 
     }
 
-    register = () => {
-        this.router.navigate(['/register']);
-    };
-
     handleAuth = (auth: any) => {
         this.signinInProgress = false;
         this.cacheService.set('auth', auth.access_token);
         this.router.navigate(['/news']);
     };
 
-    handleFailedAuth = () => {
+    handleFailedAuth = (error: Error) => {
         this.signinInProgress = false;
+        this.signinFailed = true;
+        this.errorMessage = error.message;
     };
 
     signIn = () => {
         this.signinInProgress = true;
         this.authService.signIn(this.email, this.password)
             .then(auth => this.handleAuth(auth))
-            .catch(() => this.handleFailedAuth());
+            .catch(error => this.handleFailedAuth(error));
     };
 }

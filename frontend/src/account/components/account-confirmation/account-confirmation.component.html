@@ -4,7 +4,7 @@
         <div class="col-md-6">
             <div *ngIf="confirmationSucceeded">
                 <p>You have successfully confirmed your account! You can sign in now.</p>
-                <a href="#" class="btn btn-success btn-md" routerLink="/sign-in">Sign In</a>
+                <a href="#" class="btn btn-primary btn-md pull-right" routerLink="/sign-in">Sign In</a>
             </div>
             <div *ngIf="confirmationFailed">
                 <p *ngIf="!errorMessage">Account confirmation failed.</p>

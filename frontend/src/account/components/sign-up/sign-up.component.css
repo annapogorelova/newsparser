@@ -1,12 +1,12 @@
-register .register-form {
+sign-up .register-form {
     padding-bottom: 10px;
     min-width: 230px;
 }
 
-register .btn-full-length {
+sign-up .btn-full-length {
     width: 100%;
 }
 
-register button {
+sign-up button {
     cursor: pointer;
 }
