@@ -101,6 +101,7 @@ namespace NewsParser.Auth
                     AuthProvider = authProvider
                 }
             };
+            user.EmailConfirmed = true;
 
             await _userStore.CreateAsync(user, CancellationToken.None);
             return FindUserByExternalId(externalUser.ExternalId, authProvider);
