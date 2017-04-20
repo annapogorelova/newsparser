@@ -24,8 +24,6 @@
     <PackageReference Include="AutoMapper" Version="5.2.0" />
     <PackageReference Include="CryptoHelper" Version="2.1.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />

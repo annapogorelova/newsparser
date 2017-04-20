@@ -138,8 +138,6 @@ namespace NewsParser
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseApplicationInsightsExceptionTelemetry();
-
             app.UseResponseCaching();
 
             app.UseStaticFiles();
@@ -151,8 +149,6 @@ namespace NewsParser
             ServiceLocator.Instance = app.ApplicationServices;
 
             ConfigureJwtAuthentication(app);
-
-            ConfigureExternalAuthProviders(app);
 
             app.UseMvc(routes =>
             {
@@ -252,21 +248,6 @@ namespace NewsParser
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));;
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:google_access_token");
-            });
-        }
-
-        private void ConfigureExternalAuthProviders(IApplicationBuilder app)
-        {
-            app.UseFacebookAuthentication(new FacebookOptions()
-            {
-                AppId = Configuration["Authentication:Facebook:AppId"],
-                AppSecret = Configuration["Authentication:Facebook:AppSecret"]
-            });
-
-            app.UseGoogleAuthentication(new GoogleOptions()
-            {
-                ClientId = Configuration["Authentication:Google:ClientId"],
-                ClientSecret = Configuration["Authentication:Google:ClientSecret"]
             });
         }
 
