@@ -87,22 +87,22 @@ namespace NewsParser.API.Controllers
 
                 if(user.EmailConfirmed)
                 {
-                    return MakeResponse(HttpStatusCode.Forbidden, "Account has already been confirmed");
+                    return MakeResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
                 }
 
                 var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
                 if (result.Succeeded)
                 {
-                    return MakeResponse(HttpStatusCode.OK, "Account was activated.");
+                    return MakeResponse(HttpStatusCode.OK, "Email was successfully confirmed.");
                 }
 
                 string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to activate the account. {detailedErrorMessage}";
+                string errorMessage = $"Failed to confirm the email. {detailedErrorMessage}";
                 return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
             }
             catch (Exception e)
             {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Something went wrong.");
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to confirm the email.");
             }
         }
 
@@ -173,8 +173,8 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Put([FromBody]AccountApiModel model)
         {
             var user = _authService.GetCurrentUser();
-
-            if(user.Email != model.Email && _authService.FindUserByEmail(model.Email) != null)
+            bool emailChanged = user.Email != model.Email;
+            if(emailChanged && _authService.FindUserByEmail(model.Email) != null)
             {
                 return MakeResponse(HttpStatusCode.BadRequest, "Email is already taken.");
             }
@@ -182,11 +182,21 @@ namespace NewsParser.API.Controllers
             try
             {
                 user.Email = model.Email;
+                user.EmailConfirmed = false;
                 var result = await _authService.UpdateAsync(user);
                 
                 if(result.Succeeded)
                 {
-                    return MakeResponse(HttpStatusCode.OK, "Account was updated");
+                    string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
+                    await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
+                    var responseMessage = "Account was updated.";
+                    if(emailChanged)
+                    {
+                        responseMessage += $@" We have send you an confirmation email to {model.Email}. 
+                            Please confirm your new email address by following the link in the letter.
+                            If you don't confirm it, you won't be able to sign in with it next time.";
+                    }
+                    return MakeResponse(HttpStatusCode.OK, responseMessage);
                 }
 
                 string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;

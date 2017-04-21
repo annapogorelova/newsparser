@@ -21,11 +21,10 @@ namespace NewsParser.Services
         public Task SendAccountConfirmationEmail(string email, string confirmationToken)
         {
             string websiteUrl = _config["WebsiteUrl"];
-            string confirmationLink = $"{websiteUrl}/account-confirmation?confirmationToken={confirmationToken}&email={email}";
-            string mailContent = $@"Congratulations! You have created an account on NewsParser.
-                Please confirm your account by following <a href='{confirmationLink}'>this link</a>.";
+            string confirmationLink = $"{websiteUrl}/email-confirmation?confirmationToken={confirmationToken}&email={email}";
+            string mailContent = $@"Please confirm your email by following <a href='{confirmationLink}'>this link</a>.";
             
-            return SendEmail(email, "Account confirmation", mailContent);
+            return SendEmail(email, "Email confirmation", mailContent);
         }
 
         public async Task SendEmail(string email, string subject, string message)
