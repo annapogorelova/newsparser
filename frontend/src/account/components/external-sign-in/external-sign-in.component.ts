@@ -12,7 +12,9 @@ import {ExternalAuthService} from '../../../shared/modules/external-auth/externa
  * Component for signing in via external auth providers
  */
 export class ExternalSignInComponent  {
-    public signinInProgress = false;
+    public signinInProgress: boolean;
+    public signInFailed: boolean;
+    public errorMessage: string;
 
     @Input() provider: string;
     @Input() buttonIcon: string;
@@ -33,15 +35,19 @@ export class ExternalSignInComponent  {
         this.signinInProgress = true;
         this.authService.externalSignIn(data['token'], this.provider)
             .then(auth => this.handleAuth(auth))
-            .catch(() => this.handleFailedAuth());
+            .catch(error => this.handleFailedAuth(error));
     };
 
-    private handleFailedAuth = () => {
+    private handleFailedAuth = (error: any) => {
         this.signinInProgress = false;
+        this.signInFailed = true;
+        this.errorMessage = error.message;
     };
 
     private handleAuth = (auth: any) => {
         this.signinInProgress = false;
+        this.signInFailed = false;
+        this.errorMessage = '';
         this.onSignedIn.emit(auth);
     };
 }
