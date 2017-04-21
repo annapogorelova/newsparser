@@ -29,6 +29,8 @@ namespace NewsParser.Auth
 
         ApplicationUser FindUserByEmail(string email);
 
+        ApplicationUser FindUserByUserName(string userName);
+
         bool CheckUserPassword(ApplicationUser user, string password);
 
         Task<IdentityResult> CreateAsync(string email, string password);
@@ -40,5 +42,7 @@ namespace NewsParser.Auth
         Task<IdentityResult> ConfirmEmail(ApplicationUser user, string confirmationToken);
 
         Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string passwordResetToken, string newPassword);
+
+        Task<IdentityResult> UpdateAsync(ApplicationUser user);
     }
 }

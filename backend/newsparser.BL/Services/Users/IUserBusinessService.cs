@@ -37,6 +37,13 @@ namespace NewsParser.BL.Services.Users
         User GetUserByEmail(string email);
 
         /// <summary>
+        /// Get user by username
+        /// </summary>
+        /// <param name="email">UserName</param>
+        /// <returns>User object</returns>
+        User GetUserByUserName(string userName);
+
+        /// <summary>
         /// Get user by social id
         /// </summary>
         /// <param name="socialId">User social id</param>

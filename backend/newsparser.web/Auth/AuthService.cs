@@ -102,6 +102,7 @@ namespace NewsParser.Auth
                 }
             };
             user.EmailConfirmed = true;
+            user.UserName = Guid.NewGuid().ToString();
 
             await _userStore.CreateAsync(user, CancellationToken.None);
             return FindUserByExternalId(externalUser.ExternalId, authProvider);
@@ -151,7 +152,7 @@ namespace NewsParser.Auth
 
         public Task<IdentityResult> CreateAsync(string email, string password)
         {
-            return _userManager.CreateAsync(new ApplicationUser(){ Email = email, UserName = email }, password);
+            return _userManager.CreateAsync(new ApplicationUser(){ Email = email, UserName = Guid.NewGuid().ToString() }, password);
         }
 
         public Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
@@ -173,6 +174,17 @@ namespace NewsParser.Auth
             string newPassword)
         {
             return _userManager.ResetPasswordAsync(user, passwordResetToken, newPassword);
+        }
+
+        public Task<IdentityResult> UpdateAsync(ApplicationUser user)
+        {
+            return _userManager.UpdateAsync(user);
+        }
+
+        public ApplicationUser FindUserByUserName(string userName)
+        {
+            var user = _userBusinessService.GetUserByUserName(userName);
+            return AutoMapper.Mapper.Map<User, ApplicationUser>(user);
         }
     }
 }

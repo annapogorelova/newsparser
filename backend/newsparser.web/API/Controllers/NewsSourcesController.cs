@@ -36,7 +36,7 @@ namespace NewsParser.API.Controllers
         [HttpGet]
         public JsonResult Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
         {
-            var user = _authService.FindUserByEmail(HttpContext.User.Identity.Name);
+            var user = _authService.GetCurrentUser();
             int total;
             var newsSources = _newsSourceBusinessService
                 .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())

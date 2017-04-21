@@ -26,10 +26,9 @@ namespace NewsParser.Helpers.Mapper.Profiles
 
             CreateMap<User, ApplicationUser>()
                 .ForMember(a => a.Id, opt => opt.MapFrom(u => u.Id.ToString()))
-                .ForMember(a => a.NormalizedEmail, opt => opt.MapFrom(u => u.Email.ToUpper()))
-                .ForMember(a => a.NormalizedUserName, opt => opt.MapFrom(u => u.Email.ToUpper()))
+                .ForMember(a => a.NormalizedEmail, opt => opt.MapFrom(u => u.Email.ToLower()))
+                .ForMember(a => a.NormalizedUserName, opt => opt.MapFrom(u => u.UserName.ToLower()))
                 .ForMember(a => a.PasswordHash, opt => opt.MapFrom(u => u.Password))
-                .ForMember(a => a.UserName, opt => opt.MapFrom(u => u.Email))
                 .ForMember(a => a.ExternalIds, opt => opt.MapFrom(u => 
                     u.UserExternalIds != null ? 
                         AutoMapper.Mapper.Map<List <UserExternalId>, List <ExternalIdModel>>(u.UserExternalIds) : 

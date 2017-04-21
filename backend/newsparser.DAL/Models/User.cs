@@ -9,6 +9,11 @@ namespace NewsParser.DAL.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(36)]
+        public string UserName {get; set;} = Guid.NewGuid().ToString();
+
+        [Required]
         [MaxLength(50)]
         public string Email { get; set; }
 

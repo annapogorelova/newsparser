@@ -44,36 +44,23 @@ namespace NewsParser.Identity.Stores
 
         public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Email);
-            
-            // if (!string.IsNullOrEmpty(user.Email))
-            // {
-            //     return Task.FromResult(user.Email);
-            // }
-
-            // var userSocialId = user.ExternalIds.FirstOrDefault();
-            // if (userSocialId != null)
-            // {
-            //     return Task.FromResult(user.ExternalIds.FirstOrDefault().NormalizedExternalId);
-            // }
-
-            // throw new IdentityException("Failed to get unique username");
+            return Task.FromResult(user.UserName);
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
         {
-            user.Email = userName;
+            user.UserName = userName;
             return Task.CompletedTask;
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Email.ToLower());
+            return Task.FromResult(user.UserName.ToLower());
         }
 
         public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            user.Email = normalizedName.ToLower();
+            user.UserName = normalizedName.ToLower();
             return Task.CompletedTask;
         }
 
@@ -155,12 +142,8 @@ namespace NewsParser.Identity.Stores
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = _userBusinessService.GetUserByEmail(normalizedUserName);
+            var user = _userBusinessService.GetUserByUserName(normalizedUserName);
             return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
-
-            // var parsedSocialId = ParseSocialId(normalizedUserName);
-            // user = _userBusinessService.GetUserBySocialId(parsedSocialId.Item1, parsedSocialId.Item2);
-            // return user != null ? Task.FromResult(Mapper.Map<User, ApplicationUser>(user)) : null;
         }
 
         public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
@@ -203,7 +186,8 @@ namespace NewsParser.Identity.Stores
 
         public Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            return FindByNameAsync(normalizedEmail, cancellationToken);
+            var user = _userBusinessService.GetUserByEmail(normalizedEmail);
+            return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
         }
 
         public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
@@ -216,13 +200,5 @@ namespace NewsParser.Identity.Stores
             user.Email = normalizedEmail.ToLower();
             return Task.CompletedTask;
         }
-
-        // private Tuple<string, ExternalAuthProvider> ParseSocialId(string socialId)
-        // {
-        //     string id = socialId.Split(':')[1];
-        //     string providerAlias = socialId.Split(':')[0];
-        //     ExternalAuthProvider provider = _authProvidersAliases[providerAlias.ToLower()];
-        //     return new Tuple<string, ExternalAuthProvider>(id, provider);
-        // }
     }
 }

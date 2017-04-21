@@ -32,7 +32,7 @@ namespace NewsParser.API.Controllers
             {
                 var user = _authService.GetCurrentUser();
                 var userModel = Mapper.Map<AccountApiModel>(user);
-                return new JsonResult(new { User = userModel });
+                return new JsonResult(new { data = userModel });
             }
             catch (Exception e)
             {
@@ -163,17 +163,40 @@ namespace NewsParser.API.Controllers
             }
             catch (Exception e)
             {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Something went wrong.");
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to reset the password.");
             }
         }
 
 
         [Authorize]
         [HttpPut]
-        public JsonResult Put([FromBody]AccountApiModel model)
+        public async Task<JsonResult> Put([FromBody]AccountApiModel model)
         {
-            // update account
-            return MakeResponse(HttpStatusCode.OK, "Account was updated");
+            var user = _authService.GetCurrentUser();
+
+            if(user.Email != model.Email && _authService.FindUserByEmail(model.Email) != null)
+            {
+                return MakeResponse(HttpStatusCode.BadRequest, "Email is already taken.");
+            }
+
+            try
+            {
+                user.Email = model.Email;
+                var result = await _authService.UpdateAsync(user);
+                
+                if(result.Succeeded)
+                {
+                    return MakeResponse(HttpStatusCode.OK, "Account was updated");
+                }
+
+                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
+                string errorMessage = $"Failed to update the account. {detailedErrorMessage}";
+                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
+            }
+            catch(Exception e)
+            {
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to update the account");
+            }
         }
     }
 }

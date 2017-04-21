@@ -107,17 +107,15 @@ namespace NewsParser.BL.Services.Users
         {
             User existingUser = null;
 
-            if (!string.IsNullOrEmpty(user.Email))
-            {
-                existingUser = _userRepository.GetUserByEmail(user.Email);
-            }
-            else if (user.UserExternalIds.Any())
-            {
-                var userSocialId = user.UserExternalIds.FirstOrDefault();
-                existingUser = _userRepository.GetUserBySocialId(userSocialId.ExternalId, userSocialId.AuthProvider);
-            }
+            existingUser = _userRepository.GetUserByEmail(user.Email) ?? 
+                _userRepository.GetUserByUserName(user.UserName);
 
             return existingUser != null;
+        }
+
+        public User GetUserByUserName(string userName)
+        {
+            return _userRepository.GetUserByUserName(userName);
         }
     }
 }

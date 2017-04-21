@@ -120,5 +120,10 @@ namespace NewsParser.DAL.Repositories.Users
                         u.UserExternalIds.Any(
                             s => s.ExternalId.ToLower() == socialId.ToLower() && s.AuthProvider == provider));
         }
+
+        public User GetUserByUserName(string userName)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.UserName == userName);
+        }
     }
 }
