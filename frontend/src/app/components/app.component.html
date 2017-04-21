@@ -15,6 +15,9 @@
             </li>
         </ul>
         <div class="navbar-nav">
+            <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" routerLink="/account-settings">
+                Account
+            </a>
             <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" (click)="signOut()">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Sign Out

@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-md-12">
+        <p *ngIf="submitSucceeded && message">{{message}}</p>
+        <p *ngIf="submitSucceeded && !message">Account was updated.</p>
+        <p *ngIf="submitFailed && errorMessage">{{errorMessage}}</p>
+        <p *ngIf="submitFailed && !errorMessage">Account update failed.</p>
+
+        <form novalidate #f="ngForm" (ngSubmit)="submit(f.valid)" *ngIf="!submitComplete">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" class="form-control" name="email" [(ngModel)]="user.email"
+                       required  #email="ngModel"
+                       pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"/>
+                <small [hidden]="email.valid || (email.pristine && !f.submitted)" class="text-danger">
+                    Email is not in valid format.
+                </small>
+            </div>
+            <button type="submit" class="btn btn-info pull-right"
+                    [disabled]="!f.valid || submitInProgress">Submit</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <p>Edit your profile <b *ngIf="user">{{user.email}}</b></p>
+            <ngb-tabset>
+                <ngb-tab title="Profile">
+                    <template ngbTabContent>
+                        <edit-account></edit-account>
+                    </template>
+                </ngb-tab>
+                <ngb-tab title="Password">
+                    <template ngbTabContent>
+                        <change-password></change-password>
+                    </template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>

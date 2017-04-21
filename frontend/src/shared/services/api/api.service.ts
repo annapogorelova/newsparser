@@ -86,6 +86,23 @@ export class ApiService {
     };
 
     /**
+     * HTTP PUT method
+     * @param url - request url
+     * @param params - request body
+     * @param headers - cusrom request headers
+     * @returns {Promise<any>}
+     */
+    put = (url: string, params: any, headers: any = null) => {
+        var requestHeaders = this.initializeHeaders(headers);
+        var requestOptions = new RequestOptions({headers: requestHeaders});
+
+        return this.http.put(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
+            .map(response => this.extractData(response, false))
+            .catch(this.errorHandler.handleResponse)
+            .toPromise();
+    };
+
+    /**
      * HTTP DELETE method
      * @param url - request url
      * @param id - entity to delete id

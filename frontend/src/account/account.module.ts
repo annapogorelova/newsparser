@@ -5,12 +5,16 @@ import {FormsModule} from '@angular/forms';
 import {ExternalSignInComponent} from './components/external-sign-in/external-sign-in.component';
 import {AppSettings} from '../app/app.settings';
 import {ExternalAuthModule} from '../shared/modules/external-auth/external-auth.module';
-import {AccountConfirmationComponent} from './components/account-confirmation/account-confirmation.component';
+import {EmailConfirmationComponent} from './components/email-confirmation/email-confirmation.component';
 import {SharedModule} from '../shared/shared.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {AccountRoutingProviders, AccountRouting} from './account.routing';
 import {PasswordRemindComponent} from './components/password-remind/password-remind.component';
 import {PasswordResetComponent} from './components/password-reset/password-reset.component';
+import {AccountSettingsComponent} from './components/account-settings/settings/settings.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {EditAccountComponent} from './components/account-settings/edit-account/edit-account.component';
+import {ChangePasswordComponent} from './components/account-settings/change-password/change-password.component';
 
 let authProviders = {
     google: {
@@ -23,10 +27,25 @@ let authProviders = {
 };
 
 @NgModule({
-    imports: [FormsModule, BrowserModule, ExternalAuthModule.initWithProviders(authProviders),
-        SharedModule, AccountRouting],
-    declarations: [SignInComponent, SignUpComponent, ExternalSignInComponent,
-        AccountConfirmationComponent, PasswordRemindComponent, PasswordResetComponent],
+    imports: [
+        FormsModule,
+        BrowserModule,
+        ExternalAuthModule.initWithProviders(authProviders),
+        SharedModule,
+        AccountRouting,
+        NgbModule
+    ],
+    declarations: [
+        SignInComponent,
+        SignUpComponent,
+        ExternalSignInComponent,
+        EmailConfirmationComponent,
+        PasswordRemindComponent,
+        PasswordResetComponent,
+        AccountSettingsComponent,
+        EditAccountComponent,
+        ChangePasswordComponent
+    ],
     providers: [AccountRoutingProviders]
 })
 
