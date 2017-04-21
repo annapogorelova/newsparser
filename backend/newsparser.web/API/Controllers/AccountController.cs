@@ -187,11 +187,12 @@ namespace NewsParser.API.Controllers
                 
                 if(result.Succeeded)
                 {
-                    string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
-                    await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
                     var responseMessage = "Account was updated.";
                     if(emailChanged)
                     {
+                        string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
+                        await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
+
                         responseMessage += $@" We have send you an confirmation email to {model.Email}. 
                             Please confirm your new email address by following the link in the letter.
                             If you don't confirm it, you won't be able to sign in with it next time.";
