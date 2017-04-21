@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +14,7 @@ namespace NewsParser.API.Controllers
     /// <summary>
     /// Controller contains methods for authorizing users
     /// </summary>
-    public class AuthorizationController : Controller
+    public class AuthorizationController : BaseController
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IExternalAuthService _externalAuthService;
@@ -47,11 +48,7 @@ namespace NewsParser.API.Controllers
                 return HandleTokenAuth(request).Result;
             }
 
-            return BadRequest(new OpenIdConnectResponse
-            {
-                Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
-                ErrorDescription = "The specified grant type is not supported."
-            });
+            return MakeResponse(HttpStatusCode.BadRequest, "The specified grant type is not supported.");
         }
 
         /// <summary>
@@ -64,30 +61,18 @@ namespace NewsParser.API.Controllers
             var user = _authService.FindUserByEmail(request.Username);
             if (user == null)
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "Invalid username or password"
-                });
+                return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
             //?
             if (!await _signInManager.CanSignInAsync(user))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The specified user cannot sign in."
-                });
+                return MakeResponse(HttpStatusCode.BadRequest, "The specified user cannot sign in.");
             }
 
             if (!_authService.CheckUserPassword(user, request.Password))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "Invalid username or password"
-                });
+                return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
             var principal = await _authService.GetUserPrincipalAsync(user);
@@ -104,11 +89,7 @@ namespace NewsParser.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Assertion))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                    ErrorDescription = "The mandatory 'assertion' parameter was missing."
-                });
+                return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
             try
@@ -116,19 +97,13 @@ namespace NewsParser.API.Controllers
                 var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Facebook);
                 if (!externalUser.IsVerified)
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                        ErrorDescription = "Facebook user is not verified."
-                    });
+                    return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
                 }
 
-                if(string.IsNullOrEmpty(externalUser.Email)){
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                        ErrorDescription = "Email is required."
-                    });
+                if(string.IsNullOrEmpty(externalUser.Email))
+                {
+                    return MakeResponse(HttpStatusCode.BadRequest, @"Email is required. 
+                        Please, make sure that you have it set on your facebook account.");
                 }
 
                 var user = _authService.FindUserByEmail(externalUser.Email);
@@ -148,11 +123,7 @@ namespace NewsParser.API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.ServerError,
-                    ErrorDescription = "Failed to authenticate Facebook user."
-                });
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to authenticate Facebook user.");
             }
         }
 
@@ -165,11 +136,7 @@ namespace NewsParser.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Assertion))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                    ErrorDescription = "The mandatory 'assertion' parameter was missing."
-                });
+                return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
             try
@@ -177,11 +144,7 @@ namespace NewsParser.API.Controllers
                 var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Google);
                 if (!externalUser.IsVerified)
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                        ErrorDescription = "Facebook user is not verified."
-                    });
+                    return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
                 }
 
                 var user = _authService.FindUserByEmail(externalUser.Email);
@@ -201,11 +164,7 @@ namespace NewsParser.API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.ServerError,
-                    ErrorDescription = "Failed to authenticate Facebook user."
-                });
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to authenticate Facebook user.");
             }
         }
     }
