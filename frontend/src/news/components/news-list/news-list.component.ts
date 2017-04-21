@@ -3,7 +3,7 @@ import {ApiService} from '../../../shared/services/api/api.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
-import {BaseList} from '../../../shared/components/base-list/base-list';
+import {BaseList} from '../../../shared/abstract/base-list/base-list';
 
 @Component({
     selector: 'news-list',

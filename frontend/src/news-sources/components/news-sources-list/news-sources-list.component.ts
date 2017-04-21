@@ -2,7 +2,7 @@ import {Component, Inject, Input, Output, EventEmitter} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {AppSettings} from '../../../app/app.settings';
-import {BaseList} from '../../../shared/components/base-list/base-list';
+import {BaseList} from '../../../shared/abstract/base-list/base-list';
 
 @Component({
     selector: 'news-sources',

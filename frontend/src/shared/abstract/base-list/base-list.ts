@@ -2,7 +2,7 @@ import {ApiService} from '../../services/api/api.service';
 import {PagerService} from '../../services/pager/pager.service';
 
 /**
- * Component contains methods to manipulate the lists data,
+ * Class contains methods to manipulate the lists data,
  * to be extended by specific list components
  */
 export abstract class BaseList {
