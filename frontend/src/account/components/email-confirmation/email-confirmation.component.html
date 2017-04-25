@@ -2,12 +2,12 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div *ngIf="confirmationSucceeded">
-                <p *ngIf="message">{{message}}</p>
+            <div *ngIf="submitSucceeded">
+                <p *ngIf="responseMessage">{{responseMessage}}</p>
             </div>
-            <div *ngIf="confirmationFailed">
-                <p *ngIf="!errorMessage">Account confirmation failed.</p>
-                <p *ngIf="errorMessage">{{errorMessage}}</p>
+            <div *ngIf="submitFailed">
+                <p *ngIf="!responseMessage">Account confirmation failed.</p>
+                <p *ngIf="responseMessage">{{responseMessage}}</p>
             </div>
             <a *ngIf="!authService.isAuthenticated()" href="#" class="btn btn-primary btn-md pull-right"
                routerLink="/sign-in">

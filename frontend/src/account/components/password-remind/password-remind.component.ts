@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
-import {ApiService} from "../../../shared/services/api/api.service";
+import {Component, Inject} from '@angular/core';
+import {ApiService} from '../../../shared/services/api/api.service';
+import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 
 /**
  * Component contains functionality for the password reset
@@ -9,32 +10,14 @@ import {ApiService} from "../../../shared/services/api/api.service";
     styleUrls: ['password-remind.component.css'],
     selector: 'password-remind'
 })
-export class PasswordRemindComponent {
-    public userEmail: string;
-    public submitInProgress: boolean;
-    public submitComplete: boolean;
-    public errorMessage: string;
-
-    public constructor(private apiService: ApiService){}
-
-    submit = (isValid: boolean) => {
-        if(!isValid){
-            return;
-        }
-
-        this.submitInProgress = true;
-        this.apiService.post(`account/passwordRecovery`, {email: this.userEmail})
-            .then(() => this.onSubmitSucceeded())
-            .catch(error => this.onSubmitFailed(error));
+export class PasswordRemindComponent extends BaseForm {
+    protected method: string = 'post';
+    protected apiRoute: string = 'account/passwordRecovery';
+    protected formData: any = {
+        email: ''
     };
 
-    onSubmitSucceeded = () => {
-        this.submitInProgress = false;
-        this.submitComplete = true;
-    };
-
-    onSubmitFailed = (error: any) => {
-        this.submitInProgress = false;
-        this.errorMessage = error.message;
-    };
+    public constructor(@Inject(ApiService) apiService: ApiService){
+        super(apiService);
+    }
 }

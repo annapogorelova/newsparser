@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ApiService} from "../../../shared/services/api/api.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../../shared/services/auth/auth.service";
+import {Component, OnInit, Inject} from '@angular/core';
+import {ApiService} from '../../../shared/services/api/api.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../../../shared/services/auth/auth.service';
+import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 
 /**
  * Component contains functionality for the confirmation of email
@@ -10,46 +11,42 @@ import {AuthService} from "../../../shared/services/auth/auth.service";
     templateUrl: 'email-confirmation.component.html',
     selector: 'email-confirmation'
 })
-export class EmailConfirmationComponent implements OnInit {
-    private email: string;
-    private confirmationToken: string;
-    public confirmationSucceeded: boolean;
-    public confirmationFailed: boolean;
-    public errorMessage: string;
-    public message: string;
+export class EmailConfirmationComponent extends BaseForm implements OnInit {
+    protected apiRoute: string;
+    protected method: string = 'post';
+    protected formData: any = {
+        confirmationToken: ''
+    };
 
-    public constructor(private apiService: ApiService,
+    public email: string;
+
+    public constructor(@Inject(ApiService) apiService: ApiService,
                        private authService: AuthService,
                        private route: ActivatedRoute,
-                       private router: Router){}
+                       private router: Router){
+        super(apiService);
+    }
 
     ngOnInit(){
         this.route.queryParams
             .map((queryParams) => queryParams['email'])
-            .subscribe((email: string) => this.email = email);
+            .subscribe((email: string) => this.onEmailRetrieved(email));
 
         this.route.queryParams
             .map((queryParams) => queryParams['confirmationToken'])
-            .subscribe((confirmationToken: string) => this.confirmationToken = confirmationToken);
+            .subscribe((confirmationToken: string) => this.formData.confirmationToken = confirmationToken);
     }
 
     ngAfterViewInit() {
-        if(!this.email || !this.confirmationToken){
+        if(!this.email || !this.formData.confirmationToken){
             this.router.navigate(['/sign-in']);
         }
 
-        this.apiService.post(`account/${this.email}/confirmation`, { confirmationToken: this.confirmationToken})
-            .then(data => this.onConfirmationSucceeded(data))
-            .catch(error => this.onConfirmationFailed(error));
+        this.submit(true);
     }
 
-    onConfirmationSucceeded = (data: any) => {
-        this.confirmationSucceeded = true;
-        this.message = data.message;
-    };
-
-    onConfirmationFailed = (error: any) => {
-        this.confirmationFailed = true;
-        this.errorMessage = error.message;
+    onEmailRetrieved = (email: string) => {
+        this.email = email;
+        this.apiRoute = `account/${this.email}/confirmation`;
     };
 }

@@ -2,18 +2,20 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <p class="text-danger" *ngIf="registrationFailed && errorMessage">
-                {{errorMessage}}
+            <p class="text-danger" *ngIf="submitFailed && responseMessage">
+                {{responseMessage}}
             </p>
-            <p class="text-danger" *ngIf="registrationFailed && !errorMessage">
+            <p class="text-danger" *ngIf="submitFailed && !responseMessage">
                 Failed to create the account. Please, try again later.
             </p>
-            <p *ngIf="registrationSucceeded">Nearly done! Please check your email to confirm the registration.</p>
+            <p *ngIf="submitSucceeded">
+                Nearly done! Please check your email to confirm the registration.
+            </p>
 
             <form #f="ngForm" novalidate (ngSubmit)="submit(f.valid)"
-                  *ngIf="!registrationSucceeded">
+                  *ngIf="!submitSucceeded">
                 <div class="form-group">
-                    <input type="email" class="form-control" name="email" [(ngModel)]="user.email"
+                    <input type="email" class="form-control" name="email" [(ngModel)]="formData.email"
                            required  #email="ngModel"
                            pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"
                            placeholder="Email">
@@ -22,7 +24,7 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="password" [(ngModel)]="user.password"
+                    <input type="password" class="form-control" name="password" [(ngModel)]="formData.password"
                            required validateEqual="confirmPassword" reverse="true" #password="ngModel" minlength="8"
                            placeholder="Password">
                     <small [hidden]="password.valid || (password.pristine && !f.submitted)" class="text-danger">
@@ -30,7 +32,7 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="user.confirmPassword"
+                    <input type="password" class="form-control" name="confirmPassword" [(ngModel)]="formData.confirmPassword"
                            required validateEqual="password" reverse="false" #confirmPassword="ngModel"
                            placeholder="Confirm password">
                     <small [hidden]="confirmPassword.valid || (confirmPassword.pristine && !f.submitted)" class="text-danger">
