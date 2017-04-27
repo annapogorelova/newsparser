@@ -186,5 +186,10 @@ namespace NewsParser.Auth
             var user = _userBusinessService.GetUserByUserName(userName);
             return AutoMapper.Mapper.Map<User, ApplicationUser>(user);
         }
+
+        public Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            return _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        }
     }
 }

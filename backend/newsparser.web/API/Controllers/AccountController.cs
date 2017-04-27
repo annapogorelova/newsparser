@@ -169,7 +169,7 @@ namespace NewsParser.API.Controllers
 
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("passwordChange")]
         public async Task<JsonResult> Put([FromBody]AccountApiModel model)
         {
             var user = _authService.GetCurrentUser();
@@ -207,6 +207,40 @@ namespace NewsParser.API.Controllers
             catch(Exception e)
             {
                 return MakeResponse(HttpStatusCode.InternalServerError, "Failed to update the account");
+            }
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<JsonResult> Put([FromBody]PasswordChangeModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return MakeResponse(HttpStatusCode.BadRequest, "Required data is missing");
+            }
+
+            if(model.CurrentPassword == model.NewPassword)
+            {
+                return MakeResponse(HttpStatusCode.BadRequest, "New password must be different from the current one.");
+            }
+
+            try
+            {
+                var user = _authService.GetCurrentUser();
+                var result = await _authService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                
+                if(result.Succeeded)
+                {
+                    return MakeResponse(HttpStatusCode.OK, "Password was successfully changed");
+                }
+
+                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
+                string errorMessage = $"Failed to change the password. {detailedErrorMessage}";
+                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
+            }
+            catch(Exception)
+            {
+                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to change the password.");
             }
         }
     }

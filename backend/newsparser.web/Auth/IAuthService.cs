@@ -43,6 +43,8 @@ namespace NewsParser.Auth
 
         Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string passwordResetToken, string newPassword);
 
+        Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword);
+
         Task<IdentityResult> UpdateAsync(ApplicationUser user);
     }
 }
