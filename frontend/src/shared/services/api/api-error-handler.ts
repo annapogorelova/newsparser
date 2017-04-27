@@ -25,7 +25,7 @@ export class ApiErrorHandler {
         }
 
         let body = response.json();
-        return Observable.throw(new HttpError(body.message, response.status));
+        return Observable.throw(new HttpError(body.message, response.status, body.validationErrors));
     };
 
     /**

@@ -9,6 +9,7 @@ export abstract class BaseForm {
     protected submitFailed: boolean;
     protected submitSucceeded: boolean;
     protected responseMessage: string;
+    protected validationErrors: Array<string>;
 
     protected abstract apiRoute: string;
     protected abstract method: string;
@@ -70,8 +71,12 @@ export abstract class BaseForm {
         this.submitCompleted = true;
         this.submitSucceeded = false;
         this.submitFailed = true;
+        
         if(error){
             this.responseMessage = error.message;
+            if(error.validationErrors){
+                this.validationErrors = error.validationErrors.map(function(e: any){ return e['message'];});
+            }
         }
 
         return Promise.reject(error);
