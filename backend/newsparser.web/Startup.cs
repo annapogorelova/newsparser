@@ -35,6 +35,7 @@ using NewsParser.Identity.Stores;
 using OpenIddict.Core;
 using OpenIddict.Models;
 using NewsParser.Services;
+using NewsParser.Middleware;
 
 namespace NewsParser
 {
@@ -149,6 +150,8 @@ namespace NewsParser
             ServiceLocator.Instance = app.ApplicationServices;
 
             ConfigureJwtAuthentication(app);
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseMvc(routes =>
             {

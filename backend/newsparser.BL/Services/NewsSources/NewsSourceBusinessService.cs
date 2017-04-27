@@ -5,6 +5,7 @@ using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.NewsSources;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.Repositories.Users;
+using NewsParser.BL.Exceptions;
 
 namespace NewsParser.BL.Services.NewsSources
 {
@@ -52,7 +53,8 @@ namespace NewsParser.BL.Services.NewsSources
 
         public NewsSource GetNewsSourceById(int id)
         {
-            return _newsSourceRepository.GetNewsSourceById(id);
+            return _newsSourceRepository.GetNewsSourceById(id) ??
+                throw new EntityNotFoundException("News source was not found");
         }
 
         public NewsSource AddNewsSource(NewsSource newsSource)

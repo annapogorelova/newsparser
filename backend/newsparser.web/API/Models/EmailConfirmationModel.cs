@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 namespace NewsParser.API.Models
 {
     /// <summary>
-    /// Class contains properties for activating a user
+    /// Class contains properties for the user's email conformation
     /// </summary>
-    public class AccountActivationModel
+    public class EmailConfirmationModel
     {       
-        [Required]
+        [Required(ErrorMessage = "Email confirmation token is required")]
         public string ConfirmationToken { get; set; }
     }
 }

@@ -1,13 +1,18 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
 using NewsParser.Auth;
+using NewsParser.BL.Services.Users;
+using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Helpers.Utilities;
+using NewsParser.Identity.Models;
 using NewsParser.Services;
 
 namespace NewsParser.API.Controllers
@@ -16,232 +21,167 @@ namespace NewsParser.API.Controllers
     public class AccountController : BaseController
     {
         private readonly IAuthService _authService;
+        private readonly IUserBusinessService _userBusinessService;
         private readonly IMailService _mailService;
 
-        public AccountController(IAuthService authService, IMailService mailService)
+        public AccountController(IAuthService authService, IMailService mailService, IUserBusinessService userBusinessService)
         {
             _authService = authService;
             _mailService = mailService;
+            _userBusinessService = userBusinessService;
         }
 
         [Authorize]
         [HttpGet]
         public JsonResult Get()
         {
-            try
-            {
-                var user = _authService.GetCurrentUser();
-                var userModel = Mapper.Map<AccountApiModel>(user);
-                return new JsonResult(new { data = userModel });
-            }
-            catch (Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to find the user");
-            }
+            var user = _authService.GetCurrentUser();
+            var userModel = Mapper.Map<AccountApiModel>(user);
+            return new JsonResult(new { data = userModel });
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<JsonResult> Post([FromBody]CreateAccountModel model)
         {
-            if(!ModelState.IsValid)
+            var result = await _authService.CreateAsync(model.Email, model.Password);
+            
+            if (result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Required data was not provided or was not in valid format.");
+                var user = _authService.FindUserByEmail(model.Email);
+                string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
+                await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
+                return MakeResponse(HttpStatusCode.Created, "Account was created");
             }
 
-            try
-            {
-                var result = await _authService.CreateAsync(model.Email, model.Password);
-                
-                if (result.Succeeded){
-                    var user = _authService.FindUserByEmail(model.Email);
-                    string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
-                    await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
-                    return MakeResponse(HttpStatusCode.Created, "Account was created");
-                }
-
-                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to create the account. {detailedErrorMessage}";
-                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
-            }
-            catch (Exception)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to create the account");
-            }
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to create the account", 
+                result
+            );
         }
 
         [HttpPost("{email}/confirmation")]
-        public async Task<JsonResult> Post(string email, [FromBody]AccountActivationModel model)
+        [ValidateModel]
+        public async Task<JsonResult> Post(string email, [FromBody]EmailConfirmationModel model)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(model.ConfirmationToken))
+            var user = _authService.FindUserByEmail(email);
+            
+            if(user.EmailConfirmed)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Required data is missing");
+                return MakeResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
             }
 
-            try
+            var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
+            
+            if(result.Succeeded)
             {
-                var user = _authService.FindUserByEmail(email);
-                if (user == null)
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, "Account does not exist");
-                }
-
-                if(user.EmailConfirmed)
-                {
-                    return MakeResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
-                }
-
-                var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
-                if (result.Succeeded)
-                {
-                    return MakeResponse(HttpStatusCode.OK, "Email was successfully confirmed.");
-                }
-
-                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to confirm the email. {detailedErrorMessage}";
-                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
+                return MakeResponse(HttpStatusCode.OK, "Email was successfully confirmed");
             }
-            catch (Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to confirm the email.");
-            }
+
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to confirm the email", 
+                result
+            );
         }
 
         [HttpPost("passwordRecovery")]
+        [ValidateModel]
         public async Task<JsonResult> Post([FromBody]PasswordResetRequestModel model)
         {
-            if(!ModelState.IsValid)
-            {
-                return MakeResponse(HttpStatusCode.BadRequest, "Email was not provided or was not in valid format.");
-            }
-
-            try
-            {
-                var user = _authService.FindUserByEmail(model.Email);
-                if(user == null)
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, $"Account with email {model.Email} does not exist.");
-                }
-
-                string passwordResetToken = await _authService.GeneratePasswordResetTokenAsync(user);
-                await _mailService.SendPasswordResetEmail(user.Email, Base64EncodingUtility.Encode(passwordResetToken));
-                return MakeResponse(HttpStatusCode.OK, "Password reset email was sent.");
-            }
-            catch(Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Password reset request failed.");
-            }
+            var user = _authService.FindUserByEmail(model.Email);
+            string passwordResetToken = await _authService.GeneratePasswordResetTokenAsync(user);
+            await _mailService.SendPasswordResetEmail(user.Email, Base64EncodingUtility.Encode(passwordResetToken));
+            return MakeResponse(HttpStatusCode.OK, "Password reset email was sent.");
         }
 
         [HttpPost("{email}/passwordRecovery")]
-        public async Task<JsonResult> Post(string email, [FromBody]PasswordResetModel model)
+        [ValidateModel]
+        public async Task<JsonResult> Post([Required]string email, [FromBody]PasswordResetModel model)
         {
-            if (string.IsNullOrEmpty(email) || !ModelState.IsValid)
+            var user = _authService.FindUserByEmail(email);
+            var result = await _authService.ResetPasswordAsync(user, 
+                Base64EncodingUtility.Decode(model.PasswordResetToken), 
+                model.NewPassword);
+                
+            if (result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Required data is missing");
+                return MakeResponse(HttpStatusCode.OK, "Password was reset. You can sign in now.");
             }
 
-            try
-            {
-                var user = _authService.FindUserByEmail(email);
-                if (user == null)
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, "Account does not exist");
-                }
-
-                var result = await _authService.ResetPasswordAsync(user, 
-                    Base64EncodingUtility.Decode(model.PasswordResetToken), 
-                    model.NewPassword);
-
-                if (result.Succeeded)
-                {
-                    return MakeResponse(HttpStatusCode.OK, "Password was reset. You can sign in now.");
-                }
-
-                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to reset the password. {detailedErrorMessage}";
-                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
-            }
-            catch (Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to reset the password.");
-            }
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to reset the password", 
+                result
+            );
         }
 
 
         [Authorize]
-        [HttpPut("passwordChange")]
+        [HttpPut]
+        [ValidateModel]
         public async Task<JsonResult> Put([FromBody]AccountApiModel model)
         {
             var user = _authService.GetCurrentUser();
             bool emailChanged = user.Email != model.Email;
-            if(emailChanged && _authService.FindUserByEmail(model.Email) != null)
+            
+            if(emailChanged && !_userBusinessService.EmailAvailable(model.Email))
             {
                 return MakeResponse(HttpStatusCode.BadRequest, "Email is already taken.");
             }
 
-            try
+            user.Email = model.Email;
+            user.EmailConfirmed = false;
+            var result = await _authService.UpdateAsync(user);
+            
+            if(result.Succeeded)
             {
-                user.Email = model.Email;
-                user.EmailConfirmed = false;
-                var result = await _authService.UpdateAsync(user);
-                
-                if(result.Succeeded)
+                var responseMessage = "Account was updated.";
+                if(emailChanged)
                 {
-                    var responseMessage = "Account was updated.";
-                    if(emailChanged)
-                    {
-                        string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
-                        await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
-
-                        responseMessage += $@" We have send you an confirmation email to {model.Email}. 
-                            Please confirm your new email address by following the link in the letter.
-                            If you don't confirm it, you won't be able to sign in with it next time.";
-                    }
-                    return MakeResponse(HttpStatusCode.OK, responseMessage);
+                    string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
+                    await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
+                    responseMessage += $@" We have send you an confirmation email to {model.Email}. 
+                        Please confirm your new email address by following the link in the letter.
+                        If you don't confirm it, you won't be able to sign in with it next time.";
                 }
 
-                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to update the account. {detailedErrorMessage}";
-                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
+                return MakeResponse(HttpStatusCode.OK, responseMessage);
             }
-            catch(Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to update the account");
-            }
+
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to update the account", 
+                result
+            );
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("passwordChange")]
+        [ValidateModel]
         public async Task<JsonResult> Put([FromBody]PasswordChangeModel model)
         {
-            if(!ModelState.IsValid)
+            var user = _authService.GetCurrentUser();
+            var result = await _authService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            
+            if(result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Required data is missing");
+                return MakeResponse(HttpStatusCode.OK, "Password was successfully changed");
             }
 
-            if(model.CurrentPassword == model.NewPassword)
-            {
-                return MakeResponse(HttpStatusCode.BadRequest, "New password must be different from the current one.");
-            }
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to change the password", 
+                result
+            );
+        }
 
-            try
-            {
-                var user = _authService.GetCurrentUser();
-                var result = await _authService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                
-                if(result.Succeeded)
-                {
-                    return MakeResponse(HttpStatusCode.OK, "Password was successfully changed");
-                }
-
-                string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-                string errorMessage = $"Failed to change the password. {detailedErrorMessage}";
-                return MakeResponse(HttpStatusCode.InternalServerError, errorMessage);
-            }
-            catch(Exception)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to change the password.");
-            }
+        private JsonResult MakeIdentityErrorResponse(HttpStatusCode status, string errorMessage, IdentityResult result)
+        {
+            string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
+            string fullErrorMessage = $"{errorMessage}. {detailedErrorMessage}";
+            return MakeResponse(HttpStatusCode.InternalServerError, fullErrorMessage);
         }
     }
 }

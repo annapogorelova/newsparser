@@ -51,7 +51,19 @@ namespace NewsParser.BL.Services.Users
         /// <returns>User object</returns>
         User GetUserBySocialId(string socialId, ExternalAuthProvider provider);
 
+        /// <summary>
+        /// Checks if user already exists based on email and user name
+        /// </summary>
+        /// <param name="user">User object</param>
+        /// <returns>True if user exists, false if does not exist</returns>
         bool UserExists(User user);
+
+        /// <summary>
+        /// Checks if email is available
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <returns>True if available, false if not available</returns>
+        bool EmailAvailable(string email);
     
         /// <summary>
         /// Insert user

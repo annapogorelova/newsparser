@@ -7,11 +7,11 @@ namespace NewsParser.API.Models
     /// </summary>
     public class CreateAccountModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email { get; set; }
         
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }

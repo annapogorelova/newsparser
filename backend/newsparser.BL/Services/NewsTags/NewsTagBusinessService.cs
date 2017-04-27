@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.NewsTags;
+using NewsParser.BL.Exceptions;
 
 namespace NewsParser.BL.Services.NewsTags
 {
@@ -22,12 +23,14 @@ namespace NewsParser.BL.Services.NewsTags
 
         public NewsTag GetNewsTagById(int id)
         {
-            return _newsTagRepository.GetNewsTagById(id);
+            return _newsTagRepository.GetNewsTagById(id) ??
+                throw new EntityNotFoundException("News tag was not found");
         }
 
         public NewsTag GetNewsTagByName(string name)
         {
-            return _newsTagRepository.GetNewsTagByName(name);
+            return _newsTagRepository.GetNewsTagByName(name) ??
+                throw new EntityNotFoundException("News tag was not found");
         }
 
         public NewsTag AddNewsTag(NewsTag newsTag)

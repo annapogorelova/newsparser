@@ -7,7 +7,7 @@ namespace NewsParser.API.Models
     /// </summary>
     public class PasswordResetRequestModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email { get; set; }
     }

@@ -7,9 +7,9 @@ namespace NewsParser.API.Models
     /// </summary>
     public class NewsSourceCreateModel
     {
-        [Url]
         [MaxLength(100)]
-        [Required]
+        [Url(ErrorMessage = "RSS url must be a valid fully-qualified http or https URL string")]
+        [Required(ErrorMessage = "RSS url is required")]
         public string RssUrl { get; set; }
     }
 }

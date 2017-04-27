@@ -5,6 +5,7 @@ using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.News;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.NewsTags;
+using NewsParser.BL.Exceptions;
 
 namespace NewsParser.BL.Services.News
 {
@@ -74,12 +75,14 @@ namespace NewsParser.BL.Services.News
 
         public NewsItem GetNewsItemById(int id)
         {
-            return _newsRepository.GetNewsById(id);
+            return _newsRepository.GetNewsById(id) ?? 
+                throw new EntityNotFoundException("News item was not found");
         }
 
         public NewsItem GetNewsItemByLink(string linkToSource)
         {
-            return _newsRepository.GetNewsItemByLink(linkToSource);
+            return _newsRepository.GetNewsItemByLink(linkToSource) ??
+                throw new EntityNotFoundException("News item was not found");
         }
 
         public NewsItem AddNewsItem(NewsItem newsItem)

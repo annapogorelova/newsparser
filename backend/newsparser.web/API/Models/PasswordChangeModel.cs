@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using NewsParser.Helpers.ValidationAttributes;
 
 namespace NewsParser.API.Models
 {
@@ -7,10 +8,12 @@ namespace NewsParser.API.Models
     /// </summary>
     public class PasswordChangeModel
     {
-        [Required]
+        [Required(ErrorMessage = "Current password is required")]
         public string CurrentPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "New password is required")]
+        [NotEqual(PropertyName = "CurrentPassword", 
+            ErrorMessage = "New password must be different from the current password")]
         public string NewPassword { get; set; }
     }
 }

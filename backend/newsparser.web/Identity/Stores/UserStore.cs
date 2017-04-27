@@ -6,26 +6,28 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using newsparser.DAL.Models;
-using NewsParser.BL;
+using NewsParser.BL.Exceptions;
 using NewsParser.BL.Services.Users;
 using NewsParser.DAL.Models;
+using NewsParser.DAL.Repositories.Users;
 using NewsParser.Identity.Models;
 
 namespace NewsParser.Identity.Stores
 {
     /// <summary>
-    /// Class contains implementation of <see cref="IUserPasswordStore{TUser}"/> 
-    /// using <see cref="IUserBusinessService"/>
+    /// Class contains implementation of <see cref="IUserPasswordStore{TUser}"/>
+    /// and <see cref="IUserEmailStore{TUser}"/> 
+    /// using <see cref="IUserRepository"/>
     /// </summary>
     public class UserStore: IUserPasswordStore<ApplicationUser>, 
                             IUserEmailStore<ApplicationUser>
     {
-        private readonly IUserBusinessService _userBusinessService;
+        private readonly IUserRepository _userRepository;
         private readonly Dictionary<string, ExternalAuthProvider> _authProvidersAliases;
 
-        public UserStore(IUserBusinessService userBusinessService)
+        public UserStore(IUserRepository userRepository)
         {
-            _userBusinessService = userBusinessService;
+            _userRepository = userRepository;
             _authProvidersAliases = new Dictionary<string, ExternalAuthProvider>()
             {
                 {"facebook", ExternalAuthProvider.Facebook},
@@ -73,7 +75,7 @@ namespace NewsParser.Identity.Stores
 
             try
             {
-                _userBusinessService.AddUser(Mapper.Map<ApplicationUser, User>(user));
+                _userRepository.AddUser(Mapper.Map<ApplicationUser, User>(user));
                 return Task.FromResult(IdentityResult.Success);
             }
             catch (BusinessLayerException e)
@@ -91,13 +93,9 @@ namespace NewsParser.Identity.Stores
 
             try
             {
-                var existingUser = _userBusinessService.GetUserById(user.GetId());
-                if (existingUser == null)
-                {
-                    throw new IdentityException($"User with id {user.GetId()} does not exist");
-                }
+                var existingUser = _userRepository.GetUserById(user.GetId());
                 Mapper.Map(user, existingUser);
-                _userBusinessService.UpdateUser(existingUser);
+                _userRepository.UpdateUser(existingUser);
                 return Task.FromResult(IdentityResult.Success);
             }
             catch (BusinessLayerException e)
@@ -113,15 +111,11 @@ namespace NewsParser.Identity.Stores
                 throw new ArgumentNullException();
             }
 
-            var existingUser = _userBusinessService.GetUserById(user.GetId());
-            if (existingUser == null)
-            {
-                throw new ArgumentException($"User width id {user.Id} does not exist");
-            }
+            var existingUser = _userRepository.GetUserById(user.GetId());
 
             try
             {
-                _userBusinessService.DeleteUser(existingUser.Id);
+                _userRepository.DeleteUser(existingUser);
                 return Task.FromResult(IdentityResult.Success);
             }
             catch (BusinessLayerException e)
@@ -132,18 +126,21 @@ namespace NewsParser.Identity.Stores
 
         public Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = _userBusinessService.GetUserById(Convert.ToInt32(userId));
-            if (user == null)
-            {
-                return null;
-            }
+            var user = _userRepository.GetUserById(Convert.ToInt32(userId));
             return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
         }
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = _userBusinessService.GetUserByUserName(normalizedUserName);
-            return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
+            try
+            {
+                var user = _userRepository.GetUserByUserName(normalizedUserName.ToLower());
+                return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
+            }
+            catch(EntityNotFoundException)
+            {
+                return null;
+            }
         }
 
         public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
@@ -186,8 +183,15 @@ namespace NewsParser.Identity.Stores
 
         public Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            var user = _userBusinessService.GetUserByEmail(normalizedEmail);
-            return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
+            try
+            {
+                var user = _userRepository.GetUserByEmail(normalizedEmail.ToLower());
+                return Task.FromResult(Mapper.Map<User, ApplicationUser>(user));
+            }
+            catch(EntityNotFoundException)
+            {
+                return null;
+            }
         }
 
         public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)

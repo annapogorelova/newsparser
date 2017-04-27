@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsParser.API.Models;
 using NewsParser.BL.Services.NewsSources;
+using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Identity.Models;
 
 namespace NewsParser.API.Controllers
@@ -32,35 +33,20 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<JsonResult> Post([FromBody]CreateSubscriptionModel model)
         {
-            try
-            {
-                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-                _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, user.GetId());
-                return MakeResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
-            }
-            catch (Exception e)
-            {
-                _log.LogError(e.Message);
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to subscribe to new source");
-            }
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, user.GetId());
+            return MakeResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
         }
 
         [HttpDelete]
         public async Task<JsonResult> Delete(int id)
         {
-            try
-            {
-                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-                _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
-                return MakeResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
-            }
-            catch (Exception e)
-            {
-                _log.LogError(e.Message);
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to unsubscribe from new source");
-            }
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
+            return MakeResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
         }
     }
 }

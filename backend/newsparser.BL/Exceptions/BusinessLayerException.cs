@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NewsParser.BL
+namespace NewsParser.BL.Exceptions
 {
     /// <summary>
     /// Class represents an exception to be thrown by the business layer

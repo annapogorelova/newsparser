@@ -64,7 +64,6 @@ namespace NewsParser.API.Controllers
                 return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
-            //?
             if (!await _signInManager.CanSignInAsync(user))
             {
                 return MakeResponse(HttpStatusCode.BadRequest, "The specified user cannot sign in.");
@@ -92,39 +91,33 @@ namespace NewsParser.API.Controllers
                 return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
-            try
+            var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Facebook);
+            
+            if (!externalUser.IsVerified)
             {
-                var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Facebook);
-                if (!externalUser.IsVerified)
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
-                }
-
-                if(string.IsNullOrEmpty(externalUser.Email))
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, @"Email is required. 
-                        Please, make sure that you have it set on your facebook account.");
-                }
-
-                var user = _authService.FindUserByEmail(externalUser.Email);
-
-                if (user == null)
-                {
-                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Facebook);
-                }
-                else
-                {
-                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Facebook);
-                }
-
-                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
-                var ticket = _authService.GetAuthTicket(principal);
-                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+                return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
             }
-            catch (Exception e)
+            
+            if(string.IsNullOrEmpty(externalUser.Email))
             {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to authenticate Facebook user.");
+                return MakeResponse(HttpStatusCode.BadRequest, @"Email is required. 
+                    Please, make sure that you have it set on your facebook account.");
             }
+            
+            var user = _authService.FindUserByEmail(externalUser.Email);
+
+            if (user == null)
+            {
+                user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Facebook);
+            }
+            else
+            {
+                await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Facebook);
+            }
+
+            var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
+            var ticket = _authService.GetAuthTicket(principal);
+            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
         /// <summary>
@@ -139,33 +132,23 @@ namespace NewsParser.API.Controllers
                 return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
-            try
+            var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Google);
+            if (!externalUser.IsVerified)
             {
-                var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Google);
-                if (!externalUser.IsVerified)
-                {
-                    return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
-                }
-
-                var user = _authService.FindUserByEmail(externalUser.Email);
-
-                if (user == null)
-                {
-                    user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
-                }
-                else
-                {
-                    await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
-                }
-
-                var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Google);
-                var ticket = _authService.GetAuthTicket(principal);
-                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+                return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
             }
-            catch (Exception e)
+            var user = _authService.FindUserByEmail(externalUser.Email);
+            if (user == null)
             {
-                return MakeResponse(HttpStatusCode.InternalServerError, "Failed to authenticate Facebook user.");
+                user = await _authService.CreateExternalUserAsync(externalUser, ExternalAuthProvider.Google);
             }
+            else
+            {
+                await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
+            }
+            var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Google);
+            var ticket = _authService.GetAuthTicket(principal);
+            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
     }
 }

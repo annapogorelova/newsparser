@@ -7,10 +7,10 @@ namespace NewsParser.API.Models
     /// </summary>
     public class PasswordResetModel
     {
-        [Required]
+        [Required(ErrorMessage = "Reset password token is required")]
         public string PasswordResetToken { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "New password is required")]
         public string NewPassword { get; set; }
     }
 }

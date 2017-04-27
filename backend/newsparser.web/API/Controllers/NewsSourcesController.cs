@@ -11,6 +11,7 @@ using newsparser.feedparser;
 using NewsParser.Auth;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
+using NewsParser.Helpers.ActionFilters.ModelValidation;
 
 namespace NewsParser.API.Controllers
 {
@@ -45,7 +46,7 @@ namespace NewsParser.API.Controllers
             return new JsonResult(new { data = newsSourcesModels, total });
         }
 
-        [HttpGet("/newssources/{id}")]
+        [HttpGet("{id:int}")]
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
@@ -53,6 +54,7 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<JsonResult> Post([FromBody]NewsSourceCreateModel newsSourceModel)
         {
             if (_newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl) != null)
@@ -60,17 +62,10 @@ namespace NewsParser.API.Controllers
                 return MakeResponse(HttpStatusCode.BadRequest, new { Message = "News source already exists" });
             }
 
-            try
-            {
-                var user = _authService.FindUserByEmail(HttpContext.User.Identity.Name);
-                var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
-                var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
-                return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);
-            }
-            catch (Exception e)
-            {
-                return MakeResponse(HttpStatusCode.InternalServerError, $"Failed to create a news source; {e.Message}");
-            }
+            var user = _authService.FindUserByUserName(HttpContext.User.Identity.Name);
+            var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
+            var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
+            return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);
         }
     }
 }
