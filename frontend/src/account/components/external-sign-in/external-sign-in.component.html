@@ -3,6 +3,7 @@
         <i class="{{buttonIcon}}" aria-hidden="true"></i>
         Sign in with {{provider}}
     </button>
-    <p *ngIf="signInFailed && errorMessage">{{errorMessage}}</p>
-    <p *ngIf="signInFailed && !errorMessage">Failed to sign in the external user</p>
+    <div class="alert alert-danger" role="alert" *ngIf="signInFailed">
+        {{errorMessage || 'Failed to sign in the external user'}}
+    </div>
 </div>

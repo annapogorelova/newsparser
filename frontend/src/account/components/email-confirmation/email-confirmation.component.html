@@ -2,13 +2,16 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div *ngIf="submitSucceeded">
-                <p *ngIf="responseMessage">{{responseMessage}}</p>
+            <div class="alert alert-danger" role="alert" *ngIf="submitFailed">
+                {{responseMessage || 'Account confirmation failed'}}
+                <p *ngFor="let validationError of validationErrors">
+                    {{validationError}}
+                </p>
             </div>
-            <div *ngIf="submitFailed">
-                <p *ngIf="!responseMessage">Account confirmation failed.</p>
-                <p *ngIf="responseMessage">{{responseMessage}}</p>
+            <div class="alert alert-success" role="alert" *ngIf="submitSucceeded">
+                {{responseMessage || 'Account confirmation succeeded'}}
             </div>
+
             <a *ngIf="!authService.isAuthenticated()" href="#" class="btn btn-primary btn-md pull-right"
                routerLink="/sign-in">
                 Sign In

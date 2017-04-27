@@ -1,9 +1,14 @@
 <div class="row">
     <div class="col-md-12">
-        <p *ngIf="submitSucceeded && responseMessage">{{responseMessage}}</p>
-        <p *ngIf="submitSucceeded && !responseMessage">Account was updated.</p>
-        <p *ngIf="submitFailed && responseMessage">{{responseMessage}}</p>
-        <p *ngIf="submitFailed && !responseMessage">Account update failed.</p>
+        <div class="alert alert-danger" role="alert" *ngIf="submitFailed">
+            <strong>{{responseMessage || 'Account update failed'}}</strong>
+            <p *ngFor="let validationError of validationErrors">
+                {{validationError}}
+            </p>
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="submitSucceeded">
+            {{responseMessage || 'Account was updated.'}}
+        </div>
 
         <form novalidate #f="ngForm" (ngSubmit)="submit(f.valid)" (ngModelChange)="onFormChanged()">
             <div class="form-group">
