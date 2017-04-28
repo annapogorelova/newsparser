@@ -6,7 +6,6 @@ refresh-button .refresh {
     color: white;
     background: rgba(0, 0, 0, 0.3);
     border: none;
-    border-radius: 3px 3px 3px 3px;
     cursor: pointer;
 }
 

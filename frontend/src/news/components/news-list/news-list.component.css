@@ -94,12 +94,6 @@ news-list .loading-status, .loading-status h5 {
     line-height: 50vh;
 }
 
-news-list .tags-list-container {
-    padding: 5px 5px 5px 5px;
-    border-radius: 4px;
-    border: 1px solid #E0E0E0;
-}
-
 news-list .row.tags-container {
     margin-top: 10px;
 }
@@ -116,5 +110,4 @@ news-list .refresh-button-container {
 news-list .refresh-button-container button {
     width: 35px;
     height: 65px;
-    border-radius: 3px 0 0 3px;
 }

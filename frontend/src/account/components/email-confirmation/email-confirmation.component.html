@@ -11,9 +11,8 @@
             <div class="alert alert-success" role="alert" *ngIf="submitSucceeded">
                 {{responseMessage || 'Account confirmation succeeded'}}
             </div>
-
-            <a *ngIf="!authService.isAuthenticated()" href="#" class="btn btn-primary btn-md pull-right"
-               routerLink="/sign-in">
+            <a *ngIf="!authService.isAuthenticated()" href="#"
+               class="btn btn-primary btn-md pull-right" routerLink="/sign-in">
                 Sign In
             </a>
         </div>

@@ -1,3 +1,7 @@
 account-settings .tab-content {
     padding: 10px 10px 10px 10px;
 }
+
+edit-account button, change-password button {
+    cursor: pointer;
+}

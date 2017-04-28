@@ -1,6 +1,9 @@
-<div class="tag-container" *ngFor="let tag of tags">
-    <span class="tag-item badge badge-default" (click)="deselectTag(tag)" [attr.title]="tag">
-        #{{tag}}
-    </span>
+<div class="card card-outline-primary text-xs-center">
+    <div class="card-block">
+        <div class="tag-container" *ngFor="let tag of tags">
+            <span class="tag-item badge badge-default" (click)="deselectTag(tag)" [attr.title]="tag">
+                #{{tag}}
+            </span>
+        </div>
+    </div>
 </div>
-<div *ngIf="!tags.length" class="no-tags-text">No tags</div>
