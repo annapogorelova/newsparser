@@ -14,11 +14,12 @@ import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 export class EmailConfirmationComponent extends BaseForm implements OnInit {
     protected apiRoute: string;
     protected method: string = 'post';
-    protected formData: any = {
+
+    formData: any = {
         confirmationToken: ''
     };
 
-    public email: string;
+    email: string;
 
     public constructor(@Inject(ApiService) apiService: ApiService,
                        private authService: AuthService,
@@ -27,7 +28,7 @@ export class EmailConfirmationComponent extends BaseForm implements OnInit {
         super(apiService);
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.route.queryParams
             .map((queryParams) => queryParams['email'])
             .subscribe((email: string) => this.onEmailRetrieved(email));

@@ -14,13 +14,14 @@ import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 export class PasswordResetComponent extends BaseForm implements OnInit{
     protected apiRoute: string;
     protected method: string = 'post';
-    protected formData: any = {
+
+    formData: any = {
         newPassword: ''
     };
 
-    public email: string;
+    email: string;
 
-    public constructor(@Inject(ApiService) apiService: ApiService,
+    constructor(@Inject(ApiService) apiService: ApiService,
                        private route: ActivatedRoute){
         super(apiService);
     }

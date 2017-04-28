@@ -11,7 +11,8 @@ import {NgForm} from '@angular/forms';
 export class ChangePasswordComponent extends BaseForm {
     protected apiRoute: string = 'account/passwordChange';
     protected method: string = 'put';
-    protected formData: any = {
+
+    formData: any = {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: ''
@@ -22,12 +23,12 @@ export class ChangePasswordComponent extends BaseForm {
     constructor(@Inject(ApiService) apiService: ApiService){
         super(apiService);
     }
-    
-    protected reset(){
+
+    reset(){
         this.form.resetForm();
     };
 
-    protected submit(isValid: boolean){
+    submit(isValid: boolean){
         super.submit(isValid).then(() => this.reset());
     };
 }

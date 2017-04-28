@@ -14,13 +14,13 @@ export class SignUpComponent extends BaseForm  {
     protected apiRoute: string = 'account';
     protected method: string = 'post';
 
-    protected formData: any = {
+    formData: any = {
         email: '',
         password: '',
         confirmPassword: ''
     };
     
-    public constructor(@Inject(ApiService) apiService: ApiService){
+    constructor(@Inject(ApiService) apiService: ApiService){
         super(apiService);
     }
 }

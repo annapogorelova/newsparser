@@ -10,12 +10,13 @@ import {BaseForm} from '../../../../shared/abstract/base-form/base-form';
 export class EditAccountComponent extends BaseForm implements OnInit {
     protected apiRoute: string = 'account';
     protected method: string = 'put';
-    protected formData: any = {
+
+    formData: any = {
         email: ''
     };
 
-    public formDataChanged: boolean;
-    public user: any;
+    formDataChanged: boolean;
+    user: any;
 
     @ViewChild('f') form: any;
 
@@ -54,7 +55,7 @@ export class EditAccountComponent extends BaseForm implements OnInit {
         this.formData.email = data.email;
     };
 
-    protected submit(isValid: boolean) {
+    submit(isValid: boolean) {
         super.submit(isValid).then(() => this.getAccount());
     };
 }

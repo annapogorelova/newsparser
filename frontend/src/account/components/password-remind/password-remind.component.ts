@@ -13,11 +13,12 @@ import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 export class PasswordRemindComponent extends BaseForm {
     protected method: string = 'post';
     protected apiRoute: string = 'account/passwordRecovery';
-    protected formData: any = {
+
+    formData: any = {
         email: ''
     };
 
-    public constructor(@Inject(ApiService) apiService: ApiService){
+    constructor(@Inject(ApiService) apiService: ApiService){
         super(apiService);
     }
 }

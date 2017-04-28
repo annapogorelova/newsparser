@@ -6,6 +6,7 @@ import {CacheService} from '../cache/cache.service';
 @Injectable()
 export class AuthService {
     private supportedExternalProviders: Array<string> = ['facebook', 'google'];
+    private user: any;
 
     constructor(@Inject(ApiService) private apiService: ApiService,
                 @Inject(Router) private router: Router,
@@ -16,15 +17,31 @@ export class AuthService {
         return this.cacheService.get('auth');
     };
 
+    getUser = () => {
+        return this.user;
+    };
+
+    private setUser = (data: any) => {
+        this.user = data;
+    };
+
     signIn = function (username: string, password: string): Promise<any> {
-        return this.apiService.getAuth(username, password);
+        return this.apiService.getAuth(username, password)
+            .then((response: any) => this.handleAuth(response));
+    };
+
+    private handleAuth = (response: any) => {
+        this.cacheService.set('auth', response.access_token);
+        this.apiService.get('account').then((response: any) => this.setUser(response.data));
+        return Promise.resolve(response);
     };
 
     externalSignIn = function (accessToken: string, provider: string): Promise<any> {
         if(this.supportedExternalProviders.indexOf(provider.toLowerCase()) === -1){
             throw new Error(`${provider} external auth provider is no supported`);
         }
-        return this.apiService.getExternalAuth(accessToken, provider.toLowerCase());
+        return this.apiService.getExternalAuth(accessToken, provider.toLowerCase())
+            .then((response: any) => this.handleAuth(response));
     };
 
     isAuthenticated = function (): boolean {

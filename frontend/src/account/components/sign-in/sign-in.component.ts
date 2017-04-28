@@ -1,42 +1,54 @@
 import {Component, Inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../shared/services/auth/auth.service';
-import {CacheService} from '../../../shared/services/cache/cache.service';
+import {IForm} from '../../../shared/abstract/base-form/base-form';
 
 @Component({
     templateUrl: 'sign-in.component.html',
     styleUrls: ['./sign-in.component.css'],
     selector: 'sign-in'
 })
-export class SignInComponent  {
-    public email: string;
-    public password: string;
-    public signinInProgress: boolean;
-    public signinFailed: boolean;
-    public errorMessage: string;
+export class SignInComponent implements IForm {
+    public submitCompleted: boolean;
+    public validationErrors: Array<string>;
+    public submitInProgress: boolean;
+    public submitFailed: boolean;
+    public submitSucceeded: boolean;
+    public responseMessage: string;
+
+    public formData: any = {
+        email: '',
+        password: ''
+    };
 
     constructor(@Inject(Router) private router: Router,
-                private authService: AuthService,
-                private cacheService: CacheService){
+                private authService: AuthService){
 
     }
 
-    handleAuth = (auth: any) => {
-        this.signinInProgress = false;
-        this.cacheService.set('auth', auth.access_token);
+    reset() {}
+
+    public onSubmitSucceeded = (response: any) => {
+        this.submitInProgress = false;
+        this.submitSucceeded = true;
         this.router.navigate(['/news']);
+        return Promise.resolve(response);
     };
 
-    handleFailedAuth = (error: Error) => {
-        this.signinInProgress = false;
-        this.signinFailed = true;
-        this.errorMessage = error.message;
+    public onSubmitFailed = (error: Error) => {
+        this.submitInProgress = false;
+        this.submitFailed = true;
+        this.responseMessage = error.message;
+        return Promise.reject(error);
     };
 
-    signIn = () => {
-        this.signinInProgress = true;
-        this.authService.signIn(this.email, this.password)
-            .then(auth => this.handleAuth(auth))
-            .catch(error => this.handleFailedAuth(error));
+    submit = (isValid: boolean) => {
+        if(!isValid){
+            return;
+        }
+        this.submitInProgress = true;
+        return this.authService.signIn(this.formData.email, this.formData.password)
+            .then(auth => this.onSubmitSucceeded(auth))
+            .catch(error => this.onSubmitFailed(error));
     };
 }

@@ -1,28 +1,45 @@
 import {ApiService} from "../../services/api/api.service";
+
+/**
+ * Interface contains a declaration of methods and properties for a basic form
+ */
+export interface IForm {
+    submitInProgress: boolean;
+    submitCompleted: boolean;
+    submitFailed: boolean;
+    submitSucceeded: boolean;
+    responseMessage: string;
+    validationErrors: Array<string>;
+    formData: any;
+
+    submit(isValid: boolean): Promise<any>;
+    onSubmitSucceeded(response: any): Promise<any>;
+    onSubmitFailed (error: any): Promise<any>;
+    reset(): void;
+}
+
 /**
  * Class contains methods to manipulate the form data,
  * to be extended by specific components that represent forms
  */
-export abstract class BaseForm {
-    protected submitInProgress: boolean;
-    protected submitCompleted: boolean;
-    protected submitFailed: boolean;
-    protected submitSucceeded: boolean;
-    protected responseMessage: string;
-    protected validationErrors: Array<string>;
+export abstract class BaseForm implements IForm {
+    submitInProgress: boolean;
+    submitCompleted: boolean;
+    submitFailed: boolean;
+    submitSucceeded: boolean;
+    responseMessage: string;
+    validationErrors: Array<string>;
+    abstract formData: any;
 
     protected abstract apiRoute: string;
     protected abstract method: string;
-    protected abstract formData: any;
 
-    constructor(protected apiService: ApiService){
-
-    }
+    constructor(protected apiService: ApiService){}
 
     /**
      * Resets the form settings
      */
-    protected reset() {
+    reset() {
         this.submitInProgress = false;
         this.submitCompleted = false;
         this.submitFailed = false;
@@ -35,7 +52,7 @@ export abstract class BaseForm {
      * @param isValid
      * @returns {Promise<T>|Promise<TResult|T>|Promise<R>|any}
      */
-    protected submit(isValid: boolean) {
+    submit(isValid: boolean) {
         if(!isValid){
             return;
         }
@@ -50,7 +67,7 @@ export abstract class BaseForm {
      * Callback to be executed on submit success
      * @param response
      */
-    protected onSubmitSucceeded = (response: any) => {
+    onSubmitSucceeded = (response: any) => {
         this.submitInProgress = false;
         this.submitCompleted = true;
         this.submitSucceeded = true;
@@ -66,7 +83,7 @@ export abstract class BaseForm {
      * Callback to be executed on submit fail
      * @param error
      */
-    protected onSubmitFailed = (error: any) => {
+    onSubmitFailed = (error: any) => {
         this.submitInProgress = false;
         this.submitCompleted = true;
         this.submitSucceeded = false;
