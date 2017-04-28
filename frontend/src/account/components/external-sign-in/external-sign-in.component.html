@@ -1,11 +1,11 @@
 <div>
     <button class="btn social-button {{buttonClass}}" type="button"
             (click)="submit(true)"
-            [disabled]="submitInProgress">
+            [disabled]="submitInProgress || disabled">
         <i class="{{buttonIcon}}" aria-hidden="true"></i>
             Sign in with {{provider}}
     </button>
-    <div class="alert alert-danger" role="alert" *ngIf="submitInFailed">
+    <div class="alert alert-danger" role="alert" *ngIf="submitFailed">
         {{responseMessage || 'Failed to sign in the external user'}}
     </div>
 </div>

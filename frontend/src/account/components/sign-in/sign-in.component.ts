@@ -28,14 +28,14 @@ export class SignInComponent implements IForm {
 
     reset() {}
 
-    public onSubmitSucceeded = (response: any) => {
+    onSubmitSucceeded = (response: any) => {
         this.submitInProgress = false;
         this.submitSucceeded = true;
         this.router.navigate(['/news']);
         return Promise.resolve(response);
     };
 
-    public onSubmitFailed = (error: Error) => {
+    onSubmitFailed = (error: Error) => {
         this.submitInProgress = false;
         this.submitFailed = true;
         this.responseMessage = error.message;
@@ -50,5 +50,9 @@ export class SignInComponent implements IForm {
         return this.authService.signIn(this.formData.email, this.formData.password)
             .then(auth => this.onSubmitSucceeded(auth))
             .catch(error => this.onSubmitFailed(error));
+    };
+
+    disableInputs = (event: any) => {
+        this.submitInProgress = true;
     };
 }

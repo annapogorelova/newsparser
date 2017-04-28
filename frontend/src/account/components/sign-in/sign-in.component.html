@@ -7,14 +7,18 @@
                     <external-sign-in [provider]="'facebook'"
                                       [buttonIcon]="'fa fa-facebook-square'"
                                       [buttonClass]="'btn-primary'"
-                                      (onSignedIn)="onSubmitSucceeded($event)">
+                                      [disabled]="submitInProgress"
+                                      (onSignedIn)="onSubmitSucceeded($event)"
+                                      (onSignInInProgress)="disableInputs($event)">
                     </external-sign-in>
                 </div>
                 <div class="col-md-6">
                     <external-sign-in [provider]="'google'"
                                       [buttonIcon]="'fa fa-google-plus-square'"
                                       [buttonClass]="'btn-danger'"
-                                      (onSignedIn)="onSubmitSucceeded($event)">
+                                      [disabled]="submitInProgress"
+                                      (onSignedIn)="onSubmitSucceeded($event)"
+                                      (onSignInInProgress)="disableInputs($event)">
                     </external-sign-in>
                 </div>
             </div>

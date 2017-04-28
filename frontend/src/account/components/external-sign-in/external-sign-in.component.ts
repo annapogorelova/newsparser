@@ -24,14 +24,17 @@ export class ExternalSignInComponent implements IForm{
     @Input() provider: string;
     @Input() buttonIcon: string;
     @Input() buttonClass: string;
+    @Input() disabled: boolean;
 
     @Output() onSignedIn: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInInProgress: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private authService: AuthService,
                 public externalAuthService: ExternalAuthService){
     }
 
     submit(isValid: boolean): Promise<any> {
+        this.onSignInInProgress.emit();
         return this.externalAuthService.login(this.provider)
             .then((data: any) => this.onExternalAuthSucceeded(data))
             .catch((error: any) => this.onExternalAuthFailed(error));
