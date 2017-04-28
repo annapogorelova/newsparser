@@ -26,7 +26,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
             var userManager = ServiceLocator.Instance.GetService<UserManager<ApplicationUser>>();
             var httpContextAccessor = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
             var user = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
-            model.IsSubscribed = newsSource.Users.Any(u => u.UserId == user.GetId());
+            model.IsSubscribed = newsSource.Users == null ? false : newsSource.Users.Any(u => u.UserId == user.GetId());
         }
     }
 }
