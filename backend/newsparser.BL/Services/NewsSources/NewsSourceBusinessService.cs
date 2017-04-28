@@ -91,11 +91,6 @@ namespace NewsParser.BL.Services.NewsSources
                 throw new ArgumentNullException(nameof(newsSource), "News source cannot be null");    
             }
 
-            if (_newsSourceRepository.GetNewsSourceById(newsSource.Id) == null)
-            {
-                throw new BusinessLayerException($"News source with id {newsSource.Id} does not exist");
-            }
-
             try
             {
                 _newsSourceRepository.UpdateNewsSource(newsSource);

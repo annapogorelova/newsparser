@@ -68,5 +68,12 @@ namespace NewsParser.BL.Services.News
         /// </summary>
         /// <param name="id">News item id</param>
         void DeleteNewsItem(int id);
+
+        /// <summary>
+        /// Checks if news item with the indicated link to source already exists
+        /// </summary>
+        /// <param name="linkToSource">Link to source</param>
+        /// <returns>True if exists, false if not</returns>
+        bool NewsItemExists(string linkToSource);
     }
 }

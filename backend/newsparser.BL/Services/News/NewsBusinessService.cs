@@ -153,5 +153,10 @@ namespace NewsParser.BL.Services.News
                 throw new BusinessLayerException($"Failed to delete news item with id {id}", e);
             }
         }
+
+        public bool NewsItemExists(string linkToSource)
+        {
+            return _newsRepository.GetNewsItemByLink(linkToSource) != null;
+        }
     }
 }

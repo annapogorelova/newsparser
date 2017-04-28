@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NewsParser.BL.Exceptions;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
@@ -76,12 +77,6 @@ namespace newsparser.feedparser
             try
             {
                 var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-                if (newsSource == null)
-                {
-                    string message = $"Failed updating the feed: source with id {sourceId} does not exist";
-                    _log.LogError(message);
-                    throw new FeedUpdatingException(message);
-                }
 
                 if (newsSource.IsUpdating)
                 {
@@ -97,6 +92,12 @@ namespace newsparser.feedparser
             catch (Exception e)
             {
                 string errorMessage = $"Failed updating news source {sourceId}: {e.Message}";
+
+                if(e is EntityNotFoundException)
+                {
+                    errorMessage = $"Failed updating the feed: source with id {sourceId} does not exist";
+                }
+
                 _log.LogError(errorMessage);
                 throw new FeedUpdatingException(errorMessage, e);
             }
@@ -108,16 +109,9 @@ namespace newsparser.feedparser
             {
                 var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
 
-                if (newsSource == null)
-                {
-                    string message = $"Failed updating the feed: source with id {sourceId} does not exist";
-                    _log.LogError(message);
-                    throw new FeedUpdatingException(message);
-                }
-
                 if (newsSource.IsUpdating)
                 {
-                    _log.LogError($"News source {sourceId} is currently being updated");
+                    _log.LogInformation($"News source {sourceId} is currently being updated");
                     return;
                 }
 
@@ -129,6 +123,12 @@ namespace newsparser.feedparser
             catch (Exception e)
             {
                 string errorMessage = $"Failed updating news source {sourceId}: {e.Message}";
+
+                if(e is EntityNotFoundException)
+                {
+                    errorMessage = $"Failed updating the feed: source with id {sourceId} does not exist";
+                }
+
                 _log.LogError(errorMessage);
                 throw new FeedUpdatingException(errorMessage, e);
             }
@@ -145,6 +145,7 @@ namespace newsparser.feedparser
             {
                 var newsSource = await _feedParser.ParseRssSource(rssUrl);
                 var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
+                UpdateSource(addedNewsSource.Id);
 
                 if (userId.HasValue)
                 {
@@ -169,7 +170,7 @@ namespace newsparser.feedparser
         {
             foreach (var newsItem in newsItems)
             {
-                if (_newsBusinessService.GetNewsItemByLink(newsItem.LinkToSource) == null)
+                if (!_newsBusinessService.NewsItemExists(newsItem.LinkToSource))
                 {
                     var addedNewsItem = _newsBusinessService.AddNewsItem(new NewsItem()
                     {
@@ -180,6 +181,7 @@ namespace newsparser.feedparser
                         LinkToSource = newsItem.LinkToSource,
                         Title = newsItem.Title
                     });
+                    
                     _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, newsItem.Categories);
                 }
             }

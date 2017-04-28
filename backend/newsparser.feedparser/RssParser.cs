@@ -91,15 +91,16 @@ namespace NewsParser.FeedParser
             {
                 foreach (var rssItem in xmlElements)
                 {
-                    var rssItemDescription = rssItem.Element("description").Value;
+                    var rssItemDescription = rssItem.Element("description")?.Value?.RemoveTabulation(" ");
+                    string imageUrl = ExtractFirstImage(rssItemDescription);
                     
                     var newsItem = new NewsItemParseModel
                     {                       
                         Title = rssItem.Element("title").Value,
-                        Description = CleanHtmlString(rssItemDescription),
+                        Description = rssItemDescription.RemoveHtmlTags().CropHtmlString(500),
                         DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
                         LinkToSource = rssItem.Element("link").Value,
-                        ImageUrl = ExtractFirstImage(rssItemDescription),
+                        ImageUrl = imageUrl,
                         Categories = ExtractRssItemTags(rssItem)
                     };
 
@@ -112,24 +113,6 @@ namespace NewsParser.FeedParser
             {
                 throw new FeedParsingException("Failed to parse source", e);
             }
-        }
-
-        /// <summary>
-        /// Performs the cleaning action for html string (removing some tags, etc.)
-        /// </summary>
-        /// <param name="html">Html string</param>
-        /// <returns>Cleaned html string</returns>
-        private string CleanHtmlString(string html)
-        {
-            string cleanHtmlString = Regex.Replace(html, "<.*?>", string.Empty, RegexOptions.IgnoreCase);
-            cleanHtmlString = Regex.Replace(cleanHtmlString, @"\t|\n|\r", string.Empty);
-            if (cleanHtmlString.Length < 500)
-            {
-                return cleanHtmlString;
-            }
-
-            var croppedHtmlString = cleanHtmlString.Substring(0, 497);
-            return $"{croppedHtmlString.Substring(0, croppedHtmlString.LastIndexOf(' '))}...";
         }
 
         /// <summary>
