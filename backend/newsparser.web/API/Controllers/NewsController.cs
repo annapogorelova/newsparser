@@ -8,6 +8,7 @@ using NewsParser.DAL.Models;
 using System.Linq;
 using System.Net;
 using NewsParser.Auth;
+using NewsParser.Helpers.ActionFilters.ModelValidation;
 
 namespace NewsParser.API.Controllers
 {
@@ -26,13 +27,9 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet]
+        [ValidateModel]
         public JsonResult Get(NewsListSelectModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return MakeResponse(HttpStatusCode.BadRequest, "Invalid request data");
-            }
-
             var user = _authService.GetCurrentUser();
             var news = _newsBusinessService.GetNewsPage
                 (
