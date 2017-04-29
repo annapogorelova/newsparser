@@ -1,9 +1,22 @@
 <div class="card card-outline-primary text-xs-center">
+    <div class="card-header">
+        <h5 class="pull-left">Tags</h5>
+        <button title="Clear" class="btn btn-sm close pull-right"
+                (click)="clearTags()"
+                [disabled]="!tags.length">
+            &times;
+        </button>
+    </div>
     <div class="card-block">
         <div class="tag-container" *ngFor="let tag of tags">
             <span class="tag-item badge badge-default" (click)="deselectTag(tag)" [attr.title]="tag">
                 #{{tag}}
             </span>
+        </div>
+        <div *ngIf="!tags.length">
+            <p class="text-center">
+                Nothing selected
+            </p>
         </div>
     </div>
 </div>

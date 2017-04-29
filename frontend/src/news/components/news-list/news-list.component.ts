@@ -125,6 +125,12 @@ export class NewsListComponent extends BaseList{
         this.reload();
     };
 
+    onClearTags = (event: any) => {
+        this.selectedTags = [];
+        this.navigator.setQueryParam('tags', null);
+        this.reload();
+    };
+
     selectTag = (tag: any) => {
         if(this.selectedTags.indexOf(tag) !== -1){
             return;

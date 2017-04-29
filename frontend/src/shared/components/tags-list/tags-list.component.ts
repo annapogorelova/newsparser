@@ -18,7 +18,17 @@ export class TagListComponent {
      */
     @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
 
+    /**
+     * Tags list clear event
+     * @type {EventEmitter<any>}
+     */
+    @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
+
     deselectTag = (tag: any) => {
         this.onDeselect.emit({tag: tag});
+    };
+
+    clearTags = () => {
+        this.onClear.emit();
     };
 }
