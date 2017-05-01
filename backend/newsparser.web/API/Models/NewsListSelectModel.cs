@@ -1,4 +1,5 @@
-﻿using NewsParser.Helpers.ValidationAttributes;
+﻿using System;
+using NewsParser.Helpers.ValidationAttributes;
 
 namespace NewsParser.API.Models
 {
@@ -11,6 +12,8 @@ namespace NewsParser.API.Models
         public int PageSize { get; set; } = 5;
 
         public string Search { get; set; }
+
+        public DateTime Date {get;set;}
 
         [DigitsStringArray]
         public string[] Sources { get; set; } = null;

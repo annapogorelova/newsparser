@@ -23,8 +23,15 @@ namespace NewsParser.BL.Services.News
             _newsTagRepository = newsTagRepository;
         }
 
-        public IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5,
-            int? userId = null, string search = null, int[] sourcesIds = null, string[] tags = null)
+        public IEnumerable<NewsItem> GetNewsPage(
+            int pageIndex = 0, 
+            int pageSize = 5,
+            int? userId = null, 
+            string search = null, 
+            DateTime? date = null,
+            int[] sourcesIds = null, 
+            string[] tags = null
+        )
         {
             if (pageIndex < 0)
             {
@@ -56,6 +63,11 @@ namespace NewsParser.BL.Services.News
                     news.Where(
                         n => n.Title.ToLower().Contains(searchTerm)
                         || n.Description.ToLower().Contains(searchTerm));
+            }
+
+            if (date.HasValue)
+            {
+                news = news.Where(n => n.DateAdded.Date == date.Value.Date);
             }
 
             if (tags != null)

@@ -37,6 +37,7 @@ namespace NewsParser.API.Controllers
                 model.PageSize,
                 user.GetId(),
                 model.Search,
+                model.Date,
                 model.Sources?.Select(int.Parse).ToArray(),
                 model.Tags
                 ).ToList();

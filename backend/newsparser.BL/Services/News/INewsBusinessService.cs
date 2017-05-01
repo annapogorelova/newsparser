@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.BL.Services.News
@@ -16,10 +17,18 @@ namespace NewsParser.BL.Services.News
         /// <param name="sourcesIds">Sources ids to select by</param>
         /// <param name="userId">User id</param>
         /// <param name="search">Search string</param>
+        /// <param name="date">Date</param>
         /// <param name="tags">Tags names to select by</param>
         /// <returns>IEnumerable of NewsItem</returns>
-        IEnumerable<NewsItem> GetNewsPage(int pageIndex = 0, int pageSize = 5, 
-            int? userId = null, string search = null, int[] sourcesIds = null, string[] tags = null);
+        IEnumerable<NewsItem> GetNewsPage(
+            int pageIndex = 0, 
+            int pageSize = 5, 
+            int? userId = null, 
+            string search = null,
+            DateTime? date = null,
+            int[] sourcesIds = null, 
+            string[] tags = null
+        );
 
         /// <summary>
         /// Get news by source
