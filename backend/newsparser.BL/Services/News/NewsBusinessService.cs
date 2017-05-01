@@ -67,7 +67,7 @@ namespace NewsParser.BL.Services.News
 
             if (date.HasValue)
             {
-                news = news.Where(n => n.DateAdded.Date == date.Value.Date);
+                news = news.Where(n => n.DatePublished.Date == date.Value.Date);
             }
 
             if (tags != null)
@@ -77,7 +77,7 @@ namespace NewsParser.BL.Services.News
                         string.Equals(nt.Tag.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
             }
 
-            return news.OrderByDescending(n => n.DateAdded).Skip(pageIndex).Take(pageSize);
+            return news.OrderByDescending(n => n.DatePublished).Skip(pageIndex).Take(pageSize);
         }
 
         public IEnumerable<NewsItem> GetNewsBySource(int sourceId)

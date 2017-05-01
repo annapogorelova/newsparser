@@ -23,6 +23,8 @@ namespace newsparser.DAL.Migrations
 
                     b.Property<DateTime>("DateAdded");
 
+                    b.Property<DateTime>("DatePublished");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500);

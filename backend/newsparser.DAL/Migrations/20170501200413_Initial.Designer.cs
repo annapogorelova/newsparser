@@ -9,8 +9,8 @@ using newsparser.DAL.Models;
 namespace newsparser.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20170421085051_AddUserName")]
-    partial class AddUserName
+    [Migration("20170501200413_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,8 @@ namespace newsparser.DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("DateAdded");
+
+                    b.Property<DateTime>("DatePublished");
 
                     b.Property<string>("Description")
                         .IsRequired()

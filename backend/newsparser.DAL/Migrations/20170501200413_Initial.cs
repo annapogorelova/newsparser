@@ -46,8 +46,10 @@ namespace newsparser.DAL.Migrations
                         .Annotation("MySql:ValueGeneratedOnAdd", true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: true),
-                    Password = table.Column<string>(maxLength: 2147483647, nullable: false)
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    Password = table.Column<string>(maxLength: 2147483647, nullable: false),
+                    UserName = table.Column<string>(maxLength: 36, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,6 +63,7 @@ namespace newsparser.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGeneratedOnAdd", true),
                     DateAdded = table.Column<DateTime>(nullable: false),
+                    DatePublished = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 255, nullable: true),
                     LinkToSource = table.Column<string>(maxLength: 255, nullable: false),

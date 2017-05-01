@@ -175,7 +175,7 @@ namespace newsparser.feedparser
                     var addedNewsItem = _newsBusinessService.AddNewsItem(new NewsItem()
                     {
                         SourceId = sourceId,
-                        DateAdded = newsItem.DateAdded,
+                        DatePublished = newsItem.DatePublished,
                         Description = newsItem.Description,
                         ImageUrl = newsItem.ImageUrl,
                         LinkToSource = newsItem.LinkToSource,

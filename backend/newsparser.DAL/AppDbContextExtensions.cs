@@ -14,11 +14,6 @@ namespace NewsParser.DAL
                 AddNewsSources(dbContext);
             }
 
-            if (!dbContext.News.Any())
-            {
-                AddNews(dbContext);
-            }
-
             if (!dbContext.Users.Any())
             {
                 AddUsers(dbContext);
@@ -62,24 +57,6 @@ namespace NewsParser.DAL
             });
         }
 
-        private static void AddNews(AppDbContext dbContext)
-        {
-            var sources = dbContext.NewsSources.Local.Count != 0 ? 
-                dbContext.NewsSources.Local.ToList() : dbContext.NewsSources.ToList();
-
-            dbContext.News.AddRange(new List<NewsItem> ()
-            {
-                new NewsItem
-                {
-                    Title = "Welcome!",
-                    Description = "Welcome to the News Parser",
-                    DateAdded = DateTime.UtcNow,
-                    LinkToSource = "https://localhost:50451/news",
-                    SourceId = sources.First().Id
-                }
-            });
-        }
-
         private static void AddUsers(AppDbContext dbContext)
         {
             dbContext.Add(new User
@@ -87,7 +64,8 @@ namespace NewsParser.DAL
                 DateAdded = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow,
                 Password = "AQAAAAEAACcQAAAAEIuIbDmD0yrdqLtSGiiWobFEBFK7bdlrJEPnornIOA+RGlTB8yoYwDOX/Cbr2viTlw==", //hash for "tolochko" word
-                Email = "anya.pogorelova@gmail.com"
+                Email = "anya.pogorelova@gmail.com",
+                EmailConfirmed = true
             });
         }
 

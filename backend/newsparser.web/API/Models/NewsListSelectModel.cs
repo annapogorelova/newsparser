@@ -13,7 +13,7 @@ namespace NewsParser.API.Models
 
         public string Search { get; set; }
 
-        public DateTime Date {get;set;}
+        public DateTime? Date { get; set; }
 
         [DigitsStringArray]
         public string[] Sources { get; set; } = null;

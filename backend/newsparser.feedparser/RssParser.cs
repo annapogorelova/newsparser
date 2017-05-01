@@ -94,11 +94,19 @@ namespace NewsParser.FeedParser
                     var rssItemDescription = rssItem.Element("description")?.Value?.RemoveTabulation(" ");
                     string imageUrl = ExtractFirstImage(rssItemDescription);
                     
+                    DateTime pubDate;
+                    var result = DateTime.TryParse(rssItem.Element("pubDate").Value, out pubDate);
+                    
+                    if(!result)
+                    {
+                        throw new FeedParsingException($"Failed to parse published date for {rssItem.Element("title").Value} rss item.");
+                    }
+                    
                     var newsItem = new NewsItemParseModel
                     {                       
                         Title = rssItem.Element("title").Value,
                         Description = rssItemDescription.RemoveHtmlTags().CropHtmlString(500),
-                        DateAdded = DateTime.Parse(rssItem.Element("pubDate").Value),
+                        DatePublished = pubDate.ToUniversalTime(),
                         LinkToSource = rssItem.Element("link").Value,
                         ImageUrl = imageUrl,
                         Categories = ExtractRssItemTags(rssItem)
