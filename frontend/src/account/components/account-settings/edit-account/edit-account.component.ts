@@ -1,12 +1,16 @@
-import {Component, OnInit, Inject, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, OnInit, Inject, ViewChild} from '@angular/core';
 import {ApiService} from '../../../../shared/services/api/api.service';
 import {BaseForm} from '../../../../shared/abstract/base-form/base-form';
+import {AuthService} from "../../../../shared/services/auth/auth.service";
 
 @Component({
     templateUrl: 'edit-account.component.html',
     selector: 'edit-account'
 })
 
+/**
+ * Component for editing the acount's email
+ */
 export class EditAccountComponent extends BaseForm implements OnInit {
     protected apiRoute: string = 'account';
     protected method: string = 'put';
@@ -20,12 +24,13 @@ export class EditAccountComponent extends BaseForm implements OnInit {
 
     @ViewChild('f') form: any;
 
-    constructor(@Inject(ApiService) apiService: ApiService){
+    constructor(@Inject(ApiService) apiService: ApiService,
+                private authService: AuthService){
         super(apiService);
     }
 
     ngOnInit(){
-        this.getAccount();
+        this.loadAccount();
     }
 
     ngAfterViewInit() {
@@ -44,10 +49,9 @@ export class EditAccountComponent extends BaseForm implements OnInit {
 
         this.formDataChanged = false;
     };
-    
-    getAccount = () => {
-        this.apiService.get('account', null, null, true)
-            .then(response => this.initializeFormData(response.data));
+
+    loadAccount = (refresh: boolean = false) => {
+        this.authService.loadUser(refresh).then((data: any) => this.initializeFormData(data));
     };
     
     initializeFormData = (data: any) => {
@@ -56,6 +60,6 @@ export class EditAccountComponent extends BaseForm implements OnInit {
     };
 
     submit(isValid: boolean) {
-        super.submit(isValid).then(() => this.getAccount());
+        super.submit(isValid).then(() => this.loadAccount(true));
     };
 }

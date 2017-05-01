@@ -17,12 +17,18 @@ export class AuthService {
         return this.cacheService.get('auth');
     };
 
+    loadUser = (refresh: boolean = false) => {
+        return this.apiService.get('account', null, null, refresh)
+            .then((response: any) => this.setUser(response.data));
+    };
+
     getUser = () => {
         return this.user;
     };
 
     private setUser = (data: any) => {
         this.user = data;
+        return Promise.resolve(data);
     };
 
     signIn = function (username: string, password: string): Promise<any> {
@@ -32,7 +38,7 @@ export class AuthService {
 
     private handleAuth = (response: any) => {
         this.cacheService.set('auth', response.access_token);
-        this.apiService.get('account').then((response: any) => this.setUser(response.data));
+        this.loadUser(true);
         return Promise.resolve(response);
     };
 

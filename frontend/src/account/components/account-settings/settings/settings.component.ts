@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {ApiService} from '../../../../shared/services/api/api.service';
+import {Component} from '@angular/core';
 
 @Component({
     templateUrl: 'settings.component.html',
@@ -7,14 +6,9 @@ import {ApiService} from '../../../../shared/services/api/api.service';
     selector: 'account-settings'
 })
 
-export class AccountSettingsComponent implements OnInit {
-    public user: any;
+/**
+ * Component contains child components for editing the account in its template
+ */
+export class AccountSettingsComponent {
 
-    constructor(private apiService: ApiService){
-
-    }
-
-    ngOnInit(){
-        this.apiService.get('account', null, null, true).then(response => this.user = response.data);
-    }
 }
