@@ -18,6 +18,7 @@ using NewsParser.Services;
 namespace NewsParser.API.Controllers
 {
     [Route("api/[controller]")]
+    [ResponseCache(CacheProfileName = "OneMinuteCache")]
     public class AccountController : BaseController
     {
         private readonly IAuthService _authService;

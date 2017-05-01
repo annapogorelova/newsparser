@@ -108,6 +108,12 @@ namespace NewsParser
                             Duration = 60 * defaultCacheDuration,
                             Location = ResponseCacheLocation.Client
                         });
+                    options.CacheProfiles.Add("OneMinuteCache",
+                        new CacheProfile
+                        {
+                            Duration = 60,
+                            Location = ResponseCacheLocation.Client
+                        });
                     options.UseCommaDelimitedArrayModelBinding();
                 }
             );
