@@ -146,6 +146,11 @@ export class NewsListComponent extends BaseList{
         this.reload(true);
     };
 
+    formatNewsSourceName = (newsSourceName: string) => {
+        return newsSourceName.length < 35 ?
+            newsSourceName : newsSourceName.substring(0, 35) + '...';
+    };
+    
     /**
      * Listens to user scrolling the page and loads the next page
      * of data when user reaches the bottom

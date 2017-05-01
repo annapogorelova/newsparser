@@ -40,23 +40,7 @@
                 <div class="news-item list-group" *ngFor="let newsItem of items">
                     <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="news-image-container"
-                                     [ngStyle]="{'background-image': newsItem.imageUrl ?
-                                     'url(' + newsItem.imageUrl + ')' :
-                                     'url(\'../../../../public/images/no-image.jpg\')'}">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="news-item-info-container">
-                                    <div class="mb-1 pull-right">
-                                        <small>{{newsItem.dateAdded | date}}</small>
-                                        <h4 class="news-item-source">
-                                        <span class="badge badge-primary"
-                                              [attr.title]="newsItem.source.name">{{newsItem.source.name}}</span>
-                                        </h4>
-                                    </div>
-                                </div>
+                            <div class="col-md-9">
                                 <div class="news-item-header">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1">
@@ -66,7 +50,33 @@
                                         </h5>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="news-item-info-container">
+                                    <div class="pull-right">
+                                        <span class="badge badge-primary"
+                                              [attr.title]="newsItem.source.name">
+                                            {{formatNewsSourceName(newsItem.source.name)}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="news-image-container"
+                                     [ngStyle]="{'background-image': newsItem.imageUrl ?
+                                     'url(' + newsItem.imageUrl + ')' :
+                                     'url(\'../../../../public/images/no-image.jpg\')'}">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
                                 <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="news-item-date pull-right">{{newsItem.dateAdded | date}}</span>
                             </div>
                         </div>
                         <div class="row" *ngIf="newsItem.tags.length">
