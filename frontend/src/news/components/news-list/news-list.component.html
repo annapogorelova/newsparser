@@ -76,7 +76,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <span class="news-item-date pull-right">{{newsItem.dateAdded | date}}</span>
+                                <span class="news-item-date pull-right">{{newsItem.datePublished | date:'short'}}</span>
                             </div>
                         </div>
                         <div class="row" *ngIf="newsItem.tags.length">
