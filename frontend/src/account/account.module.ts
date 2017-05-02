@@ -13,7 +13,7 @@ import {PasswordRemindComponent} from './components/password-remind/password-rem
 import {PasswordResetComponent} from './components/password-reset/password-reset.component';
 import {AccountSettingsComponent} from './components/account-settings/settings/settings.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {EditAccountComponent} from './components/account-settings/edit-account/edit-account.component';
+import {EditProfileComponent} from './components/account-settings/edit-profile/edit-profile.component';
 import {ChangePasswordComponent} from './components/account-settings/change-password/change-password.component';
 
 let authProviders = {
@@ -43,7 +43,7 @@ let authProviders = {
         PasswordRemindComponent,
         PasswordResetComponent,
         AccountSettingsComponent,
-        EditAccountComponent,
+        EditProfileComponent,
         ChangePasswordComponent
     ],
     providers: [AccountRoutingProviders]

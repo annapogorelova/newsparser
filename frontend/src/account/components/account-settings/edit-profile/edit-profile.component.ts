@@ -1,17 +1,18 @@
 import {Component, OnInit, Inject, ViewChild} from '@angular/core';
 import {ApiService} from '../../../../shared/services/api/api.service';
 import {BaseForm} from '../../../../shared/abstract/base-form/base-form';
-import {AuthService} from "../../../../shared/services/auth/auth.service";
+import {AuthService} from '../../../../shared/services/auth/auth.service';
+import {NavigatorService} from '../../../../shared/services/navigator/navigator.service';
 
 @Component({
-    templateUrl: 'edit-account.component.html',
-    selector: 'edit-account'
+    templateUrl: 'edit-profile.component.html',
+    selector: 'edit-profile'
 })
 
 /**
- * Component for editing the acount's email
+ * Component for editing the profile's email
  */
-export class EditAccountComponent extends BaseForm implements OnInit {
+export class EditProfileComponent extends BaseForm implements OnInit {
     protected apiRoute: string = 'account';
     protected method: string = 'put';
 
@@ -25,11 +26,13 @@ export class EditAccountComponent extends BaseForm implements OnInit {
     @ViewChild('f') form: any;
 
     constructor(@Inject(ApiService) apiService: ApiService,
-                private authService: AuthService){
+                private authService: AuthService,
+                private navigator: NavigatorService){
         super(apiService);
     }
 
     ngOnInit(){
+        this.navigator.navigate([], {fragment: 'profile'});
         this.loadAccount();
     }
 

@@ -3,13 +3,13 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <p>Edit your profile</p>
-            <ngb-tabset>
-                <ngb-tab title="Profile">
+            <ngb-tabset [activeId]="selectedTabId">
+                <ngb-tab id="profile" title="Profile">
                     <template ngbTabContent>
-                        <edit-account></edit-account>
+                        <edit-profile></edit-profile>
                     </template>
                 </ngb-tab>
-                <ngb-tab title="Password">
+                <ngb-tab id="password" title="Password">
                     <template ngbTabContent>
                         <change-password></change-password>
                     </template>
