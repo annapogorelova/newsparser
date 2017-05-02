@@ -27,8 +27,7 @@ namespace NewsParser.BL.Services.News
             int pageIndex = 0, 
             int pageSize = 5,
             int? userId = null, 
-            string search = null, 
-            DateTime? date = null,
+            string search = null,
             int[] sourcesIds = null, 
             string[] tags = null
         )
@@ -63,11 +62,6 @@ namespace NewsParser.BL.Services.News
                     news.Where(
                         n => n.Title.ToLower().Contains(searchTerm)
                         || n.Description.ToLower().Contains(searchTerm));
-            }
-
-            if (date.HasValue)
-            {
-                news = news.Where(n => n.DatePublished.Date == date.Value.Date);
             }
 
             if (tags != null)

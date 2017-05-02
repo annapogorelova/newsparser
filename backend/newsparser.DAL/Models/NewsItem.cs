@@ -28,10 +28,8 @@ namespace NewsParser.DAL.Models
 
         public List<NewsTagsNews> NewsItemTags { get; set; }
 
-        [DateTimeKind(DateTimeKind.Utc)]
         public DateTime DatePublished { get; set; }
 
-        [DateTimeKind(DateTimeKind.Utc)]
         public DateTime DateAdded { get; set; }  = DateTime.UtcNow;
     }
 }

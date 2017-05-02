@@ -17,7 +17,6 @@ namespace NewsParser.BL.Services.News
         /// <param name="sourcesIds">Sources ids to select by</param>
         /// <param name="userId">User id</param>
         /// <param name="search">Search string</param>
-        /// <param name="date">Date</param>
         /// <param name="tags">Tags names to select by</param>
         /// <returns>IEnumerable of NewsItem</returns>
         IEnumerable<NewsItem> GetNewsPage(
@@ -25,7 +24,6 @@ namespace NewsParser.BL.Services.News
             int pageSize = 5, 
             int? userId = null, 
             string search = null,
-            DateTime? date = null,
             int[] sourcesIds = null, 
             string[] tags = null
         );
