@@ -50,6 +50,13 @@ namespace NewsParser.BL.Services.News
         NewsItem GetNewsItemByLink(string linkToSource);
 
         /// <summary>
+        /// Get news item by the guid
+        /// </summary>
+        /// <param name="linkToSource">Guid string</param>
+        /// <returns>NewsItem object</returns>
+        NewsItem GetNewsItemByGuid(string guid);
+
+        /// <summary>
         /// Inserts a news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>
@@ -71,16 +78,31 @@ namespace NewsParser.BL.Services.News
         void AddTagsToNewsItem(int newsItemId, List<string> tags);
 
         /// <summary>
+        /// Add an existing news source to the news item
+        /// </summary>
+        /// <param name="newsItemId">News item id</param>
+        /// <param name="sourceId">Source id</param>
+        void AddSourceToNewsItem(int newsItemId, int sourceId);
+
+        /// <summary>
         /// Deletes a news item
         /// </summary>
         /// <param name="id">News item id</param>
         void DeleteNewsItem(int id);
 
         /// <summary>
-        /// Checks if news item with the indicated link to source already exists
+        /// Checks if news item with the indicated guid already exists
         /// </summary>
-        /// <param name="linkToSource">Link to source</param>
+        /// <param name="guid">Guid string</param>
         /// <returns>True if exists, false if not</returns>
-        bool NewsItemExists(string linkToSource);
+        bool NewsItemExists(string guid);
+
+        /// <summary>
+        /// Update news item with source and tags
+        /// </summary>
+        /// <param name="newsItemId">News item id</param>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="tags">List of tags</param>
+        void UpdateNewsItem(int newsItemId, int sourceId, List<string> tags = null);
     }
 }

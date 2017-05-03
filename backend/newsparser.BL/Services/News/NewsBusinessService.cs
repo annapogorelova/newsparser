@@ -6,6 +6,7 @@ using NewsParser.DAL.Repositories.News;
 using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.NewsTags;
 using NewsParser.BL.Exceptions;
+using NewsParser.DAL.Repositories.NewsSources;
 
 namespace NewsParser.BL.Services.News
 {
@@ -17,10 +18,16 @@ namespace NewsParser.BL.Services.News
         private readonly INewsRepository _newsRepository;
         private readonly INewsTagRepository _newsTagRepository;
 
-        public NewsBusinessService(INewsRepository newsRepository, INewsTagRepository newsTagRepository)
+        private readonly INewsSourceRepository _newsSourceRepository;
+
+        public NewsBusinessService(
+            INewsRepository newsRepository, 
+            INewsTagRepository newsTagRepository,
+            INewsSourceRepository newsSourceRepository)
         {
             _newsRepository = newsRepository;
             _newsTagRepository = newsTagRepository;
+            _newsSourceRepository = newsSourceRepository;
         }
 
         public IEnumerable<NewsItem> GetNewsPage(
@@ -46,13 +53,17 @@ namespace NewsParser.BL.Services.News
 
             if (sourcesIds != null)
             {
-                news = news.Where(n => sourcesIds.Any(s => s == n.SourceId));
+                news = news.Where(n => sourcesIds.Intersect(n.Sources.Select(ns => ns.SourceId)).Any());
             }
 
             if (userId.HasValue)
             {
-                news = news.Include(n => n.Source).ThenInclude(n => n.Users)
-                    .Where(n => n.Source.Users.Any(u => u.UserId == userId.Value));
+                news = news
+                    .Include(n => n.Sources)
+                    .ThenInclude(s => s.Source)
+                    .ThenInclude(source => source.Users)
+                    .Where(n => n.Sources.Select(s => s.Source)
+                    .Any(ns => ns.Users.Any(u => u.UserId == userId.Value)));
             }
 
             if (!string.IsNullOrEmpty(search))
@@ -67,7 +78,7 @@ namespace NewsParser.BL.Services.News
             if (tags != null)
             {
                 news =
-                    news.Where(n => n.NewsItemTags.Any(nt => tags.Any(tag =>
+                    news.Where(n => n.Tags.Any(nt => tags.Any(tag =>
                         string.Equals(nt.Tag.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
             }
 
@@ -93,11 +104,6 @@ namespace NewsParser.BL.Services.News
 
         public NewsItem AddNewsItem(NewsItem newsItem)
         {
-            if (_newsRepository.GetNewsItemByLink(newsItem.LinkToSource) != null)
-            {
-                return null;
-            }
-
             try
             {
                 return _newsRepository.AddNewsItem(newsItem);
@@ -160,9 +166,42 @@ namespace NewsParser.BL.Services.News
             }
         }
 
-        public bool NewsItemExists(string linkToSource)
+        public bool NewsItemExists(string guid)
         {
-            return _newsRepository.GetNewsItemByLink(linkToSource) != null;
+            return _newsRepository.GetNewsItemByGuid(guid) != null;
+        }
+
+        public void AddSourceToNewsItem(int newsItemId, int sourceId)
+        {
+            _newsRepository.AddNewsItemSource(newsItemId, sourceId);
+        }
+
+        public NewsItem GetNewsItemByGuid(string guid)
+        {
+            return _newsRepository.GetNewsItemByGuid(guid);
+        }
+
+        public void UpdateNewsItem(int newsItemId, int sourceId, List<string> tags = null)
+        {
+            try
+            {
+                if(!_newsRepository.NewsItemHasSource(newsItemId, sourceId))
+                {
+                    AddSourceToNewsItem(newsItemId, sourceId);
+                }
+
+                var newsItemTags = _newsTagRepository.GetNewsTagsByNewsItemId(newsItemId);
+                var newTags = tags.Except(newsItemTags.Select(t => t.Name)).ToList();
+
+                if(newTags.Any())
+                {
+                    AddTagsToNewsItem(newsItemId, newTags);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLayerException($"Failed to update news item with id {newsItemId}", e);
+            }
         }
     }
 }

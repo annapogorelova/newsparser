@@ -170,20 +170,26 @@ namespace newsparser.feedparser
         {
             foreach (var newsItem in newsItems)
             {
-                if (!_newsBusinessService.NewsItemExists(newsItem.LinkToSource))
+                NewsItem existingItem;
+                if (!_newsBusinessService.NewsItemExists(newsItem.Guid.GuidString))
                 {
-                    var addedNewsItem = _newsBusinessService.AddNewsItem(new NewsItem()
+                    existingItem = _newsBusinessService.AddNewsItem(new NewsItem()
                     {
-                        SourceId = sourceId,
                         DatePublished = newsItem.DatePublished,
                         Description = newsItem.Description,
                         ImageUrl = newsItem.ImageUrl,
-                        LinkToSource = newsItem.LinkToSource,
-                        Title = newsItem.Title
+                        LinkToSource = (newsItem.Guid != null && newsItem.Guid.IsPermaLink) ? 
+                            newsItem.Guid.GuidString : newsItem.LinkToSource,
+                        Title = newsItem.Title,
+                        Guid = newsItem.Guid?.GuidString ?? newsItem.LinkToSource
                     });
-                    
-                    _newsBusinessService.AddTagsToNewsItem(addedNewsItem.Id, newsItem.Categories);
                 }
+                else 
+                {
+                    existingItem = _newsBusinessService.GetNewsItemByGuid(newsItem.Guid.GuidString);
+                }
+
+                _newsBusinessService.UpdateNewsItem(existingItem.Id, sourceId, newsItem.Categories);
             }
         }
     }

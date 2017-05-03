@@ -105,12 +105,25 @@ namespace NewsParser.FeedParser
                     var newsItem = new NewsItemParseModel
                     {                       
                         Title = rssItem.Element("title").Value,
+                        Author = rssItem.Element("author")?.Value?.CropHtmlString(100),
                         Description = rssItemDescription.RemoveHtmlTags().CropHtmlString(500),
                         DatePublished = pubDate.ToUniversalTime(),
                         LinkToSource = rssItem.Element("link").Value,
                         ImageUrl = imageUrl,
                         Categories = ExtractRssItemTags(rssItem)
                     };
+
+                    var guidElement = rssItem.Element("guid");
+                    if(guidElement != null)
+                    {
+                        var isPermaLinkAttribute = guidElement.Attribute("isPermaLink");
+                        newsItem.Guid = new RssItemGuid
+                        {
+                            GuidString = guidElement.Value,
+                            IsPermaLink = isPermaLinkAttribute != null ?
+                                Convert.ToBoolean(isPermaLinkAttribute.Value) : true
+                        };
+                    }
 
                     newsItems.Add(newsItem);
                 }

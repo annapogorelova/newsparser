@@ -51,6 +51,13 @@ namespace NewsParser.DAL.Repositories.News
         NewsItem GetNewsItemByLink(string linkToSource);
 
         /// <summary>
+        /// Gets news item by the guid
+        /// </summary>
+        /// <param name="linkToSource">Guid string</param>
+        /// <returns>NewsItem object</returns>
+        NewsItem GetNewsItemByGuid(string guid);
+
+        /// <summary>
         /// Inserts a news item
         /// </summary>
         /// <param name="newsItem">NewsItem object</param>
@@ -69,6 +76,13 @@ namespace NewsParser.DAL.Repositories.News
         /// <param name="newsItemId">News item id</param>
         /// <param name="tagId">Tag id</param>
         void AddNewsItemTag(int newsItemId, int tagId);
+
+        /// <summary>
+        /// Adds a source to news item
+        /// </summary>
+        /// <param name="newsItemId">News item id</param>
+        /// <param name="sourceId">Source id</param>
+        void AddNewsItemSource(int newsItemId, int sourceId);
         
         /// <summary>
         /// Deletes a news item
@@ -80,5 +94,13 @@ namespace NewsParser.DAL.Repositories.News
         /// Deletes a range of news
         /// </summary>
         void DeleteNews(IEnumerable<NewsItem> news);
+
+        /// <summary>
+        /// Deterrmines whether news item has a source with the given id
+        /// </summary>
+        /// <param name="newsItemId">News item id</param>
+        /// <param name="sourceId">Source id</param>
+        /// <returns>True if news item has such news source, false - if not</returns>
+        bool NewsItemHasSource(int newsItemId, int sourceId);
     }
 }

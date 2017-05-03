@@ -15,6 +15,7 @@ namespace NewsParser.DAL
         public DbSet<NewsSource> NewsSources { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
+        public DbSet<NewsSourceNews> NewsSourcesNews { get; set; }
         public DbSet<UserNewsSource> UserSources { get; set; }
         public DbSet<UserExternalId> UserExternalIds { get; set; }
 
@@ -27,16 +28,16 @@ namespace NewsParser.DAL
         {
             modelBuilder.Entity<User>().ToTable("users");
 
-            modelBuilder.Entity<UserNewsSource>().ToTable("user_sources");
+            modelBuilder.Entity<UserNewsSource>().ToTable("user_news_sources");
 
             modelBuilder.Entity<UserNewsSource>()
                 .HasOne(ns => ns.User)
-                .WithMany(u => u.NewsSources)
+                .WithMany(u => u.Sources)
                 .HasForeignKey(ns => ns.UserId);
 
             modelBuilder.Entity<UserNewsSource>()
-                .HasOne(ns => ns.NewsSource)
-                .WithMany(u => u.Users)
+                .HasOne(ns => ns.Source)
+                .WithMany(s => s.Users)
                 .HasForeignKey(ns => ns.SourceId);
 
             modelBuilder.Entity<UserExternalId>().ToTable("user_external_ids");
@@ -48,10 +49,16 @@ namespace NewsParser.DAL
 
             modelBuilder.Entity<NewsItem>().ToTable("news");
 
-            modelBuilder.Entity<NewsItem>()
-                .HasOne(n => n.Source)
+            modelBuilder.Entity<NewsSourceNews>().ToTable("news_source_news");
+            
+            modelBuilder.Entity<NewsSourceNews>()
+                .HasOne(ns => ns.Source)
                 .WithMany(s => s.News)
-                .HasForeignKey(n => n.SourceId);
+                .HasForeignKey(nt => nt.SourceId);
+            modelBuilder.Entity<NewsSourceNews>()
+                .HasOne(ns => ns.NewsItem)
+                .WithMany(n => n.Sources)
+                .HasForeignKey(ns => ns.NewsItemId);
 
             modelBuilder.Entity<NewsTag>().ToTable("news_tags");
 
@@ -63,7 +70,7 @@ namespace NewsParser.DAL
                 .HasForeignKey(nt => nt.TagId);
             modelBuilder.Entity<NewsTagsNews>()
                 .HasOne(nt => nt.NewsItem)
-                .WithMany(t => t.NewsItemTags)
+                .WithMany(t => t.Tags)
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("news_sources");

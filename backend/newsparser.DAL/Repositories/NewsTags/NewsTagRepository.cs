@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.NewsTags
@@ -76,6 +77,12 @@ namespace NewsParser.DAL.NewsTags
 
             _dbContext.NewsTags.AddRange(newsTags);
             _dbContext.SaveChanges();
+        }
+
+        public IQueryable<NewsTag> GetNewsTagsByNewsItemId(int newsItemId)
+        {
+            return _dbContext.NewsTagsNews.Include(nt => nt.Tag)
+                .Where(nt => nt.NewsItemId == newsItemId).Select(nt => nt.Tag);
         }
     }
 }

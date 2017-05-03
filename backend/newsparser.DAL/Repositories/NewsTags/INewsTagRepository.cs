@@ -30,6 +30,13 @@ namespace NewsParser.DAL.NewsTags
         NewsTag GetNewsTagByName(string name);
 
         /// <summary>
+        /// Gets the list of tags of specific news item
+        /// </summary>
+        /// <param name="newsItemId">News item id</param>
+        /// <returns>IQueryable of NewsTag</returns>
+        IQueryable<NewsTag> GetNewsTagsByNewsItemId(int newsItemId);
+
+        /// <summary>
         /// Inserts a news tag
         /// </summary>
         /// <param name="newsTag">NewsTag object</param>

@@ -37,22 +37,37 @@ namespace NewsParser.DAL
                 new NewsSource
                 {
                     RssUrl = "https://habrahabr.ru/rss/all/",
-                    Name = "Habrahabr"
+                    Name = "Хабрахабр / Все публикации"
                 },
                 new NewsSource
                 {
                     RssUrl = "https://geektimes.ru/rss/all/",
-                    Name = "Geektimes"
+                    Name = "Geektimes / Все публикации"
                 },
                 new NewsSource
                 {
                     RssUrl = "https://css-tricks.com/feed/",
-                    Name = "CSS Tricks"
+                    Name = "CSS-Tricks"
                 },
                 new NewsSource
                 {
                     RssUrl = "http://arzamas.academy/feed_v1.rss",
-                    Name = "Arzamas"
+                    Name = "Arzamas | Всё"
+                },
+                new NewsSource
+                {
+                    RssUrl = "https://habrahabr.ru/rss/flows/develop/all/",
+                    Name = "Хабрахабр / Все публикации в потоке Разработка"
+                },
+                new NewsSource
+                {
+                    RssUrl = "https://habrahabr.ru/rss/hub/programming/",
+                    Name = "Хабрахабр / Программирование / Интересные публикации"
+                },
+                new NewsSource
+                {
+                    RssUrl = "https://postnauka.ru/feed",
+                    Name = "ПостНаука"
                 }
             });
         }

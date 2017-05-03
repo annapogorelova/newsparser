@@ -11,6 +11,6 @@
         public int SourceId { get; set; }
 
         public User User { get; set; }
-        public NewsSource NewsSource { get; set; }
+        public NewsSource Source { get; set; }
     }
 }

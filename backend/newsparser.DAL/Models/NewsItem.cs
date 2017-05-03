@@ -21,15 +21,21 @@ namespace NewsParser.DAL.Models
 
         [Required]
         [MaxLength(255)]
+        public string Guid { get; set; }
+
+        [MaxLength(100)]
+        public string Author { get; set; }
+
+        [Required]
+        [MaxLength(255)]
         public string LinkToSource { get; set; }
-        
-        public int SourceId { get; set; }
-        public NewsSource Source { get; set; }
 
-        public List<NewsTagsNews> NewsItemTags { get; set; }
-
-        public DateTime DatePublished { get; set; }
+        public DateTime DatePublished { get; set; } = DateTime.UtcNow;
 
         public DateTime DateAdded { get; set; }  = DateTime.UtcNow;
+        
+        public List<NewsSourceNews> Sources { get; set; } = new List<NewsSourceNews>();
+
+        public List<NewsTagsNews> Tags { get; set; } = new List<NewsTagsNews>();
     }
 }

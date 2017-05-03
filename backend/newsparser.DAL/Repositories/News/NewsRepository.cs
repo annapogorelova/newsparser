@@ -24,7 +24,7 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNews()
         {
-            return _dbContext.News.Include(n => n.NewsItemTags).ThenInclude(t => t.Tag);
+            return _dbContext.News.Include(n => n.Tags).ThenInclude(t => t.Tag);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNewsBySource(int sourceId)
         {
-            return _dbContext.News.Where(n => n.SourceId == sourceId);
+            return _dbContext.News.Where(n => n.Sources.Any(s => s.SourceId == sourceId));
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNewsByTagName(string tagName)
         {
-            return _dbContext.News.Include(n => n.NewsItemTags)
-                .Where(n => n.NewsItemTags.Any(t => t.Tag.Name == tagName));
+            return _dbContext.News.Include(n => n.Tags)
+                .Where(n => n.Tags.Any(t => t.Tag.Name == tagName));
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNewsByTagId(int tagId)
         {
-            return _dbContext.News.Include(n => n.NewsItemTags)
-                .Where(n => n.NewsItemTags.Any(t => t.Tag.Id == tagId));
+            return _dbContext.News.Include(n => n.Tags)
+                .Where(n => n.Tags.Any(t => t.Tag.Id == tagId));
         }
 
         /// <summary>
@@ -148,6 +148,26 @@ namespace NewsParser.DAL.Repositories.News
 
             _dbContext.News.RemoveRange(news);
             _dbContext.SaveChanges();
+        }
+
+        public void AddNewsItemSource(int newsItemId, int sourceId)
+        {
+            _dbContext.NewsSourcesNews.Add(new NewsSourceNews() {
+                NewsItemId = newsItemId,
+                SourceId = sourceId
+            });
+            _dbContext.SaveChanges();
+        }
+
+        public NewsItem GetNewsItemByGuid(string guid)
+        {
+            return _dbContext.News.FirstOrDefault(n => n.Guid == guid);
+        }
+
+        public bool NewsItemHasSource(int newsItemId, int sourceId)
+        {
+            return _dbContext.NewsSourcesNews
+                .Any(ns => ns.NewsItemId == newsItemId && ns.SourceId == sourceId);
         }
     }
 }

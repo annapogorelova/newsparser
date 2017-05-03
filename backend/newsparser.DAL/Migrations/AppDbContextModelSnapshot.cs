@@ -21,6 +21,9 @@ namespace newsparser.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Author")
+                        .HasMaxLength(100);
+
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<DateTime>("DatePublished");
@@ -29,6 +32,10 @@ namespace newsparser.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(500);
 
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(255);
 
@@ -36,15 +43,11 @@ namespace newsparser.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<int>("SourceId");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SourceId");
 
                     b.ToTable("news");
                 });
@@ -71,6 +74,24 @@ namespace newsparser.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("news_sources");
+                });
+
+            modelBuilder.Entity("NewsParser.DAL.Models.NewsSourceNews", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("NewsItemId");
+
+                    b.Property<int>("SourceId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsItemId");
+
+                    b.HasIndex("SourceId");
+
+                    b.ToTable("news_source_news");
                 });
 
             modelBuilder.Entity("NewsParser.DAL.Models.NewsTag", b =>
@@ -167,11 +188,16 @@ namespace newsparser.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("user_sources");
+                    b.ToTable("user_news_sources");
                 });
 
-            modelBuilder.Entity("NewsParser.DAL.Models.NewsItem", b =>
+            modelBuilder.Entity("NewsParser.DAL.Models.NewsSourceNews", b =>
                 {
+                    b.HasOne("NewsParser.DAL.Models.NewsItem", "NewsItem")
+                        .WithMany("Sources")
+                        .HasForeignKey("NewsItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("NewsParser.DAL.Models.NewsSource", "Source")
                         .WithMany("News")
                         .HasForeignKey("SourceId")
@@ -181,7 +207,7 @@ namespace newsparser.DAL.Migrations
             modelBuilder.Entity("NewsParser.DAL.Models.NewsTagsNews", b =>
                 {
                     b.HasOne("NewsParser.DAL.Models.NewsItem", "NewsItem")
-                        .WithMany("NewsItemTags")
+                        .WithMany("Tags")
                         .HasForeignKey("NewsItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -201,13 +227,13 @@ namespace newsparser.DAL.Migrations
 
             modelBuilder.Entity("NewsParser.DAL.Models.UserNewsSource", b =>
                 {
-                    b.HasOne("NewsParser.DAL.Models.NewsSource", "NewsSource")
+                    b.HasOne("NewsParser.DAL.Models.NewsSource", "Source")
                         .WithMany("Users")
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NewsParser.DAL.Models.User", "User")
-                        .WithMany("NewsSources")
+                        .WithMany("Sources")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
