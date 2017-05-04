@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
+import {BaseForm} from '../../../shared/abstract/base-form/base-form';
+import {NgForm} from '@angular/forms';
 
 /**
  * A component for adding a new news source
@@ -10,35 +12,38 @@ import {ApiService} from '../../../shared/services/api/api.service';
     styleUrls: ['./add-news-source.component.css']
 })
 
-export class AddNewsSourceComponent {
-    public rssUrl: string = null;
-    public addingInProgress: boolean = false;
+export class AddNewsSourceComponent extends BaseForm{
+    protected apiRoute: string = 'newsSources';
+    protected method: string = 'post';
+    
+    showResponseMessage: boolean = false;
 
-    constructor(private apiService: ApiService){ }
-
-    addNewsSource = () => {
-        if(!this.rssUrl){
-            return;
-        }
-        this.addingInProgress = true;
-        this.apiService.post('newsSources', {rssUrl: this.rssUrl})
-            .then(response => this.handleResponse(response))
-            .catch(error => this.handleError(error));
+    formData: any = {
+        rssUrl: ''
     };
 
-    handleResponse = (response: any) => {
-        this.addingInProgress = false;
-        this.reset();
-        alert('News source added');
-    };
+    @ViewChild('f') form: NgForm;
 
-    handleError = (error: any) => {
-        this.addingInProgress = false;
-        this.reset();
-        alert('Failed to add a news source');
-    };
+    constructor(@Inject(ApiService) apiService: ApiService){
+        super(apiService);
+    }
 
-    reset = () => {
-        this.rssUrl = null;
+    submit(isValid: boolean){
+        super.submit(isValid)
+            .then(() => this.handleSubmit())
+            .catch(() => this.showResponseMessage = true);
+    }
+    
+    handleSubmit(){
+        this.showResponseMessage = true;
+        this.form.resetForm();
+    };
+    
+    hideResponseMessage = () => {
+        this.showResponseMessage = false;
+    };
+    
+    isResponseMessageShown = () => {
+        return (this.showResponseMessage && this.submitCompleted && !this.submitInProgress);
     };
 }
