@@ -59,13 +59,15 @@ namespace NewsParser.API.Controllers
         {
             if (_newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl) != null)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, new { Message = "News source already exists" });
+                return MakeResponse(HttpStatusCode.BadRequest, new { message = "RSS source already exists" });
             }
 
             var user = _authService.FindUserByUserName(HttpContext.User.Identity.Name);
             var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
             var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
-            return MakeResponse(HttpStatusCode.Created, addedNewsSourceModel);
+            return MakeResponse(HttpStatusCode.Created, 
+                new { data = addedNewsSourceModel, 
+                    message = "RSS source was added to the list of your subscriptions" });
         }
     }
 }
