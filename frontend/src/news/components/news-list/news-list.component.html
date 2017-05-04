@@ -53,12 +53,23 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="news-item-info-container">
-                                    <div class="pull-right">
                                         <span class="badge badge-primary"
-                                              [attr.title]="newsItem.source.name">
-                                            {{formatNewsSourceName(newsItem.source.name)}}
+                                              [attr.title]="newsItem.sources[0].name">
+                                            {{newsItem.sources[0].name}}
                                         </span>
-                                    </div>
+                                        <div id="otherSources" [ngbCollapse]="!newsItem.sourcesListCollapsed">
+                                                <span *ngFor="let source of getOtherSources(newsItem)"
+                                                      class="badge badge-primary"
+                                                      [attr.title]="source.name">
+                                                    {{source.name}}
+                                                </span>
+                                        </div>
+                                        <span class="link pull-right" *ngIf="newsItem.sources.length > 1"
+                                              (click)="newsItem.sourcesListCollapsed = !newsItem.sourcesListCollapsed"
+                                              [attr.aria-expanded]="newsItem.sourcesListCollapsed"
+                                              aria-controls="otherSources">
+                                                 {{newsItem.sourcesListCollapsed ? 'less sources' : 'more sources'}}
+                                        </span>
                                 </div>
                             </div>
                         </div>

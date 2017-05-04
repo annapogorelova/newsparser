@@ -145,10 +145,9 @@ export class NewsListComponent extends BaseList{
         this.navigator.setQueryParam('search', this.search);
         this.reload(true);
     };
-
-    formatNewsSourceName = (newsSourceName: string) => {
-        return newsSourceName.length < 35 ?
-            newsSourceName : newsSourceName.substring(0, 35) + '...';
+    
+    getOtherSources = (newsItem: any) => {
+        return newsItem.sources.slice(1, newsItem.sources.length);
     };
     
     /**

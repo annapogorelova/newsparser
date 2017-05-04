@@ -6,9 +6,18 @@ import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {SharedModule} from '../shared/shared.module';
 import {FormsModule} from '@angular/forms';
 import {NewsSourcesModule} from '../news-sources/news-sources.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-    imports: [NewsRouting, BrowserModule, InfiniteScrollModule, SharedModule, FormsModule, NewsSourcesModule],
+    imports: [
+        NewsRouting,
+        BrowserModule,
+        InfiniteScrollModule,
+        SharedModule,
+        FormsModule,
+        NewsSourcesModule,
+        NgbModule
+    ],
     declarations: [NewsListComponent],
     providers: [NewsRoutingProviders]
 })

@@ -115,3 +115,19 @@ news-list .refresh-button-container button {
 news-list .news-item-info-container {
     font-size: 16px;
 }
+
+news-list span.link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 11px;
+}
+
+news-list .news-item-info-container span.badge {
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
