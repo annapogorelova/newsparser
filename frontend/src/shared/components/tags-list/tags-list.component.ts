@@ -29,6 +29,9 @@ export class TagListComponent {
     };
 
     clearTags = () => {
+        if(!this.tags.length){
+            return;
+        }
         this.onClear.emit();
     };
 }

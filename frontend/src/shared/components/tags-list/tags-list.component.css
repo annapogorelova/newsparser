@@ -27,8 +27,13 @@ tags-list div.card-header, div.card-block {
     padding: 8px 8px 8px 8px;
 }
 
-tags-list button.close, h5, p {
+tags-list h5, p, span.clear {
     padding: 0 0 0 0;
+    border: none;
+}
+
+tags-list span {
+    cursor: pointer;
 }
 
 tags-list p {
