@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild, Output, EventEmitter} from '@angular/core';
 import {ApiService} from '../../../shared/services/api/api.service';
 import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 import {NgForm} from '@angular/forms';
@@ -24,19 +24,22 @@ export class AddNewsSourceComponent extends BaseForm{
 
     @ViewChild('f') form: NgForm;
 
+    @Output() onSourceAdded: EventEmitter<any> = new EventEmitter<any>();
+
     constructor(@Inject(ApiService) apiService: ApiService){
         super(apiService);
     }
 
     submit(isValid: boolean){
         super.submit(isValid)
-            .then(() => this.handleSubmit())
+            .then((response: any) => this.handleSubmit(response))
             .catch(() => this.showResponseMessage = true);
     }
     
-    handleSubmit(){
+    handleSubmit(response: any){
         this.showResponseMessage = true;
         this.form.resetForm();
+        this.onSourceAdded.emit(response.data);
     };
     
     hideResponseMessage = () => {
