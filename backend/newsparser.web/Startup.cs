@@ -36,6 +36,7 @@ using OpenIddict.Core;
 using OpenIddict.Models;
 using NewsParser.Services;
 using NewsParser.Middleware;
+using NewsParser.DAL.Repositories.Tokens;
 
 namespace NewsParser
 {
@@ -211,7 +212,8 @@ namespace NewsParser
         {
             var secretKey = Configuration["Authentication:SecretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
-            var tokenLifetime = int.Parse(Configuration.GetSection("Security")["TokenLifetimeMinutes"]);
+            var accessTokenLifetime = int.Parse(Configuration.GetSection("Security")["AccessTokenLifetimeMinutes"]);
+            var refreshTokenLifetime = int.Parse(Configuration.GetSection("Security")["RefreshTokenLifetimeHours"]);
 
             services.AddIdentity<ApplicationUser, Role>(config =>
                 {
@@ -252,15 +254,21 @@ namespace NewsParser
             {
                 options.AllowAuthorizationCodeFlow();
                 options.AllowPasswordFlow();
-                options.EnableTokenEndpoint("/api/token");
-                options.EnableAuthorizationEndpoint("/api/authorize");
-                options.UseJsonWebTokens();
-                options.DisableHttpsRequirement();
-                options.AddMvcBinders();
-                options.AddSigningKey(signingKey);
-                options.SetAccessTokenLifetime(TimeSpan.FromMinutes(tokenLifetime));;
+                options.AllowRefreshTokenFlow();
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:google_access_token");
+                
+                options.SetRefreshTokenLifetime(TimeSpan.FromHours(refreshTokenLifetime));
+                options.SetAccessTokenLifetime(TimeSpan.FromMinutes(accessTokenLifetime));
+               
+                options.EnableTokenEndpoint("/api/token");
+                options.EnableAuthorizationEndpoint("/api/authorize");
+               
+                options.UseJsonWebTokens();
+                options.DisableHttpsRequirement();
+               
+                options.AddMvcBinders();
+                options.AddSigningKey(signingKey);
             });
         }
 
@@ -271,6 +279,7 @@ namespace NewsParser
             services.AddTransient<INewsSourceRepository, NewsSourceRepository>();
             services.AddTransient<INewsTagRepository, NewsTagRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITokenRepository, TokenRepository>();
 
             // Business layer services
             services.AddTransient<INewsBusinessService, NewsBusinessService>();

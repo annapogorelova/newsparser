@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
+using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using newsparser.DAL.Models;
@@ -48,6 +49,11 @@ namespace NewsParser.API.Controllers
                 return HandleTokenAuth(request).Result;
             }
 
+            if (request.IsRefreshTokenGrantType())
+            {
+                return HandleRefreshToken(request).Result;
+            }
+
             return MakeResponse(HttpStatusCode.BadRequest, "The specified grant type is not supported.");
         }
 
@@ -74,8 +80,8 @@ namespace NewsParser.API.Controllers
                 return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
-            var principal = await _authService.GetUserPrincipalAsync(user);
-            var ticket = _authService.GetAuthTicket(principal);
+            var principal = await _authService.CreateUserPrincipalAsync(user);
+            var ticket = _authService.CreateAuthTicket(request, principal);
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
@@ -115,8 +121,8 @@ namespace NewsParser.API.Controllers
                 await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Facebook);
             }
 
-            var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
-            var ticket = _authService.GetAuthTicket(principal);
+            var principal = await _authService.CreateSocialUserPrincipalAsync(user, ExternalAuthProvider.Facebook);
+            var ticket = _authService.CreateAuthTicket(request, principal);
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
@@ -137,6 +143,7 @@ namespace NewsParser.API.Controllers
             {
                 return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
             }
+
             var user = _authService.FindUserByEmail(externalUser.Email);
             if (user == null)
             {
@@ -146,9 +153,35 @@ namespace NewsParser.API.Controllers
             {
                 await _authService.UpdateExternalUserAsync(user, externalUser, ExternalAuthProvider.Google);
             }
-            var principal = await _authService.GetSocialUserPrincipalAsync(user, ExternalAuthProvider.Google);
-            var ticket = _authService.GetAuthTicket(principal);
+
+            var principal = await _authService.CreateSocialUserPrincipalAsync(user, ExternalAuthProvider.Google);
+            var ticket = _authService.CreateAuthTicket(request, principal);
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+        }
+
+        private async Task<IActionResult> HandleRefreshToken(OpenIdConnectRequest request)
+        {
+                var info = await HttpContext.Authentication.GetAuthenticateInfoAsync(
+                    OpenIdConnectServerDefaults.AuthenticationScheme);
+
+                var user = await _authService.GetUserAsync(info.Principal);
+                if (user == null)
+                {
+                    return MakeResponse(HttpStatusCode.BadRequest,"The refresh token is no longer valid.");
+                }
+
+                // Ensure the user is still allowed to sign in.
+                if (!await _signInManager.CanSignInAsync(user))
+                {
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
+                        ErrorDescription = "The user is no longer allowed to sign in."
+                    });
+                }
+
+                var ticket = _authService.CreateAuthTicket(request, info.Principal);
+                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace NewsParser.DAL
         public DbSet<NewsSourceNews> NewsSourcesNews { get; set; }
         public DbSet<UserNewsSource> UserSources { get; set; }
         public DbSet<UserExternalId> UserExternalIds { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -74,6 +75,8 @@ namespace NewsParser.DAL
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("news_sources");
+
+            modelBuilder.Entity<Token>().ToTable("tokens");
         }
     }
 }

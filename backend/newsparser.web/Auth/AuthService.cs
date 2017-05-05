@@ -17,6 +17,7 @@ using NewsParser.BL.Services.Users;
 using NewsParser.DAL.Models;
 using NewsParser.Identity;
 using NewsParser.Identity.Models;
+using OpenIddict.Core;
 
 namespace NewsParser.Auth
 {
@@ -42,7 +43,7 @@ namespace NewsParser.Auth
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ClaimsPrincipal> GetUserPrincipalAsync(ApplicationUser user)
+        public async Task<ClaimsPrincipal> CreateUserPrincipalAsync(ApplicationUser user)
         {
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
 
@@ -55,9 +56,9 @@ namespace NewsParser.Auth
             return principal;
         }
 
-        public async Task<ClaimsPrincipal> GetSocialUserPrincipalAsync(ApplicationUser user, ExternalAuthProvider authProvider)
+        public async Task<ClaimsPrincipal> CreateSocialUserPrincipalAsync(ApplicationUser user, ExternalAuthProvider authProvider)
         {
-            var principal = await GetUserPrincipalAsync(user);
+            var principal = await CreateUserPrincipalAsync(user);
             if (string.IsNullOrEmpty(principal.Identity.Name))
             {
                 var userSocialId = user.ExternalIds.FirstOrDefault(s => s.AuthProvider == authProvider);
@@ -74,12 +75,18 @@ namespace NewsParser.Auth
             return principal;
         }
 
-        public AuthenticationTicket GetAuthTicket(ClaimsPrincipal principal)
+        public AuthenticationTicket CreateAuthTicket(OpenIdConnectRequest request, ClaimsPrincipal principal)
         {
             var ticket = new AuthenticationTicket(
                     principal,
                     new AuthenticationProperties(),
                     OpenIdConnectServerDefaults.AuthenticationScheme);
+
+                ticket.SetScopes(new[]
+                {
+                    OpenIdConnectConstants.Scopes.Email,
+                    OpenIdConnectConstants.Scopes.OfflineAccess,
+                }.Intersect(request.GetScopes()));
 
             return ticket;
         }
@@ -190,6 +197,11 @@ namespace NewsParser.Auth
         public Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
         {
             return _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        }
+
+        public Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal)
+        {
+            return _userManager.GetUserAsync(principal);
         }
     }
 }

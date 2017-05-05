@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using newsparser.DAL.Models;
@@ -13,11 +14,11 @@ namespace NewsParser.Auth
     /// </summary>
     public interface IAuthService
     {
-        Task<ClaimsPrincipal> GetUserPrincipalAsync(ApplicationUser user);
+        Task<ClaimsPrincipal> CreateUserPrincipalAsync(ApplicationUser user);
 
-        Task<ClaimsPrincipal> GetSocialUserPrincipalAsync(ApplicationUser user, ExternalAuthProvider authProvider);
+        Task<ClaimsPrincipal> CreateSocialUserPrincipalAsync(ApplicationUser user, ExternalAuthProvider authProvider);
 
-        AuthenticationTicket GetAuthTicket(ClaimsPrincipal principal);
+        AuthenticationTicket CreateAuthTicket(OpenIdConnectRequest request, ClaimsPrincipal principal);
 
         ApplicationUser GetCurrentUser();
 
@@ -46,5 +47,7 @@ namespace NewsParser.Auth
         Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword);
 
         Task<IdentityResult> UpdateAsync(ApplicationUser user);
+
+        Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal);
     }
 }
