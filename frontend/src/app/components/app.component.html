@@ -7,22 +7,22 @@
     <a class="navbar-brand" routerLink="/news">News Parser</a>
     <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" *ngIf="authService.isAuthenticated()">
+            <li class="nav-item" *ngIf="authProvider.isAuthenticated()">
                 <a class="nav-link" routerLink="/news" routerLinkActive="active">News</a>
             </li>
-            <li class="nav-item" *ngIf="authService.isAuthenticated()">
+            <li class="nav-item" *ngIf="authProvider.isAuthenticated()">
                 <a class="nav-link" routerLink="/news-sources" routerLinkActive="active">News Sources</a>
             </li>
         </ul>
         <div class="navbar-nav">
-            <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" routerLink="/account-settings">
-                Account <strong *ngIf="authService.getUser()">({{authService.getUser().email}})</strong>
+            <a href="#" role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
+                Account <strong *ngIf="authProvider.hasUser()">({{authProvider.getUser().email}})</strong>
             </a>
-            <a href="#" role="link" class="nav-link" *ngIf="authService.isAuthenticated()" (click)="signOut()">
+            <a href="#" role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Sign Out
             </a>
-            <a href="#" role="link" class="nav-link" *ngIf="!authService.isAuthenticated()"
+            <a href="#" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
                routerLink="/sign-in" routerLinkActive="active">
                 <i class="fa fa-sign-in" aria-hidden="true"></i>
                 Sign In

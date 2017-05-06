@@ -1,17 +1,16 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
-import {AppSettings} from '../../../app/app.settings';
-import {ApiErrorHandler} from './api-error-handler';
-import {CacheService} from '../cache/cache.service';
+import {Http, Headers, RequestOptions, URLSearchParams} from '@angular/http';
 
 /**
  * Class is a wrapper for HTTP GET, PUT, POST, DELETE methods
  */
 @Injectable()
 export class ApiService {
-    constructor(private http: Http,
-                private cacheService: CacheService,
-                private errorHandler: ApiErrorHandler) {
+    constructor(protected http: Http,
+                protected apiUrl: string,
+                protected onResponseSuccess:any,
+                protected onResponseError:any,
+                protected provideDefaultHeaders:any = null) {
     }
 
     /**
@@ -23,16 +22,6 @@ export class ApiService {
      */
     get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
         var absoluteUrl = this.getAbsoluteUrl(url);
-        var cacheKey = this.cacheService.getCacheKey(absoluteUrl, params);
-        var cachedData = this.cacheService.get(cacheKey);
-        if (!refresh && cachedData) {
-            return Promise.resolve(cachedData);
-        }
-
-        if(cachedData){
-            this.cacheService.remove(cacheKey);
-        }
-
         var requestHeaders = this.initializeHeaders(headers);
         var requestOptions = new RequestOptions({
             headers: requestHeaders,
@@ -40,39 +29,16 @@ export class ApiService {
         });
 
         return this.http.get(absoluteUrl, requestOptions)
-            .map(response => this.extractData(response, true))
-            .catch(this.errorHandler.handleResponse).toPromise();
-    };
-
-    /**
-     * HTTP GET customized to get auth token
-     * @param username
-     * @param password
-     * @returns {Promise<any>}
-     */
-    getAuth = (username: string, password: string) => {
-        var requestBody = `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-        var requestHeaders = {'Content-Type': 'application/x-www-form-urlencoded'};
-        return this.post('token', requestBody, requestHeaders);
-    };
-
-    /**
-     * HTTP GET customized to get auth token using external auth provider
-     * @param accessToken
-     * @param provider
-     * @returns {Promise<T>}
-     */
-    getExternalAuth = (accessToken: string, provider: string) => {
-        var requestBody = `grant_type=urn:ietf:params:oauth:grant-type:${provider}_access_token&assertion=${encodeURIComponent(accessToken)}`;
-        var requestHeaders = {'Content-Type': 'application/x-www-form-urlencoded'};
-        return this.post('token', requestBody, requestHeaders);
+            .toPromise()
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     /**
      * HTTP POST method
      * @param url - request url
      * @param params - request body
-     * @param headers - cusrom request headers
+     * @param headers - custom request headers
      * @returns {Promise<any>}
      */
     post = (url: string, params: any, headers: any = null) => {
@@ -80,9 +46,9 @@ export class ApiService {
         var requestOptions = new RequestOptions({headers: requestHeaders});
 
         return this.http.post(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
-            .map(response => this.extractData(response, false))
-            .catch(this.errorHandler.handleResponse)
-            .toPromise();
+            .toPromise()
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     /**
@@ -97,9 +63,9 @@ export class ApiService {
         var requestOptions = new RequestOptions({headers: requestHeaders});
 
         return this.http.put(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
-            .map(response => this.extractData(response, false))
-            .catch(this.errorHandler.handleResponse)
-            .toPromise();
+            .toPromise()
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     /**
@@ -115,25 +81,9 @@ export class ApiService {
         var requestUrl = this.getAbsoluteUrl(url) + '?id=' + id;
 
         return this.http.delete(requestUrl, requestOptions)
-            .map(response => this.extractData(response, false))
-            .catch(this.errorHandler.handleResponse)
-            .toPromise();
-    };
-
-    /**
-     * Extracts response data
-     * @param response - Response
-     * @returns {any|{}}
-     */
-    private extractData = (response: Response, cache: boolean = false) => {
-        let maxAge = 300;
-        let body = response.json();
-        if (cache && body) {
-            // TODO: maybe customize this
-            var cacheKey = response.url.replace(/&autotimestamp=([^&]*)/, '');
-            this.cacheService.set(cacheKey, body, maxAge);
-        }
-        return body || {};
+            .toPromise()
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     /**
@@ -142,7 +92,7 @@ export class ApiService {
      * @returns {string} - absolute url
      */
     private getAbsoluteUrl(route: string): string {
-        return AppSettings.API_ENDPOINT + route;
+        return this.apiUrl + route;
     };
 
     /**
@@ -159,19 +109,35 @@ export class ApiService {
      * @param customHeaders
      * @returns {Headers}
      */
-    private initializeHeaders = (customHeaders: Headers): Headers => {
-        var headers = new Headers(customHeaders);
-        if (!headers.has('Content-Type')) {
-            headers.append('Content-Type', 'application/json');
+    private initializeHeaders(headers?: any):Headers {
+        var initializedHeaders = this.getDefaultHeaders();
+        headers = headers || {};
+        for (let name in headers) {
+            initializedHeaders.set(name, headers[name]);
         }
-
-        var authToken = this.cacheService.get('auth');
-        if (authToken) {
-            headers.append('Authorization', `Bearer ${authToken}`);
-        }
-
-        return headers;
+        return initializedHeaders;
     };
+
+    protected getDefaultHeaders():Headers {
+        const defaultHeaders = new Headers;
+        const rawDefaultHeaders = this.getRawDefaultHeaders();
+        for (let name in rawDefaultHeaders) {
+            if (rawDefaultHeaders.hasOwnProperty(name)) {
+                defaultHeaders.append(name, rawDefaultHeaders[name]);
+            }
+        }
+        return defaultHeaders;
+    }
+
+    /**
+     * Get default request headers
+     * @returns {{}}
+     */
+    protected getRawDefaultHeaders():any {
+        return typeof (this.provideDefaultHeaders) === 'function'
+            ? this.provideDefaultHeaders()
+            : {};
+    }
 
     /**
      * Initializes GET search params

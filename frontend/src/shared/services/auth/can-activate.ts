@@ -1,15 +1,14 @@
 import {CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Inject} from '@angular/core';
-import {AuthService} from './auth.service';
 import {Observable} from 'rxjs';
+import {AuthProviderService} from './auth-provider.service';
+import {Inject} from '@angular/core';
 
 export class CanActivateAuth implements CanActivate {
-    constructor(@Inject(Router) private router: Router, @Inject(AuthService) private authService: AuthService){
-
-    }
+    constructor(@Inject(Router)private router: Router,
+                @Inject(AuthProviderService)private authProvider: AuthProviderService){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>|Promise<boolean>|boolean {
-        if(this.authService.getAuth()){
+        if(this.authProvider.isAuthenticated()){
             return true;
         }
 

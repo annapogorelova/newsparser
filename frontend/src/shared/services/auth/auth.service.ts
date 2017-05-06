@@ -1,61 +1,57 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ApiService} from '../api/api.service';
-import {Router} from '@angular/router';
-import {CacheService} from '../cache/cache.service';
+import {AuthProviderService} from './auth-provider.service';
 
 @Injectable()
 export class AuthService {
     private supportedExternalProviders: Array<string> = ['facebook', 'google'];
-    private user: any;
 
-    constructor(@Inject(ApiService) private apiService: ApiService,
-                @Inject(Router) private router: Router,
-                private cacheService: CacheService) {
+    constructor(private apiService: ApiService,
+                private authProvider: AuthProviderService) {
     }
-
-    getAuth = function (): string {
-        return this.cacheService.get('auth');
-    };
 
     loadUser = (refresh: boolean = false) => {
         return this.apiService.get('account', null, null, refresh)
-            .then((response: any) => this.setUser(response.data));
-    };
-
-    getUser = () => {
-        return this.user;
-    };
-
-    private setUser = (data: any) => {
-        this.user = data;
-        return Promise.resolve(data);
+            .then((response: any) => this.authProvider.setUser(response.data));
     };
 
     signIn = function (username: string, password: string): Promise<any> {
-        return this.apiService.getAuth(username, password)
-            .then((response: any) => this.handleAuth(response));
-    };
-
-    private handleAuth = (response: any) => {
-        this.cacheService.set('auth', response.access_token);
-        this.loadUser(true);
-        return Promise.resolve(response);
+        var requestBody = `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+        return this.postToken(requestBody)
+            .then((auth: any) => this.authProvider.setAuth(auth))
+            .then((auth: any) => this.loadUser(true));
     };
 
     externalSignIn = function (accessToken: string, provider: string): Promise<any> {
         if(this.supportedExternalProviders.indexOf(provider.toLowerCase()) === -1){
             throw new Error(`${provider} external auth provider is no supported`);
         }
-        return this.apiService.getExternalAuth(accessToken, provider.toLowerCase())
-            .then((response: any) => this.handleAuth(response));
+        return this.postExternalAuth(accessToken, provider.toLowerCase())
+            .then((auth: any) => this.authProvider.setAuth(auth))
+            .then((auth: any) => this.loadUser(true));
     };
 
-    isAuthenticated = function (): boolean {
-        return this.getAuth() !== null && this.getAuth() !== undefined;
+    signOut = function (): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (this.authProvider.isAuthenticated()) {
+                let user:any = this.authProvider.getUser();
+                this.authProvider.setAuth(null);
+                this.authProvider.setUser(null);
+                resolve(user);
+            } else {
+                reject();
+            }
+        });
     };
 
-    signOut = function (): void {
-        localStorage.clear();
-        this.router.navigate('/sign-in');
+    private postToken = (requestBody: string) => {
+        var requestHeaders = {'Content-Type': 'application/x-www-form-urlencoded'};
+        return this.apiService.post('token', requestBody, requestHeaders);
     };
+
+    private postExternalAuth = (accessToken: string, provider: string) => {
+        var requestBody = `grant_type=urn:ietf:params:oauth:grant-type:${provider}_access_token&assertion=${encodeURIComponent(accessToken)}`;
+        return this.postToken(requestBody);
+    };
+
 }

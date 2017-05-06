@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../../shared/services/auth/auth.service';
+import {AuthProviderService} from '../../shared/services/auth/auth-provider.service';
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app',
@@ -10,7 +12,9 @@ export class AppComponent {
     public isNavbarCollapsed = true;
     public minContentHeight:number;
 
-    constructor(private authService:AuthService) {
+    constructor(private authService: AuthService,
+                private authProvider: AuthProviderService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -19,6 +23,6 @@ export class AppComponent {
     }
 
     signOut = () => {
-        this.authService.signOut();
+        this.authService.signOut().then(() => this.router.navigate(['/sign-in']));
     };
 }

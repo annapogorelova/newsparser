@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../shared/services/auth/auth.service';
 import {IForm} from '../../../shared/abstract/base-form/base-form';
@@ -21,12 +21,12 @@ export class SignInComponent implements IForm {
         password: ''
     };
 
-    constructor(@Inject(Router) private router: Router,
+    constructor(private router: Router,
                 private authService: AuthService){
 
     }
 
-    reset() {}
+    reset(){}
 
     onSubmitSucceeded = (response: any) => {
         this.submitInProgress = false;
@@ -36,6 +36,7 @@ export class SignInComponent implements IForm {
     };
 
     onSubmitFailed = (error: Error) => {
+        debugger;
         this.submitInProgress = false;
         this.submitFailed = true;
         this.responseMessage = error.message;
@@ -52,7 +53,7 @@ export class SignInComponent implements IForm {
             .catch(error => this.onSubmitFailed(error));
     };
 
-    disableInputs = (event: any) => {
+    disableInputs = () => {
         this.submitInProgress = true;
     };
 }

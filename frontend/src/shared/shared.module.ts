@@ -16,11 +16,15 @@ import {GoTopButtonModule} from 'ng2-go-top-button';
 import {TagListComponent} from './components/tags-list/tags-list.component';
 import {ExternalAuthModule} from './modules/external-auth/external-auth.module';
 import {EqualityValidator} from './directives/equality-validator.directive';
+import {Http, Response} from '@angular/http';
+import {AppSettings} from '../app/app.settings';
+import {AuthProviderService} from './services/auth/auth-provider.service';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
     providers: [
-        ApiService, AuthService, CanActivateAuth,
+        AuthService,
+        CanActivateAuth,
         PagerServiceProvider,
         {
             provide: NavigatorService,
@@ -28,6 +32,12 @@ import {EqualityValidator} from './directives/equality-validator.directive';
                 new NavigatorService(router, activatedRoute),
             deps: [Router, ActivatedRoute]
         },
+        {
+            provide: ApiService,
+            useFactory: getApiService,
+            deps: [Http, CacheService, AuthProviderService, ApiErrorHandler],
+        },
+        AuthProviderService,
         ApiErrorHandler,
         CacheService
     ],
@@ -38,4 +48,34 @@ import {EqualityValidator} from './directives/equality-validator.directive';
 })
 
 export class SharedModule {
+}
+
+export function getApiService(http:Http,
+                              cacheService:CacheService,
+                              authProvider:AuthProviderService,
+                              errorHandler:ApiErrorHandler) {
+    return new ApiService(
+        http,
+        AppSettings.API_ENDPOINT,
+        function onResponseSuccess(response:Response, cache: boolean = false) {
+            let maxAge = 300;
+            let body = response.json();
+            if (cache && body) {
+                // TODO: maybe customize this
+                var cacheKey = response.url.replace(/&autotimestamp=([^&]*)/, '');
+                cacheService.set(cacheKey, body, maxAge);
+            }
+            return body || {};
+        },
+        function onResponseError(response:Response) {
+            return errorHandler.handleResponse(response);
+        },
+        function provideDefaultHeaders() {
+            const headers = {'Content-Type': 'application/json'};
+            if (authProvider.hasAuth()) {
+                headers['Authorization'] = `Bearer ${authProvider.getAuthToken()}`;
+            }
+            return headers;
+        }
+    );
 }
