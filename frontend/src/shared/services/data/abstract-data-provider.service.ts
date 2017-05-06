@@ -16,7 +16,6 @@ export class AbstractDataProviderService {
     get(apiRoute: string, params: any, headers: any, refresh: boolean = false){
         var cacheKey = this.cacheService.getCacheKey(AppSettings.API_ENDPOINT + apiRoute, params);
         var cachedData = this.cacheService.get(cacheKey);
-        debugger;
         if (!refresh && cachedData) {
             return Promise.resolve(cachedData);
         }
