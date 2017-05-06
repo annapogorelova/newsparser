@@ -1,5 +1,5 @@
-import {ApiService} from '../../services/api/api.service';
 import {PagerService} from '../../services/pager/pager.service';
+import {AbstractDataProviderService} from '../../services/data/abstract-data-provider.service';
 
 /**
  * Class contains methods to manipulate the lists data,
@@ -26,7 +26,7 @@ export abstract class BaseList {
      */
     protected items: Array<any> = [];
 
-    constructor(protected apiService: ApiService,
+    constructor(protected dataProvider: AbstractDataProviderService,
                 protected pager: PagerService){
     }
 
@@ -60,7 +60,7 @@ export abstract class BaseList {
     protected loadData = (params: any, refresh: boolean = false) => {
         this.loadingInProgress = true;
         var mergedParams = this.mergeRequestParams(params);
-        return this.apiService.get(this.apiRoute, mergedParams, null, refresh)
+        return this.dataProvider.get(this.apiRoute, mergedParams, null, refresh)
             .then(data => this.onLoaded(data))
             .catch(error => this.onError(error));
     };

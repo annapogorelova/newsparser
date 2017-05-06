@@ -29,8 +29,8 @@ export class CacheService {
      * @param data
      * @param maxAge
      */
-    set = (key: string, data: any, maxAge: number = null) => {
-        var expires = maxAge !== null ? Date.now() + (maxAge * 1000) : null;
+    set = (key: string, data: any, expires: number = null) => {
+        expires = expires !== null ? Date.now() + (expires * 1000) : null;
         localStorage.setItem(key, JSON.stringify({data: data, expires: expires}));
     };
 

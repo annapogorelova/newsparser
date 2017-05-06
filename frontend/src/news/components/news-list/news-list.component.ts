@@ -1,9 +1,9 @@
 import {Component, HostListener, Inject} from '@angular/core';
-import {ApiService} from '../../../shared/services/api/api.service';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {BaseList} from '../../../shared/abstract/base-list/base-list';
+import {AbstractDataProviderService} from '../../../shared/services/data/abstract-data-provider.service';
 
 @Component({
     selector: 'news-list',
@@ -21,11 +21,11 @@ export class NewsListComponent extends BaseList{
     public selectedTags: Array<string> = [];
     private search: string = null;
 
-    constructor(@Inject(ApiService) apiService: ApiService,
+    constructor(protected dataProvider: AbstractDataProviderService,
                 @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider,
                 private navigator: NavigatorService,
                 @Inject(ActivatedRoute) private route:ActivatedRoute){
-        super(apiService, pagerProvider.getInstance());
+        super(dataProvider, pagerProvider.getInstance());
     }
 
     ngOnInit(){
@@ -154,7 +154,7 @@ export class NewsListComponent extends BaseList{
      * Listens to user scrolling the page and loads the next page
      * of data when user reaches the bottom
      */
-    @HostListener("window:scroll", [])
+    @HostListener('window:scroll', [])
     onWindowScroll = () => {
         var userScrollPosition = window.innerHeight + window.scrollY;
         if (userScrollPosition >= document.body.offsetHeight &&

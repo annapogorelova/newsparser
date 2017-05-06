@@ -36,7 +36,6 @@ export class SignInComponent implements IForm {
     };
 
     onSubmitFailed = (error: Error) => {
-        debugger;
         this.submitInProgress = false;
         this.submitFailed = true;
         this.responseMessage = error.message;

@@ -6,9 +6,13 @@ export class AuthProviderService {
     constructor(protected cacheService: CacheService) {
     }
 
-    setAuth(auth:any):any {
-        this.cacheService.set('auth', auth);
-        return auth;
+    setAuth(data: any): any {
+        this.cacheService.set('auth', data);
+        return data;
+    }
+    
+    clearAuth(): void {
+        this.cacheService.remove('auth');
     }
 
     getAuth():any {
@@ -24,9 +28,13 @@ export class AuthProviderService {
         return auth ? auth.access_token : null;
     }
 
-    setUser(user:any):any {
-        this.cacheService.set('user', user);
-        return user;
+    setUser(data: any): any {
+        this.cacheService.set('user', data, data.expires_in);
+        return data;
+    }
+
+    clearUser(): void {
+        this.cacheService.remove('user');
     }
 
     getUser():any {

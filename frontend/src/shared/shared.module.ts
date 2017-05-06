@@ -19,6 +19,7 @@ import {EqualityValidator} from './directives/equality-validator.directive';
 import {Http, Response} from '@angular/http';
 import {AppSettings} from '../app/app.settings';
 import {AuthProviderService} from './services/auth/auth-provider.service';
+import {AbstractDataProviderService} from './services/data/abstract-data-provider.service';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -26,6 +27,10 @@ import {AuthProviderService} from './services/auth/auth-provider.service';
         AuthService,
         CanActivateAuth,
         PagerServiceProvider,
+        AuthProviderService,
+        ApiErrorHandler,
+        CacheService,
+        AbstractDataProviderService,
         {
             provide: NavigatorService,
             useFactory: (router: Router, activatedRoute: ActivatedRoute) =>
@@ -35,39 +40,40 @@ import {AuthProviderService} from './services/auth/auth-provider.service';
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, CacheService, AuthProviderService, ApiErrorHandler],
-        },
-        AuthProviderService,
-        ApiErrorHandler,
-        CacheService
+            deps: [Http, AuthProviderService, ApiErrorHandler],
+        }
     ],
-    declarations: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent,
-        TagListComponent, EqualityValidator],
-    exports: [PageNotFoundComponent, RefreshButtonComponent, SearchComponent, GoTopButtonModule,
-        TagListComponent, ExternalAuthModule, EqualityValidator]
+    declarations: [
+        PageNotFoundComponent,
+        RefreshButtonComponent,
+        SearchComponent,
+        TagListComponent,
+        EqualityValidator
+    ],
+    exports: [
+        PageNotFoundComponent,
+        RefreshButtonComponent,
+        SearchComponent,
+        GoTopButtonModule,
+        TagListComponent,
+        ExternalAuthModule,
+        EqualityValidator
+    ]
 })
 
 export class SharedModule {
 }
 
 export function getApiService(http:Http,
-                              cacheService:CacheService,
                               authProvider:AuthProviderService,
                               errorHandler:ApiErrorHandler) {
     return new ApiService(
         http,
         AppSettings.API_ENDPOINT,
-        function onResponseSuccess(response:Response, cache: boolean = false) {
-            let maxAge = 300;
-            let body = response.json();
-            if (cache && body) {
-                // TODO: maybe customize this
-                var cacheKey = response.url.replace(/&autotimestamp=([^&]*)/, '');
-                cacheService.set(cacheKey, body, maxAge);
-            }
-            return body || {};
+        function onResponseSuccess(response: Response) {
+            return response.json() || {};
         },
-        function onResponseError(response:Response) {
+        function onResponseError(response: Response) {
             return errorHandler.handleResponse(response);
         },
         function provideDefaultHeaders() {

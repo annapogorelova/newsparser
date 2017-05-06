@@ -1,8 +1,8 @@
 import {Component, Inject, Input, Output, EventEmitter} from '@angular/core';
-import {ApiService} from '../../../shared/services/api/api.service';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
 import {AppSettings} from '../../../app/app.settings';
 import {BaseList} from '../../../shared/abstract/base-list/base-list';
+import {AbstractDataProviderService} from '../../../shared/services/data/abstract-data-provider.service';
 
 @Component({
     selector: 'news-sources',
@@ -26,9 +26,9 @@ export class NewsSourcesListComponent extends BaseList {
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     @Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(@Inject(ApiService) apiService: ApiService,
+    constructor(protected dataProvider: AbstractDataProviderService,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
-        super(apiService, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
+        super(dataProvider, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
     }
 
     ngOnInit(){

@@ -35,8 +35,8 @@ export class AuthService {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
                 let user:any = this.authProvider.getUser();
-                this.authProvider.setAuth(null);
-                this.authProvider.setUser(null);
+                this.authProvider.clearAuth();
+                this.authProvider.clearUser();
                 resolve(user);
             } else {
                 reject();
