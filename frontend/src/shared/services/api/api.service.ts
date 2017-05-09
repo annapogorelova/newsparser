@@ -22,7 +22,9 @@ export class ApiService {
      */
     get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
         var absoluteUrl = this.getAbsoluteUrl(url);
-        params.refresh = refresh;
+        if(params){
+            params.refresh = refresh;
+        }
 
         return this.request(absoluteUrl, 'GET', null, params, headers);
     };
@@ -80,7 +82,7 @@ export class ApiService {
             method: method,
             headers: this.initializeHeaders(headers),
             body: this.initializeBody(body),
-            search: this.initializeParams(params, params.refresh)
+            search: this.initializeParams(params, params ? params.refresh : false)
         });
         return this.http.request(url, requestOptions)
             .toPromise()
