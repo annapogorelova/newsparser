@@ -20,6 +20,7 @@ import {Http, Response} from '@angular/http';
 import {AppSettings} from '../app/app.settings';
 import {AuthProviderService} from './services/auth/auth-provider.service';
 import {AbstractDataProviderService} from './services/data/abstract-data-provider.service';
+import {AuthRefreshLocker} from './services/auth/auth-refresh-locker.service';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -28,6 +29,7 @@ import {AbstractDataProviderService} from './services/data/abstract-data-provide
         CanActivateAuth,
         PagerServiceProvider,
         AuthProviderService,
+        AuthRefreshLocker,
         ApiErrorHandler,
         CacheService,
         AbstractDataProviderService,
@@ -74,7 +76,7 @@ export function getApiService(http:Http,
             return response.json() || {};
         },
         function onResponseError(response: Response) {
-            return errorHandler.handleResponse(response);
+            return errorHandler.onRequestFailed(response);
         },
         function provideDefaultHeaders() {
             const headers = {'Content-Type': 'application/json'};

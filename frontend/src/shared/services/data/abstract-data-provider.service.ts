@@ -29,11 +29,11 @@ export class AbstractDataProviderService {
     };
 
     post(apiRoute: string, params: any, headers: any){
-        return this.apiService.post(apiRoute, params);
+        return this.apiService.post(apiRoute, params, headers);
     };
 
     put(apiRoute: string, params: any, headers: any){
-        return this.apiService.put(apiRoute, params);
+        return this.apiService.put(apiRoute, params, headers);
     };
 
     delete(apiRoute: string, id: number){

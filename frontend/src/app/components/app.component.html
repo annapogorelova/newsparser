@@ -15,14 +15,14 @@
             </li>
         </ul>
         <div class="navbar-nav">
-            <a href="#" role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
+            <a role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
                 Account <strong *ngIf="authProvider.hasUser()">({{authProvider.getUser().email}})</strong>
             </a>
-            <a href="#" role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
+            <a role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Sign Out
             </a>
-            <a href="#" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
+            <a href="" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
                routerLink="/sign-in" routerLinkActive="active">
                 <i class="fa fa-sign-in" aria-hidden="true"></i>
                 Sign In

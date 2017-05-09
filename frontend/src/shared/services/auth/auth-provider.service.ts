@@ -28,6 +28,11 @@ export class AuthProviderService {
         return auth ? auth.access_token : null;
     }
 
+    getRefreshToken():string {
+        let auth = this.getAuth();
+        return auth ? auth.refresh_token : null;
+    }
+
     setUser(data: any): any {
         this.cacheService.set('user', data, data.expires_in);
         return data;

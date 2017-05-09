@@ -22,16 +22,9 @@ export class ApiService {
      */
     get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
         var absoluteUrl = this.getAbsoluteUrl(url);
-        var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({
-            headers: requestHeaders,
-            search: this.initializeParams(params, refresh)
-        });
+        params.refresh = refresh;
 
-        return this.http.get(absoluteUrl, requestOptions)
-            .toPromise()
-            .then(this.onResponseSuccess)
-            .catch(this.onResponseError);
+        return this.request(absoluteUrl, 'GET', null, params, headers);
     };
 
     /**
@@ -42,13 +35,7 @@ export class ApiService {
      * @returns {Promise<any>}
      */
     post = (url: string, params: any, headers: any = null) => {
-        var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({headers: requestHeaders});
-
-        return this.http.post(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
-            .toPromise()
-            .then(this.onResponseSuccess)
-            .catch(this.onResponseError);
+        return this.request(this.getAbsoluteUrl(url), 'POST', params, null, headers);
     };
 
     /**
@@ -59,13 +46,7 @@ export class ApiService {
      * @returns {Promise<any>}
      */
     put = (url: string, params: any, headers: any = null) => {
-        var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({headers: requestHeaders});
-
-        return this.http.put(this.getAbsoluteUrl(url), this.initializeBody(params), requestOptions)
-            .toPromise()
-            .then(this.onResponseSuccess)
-            .catch(this.onResponseError);
+        return this.request(this.getAbsoluteUrl(url), 'PUT', params, null, headers);
     };
 
     /**
@@ -76,14 +57,59 @@ export class ApiService {
      * @returns {Promise<any>}
      */
     delete = (url: string, id: number, headers: any = null) => {
-        var requestHeaders = this.initializeHeaders(headers);
-        var requestOptions = new RequestOptions({headers: requestHeaders});
         var requestUrl = this.getAbsoluteUrl(url) + '?id=' + id;
 
-        return this.http.delete(requestUrl, requestOptions)
+        return this.request(requestUrl, 'DELETE', null, null, headers);
+    };
+
+    /**
+     * General HTTP request
+     * @param url
+     * @param method
+     * @param body
+     * @param params
+     * @param headers
+     * @returns {Promise<any|T>|Promise<any>}
+     */
+    private request = (url: string,
+               method: string,
+               body: any = null,
+               params: any = null,
+               headers: any = null): Promise<any> => {
+        var requestOptions = new RequestOptions({
+            method: method,
+            headers: this.initializeHeaders(headers),
+            body: this.initializeBody(body),
+            search: this.initializeParams(params, params.refresh)
+        });
+        return this.http.request(url, requestOptions)
             .toPromise()
             .then(this.onResponseSuccess)
-            .catch(this.onResponseError);
+            .catch(this.onResponseError)
+            .catch((error: any) => this.afterError(error, url, method, body, params, headers));
+    };
+
+    /**
+     * Retries the request if required
+     * @param response
+     * @param url
+     * @param method
+     * @param body
+     * @param params
+     * @param headers
+     * @returns {any}
+     */
+    private afterError = (error: any,
+                          url: string,
+                          method: string,
+                          body: any = null,
+                          params: any = null,
+                          headers: any = null): Promise<any> => {
+        if(error.retry){
+            return Promise.resolve(this.request(url, method, body, params, headers));
+        }
+
+        return Promise.reject(error);
     };
 
     /**
