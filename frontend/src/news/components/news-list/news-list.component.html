@@ -95,7 +95,9 @@
                                 <div class="news-item-footer">
                                     <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
                                         <h6>
-                                        <span class="badge badge-default" (click)="selectTag(tag)">
+                                        <span class="tag badge badge-default"
+                                              (click)="selectTag(tag)"
+                                              ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
                                             {{tag}}
                                         </span>
                                         </h6>

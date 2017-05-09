@@ -41,3 +41,11 @@ tags-list p {
     color: #636C72;
     font-weight: lighter;
 }
+
+tags-list span.badge-default {
+    background-color: #4d5257;
+}
+
+tags-list span.badge-default:hover {
+    background-color: #818a91;
+}

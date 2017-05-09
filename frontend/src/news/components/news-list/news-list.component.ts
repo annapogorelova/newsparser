@@ -117,27 +117,35 @@ export class NewsListComponent extends BaseList{
     };
 
     onDeselectTag = (event: any) => {
-        this.selectedTags = this.selectedTags.filter(function(tag){
-            return tag !== event.tag;
+        this.deselectTag(event.tag);
+    };
+
+    onClearTags = () => {
+        this.selectedTags = [];
+        this.navigator.setQueryParam('tags', null);
+        this.reload();
+    };
+
+    selectTag = (tag: string) => {
+        if(this.isTagSelected(tag)){
+            return;
+        }
+        this.selectedTags.push(tag);
+        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
+        this.reload();
+    };
+
+    deselectTag = (tag: string) => {
+        this.selectedTags = this.selectedTags.filter(function(selectedTag){
+            return selectedTag !== tag;
         });
 
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reload();
     };
 
-    onClearTags = (event: any) => {
-        this.selectedTags = [];
-        this.navigator.setQueryParam('tags', null);
-        this.reload();
-    };
-
-    selectTag = (tag: any) => {
-        if(this.selectedTags.indexOf(tag) !== -1){
-            return;
-        }
-        this.selectedTags.push(tag);
-        this.navigator.setQueryParam('tags', this.selectedTags.join(','));
-        this.reload();
+    isTagSelected = (tag: string) => {
+        return this.selectedTags.indexOf(tag) !== -1;
     };
 
     searchNews = (search: string) => {

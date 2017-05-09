@@ -131,3 +131,12 @@ news-list .news-item-info-container span.badge {
     white-space: nowrap;
     margin-bottom: 5px;
 }
+
+news-list span.tag.badge-default.selected,
+        span.tag.badge-default:hover {
+    background-color: #4d5257;
+}
+
+news-list span.tag.badge-default.selected {
+    cursor: not-allowed;
+}
