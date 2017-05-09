@@ -213,7 +213,7 @@ namespace NewsParser
             var secretKey = Configuration["Authentication:SecretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var accessTokenLifetime = int.Parse(Configuration.GetSection("Security")["AccessTokenLifetimeMinutes"]);
-            var refreshTokenLifetime = int.Parse(Configuration.GetSection("Security")["RefreshTokenLifetimeHours"]);
+            var refreshTokenLifetime = int.Parse(Configuration.GetSection("Security")["RefreshTokenLifetimeDays"]);
 
             services.AddIdentity<ApplicationUser, Role>(config =>
                 {
@@ -258,7 +258,7 @@ namespace NewsParser
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:facebook_access_token");
                 options.AllowCustomFlow("urn:ietf:params:oauth:grant-type:google_access_token");
                 
-                options.SetRefreshTokenLifetime(TimeSpan.FromHours(refreshTokenLifetime));
+                options.SetRefreshTokenLifetime(TimeSpan.FromDays(refreshTokenLifetime));
                 options.SetAccessTokenLifetime(TimeSpan.FromMinutes(accessTokenLifetime));
                
                 options.EnableTokenEndpoint("/api/token");
