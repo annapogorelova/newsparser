@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using newsparser.DAL.Models;
 using NewsParser.Auth.ExternalAuth;
-using NewsParser.BL.Services.Users;
 using NewsParser.DAL.Models;
+using NewsParser.DAL.Repositories.Users;
 using NewsParser.Identity;
 using NewsParser.Identity.Models;
 using OpenIddict.Core;
@@ -26,20 +26,21 @@ namespace NewsParser.Auth
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly IUserBusinessService _userBusinessService;
+
+        private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthService(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
-            IUserBusinessService userBusinessService,
+            IUserRepository userRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _userStore = userStore;
-            _userBusinessService = userBusinessService;
+            _userRepository = userRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -135,13 +136,13 @@ namespace NewsParser.Auth
 
         public ApplicationUser FindUserByExternalId(string socialId, ExternalAuthProvider provider)
         {
-            var existingUser = _userBusinessService.GetUserBySocialId(socialId, provider);
+            var existingUser = _userRepository.GetUserBySocialId(socialId, provider);
             return existingUser != null ? AutoMapper.Mapper.Map<User, ApplicationUser>(existingUser) : null;
         }
 
         public ApplicationUser FindUserByEmail(string email)
         {
-            var user = _userBusinessService.GetUserByEmail(email);
+            var user = _userRepository.GetUserByEmail(email);
             return AutoMapper.Mapper.Map<User, ApplicationUser>(user);
         }
 
@@ -190,7 +191,7 @@ namespace NewsParser.Auth
 
         public ApplicationUser FindUserByUserName(string userName)
         {
-            var user = _userBusinessService.GetUserByUserName(userName);
+            var user = _userRepository.GetUserByUserName(userName);
             return AutoMapper.Mapper.Map<User, ApplicationUser>(user);
         }
 
