@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
-import {NewsListComponent} from './components/news-list/news-list.component';
-import {NewsRouting, NewsRoutingProviders} from './news.routing';
+import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
-import {SharedModule} from '../shared/shared.module';
-import {FormsModule} from '@angular/forms';
-import {NewsSourcesModule} from '../news-sources/news-sources.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NewsListComponent} from './components';
+import {NewsRouting, NewsRoutingProviders} from './news.routing';
+import {SharedModule} from '../shared';
+import {NewsSourcesModule} from '../news-sources';
 
 @NgModule({
     imports: [

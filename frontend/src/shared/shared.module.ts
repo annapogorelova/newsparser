@@ -1,26 +1,30 @@
 import {NgModule} from '@angular/core';
-import {ApiService} from './services/api/api.service';
-import {AuthService} from './services/auth/auth.service';
-import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
-import {CanActivateAuth} from './services/auth/can-activate';
 import {BrowserModule} from '@angular/platform-browser';
-import {NavigatorService} from './services/navigator/navigator.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {RefreshButtonComponent} from './components/refresh-button/refresh-button.component';
-import {ApiErrorHandler} from './services/api/api-error-handler';
-import {PagerServiceProvider} from './services/pager/pager.service.provider';
-import {CacheService} from './services/cache/cache.service';
-import {SearchComponent} from './components/search/search.component';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
-import {TagListComponent} from './components/tags-list/tags-list.component';
-import {ExternalAuthModule} from './modules/external-auth/external-auth.module';
-import {EqualityValidator} from './directives/equality-validator.directive';
+import {ExternalAuthModule} from './modules';
+import {EqualityValidator} from './directives';
 import {Http, Response} from '@angular/http';
 import {AppSettings} from '../app/app.settings';
-import {AuthProviderService} from './services/auth/auth-provider.service';
-import {AbstractDataProviderService} from './services/data/abstract-data-provider.service';
-import {AuthRefreshLocker} from './services/auth/auth-refresh-locker.service';
+import {
+    ApiService,
+    AuthService,
+    NavigatorService,
+    ApiErrorHandler,
+    PagerServiceProvider,
+    CacheService,
+    AuthProviderService,
+    AbstractDataProviderService,
+    AuthRefreshLocker,
+    CanActivateAuth
+} from './services';
+import {
+    PageNotFoundComponent,
+    RefreshButtonComponent,
+    SearchComponent,
+    TagListComponent
+} from './components';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
