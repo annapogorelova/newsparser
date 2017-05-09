@@ -39,7 +39,7 @@ export class NewsListComponent extends BaseList{
             pageSize: this.pager.getPage() * this.pager.getPageSize()
         };
         var requestParams = Object.assign(preloadPageParams, this.getRequestParams());
-        this.loadData(requestParams);
+        this.loadData(requestParams, true);
     }
 
     /**
