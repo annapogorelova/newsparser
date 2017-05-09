@@ -24,7 +24,16 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNews()
         {
-            return _dbContext.News.Include(n => n.Tags).ThenInclude(t => t.Tag);
+            return _dbContext.News;
+        }
+
+        public IQueryable<NewsItem> GetNewsByUser(int userId)
+        {
+            return _dbContext.News
+                    .Include(n => n.Sources)
+                    .ThenInclude(s => s.Source)
+                    .Where(n => n.Sources.Select(s => s.Source)
+                    .Any(s => s.Users.Any(u => u.UserId == userId)));
         }
 
         /// <summary>
@@ -44,8 +53,7 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNewsByTagName(string tagName)
         {
-            return _dbContext.News.Include(n => n.Tags)
-                .Where(n => n.Tags.Any(t => t.Tag.Name == tagName));
+            return _dbContext.News.Where(n => n.Tags.Any(t => t.Tag.Name == tagName));
         }
 
         /// <summary>
@@ -55,8 +63,7 @@ namespace NewsParser.DAL.Repositories.News
         /// <returns>IQueryable of NewsItem</returns>
         public IQueryable<NewsItem> GetNewsByTagId(int tagId)
         {
-            return _dbContext.News.Include(n => n.Tags)
-                .Where(n => n.Tags.Any(t => t.Tag.Id == tagId));
+            return _dbContext.News.Where(n => n.Tags.Any(t => t.Tag.Id == tagId));
         }
 
         /// <summary>

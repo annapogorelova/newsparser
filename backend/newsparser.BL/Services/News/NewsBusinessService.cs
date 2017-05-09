@@ -49,21 +49,13 @@ namespace NewsParser.BL.Services.News
                 throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0");
             }
 
-            var news = _newsRepository.GetNews();
+            var news = userId.HasValue ? 
+                _newsRepository.GetNewsByUser(userId.Value) : 
+                _newsRepository.GetNews();
 
             if (sourcesIds != null)
             {
                 news = news.Where(n => sourcesIds.Intersect(n.Sources.Select(ns => ns.SourceId)).Any());
-            }
-
-            if (userId.HasValue)
-            {
-                news = news
-                    .Include(n => n.Sources)
-                    .ThenInclude(s => s.Source)
-                    .ThenInclude(source => source.Users)
-                    .Where(n => n.Sources.Select(s => s.Source)
-                    .Any(ns => ns.Users.Any(u => u.UserId == userId.Value)));
             }
 
             if (!string.IsNullOrEmpty(search))
@@ -82,7 +74,14 @@ namespace NewsParser.BL.Services.News
                         string.Equals(nt.Tag.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
             }
 
-            return news.OrderByDescending(n => n.DatePublished).Skip(pageIndex).Take(pageSize);
+            return news
+                .Include(n => n.Tags)
+                .ThenInclude(t => t.Tag)
+                .Include(n => n.Sources)
+                .ThenInclude(s => s.Source)
+                .OrderByDescending(n => n.DatePublished)
+                .Skip(pageIndex)
+                .Take(pageSize);
         }
 
         public IEnumerable<NewsItem> GetNewsBySource(int sourceId)

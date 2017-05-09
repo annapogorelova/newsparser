@@ -16,6 +16,13 @@ namespace NewsParser.DAL.Repositories.News
         IQueryable<NewsItem> GetNews();
 
         /// <summary>
+        /// Get news by the user id
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>IQueryable of NewsItem</returns>
+        IQueryable<NewsItem> GetNewsByUser(int userId);
+
+        /// <summary>
         /// Get news items by source id
         /// </summary>
         /// <param name="sourceId">Source id</param>
