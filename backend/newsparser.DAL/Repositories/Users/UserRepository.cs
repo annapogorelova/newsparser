@@ -35,7 +35,7 @@ namespace NewsParser.DAL.Repositories.Users
         /// <returns>User object</returns>
         public User GetUserByEmail(string email)
         {
-            return _dbContext.Users.Include(u => u.UserExternalIds).FirstOrDefault(u => u.Email == email);
+            return _dbContext.Users.FirstOrDefault(u => u.Email == email);
         }
 
         /// <summary>
@@ -55,8 +55,7 @@ namespace NewsParser.DAL.Repositories.Users
         public IQueryable<User> GetUsersByNewsSource(int sourceId)
         {
             return
-                _dbContext.Users.Include(u => u.Sources)
-                    .Where(u => u.Sources.Any(ns => ns.SourceId == sourceId));
+                _dbContext.Users.Where(u => u.Sources.Any(ns => ns.SourceId == sourceId));
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace NewsParser.DAL.Repositories.Users
         public User GetUserBySocialId(string socialId, ExternalAuthProvider provider)
         {
             return
-                _dbContext.Users.Include(u => u.UserExternalIds).FirstOrDefault(
+                _dbContext.Users.FirstOrDefault(
                     u =>
                         u.UserExternalIds.Any(
                             s => s.ExternalId.ToLower() == socialId.ToLower() && s.AuthProvider == provider));
