@@ -1,3 +1,7 @@
 .container {
     padding-top: 50px;
 }
+
+a[role=link] {
+    cursor: pointer;
+}
