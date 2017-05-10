@@ -69,9 +69,8 @@ namespace NewsParser.BL.Services.News
 
             if (tags != null)
             {
-                news =
-                    news.Where(n => n.Tags.Any(nt => tags.Any(tag =>
-                        string.Equals(nt.Tag.Name, tag, StringComparison.CurrentCultureIgnoreCase))));
+                news = news.Where(n => n.Tags.Select(t => t.Tag.Name.ToLower())
+                    .Intersect(tags.Select(t => t.ToLower())).Any());
             }
 
             return news
