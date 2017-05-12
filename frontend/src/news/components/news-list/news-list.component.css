@@ -88,10 +88,16 @@
     cursor: pointer;
 }
 
-:host /deep/ .loading-status, .loading-status h5 {
+:host /deep/ .loading-status {
+    width: 100%;
+    height: 50vh;
+    display: table;
+}
+
+:host /deep/ .loading-status h5, i {
     text-align: center;
     vertical-align: middle;
-    line-height: 50vh;
+    display: table-cell;
 }
 
 :host /deep/ .row.tags-container {
