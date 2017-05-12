@@ -1,4 +1,4 @@
-news-sources .news-source-item {
+:host /deep/ .news-source-item {
     display: block;
     cursor: pointer;
     overflow: hidden;
@@ -8,36 +8,36 @@ news-sources .news-source-item {
     padding: 5px 5px 5px 5px;
 }
 
-news-sources .news-source-item.active {
+:host /deep/ .news-source-item.active {
     color: white;
 }
 
-news-sources .news-source-item-container {
+:host /deep/ .news-source-item-container {
     display: inline-block;
     padding-right: 5px;
     max-width: 100%;
 }
 
-news-sources .news-sources-list {
+:host /deep/ .news-sources-list {
     height: 100%;
     overflow-y: auto;
 }
 
-news-sources .loading-more-icon-container {
+:host /deep/ .loading-more-icon-container {
     display: table;
     margin: auto;
 }
 
-news-sources .loading-status-container, .loading-status-container h5 {
+:host /deep/ .loading-status-container, .loading-status-container h5 {
     text-align: center;
     vertical-align: middle;
 }
 
-news-sources .paging {
+:host /deep/ .paging {
     text-align: center;
 }
 
-news-sources .paging-button {
+:host /deep/ .paging-button {
     width: 25px;
     height: 25px;
     line-height: 25px;
@@ -49,24 +49,24 @@ news-sources .paging-button {
     border-radius: 3px 3px 3px 3px;
 }
 
-news-sources .paging-button:not([disabled]) {
+:host /deep/ .paging-button:not([disabled]) {
     cursor: pointer;
 }
 
-news-sources .paging-button:hover:not([disabled]), .paging-button:focus:not([disabled]) {
+:host /deep/ .paging-button:hover:not([disabled]), .paging-button:focus:not([disabled]) {
     background-color: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     color: white;
 }
 
-news-sources .paging-button[disabled] {
+:host /deep/ .paging-button[disabled] {
     opacity: 0.7;
 }
 
-news-sources .paging {
+:host /deep/ .paging {
     padding-top: 5px;
 }
 
-news-sources .paging div {
+:host /deep/ .paging div {
     display: inline;
 }

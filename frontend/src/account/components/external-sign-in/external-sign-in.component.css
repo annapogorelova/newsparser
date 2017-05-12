@@ -1,10 +1,10 @@
-external-sign-in .social-button {
+:host /deep/ .social-button {
     margin-bottom: 10px;
     width: 100%;
     cursor: pointer;
 }
 
-external-sign-in .social-button i {
+:host /deep/ .social-button i {
     float: left;
     padding-right: 10px;
 }

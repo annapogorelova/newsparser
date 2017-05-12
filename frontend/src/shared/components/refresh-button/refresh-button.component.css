@@ -1,4 +1,4 @@
-refresh-button .refresh {
+:host /deep/ .refresh {
     width: 45px;
     height: 45px;
     line-height: 35px;
@@ -9,7 +9,7 @@ refresh-button .refresh {
     cursor: pointer;
 }
 
-refresh-button .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {
+:host /deep/ .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {
     background-color: rgba(0, 0, 0, 0.3);
     text-decoration: none;
     color: white;

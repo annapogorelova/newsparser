@@ -1,15 +1,15 @@
-tags-list .tag-container {
+:host /deep/ .tag-container {
     display: inline-block;
     padding-right: 5px;
     max-width: 100%;
 }
 
-tags-list .card-block {
+:host /deep/ .card-block {
     max-height: 100%;
     overflow-y: auto;
 }
 
-tags-list .tag-item {
+:host /deep/ .tag-item {
     cursor: pointer;
     overflow:hidden;
     text-overflow: ellipsis;
@@ -18,39 +18,39 @@ tags-list .tag-item {
     max-width: 100%;
 }
 
-tags-list .no-tags-text {
+:host /deep/ .no-tags-text {
     text-align: center;
     vertical-align: middle;
     font-size: 0.8em;
 }
 
-tags-list .tag-input-container {
+:host /deep/ .tag-input-container {
     padding: 5px 0 5px 0;
 }
 
-tags-list div.card-header, div.card-block {
+:host /deep/ div.card-header, div.card-block {
     padding: 8px 8px 8px 8px;
 }
 
-tags-list h5, p, span.clear {
+:host /deep/ h5, p, span.clear {
     padding: 0 0 0 0;
     border: none;
 }
 
-tags-list span {
+:host /deep/ span {
     cursor: pointer;
 }
 
-tags-list p {
+:host /deep/ p {
     margin-bottom: 0;
     color: #636C72;
     font-weight: lighter;
 }
 
-tags-list span.badge-default {
+:host /deep/ span.badge-default {
     background-color: #4d5257;
 }
 
-tags-list span.badge-default:hover {
+:host /deep/ span.badge-default:hover {
     background-color: #818a91;
 }

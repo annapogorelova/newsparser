@@ -1,12 +1,12 @@
-sign-up .register-form {
+:host /deep/ .register-form {
     padding-bottom: 10px;
     min-width: 230px;
 }
 
-sign-up .btn-full-length {
+:host /deep/ .btn-full-length {
     width: 100%;
 }
 
-sign-up button {
+:host /deep/ button {
     cursor: pointer;
 }

@@ -1,8 +1,8 @@
-news-sources-settings .news-sources-settings-container {
+:host /deep/ .news-sources-settings-container {
     margin-top: 20px;
 }
 
-news-sources-settings .list-heading {
+:host /deep/ .list-heading {
     text-align: center;
     padding-bottom: 15px;
 }
