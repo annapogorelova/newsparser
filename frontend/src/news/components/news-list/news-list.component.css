@@ -161,6 +161,10 @@
     padding: 5px 5px 5px 5px;
 }
 
+:host /deep/ div.news-sources-card .news-sources-list-container {
+    border: none;
+}
+
 :host /deep/ .news-sources-container {
     height: 50vh;
 }

@@ -18,9 +18,23 @@
     max-width: 100%;
 }
 
-:host /deep/ .news-sources-list {
+:host /deep/ .news-sources-list-container {
+    border: 1px solid #2780E3;
     height: 100%;
     overflow-y: auto;
+}
+
+:host /deep/ .news-sources-list .list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+:host /deep/ .news-sources-list .list-group-item:first-child {
+    border-top: none;
+}
+
+:host /deep/ .news-sources-list .list-group-item:first-child {
+    border-bottom: none;
 }
 
 :host /deep/ .loading-more-icon-container {
@@ -28,9 +42,17 @@
     margin: auto;
 }
 
-:host /deep/ .loading-status-container, .loading-status-container h5 {
+:host /deep/ .loading-status-container {
+    padding: 10px 10px 10px 10px;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+:host /deep/ .loading-status-container h5, i {
     text-align: center;
     vertical-align: middle;
+    display: table-cell;
 }
 
 :host /deep/ .paging {

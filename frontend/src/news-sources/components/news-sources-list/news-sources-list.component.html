@@ -4,27 +4,29 @@
 <div *ngIf="useRefresh">
     <refresh-button (onRefresh)="reload($event)"></refresh-button>
 </div>
-<div *ngIf="hasItems()" class="news-sources-list" infinite-scroll
-     [infiniteScrollDistance]="3"
-     [infiniteScrollThrottle]="300"
-     [infiniteScrollDisabled]="!hasMoreItems"
-     [scrollWindow]="false"
-     (scrolled)="loadMore()">
-    <div class="list-group">
-        <a *ngFor="let newsSource of items" class="news-source-item list-group-item list-group-item-action"
-           [class.active]="isSelected(newsSource)"
-           (click)="(isSelected(newsSource) || isSubscribed(newsSource)) ?
-                deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
-           [attr.title]="newsSource.name">
-            {{newsSource.name}}
-            <i class="fa fa-check pull-right" *ngIf="isSubscribed(newsSource)"></i>
-        </a>
+<div class="news-sources-list-container">
+    <div *ngIf="hasItems()" class="news-sources-list" infinite-scroll
+         [infiniteScrollDistance]="3"
+         [infiniteScrollThrottle]="300"
+         [infiniteScrollDisabled]="!hasMoreItems"
+         [scrollWindow]="false"
+         (scrolled)="loadMore()">
+        <div class="list-group">
+            <a *ngFor="let newsSource of items" class="news-source-item list-group-item list-group-item-action"
+               [class.active]="isSelected(newsSource)"
+               (click)="(isSelected(newsSource) || isSubscribed(newsSource)) ?
+                    deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
+               [attr.title]="newsSource.name">
+                {{newsSource.name}}
+                <i class="fa fa-check pull-right" *ngIf="isSubscribed(newsSource)"></i>
+            </a>
+        </div>
+        <div *ngIf="loadingInProgress" class="loading-more-icon-container">
+            <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
+        </div>
     </div>
-    <div *ngIf="loadingInProgress" class="loading-more-icon-container">
-        <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
+    <div *ngIf="!hasItems()" class="loading-status-container">
+        <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
+        <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
     </div>
-</div>
-<div *ngIf="!hasItems()" class="loading-status-container">
-    <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
-    <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
 </div>
