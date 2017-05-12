@@ -172,3 +172,7 @@
 :host /deep/ tags-list .card {
     height: 20vh;
 }
+
+:host /deep/ h3.news-item-title {
+    font-weight: normal;
+}
