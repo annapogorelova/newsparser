@@ -109,7 +109,7 @@ news-list .refresh-button-container {
 
 news-list .refresh-button-container button {
     width: 35px;
-    height: 65px;
+    height: 35px;
 }
 
 news-list .news-item-info-container {
@@ -139,4 +139,32 @@ news-list span.tag.badge-default.selected,
 
 news-list span.tag.badge-default.selected {
     cursor: not-allowed;
+}
+
+news-list div.news-sources-card div.card-block {
+    padding: 0;
+}
+
+news-list div.news-sources-card .list-group-item {
+    border: none;
+}
+
+news-list div.news-sources-card div.card-header {
+    padding: 8px 8px 8px 8px;
+}
+
+news-list div.news-sources-card div.card-header h5 {
+    padding: 0;
+}
+
+news-list div.news-sources-card div.card-block h5 {
+    padding: 5px 5px 5px 5px;
+}
+
+news-list .news-sources-container {
+    height: 50vh;
+}
+
+news-list tags-list .card {
+    height: 20vh;
 }

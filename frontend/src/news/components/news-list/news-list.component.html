@@ -11,12 +11,19 @@
         <div class="col-md-2">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="news-sources-container">
-                        <news-sources (onSelect)="onSelectSource($event)"
-                                      (onDeselect)="onDeselectSource($event)"
-                                      [onlySubscribed]="true"
-                                      [initiallySelectedSourcesIds]="selectedSourcesIds"
-                                      [noDataText]="'No subscribed news sources'"></news-sources>
+                    <div class="news-sources-card card card-outline-primary text-xs-center">
+                        <div class="card-header">
+                            <h5>RSS Sources</h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="news-sources-container">
+                                <news-sources (onSelect)="onSelectSource($event)"
+                                              (onDeselect)="onDeselectSource($event)"
+                                              [onlySubscribed]="true"
+                                              [initiallySelectedSourcesIds]="selectedSourcesIds"
+                                              [noDataText]="'No subscribed news sources'"></news-sources>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,7 +130,7 @@
                        [scrollDistance]="250"
                        [html]="'<i class=\'fa fa-arrow-up\'></i>'"
                        [styles]="{
-                            'height': '65px',
+                            'height': '35px',
                             'left': '0',
                             'border-radius': '0 0 0 0'
                        }"

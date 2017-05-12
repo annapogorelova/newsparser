@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject} from '@angular/core';
+import {Component, HostListener, Inject, OnInit, AfterViewInit} from '@angular/core';
 import {NavigatorService} from '../../../shared/services/navigator/navigator.service';
 import {ActivatedRoute} from '@angular/router';
 import {PagerServiceProvider} from '../../../shared/services/pager/pager.service.provider';
@@ -14,7 +14,7 @@ import {AbstractDataProviderService} from '../../../shared/services/data/abstrac
 /**
  * Component represents a list of news
  */
-export class NewsListComponent extends BaseList{
+export class NewsListComponent extends BaseList implements OnInit, AfterViewInit {
     protected apiRoute: string = 'news';
     public refreshInProgress: boolean = false;
     public selectedSourcesIds: Array<number> = [];
