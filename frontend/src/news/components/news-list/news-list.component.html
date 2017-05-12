@@ -128,11 +128,14 @@
                        [speed]="100"
                        [acceleration]="10"
                        [scrollDistance]="250"
-                       [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+                       [html]="'<i class=\'fa fa-arrow-up go-top\'></i>'"
                        [styles]="{
                             'height': '35px',
+                            'width': '35px',
                             'left': '0',
-                            'border-radius': '0 0 0 0'
+                            'border-radius': '0 0 0 0',
+                            'box-sizing': 'content-box',
+                            'padding': '0'
                        }"
         ></go-top-button>
     </div>
