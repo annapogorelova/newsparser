@@ -51,7 +51,7 @@ export class ApiErrorHandler {
     };
 
     private onAuthRefreshFailed(response: Response){
-        if(response.status === 401 || response.status === 400){
+        if(!response || response.status === 401 || response.status === 400){
             this.authService.signOut().then(() => this.navigator.navigate(['/sign-in']));
         }
         return Promise.reject(response);
