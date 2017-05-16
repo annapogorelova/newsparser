@@ -1,0 +1,102 @@
+:host /deep/ .sidebar-container {
+    position: fixed;
+    width: 300px;
+    z-index: 1020;
+    height: 100%;
+    background-color: #e6e6e6;
+    -webkit-box-shadow: 2px 0px 4px -2px rgba(0,0,0,0.42);
+    -moz-box-shadow: 2px 0px 4px -2px rgba(0,0,0,0.42);
+    box-shadow: 2px 0px 4px -2px rgba(0,0,0,0.42);
+}
+
+:host /deep/ .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    width: 100vw;
+    height: 100%;
+    background: black;
+    z-index: 1000;
+}
+
+@media (min-width: 768px) {
+    :host /deep/ .sidebar-backdrop {
+        display: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    :host /deep/ .sidebar-container {
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: scroll !important;
+        top: 0;
+        z-index: 1040;
+    }
+}
+
+:host /deep/ .sidebar-content {
+    padding: 5px 5px 5px 10px
+}
+
+:host /deep/ .sidebar-content-header {
+    display: inline-block;
+    width: 100%;
+}
+
+:host /deep/ .sidebar-content-header h3 {
+    display: inline-block;
+}
+
+:host /deep/ .sidebar-main-content {
+    padding-top: 5px;
+}
+
+:host /deep/ .sidebar-toggle-btn {
+    width: 30px;
+    display: block;
+    padding: 5px 0 5px 0;
+}
+
+:host /deep/ .sidebar-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+:host /deep/ div.news-sources-card div.card-block {
+    padding: 0;
+}
+
+:host /deep/ div.news-sources-card .list-group-item {
+    border: none;
+}
+
+:host /deep/ div.news-sources-card div.card-header {
+    padding: 8px 8px 8px 8px;
+}
+
+:host /deep/ div.news-sources-card div.card-header h5 {
+    padding: 0;
+}
+
+:host /deep/ div.news-sources-card div.card-block h5 {
+    padding: 5px 5px 5px 5px;
+}
+
+:host /deep/ div.news-sources-card .news-sources-list-container {
+    border: none;
+}
+
+:host /deep/ .news-sources-container {
+    height: 50vh;
+}
+
+:host /deep/ .news-sources-container .search-container {
+    padding: 1px;
+}
+
+:host /deep/ tags-list .card {
+    height: 20vh;
+}
+
+:host /deep/ .tags-container {
+    padding-top: 10px;
+}

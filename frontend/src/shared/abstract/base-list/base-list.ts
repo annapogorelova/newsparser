@@ -1,5 +1,4 @@
-import {PagerService} from '../../services/pager/pager.service';
-import {AbstractDataProviderService} from '../../services/data/abstract-data-provider.service';
+import {PagerService, AbstractDataProviderService} from '../../services';
 
 /**
  * Class contains methods to manipulate the lists data,

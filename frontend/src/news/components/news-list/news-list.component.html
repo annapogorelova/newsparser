@@ -1,142 +1,113 @@
-<div class="news-container">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-10">
-            <div class="refresh-button-container">
-                <refresh-button (onRefresh)="refresh($event)" [isSpinning]="refreshInProgress"></refresh-button>
+<div class="container-fluid">
+    <div class="news-container">
+        <div class="row">
+            <div class="col-md-12">
+                <search (onSearch)="searchNews($event.inputValue)" [search]="search"></search>
+                <div class="news-container" infinite-scroll
+                     [infiniteScrollDistance]="4"
+                     [infiniteScrollThrottle]="300"
+                     [infiniteScrollDisabled]="!hasMoreItems"
+                     (scrolled)="loadMore()">
+                    <div class="news-item list-group" *ngFor="let newsItem of items">
+                        <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="news-item-header">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h3 class="news-item-title">
+                                                <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
+                                                    {{newsItem.title}}
+                                                </a>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="news-item-info-container">
+                                            <span class="badge badge-primary"
+                                                  [attr.title]="newsItem.sources[0].name">
+                                                {{newsItem.sources[0].name}}
+                                            </span>
+                                            <div id="otherSources" [ngbCollapse]="!newsItem.sourcesListCollapsed">
+                                                    <span *ngFor="let source of getOtherSources(newsItem)"
+                                                          class="badge badge-primary"
+                                                          [attr.title]="source.name">
+                                                        {{source.name}}
+                                                    </span>
+                                            </div>
+                                            <span class="link pull-right" *ngIf="newsItem.sources.length > 1"
+                                                  (click)="newsItem.sourcesListCollapsed = !newsItem.sourcesListCollapsed"
+                                                  [attr.aria-expanded]="newsItem.sourcesListCollapsed"
+                                                  aria-controls="otherSources">
+                                                     {{newsItem.sourcesListCollapsed ? 'less sources' : 'more sources'}}
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="news-image-container"
+                                         [ngStyle]="{'background-image': newsItem.imageUrl ?
+                                         'url(' + newsItem.imageUrl + ')' :
+                                         'url(\'../../../../public/images/no-image.jpg\')'}">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="news-item-date pull-right">{{newsItem.datePublished | date:'short'}}</span>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="newsItem.tags.length">
+                                <div class="col-md-12">
+                                    <div class="news-item-footer">
+                                        <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
+                                            <h6>
+                                            <span class="tag badge badge-default"
+                                                  (click)="selectTag(tag)"
+                                                  ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
+                                                {{tag}}
+                                            </span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
+                        <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                    </div>
+                    <div class="loading-status">
+                        <i *ngIf="!hasItems() && loadingInProgress"
+                           class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                        <h5 *ngIf="!hasItems() && !loadingInProgress">No News</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="news-sources-card card card-outline-primary text-xs-center">
-                        <div class="card-header">
-                            <h5>RSS Sources</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="news-sources-container">
-                                <news-sources (onSelect)="onSelectSource($event)"
-                                              (onDeselect)="onDeselectSource($event)"
-                                              [onlySubscribed]="true"
-                                              [initiallySelectedSourcesIds]="selectedSourcesIds"
-                                              [noDataText]="'No subscribed RSS sources'"></news-sources>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row tags-container">
-                <div class="col-md-12">
-                    <div class="tags-list-container">
-                        <tags-list (onDeselect)="onDeselectTag($event)"
-                                   (onClear)="onClearTags($event)"
-                                      [tags]="selectedTags"></tags-list>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10">
-            <search (onSearch)="searchNews($event.inputValue)" [search]="search"></search>
-            <div class="news-container" infinite-scroll
-                 [infiniteScrollDistance]="4"
-                 [infiniteScrollThrottle]="300"
-                 [infiniteScrollDisabled]="!hasMoreItems"
-                 (scrolled)="loadMore()">
-                <div class="news-item list-group" *ngFor="let newsItem of items">
-                    <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="news-item-header">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h3 class="news-item-title">
-                                            <a class="news-item-link" target="_blank" href="{{newsItem.linkToSource}}">
-                                                {{newsItem.title}}
-                                            </a>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="news-item-info-container">
-                                        <span class="badge badge-primary"
-                                              [attr.title]="newsItem.sources[0].name">
-                                            {{newsItem.sources[0].name}}
-                                        </span>
-                                        <div id="otherSources" [ngbCollapse]="!newsItem.sourcesListCollapsed">
-                                                <span *ngFor="let source of getOtherSources(newsItem)"
-                                                      class="badge badge-primary"
-                                                      [attr.title]="source.name">
-                                                    {{source.name}}
-                                                </span>
-                                        </div>
-                                        <span class="link pull-right" *ngIf="newsItem.sources.length > 1"
-                                              (click)="newsItem.sourcesListCollapsed = !newsItem.sourcesListCollapsed"
-                                              [attr.aria-expanded]="newsItem.sourcesListCollapsed"
-                                              aria-controls="otherSources">
-                                                 {{newsItem.sourcesListCollapsed ? 'less sources' : 'more sources'}}
-                                        </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="news-image-container"
-                                     [ngStyle]="{'background-image': newsItem.imageUrl ?
-                                     'url(' + newsItem.imageUrl + ')' :
-                                     'url(\'../../../../public/images/no-image.jpg\')'}">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="news-item-description mb-1" [innerHtml]="newsItem.description"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span class="news-item-date pull-right">{{newsItem.datePublished | date:'short'}}</span>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="newsItem.tags.length">
-                            <div class="col-md-12">
-                                <div class="news-item-footer">
-                                    <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
-                                        <h6>
-                                        <span class="tag badge badge-default"
-                                              (click)="selectTag(tag)"
-                                              ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
-                                            {{tag}}
-                                        </span>
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
-                    <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
-                </div>
-                <div class="loading-status">
-                    <i *ngIf="!hasItems() && loadingInProgress"
-                       class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
-                    <h5 *ngIf="!hasItems() && !loadingInProgress">No News</h5>
-                </div>
-            </div>
-        </div>
-        <go-top-button [animate]="true"
-                       [speed]="100"
-                       [acceleration]="10"
-                       [scrollDistance]="250"
-                       [html]="'<i class=\'fa fa-arrow-up go-top\'></i>'"
-                       [styles]="{
+</div>
+<go-top-button [animate]="true"
+               [speed]="100"
+               [acceleration]="10"
+               [scrollDistance]="250"
+               [html]="'<i class=\'fa fa-arrow-up go-top\'></i>'"
+               [styles]="{
                             'height': '35px',
                             'width': '35px',
-                            'left': '0',
+                            'right': '0',
+                            'bottom': '2%',
+                            'top': 'auto',
                             'border-radius': '0 0 0 0',
                             'box-sizing': 'content-box',
-                            'padding': '0'
+                            'padding': '0',
+                            'z-index': '9999999'
                        }"
-        ></go-top-button>
-    </div>
+></go-top-button>
+<div class="refresh-button-container">
+    <refresh-button (onRefresh)="refresh($event)" [isSpinning]="refreshInProgress"></refresh-button>
 </div>

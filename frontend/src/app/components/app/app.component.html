@@ -1,39 +1,37 @@
-<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
-    <button class="navbar-toggler navbar-toggler-right" type="button"
-            (click)="isNavbarCollapsed = !isNavbarCollapsed"
-            [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" routerLink="/news">News Parser</a>
-    <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item" *ngIf="authProvider.isAuthenticated()">
-                <a class="nav-link" routerLink="/news" routerLinkActive="active">News</a>
-            </li>
-            <li class="nav-item" *ngIf="authProvider.isAuthenticated()">
-                <a class="nav-link" routerLink="/news-sources" routerLinkActive="active">News Sources</a>
-            </li>
-        </ul>
-        <div class="navbar-nav">
-            <a role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
-                Account <strong *ngIf="authProvider.hasUser()">({{authProvider.getUser().email}})</strong>
-            </a>
-            <a role="link" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
-                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                Sign Out
-            </a>
-            <a href="" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
-               routerLink="/sign-in" routerLinkActive="active">
-                <i class="fa fa-sign-in" aria-hidden="true"></i>
-                Sign In
-            </a>
+<div class="page-content">
+    <!-- Navbar -->
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary sticky-top">
+        <a class="navbar-toggler navbar-toggler-right" role="button"
+                (click)="isNavbarCollapsed = !isNavbarCollapsed"
+                [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
+            <i [attr.class]="isNavbarCollapsed ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
+        </a>
+        <a class="navbar-brand" routerLink="/news">News</a>
+        <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            <div class="navbar-nav">
+                <a role="link" title="Account Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
+                    <i class="fa fa-user"></i>
+                </a>
+                <a role="link" title="Sign Out" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                </a>
+                <a href="" title="Sign In" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
+                   routerLink="/sign-in" routerLinkActive="active">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                </a>
+            </div>
         </div>
-    </div>
-</nav>
-<div class="container-fluid" [style.min-height]="minContentHeight + 'px'">
-    <router-outlet></router-outlet>
-</div>
+    </nav>
 
-<nav class="navbar navbar-light bg-faded">
-    <p>© 2017 News Parser</p>
-</nav>
+    <!-- Content -->
+    <div #appContent>
+        <router-outlet></router-outlet>
+    </div>
+
+    <!-- Footer -->
+    <nav class="navbar navbar-light bg-faded">
+        <p>© 2017 News Parser</p>
+    </nav>
+</div>

@@ -1,5 +1,15 @@
-:host /deep/ div.news-container {
-    margin-top: 10px;
+/*:host /deep/ div.news-container {*/
+    /*margin-top: 5px;*/
+/*}*/
+
+/*@media (max-width: 600px) {*/
+    /*:host /deep/ .container-fluid-hidden {*/
+        /*display: none !important;*/
+    /*}*/
+/*}*/
+
+:host /deep/ div.search-container {
+    padding: 0;
 }
 
 :host /deep/ div.news-item {
@@ -100,10 +110,6 @@
     display: table-cell;
 }
 
-:host /deep/ .row.tags-container {
-    margin-top: 10px;
-}
-
 :host /deep/ .refresh-button-container {
     position: fixed;
     top: 50%;
@@ -147,38 +153,6 @@
 
 :host /deep/ span.tag.badge-default.selected {
     cursor: not-allowed;
-}
-
-:host /deep/ div.news-sources-card div.card-block {
-    padding: 0;
-}
-
-:host /deep/ div.news-sources-card .list-group-item {
-    border: none;
-}
-
-:host /deep/ div.news-sources-card div.card-header {
-    padding: 8px 8px 8px 8px;
-}
-
-:host /deep/ div.news-sources-card div.card-header h5 {
-    padding: 0;
-}
-
-:host /deep/ div.news-sources-card div.card-block h5 {
-    padding: 5px 5px 5px 5px;
-}
-
-:host /deep/ div.news-sources-card .news-sources-list-container {
-    border: none;
-}
-
-:host /deep/ .news-sources-container {
-    height: 50vh;
-}
-
-:host /deep/ tags-list .card {
-    height: 20vh;
 }
 
 :host /deep/ h3.news-item-title {

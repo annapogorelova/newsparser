@@ -1,0 +1,30 @@
+<div>
+    <sidebar #sidebarComponent
+             (onHide)="onSidebarHidden()"
+             (onShow)="onSidebarShown()"
+             (onSourceSelected)="onSourceSelected($event)"
+             (onSourceDeselected)="onSourceDeselected($event)"
+             (onTagDeselected)="onTagDeselected($event)"
+             (onTagsCleared)="onTagsCleared()"
+             [selectedTags]="selectedTags"
+             [selectedSourcesIds]="selectedSourcesIds">
+    </sidebar>
+    <div class="news-container" [style.margin-left.px]="marginLeft"
+         [ngClass]="sidebarComponent.isVisible() ? 'news-container-hidden' : ''">
+        <div class="container-fluid sidebar-toggler-container">
+            <a title="Toggle sidebar" role="button" class="btn btn-sm btn-primary"
+               (click)="sidebarComponent.toggle()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <news-list #newsListComponent
+                   [initialSearch]="initialSearch"
+                   [initialPage]="initialPage"
+                   [selectedTags]="selectedTags"
+                   [selectedSourcesIds]="selectedSourcesIds"
+                   (onTagSelected)="onTagSelected($event)"
+                   (onSearch)="onSearch($event)"
+                   (onPageChanged)="onPageChanged($event)">
+        </news-list>
+    </div>
+</div>

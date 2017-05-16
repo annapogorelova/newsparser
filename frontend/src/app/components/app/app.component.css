@@ -1,7 +1,20 @@
-.container {
-    padding-top: 50px;
+:host /deep/ .container {
+    padding-top: 10px;
 }
 
-a[role=link] {
+:host /deep/ a[role=link] {
     cursor: pointer;
+}
+
+:host /deep/ .container-fluid {
+    padding: 10px;
+}
+
+:host /deep/ a.navbar-toggler {
+    border: none;
+}
+
+:host /deep/ .navbar-toggler i {
+    color: white;
+    font-size: medium;
 }

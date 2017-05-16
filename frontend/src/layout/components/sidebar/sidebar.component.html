@@ -1,0 +1,36 @@
+<div class="sidebar-container" [@slideInOut]="animationState" [style.width.px]="defaultWidth">
+    <div class="sidebar-content">
+        <div class="sidebar-content-header">
+            <h3>Feed options</h3>
+            <a class="btn sidebar-toggle-btn pull-right" role="button" (click)="hide()">
+                <i class="fa fa-close"></i>
+            </a>
+        </div>
+        <div class="sidebar-main-content">
+            <div class="news-sources-card card card-outline-primary text-xs-center">
+                <div class="card-header">
+                    <h5>Sources</h5>
+                </div>
+                <div class="card-block">
+                    <div class="news-sources-container">
+                        <news-sources (onSelect)="onSelectSource($event)"
+                                      (onDeselect)="onDeselectSource($event)"
+                                      [onlySubscribed]="true"
+                                      [initiallySelectedSourcesIds]="selectedSourcesIds"
+                                      [noDataText]="'No subscribed RSS sources'">
+                        </news-sources>
+                    </div>
+                </div>
+            </div>
+            <div class="tags-container">
+                <div class="tags-list-container">
+                    <tags-list (onDeselect)="onDeselectTag($event)"
+                               (onClear)="onClearTags($event)"
+                               [tags]="selectedTags">
+                    </tags-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>

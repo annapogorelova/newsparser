@@ -3,10 +3,11 @@ import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {NewsListComponent} from './components';
+import {NewsListComponent, NewsPageComponent} from './components';
 import {NewsRouting, NewsRoutingProviders} from './news.routing';
 import {SharedModule} from '../shared';
 import {NewsSourcesModule} from '../news-sources';
+import {LayoutModule} from '../layout';
 
 @NgModule({
     imports: [
@@ -16,9 +17,13 @@ import {NewsSourcesModule} from '../news-sources';
         SharedModule,
         FormsModule,
         NewsSourcesModule,
-        NgbModule
+        NgbModule,
+        LayoutModule
     ],
-    declarations: [NewsListComponent],
+    declarations: [
+        NewsListComponent,
+        NewsPageComponent
+    ],
     providers: [NewsRoutingProviders]
 })
 export class NewsModule {

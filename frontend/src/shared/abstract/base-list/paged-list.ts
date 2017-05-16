@@ -1,13 +1,13 @@
 import {BaseList} from './base-list';
-import {ApiService} from '../../services/api/api.service';
-import {PagerService} from '../../services/pager/pager.service';
+import {PagerService, AbstractDataProviderService} from '../../services';
 
 /**
  * Base list class with pagination
  */
 export abstract class PagedList extends BaseList {
-    constructor(apiService: ApiService, pager: PagerService, protected apiRoute: string){
-        super(apiService, pager);
+    constructor(protected dataProvider: AbstractDataProviderService,
+                pager: PagerService, protected apiRoute: string){
+        super(dataProvider, pager);
     }
 
     loadPage = (params: any) => {

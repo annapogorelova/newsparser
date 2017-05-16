@@ -9,4 +9,6 @@ export class AppSettings {
     public static GOOGLE_CLIENT_ID = '645619484752-5043i4f8ojri5ff523c0nkh9u01vb50j';
     public static FACEBOOK_CLIENT_ID = '514371415617815';
     public static FACEBOOK_API_VERSION = 'v2.8';
+    
+    public static SIDEBAR_WIDTH_PX = 350;
 }
