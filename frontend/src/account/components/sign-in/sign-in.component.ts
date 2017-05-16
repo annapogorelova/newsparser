@@ -35,7 +35,7 @@ export class SignInComponent implements IForm {
         return Promise.resolve(response);
     };
 
-    onSubmitFailed = (error: Error) => {
+    onSubmitFailed = (error: any) => {
         this.submitInProgress = false;
         this.submitFailed = true;
         this.responseMessage = error.message;

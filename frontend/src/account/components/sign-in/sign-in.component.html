@@ -7,8 +7,9 @@
                     <external-sign-in [provider]="'facebook'"
                                       [buttonIcon]="'fa fa-facebook-square'"
                                       [buttonClass]="'btn-primary'"
-                                      [disabled]="submitInProgress"
-                                      (onSignedIn)="onSubmitSucceeded($event)"
+                                      [inputDisabled]="submitInProgress"
+                                      (onSignInSucceeded)="onSubmitSucceeded($event)"
+                                      (onSignInFailed)="onSubmitFailed($event)"
                                       (onSignInInProgress)="disableInputs($event)">
                     </external-sign-in>
                 </div>
@@ -16,8 +17,9 @@
                     <external-sign-in [provider]="'google'"
                                       [buttonIcon]="'fa fa-google-plus-square'"
                                       [buttonClass]="'btn-danger'"
-                                      [disabled]="submitInProgress"
-                                      (onSignedIn)="onSubmitSucceeded($event)"
+                                      [inputDisabled]="submitInProgress"
+                                      (onSignInSucceeded)="onSubmitSucceeded($event)"
+                                      (onSignInFailed)="onSubmitFailed($error)"
                                       (onSignInInProgress)="disableInputs($event)">
                     </external-sign-in>
                 </div>
@@ -69,7 +71,7 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <p><small>Do not have an account?</small></p>
-                    <a href="#" class="btn btn-info btn-full-length" routerLink="/sign-up">
+                    <a role="button" class="btn btn-info btn-full-length" routerLink="/sign-up">
                         Sign up
                     </a>
                 </div>

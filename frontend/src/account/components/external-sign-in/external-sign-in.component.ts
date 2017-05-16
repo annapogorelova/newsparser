@@ -24,9 +24,10 @@ export class ExternalSignInComponent implements IForm{
     @Input() provider: string;
     @Input() buttonIcon: string;
     @Input() buttonClass: string;
-    @Input() disabled: boolean;
+    @Input() inputDisabled: boolean;
 
-    @Output() onSignedIn: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInSucceeded: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInFailed: EventEmitter<any> = new EventEmitter<any>();
     @Output() onSignInInProgress: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private authService: AuthService,
@@ -44,14 +45,19 @@ export class ExternalSignInComponent implements IForm{
         this.submitInProgress = false;
         this.submitFailed = false;
         this.responseMessage = '';
-        this.onSignedIn.emit(response);
+        this.onSignInSucceeded.emit(response);
         return Promise.resolve(response);
     }
 
-    onSubmitFailed(error: any): Promise<any> {
+    onSubmitFailed(errorResponse: any): Promise<any> {
+        var error = errorResponse || {};
+        if(!error.message){
+            error.message = 'Failed to sign in the external user';
+        }
         this.submitInProgress = false;
         this.submitFailed = true;
         this.responseMessage = error.message;
+        this.onSignInFailed.emit(error);
         return Promise.reject(error);
     }
 
