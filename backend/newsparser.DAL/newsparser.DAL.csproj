@@ -4,7 +4,6 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>newsparser.DAL</AssemblyName>
     <PackageId>newsparser.DAL</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

@@ -6,7 +6,6 @@
     <OutputType>Exe</OutputType>
     <PackageId>newsparser.web</PackageId>
     <UserSecretsId>aspnet-newsparser.web-20170323014626</UserSecretsId>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
