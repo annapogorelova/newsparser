@@ -12,12 +12,13 @@ using NewsParser.Auth;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
+using NewsParser.Cache;
 
 namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [ResponseCache(CacheProfileName = "Default")]
+    // [ResponseCache(CacheProfileName = "Default")]
     public class NewsSourcesController: BaseController
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
@@ -35,6 +36,8 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 3600)]
+        [Cache(Duration = 3600, DeferByUser = true)]
         public JsonResult Get(bool subscribed = false, string search = null, int pageIndex = 0, int pageSize = 5)
         {
             var user = _authService.GetCurrentUser();
@@ -47,6 +50,8 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ResponseCache(Duration = 3600)]
+        [Cache(Duration = 3600, DeferByUser = false)]
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);

@@ -37,6 +37,9 @@ using OpenIddict.Models;
 using NewsParser.Services;
 using NewsParser.Middleware;
 using NewsParser.DAL.Repositories.Tokens;
+using Microsoft.Extensions.Caching.Redis;
+using Microsoft.Extensions.Caching.Distributed;
+using NewsParser.Cache;
 
 namespace NewsParser
 {
@@ -96,25 +99,10 @@ namespace NewsParser
                     builder => builder.AllowAnyOrigin());
             });
 
-            int defaultCacheDuration =
-                int.Parse(Configuration.GetSection("AppConfig").GetSection("Cache")["DefaultCacheDuration"]);
-
-            services.AddResponseCaching();
+            ConfigureCaching(services);
 
             services.AddMvc(options =>
                 {
-                    options.CacheProfiles.Add("Default",
-                        new CacheProfile
-                        {
-                            Duration = 60 * defaultCacheDuration,
-                            Location = ResponseCacheLocation.Client
-                        });
-                    options.CacheProfiles.Add("OneMinuteCache",
-                        new CacheProfile
-                        {
-                            Duration = 60,
-                            Location = ResponseCacheLocation.Client
-                        });
                     options.UseCommaDelimitedArrayModelBinding();
                 }
             ).AddJsonOptions(opt =>
@@ -164,12 +152,33 @@ namespace NewsParser
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
 
+            app.UseMiddleware<CacheMiddleware>();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void ConfigureCaching(IServiceCollection services)
+        {
+            services.AddResponseCaching();
+
+            services.AddSingleton<IDistributedCache>(factory =>
+            {
+                var cache = new RedisCache(new RedisCacheOptions
+                {
+                    Configuration = "127.0.0.1:6379",
+                    InstanceName = "newsparser"
+                });
+
+                return cache;
+            });
+
+            services.AddSingleton<ICacheService, RedisCacheService>();
+            services.AddTransient<CacheAttribute>();
         }
 
         private void ConfigureJwtAuthentication(IApplicationBuilder app)

@@ -9,25 +9,33 @@ using System.Linq;
 using System.Net;
 using NewsParser.Auth;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
+using Microsoft.Extensions.Caching.Distributed;
+using NewsParser.Cache;
 
 namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [ResponseCache(CacheProfileName = "Default")]
     public class NewsController : BaseController
     {
         private readonly INewsBusinessService _newsBusinessService;
         private readonly IAuthService _authService;
+        private readonly IDistributedCache _distributedCache;
 
-        public NewsController(INewsBusinessService newsBusinessService, IAuthService authService)
+        public NewsController(
+            INewsBusinessService newsBusinessService, 
+            IAuthService authService, 
+            IDistributedCache distributedCache)
         {
             _newsBusinessService = newsBusinessService;
             _authService = authService;
+            _distributedCache = distributedCache;
         }
 
         [HttpGet]
         [ValidateModel]
+        [ResponseCache(Duration = 1800)]
+        [Cache(Duration = 1800, DeferByUser = true)]
         public JsonResult Get(NewsListSelectModel model)
         {
             var user = _authService.GetCurrentUser();

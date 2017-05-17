@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
 using NewsParser.Auth;
 using NewsParser.BL.Services.Users;
+using NewsParser.Cache;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Helpers.Utilities;
 using NewsParser.Identity.Models;
@@ -18,7 +19,6 @@ using NewsParser.Services;
 namespace NewsParser.API.Controllers
 {
     [Route("api/[controller]")]
-    [ResponseCache(CacheProfileName = "OneMinuteCache")]
     public class AccountController : BaseController
     {
         private readonly IAuthService _authService;
@@ -34,6 +34,8 @@ namespace NewsParser.API.Controllers
 
         [Authorize]
         [HttpGet]
+        [ResponseCache(Duration = 60)]
+        [Cache(Duration = 60, DeferByUser = true)]
         public JsonResult Get()
         {
             var user = _authService.GetCurrentUser();
