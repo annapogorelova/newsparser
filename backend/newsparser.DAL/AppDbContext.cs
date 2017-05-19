@@ -48,7 +48,9 @@ namespace NewsParser.DAL
                 .WithMany(u => u.UserExternalIds)
                 .HasForeignKey(s => s.UserId);
 
-            modelBuilder.Entity<NewsItem>().ToTable("news");
+            modelBuilder.Entity<NewsItem>()
+                .ToTable("news")
+                .HasIndex(n => n.LinkToSource);
 
             modelBuilder.Entity<NewsSourceNews>().ToTable("news_source_news");
             
