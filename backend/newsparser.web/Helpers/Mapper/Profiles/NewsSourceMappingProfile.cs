@@ -17,8 +17,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
         public NewsSourceMappingProfile()
         {
             CreateMap<NewsSource, NewsSourceApiModel>()
-                .ForMember(m => m.IsSubscribed, opt => opt.Ignore())
-                .AfterMap(SetSubscribedState);
+                .ForMember(m => m.IsSubscribed, opt => opt.Ignore());
         }
 
         private void SetSubscribedState(NewsSource newsSource, NewsSourceApiModel model)

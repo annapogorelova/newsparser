@@ -27,6 +27,32 @@ namespace NewsParser.DAL.Repositories.News
             return _dbContext.News;
         }
 
+        public IQueryable<NewsItem> GetNewsPage(
+            int pageIndex = 0, 
+            int pageSize = 5,
+            int? userId = null, 
+            string search = null,
+            int[] sourcesIds = null, 
+            string[] tags = null
+        )
+        {
+            return _dbContext.News.Where(n => 
+                    (string.IsNullOrEmpty(search) 
+                    || n.Title.Contains(search) 
+                    || n.Description.Contains(search))
+                    && (sourcesIds == null || n.Sources.Any(s => sourcesIds.Contains(s.SourceId)))
+                    && (userId == null || n.Sources.Select(s => s.Source).Any(s => s.Users.Any(u => u.UserId == userId)))
+                    && (tags == null || n.Tags.Any(t => tags.Contains(t.Tag.Name))))
+                .OrderByDescending(n => n.DatePublished)
+                .Skip(pageIndex)
+                .Take(pageSize)
+                .Include(n => n.Sources)
+                .ThenInclude(ns => ns.Source)
+                .Include(n => n.Tags)
+                .ThenInclude(t => t.Tag)
+                .AsNoTracking();
+        }
+
         public IQueryable<NewsItem> GetNewsByUser(int userId)
         {
             return _dbContext.News

@@ -49,38 +49,7 @@ namespace NewsParser.BL.Services.News
                 throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0");
             }
 
-            var news = userId.HasValue ? 
-                _newsRepository.GetNewsByUser(userId.Value) : 
-                _newsRepository.GetNews();
-
-            if (sourcesIds != null)
-            {
-                news = news.Where(n => sourcesIds.Intersect(n.Sources.Select(ns => ns.SourceId)).Any());
-            }
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                string searchTerm = search.ToLower();
-                news =
-                    news.Where(
-                        n => n.Title.ToLower().Contains(searchTerm)
-                        || n.Description.ToLower().Contains(searchTerm));
-            }
-
-            if (tags != null)
-            {
-                news = news.Where(n => n.Tags.Select(t => t.Tag.Name.ToLower())
-                    .Intersect(tags.Select(t => t.ToLower())).Any());
-            }
-
-            return news
-                .Include(n => n.Tags)
-                .ThenInclude(t => t.Tag)
-                .Include(n => n.Sources)
-                .ThenInclude(s => s.Source)
-                .OrderByDescending(n => n.DatePublished)
-                .Skip(pageIndex)
-                .Take(pageSize);
+            return _newsRepository.GetNewsPage(pageIndex, pageSize, userId, search, sourcesIds, tags);
         }
 
         public IEnumerable<NewsItem> GetNewsBySource(int sourceId)

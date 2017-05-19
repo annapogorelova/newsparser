@@ -45,8 +45,8 @@ namespace NewsParser.API.Controllers
                 model.PageSize,
                 user.GetId(),
                 model.Search,
-                model.Sources?.Select(int.Parse).ToArray(),
-                model.Tags
+                model.Sources?.Select(int.Parse).Distinct().ToArray(),
+                model.Tags.Distinct().ToArray()
                 ).ToList();
             var newsModels = Mapper.Map<List<NewsItem>, List<NewsItemApiModel>>(news);
             return new JsonResult(new { data = newsModels });

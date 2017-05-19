@@ -16,6 +16,25 @@ namespace NewsParser.DAL.Repositories.News
         IQueryable<NewsItem> GetNews();
 
         /// <summary>
+        /// Get the page of news
+        /// </summary>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="userId">User id. If present, only the news of this user will be fetched</param>
+        /// <param name="search">Search term (Title or Description)</param>
+        /// <param name="sourcesIds">The array of sources ids to get news by</param>
+        /// <param name="tags">The array of tags to get news by</param>
+        /// <returns></returns>
+        IQueryable<NewsItem> GetNewsPage(
+            int pageIndex = 0, 
+            int pageSize = 5,
+            int? userId = null, 
+            string search = null,
+            int[] sourcesIds = null, 
+            string[] tags = null
+        );
+
+        /// <summary>
         /// Get news by the user id
         /// </summary>
         /// <param name="userId">User id</param>
