@@ -10,3 +10,7 @@
     line-height: 200px;
     vertical-align: middle;
 }
+
+body {
+    overflow-x:hidden;
+}
