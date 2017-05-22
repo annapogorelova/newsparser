@@ -1,7 +1,5 @@
 import {ApiService} from '../api/api.service';
 import {Injectable} from '@angular/core';
-import {CacheService} from '../cache/cache.service';
-import {AppSettings} from '../../../app/app.settings';
 
 /**
  * Abstract service class to be put between component and apiService
