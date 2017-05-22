@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
 import {HttpError} from './http-error';
 import {AuthService} from '../auth/auth.service';
 import {AuthProviderService} from '../auth/auth-provider.service';
-import {AuthRefreshLocker} from '../auth/auth-refresh-locker.service';
+import {AuthRefreshLocker, AuthRefreshError} from '../auth/auth-refresh-locker.service';
 
 /**
  * Class contains functionality to handle http request errors
@@ -58,7 +58,7 @@ export class ApiErrorHandler {
     };
 
     private onAuthRefreshLockFailed(error: any){
-        if(typeof error === 'AuthRefreshError'){
+        if(error instanceof AuthRefreshError){
             return Promise.resolve(error.authRefreshPromise);
         }
 
