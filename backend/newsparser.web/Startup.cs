@@ -126,16 +126,11 @@ namespace NewsParser
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
 
                 var dbContext = app.ApplicationServices.GetService<AppDbContext>();
                 dbContext.Database.Migrate();
                 dbContext.EnsureSeedData();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseResponseCaching();
@@ -151,8 +146,6 @@ namespace NewsParser
             ConfigureJwtAuthentication(app);
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
-
-            app.UseMiddleware<CacheMiddleware>();
 
             app.UseMvc(routes =>
             {

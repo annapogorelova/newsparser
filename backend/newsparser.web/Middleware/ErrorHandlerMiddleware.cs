@@ -1,9 +1,13 @@
 using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using NewsParser.API.Models;
 using NewsParser.BL.Exceptions;
+using NewsParser.Exceptions;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -25,31 +29,55 @@ namespace NewsParser.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            try
+            using (var responseStream = new MemoryStream())
             {
-                await _next(context);
-            }
-            catch (Exception e)
-            {
-                await HandleExceptionAsync(context, e);
+                var fullResponse = context.Response.Body;
+                context.Response.Body = responseStream;
+                try
+                {
+                    await _next.Invoke(context);
+                }
+                catch (Exception ex)
+                {
+                    HandleExceptionAsync(context, ex);
+                }
+                finally
+                {
+                    responseStream.Seek(0, SeekOrigin.Begin);
+                    await responseStream.CopyToAsync(fullResponse);
+                }
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private void HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            _log.LogError(exception.Message);
+            _log.LogError(ex.Message);
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             
-            var code = HttpStatusCode.InternalServerError;
-
-            if(exception is EntityNotFoundException)
+            if(ex is WebLayerException)
             {
-                code = HttpStatusCode.NotFound;
+                statusCode = ((WebLayerException)ex).StatusCode;
+            }
+            
+            if(ex is EntityNotFoundException)
+            {
+                statusCode = HttpStatusCode.NotFound;
             }
 
-            var result = JsonConvert.SerializeObject(new { message = exception.Message });
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
-            return context.Response.WriteAsync(result);
+
+            var result = JsonConvert.SerializeObject(new ErrorModel { Message = ex.Message });
+            context.Response.ContentType = "application/json; charset=utf-8";
+            context.Response.StatusCode = (int)statusCode;
+
+            var responseStream = context.Response.Body;
+            responseStream.Seek(0, SeekOrigin.Begin);
+            
+            using (var writer = new StreamWriter(responseStream, Encoding.UTF8, 4096, true))
+            {
+                writer.Write(result);
+                writer.Flush();
+                responseStream.Flush();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using NewsParser.API.Models;
+using NewsParser.Exceptions;
 
 namespace NewsParser.API.Controllers
 {
@@ -28,8 +30,7 @@ namespace NewsParser.API.Controllers
         /// <returns>JsonResult</returns>
         protected JsonResult MakeResponse(HttpStatusCode statusCode, string message)
         {
-            Response.StatusCode = (int)statusCode;
-            return new JsonResult(new { Message = message });
+            throw new WebLayerException(statusCode, message);
         }
     }
 }

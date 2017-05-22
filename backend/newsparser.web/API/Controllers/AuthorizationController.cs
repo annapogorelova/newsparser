@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using newsparser.DAL.Models;
 using NewsParser.Auth;
 using NewsParser.Auth.ExternalAuth;
+using NewsParser.Exceptions;
 using NewsParser.Identity.Models;
 
 namespace NewsParser.API.Controllers
@@ -32,29 +33,29 @@ namespace NewsParser.API.Controllers
         }
 
         [HttpPost("~/api/token"), Produces("application/json")]
-        public IActionResult Token(OpenIdConnectRequest request)
+        public async Task<IActionResult> Token(OpenIdConnectRequest request)
         {
             if (request.GrantType == "urn:ietf:params:oauth:grant-type:facebook_access_token")
             {
-                return HandleFacebookAuth(request).Result;
+                return await HandleFacebookAuth(request);
             }
 
             if (request.GrantType == "urn:ietf:params:oauth:grant-type:google_access_token")
             {
-                return HandleGoogleAuth(request).Result;
+                return await HandleGoogleAuth(request);
             }
 
             if (request.IsPasswordGrantType())
             {
-                return HandleTokenAuth(request).Result;
+                return await HandleTokenAuth(request);
             }
 
             if (request.IsRefreshTokenGrantType())
             {
-                return HandleRefreshToken(request).Result;
+                return await HandleRefreshToken(request);
             }
 
-            return MakeResponse(HttpStatusCode.BadRequest, "The specified grant type is not supported.");
+            throw new WebLayerException(HttpStatusCode.BadRequest, "The specified grant type is not supported.");
         }
 
         /// <summary>
@@ -67,17 +68,17 @@ namespace NewsParser.API.Controllers
             var user = _authService.FindUserByEmail(request.Username);
             if (user == null)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
+                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
             if (!await _signInManager.CanSignInAsync(user))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "The specified user cannot sign in.");
+                throw new WebLayerException(HttpStatusCode.BadRequest, "The specified user cannot sign in.");
             }
 
             if (!_authService.CheckUserPassword(user, request.Password))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Invalid username or password");
+                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password");
             }
 
             var principal = await _authService.CreateUserPrincipalAsync(user);
