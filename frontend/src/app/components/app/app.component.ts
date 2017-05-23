@@ -28,14 +28,14 @@ export class AppComponent {
         this.setAppMinContentHeight();
     };
 
-    getMinContentHeight(){
+    calculateMinContentHeight(){
         // Height of top and bottom navbars is 38, padding - 8 top and bottom
         // 38*2 + 16*2 = 108
         return window.innerHeight - 108;
     };
     
     setAppMinContentHeight(){
-        this.minContentHeight = this.getMinContentHeight();
+        this.minContentHeight = this.calculateMinContentHeight();
         this.appContent.nativeElement.style['min-height'] = this.minContentHeight + 'px';
     };
 
