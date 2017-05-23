@@ -70,6 +70,12 @@ export class NewsPageComponent implements OnInit {
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
         this.reloadNews();
     };
+
+    onSourcesCleared(event: any){
+        this.selectedSourcesIds = [];
+        this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
+        this.reloadNews();
+    };
     
     onTagSelected(event: any){
         this.selectedTags.push(event.tag);

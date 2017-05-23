@@ -84,4 +84,8 @@ export class NewsSourcesListComponent extends BaseList {
             subscribed: this.onlySubscribed
         };
     };
+
+    clearSources(){
+        this.selectedSourcesIds = [];
+    };
 }

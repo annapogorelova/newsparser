@@ -100,3 +100,7 @@
 :host /deep/ .tags-container {
     padding-top: 10px;
 }
+
+:host /deep/ .news-sources-card span {
+    cursor: pointer;
+}

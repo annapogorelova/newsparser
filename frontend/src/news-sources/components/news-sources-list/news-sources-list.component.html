@@ -1,9 +1,6 @@
 <div *ngIf="useSearch">
     <search (onSearch)="searchNewsSource($event.inputValue)" [placeholderCaption]="'Type news source name...'"></search>
 </div>
-<div *ngIf="useRefresh">
-    <refresh-button (onRefresh)="reload($event)"></refresh-button>
-</div>
 <div class="news-sources-list-container">
     <div *ngIf="hasItems()" class="news-sources-list" infinite-scroll
          [infiniteScrollDistance]="3"

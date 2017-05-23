@@ -4,8 +4,9 @@
              (onShow)="onSidebarShown()"
              (onSourceSelected)="onSourceSelected($event)"
              (onSourceDeselected)="onSourceDeselected($event)"
+             (onSourcesCleared)="onSourcesCleared($event)"
              (onTagDeselected)="onTagDeselected($event)"
-             (onTagsCleared)="onTagsCleared()"
+             (onTagsCleared)="onTagsCleared($event)"
              [selectedTags]="selectedTags"
              [selectedSourcesIds]="selectedSourcesIds">
     </sidebar>

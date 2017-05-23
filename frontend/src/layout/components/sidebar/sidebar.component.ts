@@ -1,13 +1,13 @@
 import {
-    Component, 
-    EventEmitter, 
-    Output, 
-    style, 
-    state, 
-    animate, 
-    transition, 
-    trigger,
-    Input
+	Component,
+	EventEmitter,
+	Output,
+	style,
+	state,
+	animate,
+	transition,
+	trigger,
+	Input, ViewChild
 } from '@angular/core';
 import {AppSettings} from '../../../app/app.settings';
 
@@ -42,11 +42,14 @@ import {AppSettings} from '../../../app/app.settings';
 })
 export class SidebarComponent {
     protected animationState: string = 'in';
+	@ViewChild('newsSourcesList') newsSourcesList: any;
+
     @Output() onShow: EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide: EventEmitter<any> = new EventEmitter<any>();
     
     @Output() onSourceSelected: EventEmitter<any> = new EventEmitter<any>();
     @Output() onSourceDeselected: EventEmitter<any> = new EventEmitter<any>();
+	@Output() onSourcesCleared: EventEmitter<any> = new EventEmitter<any>();
 
     @Output() onTagDeselected: EventEmitter<any> = new EventEmitter<any>();
     @Output() onTagsCleared: EventEmitter<any> = new EventEmitter<any>();
@@ -84,6 +87,11 @@ export class SidebarComponent {
     onDeselectSource(event: any){
         this.onSourceDeselected.emit(event);
     };
+
+	clearSources(event: any){
+		this.newsSourcesList.clearSources();
+		this.onSourcesCleared.emit(event);
+	};
 
     onDeselectTag = (event: any) => {
         this.onTagDeselected.emit(event);
