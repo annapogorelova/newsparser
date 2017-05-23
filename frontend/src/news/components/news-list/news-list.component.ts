@@ -9,6 +9,7 @@ import {
     EventEmitter
 } from '@angular/core';
 import {AbstractDataProviderService, BaseList, PagerServiceProvider} from '../../../shared';
+import {RequestLockerService} from "../../../shared/services/request-locker/request-locker.service";
 
 @Component({
     selector: 'news-list',
@@ -35,7 +36,8 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
     @Output() onSearch: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(protected dataProvider: AbstractDataProviderService,
-                @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider){
+                @Inject(PagerServiceProvider) pagerProvider: PagerServiceProvider,
+                public requestLocker: RequestLockerService){
         super(dataProvider, pagerProvider.getInstance());
     }
 
@@ -51,7 +53,7 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
             pageSize: this.pager.getPage() * this.pager.getPageSize()
         };
         var requestParams = Object.assign(preloadPageParams, this.getRequestParams());
-        this.loadData(requestParams, true);
+        this.requestLocker.lock(() => this.loadData(requestParams, true));
     }
 
     /**
@@ -70,11 +72,11 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
      * Load the fresh list of news
      * (without launching the RSS sources refresh action on server)
      */
-    reload = (refresh: boolean = false, sourcesIds: Array<number> = [], tags: Array<string> = []) => {
+    reload(refresh: boolean = false, sourcesIds: Array<number> = [], tags: Array<string> = []) {
         window.scrollTo(0, 0);
         this.selectedSourcesIds = sourcesIds;
         this.selectedTags = tags;
-        this.reloadData(this.getRequestParams(), refresh)
+        return this.requestLocker.lock(() => this.reloadData(this.getRequestParams(), refresh))
             .then(() => this.setPageUrlQueryParam())
             .catch((error: any) => this.onReloadFailed(error));
     };
@@ -88,7 +90,7 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
     };
 
     loadMore = () => {
-        this.loadMoreData(this.getRequestParams())
+        this.requestLocker.lock(() => this.loadMoreData(this.getRequestParams()))
             .then(() => this.setPageUrlQueryParam())
             .catch(() => console.log('Loading more failed'));
     };

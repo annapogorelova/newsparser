@@ -17,7 +17,8 @@ import {
     AuthProviderService,
     AbstractDataProviderService,
     AuthRefreshLocker,
-    CanActivateAuth
+    CanActivateAuth,
+    RequestLockerService
 } from './services';
 import {
     PageNotFoundComponent,
@@ -36,6 +37,7 @@ import {
         AuthRefreshLocker,
         ApiErrorHandler,
         CacheService,
+        RequestLockerService,
         AbstractDataProviderService,
         {
             provide: NavigatorService,

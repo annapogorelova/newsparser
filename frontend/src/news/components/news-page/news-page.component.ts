@@ -60,7 +60,7 @@ export class NewsPageComponent implements OnInit {
     onSourceSelected(event: any){
         this.selectedSourcesIds.push(event.source.id);
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
-        this.newsListComponent.reload(false, this.selectedSourcesIds, this.selectedTags);
+        this.reloadNews();
     };
 
     onSourceDeselected(event: any){
@@ -68,13 +68,13 @@ export class NewsPageComponent implements OnInit {
             return item !== event.source.id;
         });
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
-        this.newsListComponent.reload(false, this.selectedSourcesIds, this.selectedTags);
+        this.reloadNews();
     };
     
     onTagSelected(event: any){
         this.selectedTags.push(event.tag);
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
-        this.newsListComponent.reload(false, this.selectedSourcesIds, this.selectedTags);
+        this.reloadNews();
     };
     
     onTagDeselected(event: any){
@@ -83,13 +83,13 @@ export class NewsPageComponent implements OnInit {
         });
 
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
-        this.newsListComponent.reload(false, this.selectedSourcesIds, this.selectedTags);
+        this.reloadNews();
     };
 
     onTagsCleared(){
         this.selectedTags = [];
         this.navigator.setQueryParam('tags', null);
-        this.newsListComponent.reload(false, this.selectedSourcesIds, this.selectedTags);
+        this.reloadNews();
     };
 
     onSearch(event: any){
@@ -98,5 +98,13 @@ export class NewsPageComponent implements OnInit {
 
     onPageChanged(event: any){
         this.navigator.setQueryParam('page', event.page);
+    };
+    
+    reloadNews(refresh: boolean = false){
+        this.newsListComponent.reload(refresh, this.selectedSourcesIds, this.selectedTags);
+    };
+    
+    showLockScreen(): boolean {
+        return this.newsListComponent.requestLocker.isLocked();
     };
 }

@@ -1,4 +1,4 @@
-<div>
+<div class="news-page-content">
     <sidebar #sidebarComponent
              (onHide)="onSidebarHidden()"
              (onShow)="onSidebarShown()"
@@ -28,3 +28,4 @@
         </news-list>
     </div>
 </div>
+<div class="lock" *ngIf="showLockScreen()"></div>

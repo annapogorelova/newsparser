@@ -1,32 +1,23 @@
 import {Injectable} from '@angular/core';
+import {BaseLocker} from '../../abstract';
 
 /**
  * A wrapper for the process of refreshing the authentication
  */
 @Injectable()
-export class AuthRefreshLocker {
-    private authRefreshPromise: Promise<any> = null;
-
-    isLocked(){
-        return this.authRefreshPromise != null;
-    }
-
+export class AuthRefreshLocker extends BaseLocker{
     lock(callback: any): Promise<any>{
-        if (this.isLocked()) {
-            return Promise.reject(new AuthRefreshError('Refresh already in progress', this.authRefreshPromise));
+        if (super.isLocked()) {
+            return Promise.reject(new AuthRefreshError('Refresh already in progress', this.callbackPromise));
         }
-        this.authRefreshPromise = new Promise((resolve, reject) => {
-            resolve(callback());
-        }).then(this.unlock).catch(this.unlock);
 
-        return this.authRefreshPromise;
-    }
-
-    unlock = () => {
-        this.authRefreshPromise = null;
+        return super.lock(callback);
     }
 }
 
+/**
+ * The Error type to be thrown when auth refresh failed
+ */
 export class AuthRefreshError extends Error {
     constructor(message: string, public authRefreshPromise: Promise<any>){
         super(message);
