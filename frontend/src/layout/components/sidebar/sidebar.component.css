@@ -105,6 +105,10 @@
     cursor: pointer;
 }
 
+:host /deep/ .news-sources-card span[disabled="true"] {
+    cursor: not-allowed;
+}
+
 :host /deep/ .copyright {
     margin-bottom: 0;
     padding: 10px 0 10px 0;

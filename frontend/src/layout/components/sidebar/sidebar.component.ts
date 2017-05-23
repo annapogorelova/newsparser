@@ -89,6 +89,9 @@ export class SidebarComponent {
     };
 
 	clearSources(event: any){
+		if(!this.selectedSourcesIds.length){
+			return;
+		}
 		this.newsSourcesList.clearSources();
 		this.onSourcesCleared.emit(event);
 	};

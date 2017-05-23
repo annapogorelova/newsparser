@@ -47,6 +47,10 @@
     font-weight: lighter;
 }
 
+:host /deep/ span[disabled="true"] {
+    cursor: not-allowed;
+}
+
 :host /deep/ span.badge-default {
     background-color: #4d5257;
 }
