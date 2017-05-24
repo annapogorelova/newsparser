@@ -24,7 +24,6 @@
 }
 
 :host /deep/ .navbar-brand img {
-    height: 32px;
-    width: 32px;
-    border-radius: 100px;
+    height: 28px;
+    width: 28px;
 }
