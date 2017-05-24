@@ -20,13 +20,19 @@ export class SearchComponent {
     private placeholderCaption: string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
 
     @Output() onSearch: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
 
-    onKeyUp = (event: any) => {
+    onKeyUp(event: any) {
         // Prevent action triggering when user hits functional buttons
         if(event.keyCode > 8 && event.keyCode < 48){
             return;
         }
 
         this.onSearch.emit({inputValue: this.search});
+    };
+
+    clear(){
+        this.search = null;
+        this.onClear.emit();
     };
 }

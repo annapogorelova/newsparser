@@ -2,7 +2,9 @@
     <div class="news-container">
         <div class="row">
             <div class="col-md-12">
-                <search (onSearch)="searchNews($event.inputValue)" [search]="search"></search>
+                <search (onSearch)="searchNews($event.inputValue)"
+                        (onClear)="searchNews($event)"
+                        [search]="search"></search>
                 <div class="news-container" infinite-scroll
                      [infiniteScrollDistance]="4"
                      [infiniteScrollThrottle]="300"
