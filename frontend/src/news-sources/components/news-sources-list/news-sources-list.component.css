@@ -8,10 +8,11 @@
     padding: 5px 5px 5px 5px;
 }
 
-:host /deep/ .news-source-item span {
+:host /deep/ span.news-source-image {
     width: 16px;
     height: 16px;
     margin-right: 5px;
+    background-color: white;
     background-size: cover;
     background-position: center;
     border-radius: 20px;

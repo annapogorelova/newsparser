@@ -22,3 +22,9 @@
 :host /deep/ .page-content {
     min-width: 250px;
 }
+
+:host /deep/ .navbar-brand img {
+    height: 32px;
+    width: 32px;
+    border-radius: 100px;
+}

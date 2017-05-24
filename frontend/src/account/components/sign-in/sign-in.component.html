@@ -6,7 +6,7 @@
                 <div class="col-md-6">
                     <external-sign-in [provider]="'facebook'"
                                       [buttonIcon]="'fa fa-facebook-square'"
-                                      [buttonClass]="'btn-primary'"
+                                      [buttonClass]="'btn-facebook'"
                                       [inputDisabled]="submitInProgress"
                                       (onSignInSucceeded)="onSubmitSucceeded($event)"
                                       (onSignInFailed)="onSubmitFailed($event)"
@@ -16,7 +16,7 @@
                 <div class="col-md-6">
                     <external-sign-in [provider]="'google'"
                                       [buttonIcon]="'fa fa-google-plus-square'"
-                                      [buttonClass]="'btn-danger'"
+                                      [buttonClass]="'btn-google'"
                                       [inputDisabled]="submitInProgress"
                                       (onSignInSucceeded)="onSubmitSucceeded($event)"
                                       (onSignInFailed)="onSubmitFailed($error)"

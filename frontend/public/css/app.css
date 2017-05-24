@@ -14,3 +14,11 @@
 body {
     overflow-x:hidden;
 }
+
+.bg-primary, .badge-primary, .list-group-item.active, .btn-primary {
+    background-color: #336688 !important;
+}
+
+.btn-primary:hover {
+    background-color: #28516C !important;
+}
