@@ -13,8 +13,9 @@
     height: 16px;
     margin-right: 5px;
     background-color: white;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     border-radius: 20px;
 }
 
