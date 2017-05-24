@@ -72,10 +72,6 @@ namespace NewsParser.BL.Services.NewsSources
 
             try
             {
-                if (newsSource.Name.Length > 100)
-                {
-                    newsSource.Name = $"{newsSource.Name.Substring(0, 97)}...";
-                }
                 return _newsSourceRepository.AddNewsSource(newsSource);
             }
             catch (Exception e)

@@ -15,7 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using newsparser.feedparser;
 using NewsParser.Auth;
 using NewsParser.Auth.ExternalAuth;
 using NewsParser.BL.Services.News;
@@ -40,6 +39,8 @@ using NewsParser.DAL.Repositories.Tokens;
 using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Caching.Distributed;
 using NewsParser.Cache;
+using NewsParser.FeedParser.Services;
+using newsparser.FeedParser.Services;
 
 namespace NewsParser
 {

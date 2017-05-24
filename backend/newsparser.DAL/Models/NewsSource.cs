@@ -10,15 +10,27 @@ namespace NewsParser.DAL.Models
 
         [Required, MaxLength(100)]
         public string Name { get; set; }
-
+        
         [Required, MaxLength(255)]
         public string RssUrl { get; set; }
+        
+        [MaxLength(255)]
+        public string ImageUrl { get; set; }
+        
+        [MaxLength(255)]
+        public string WebsiteUrl { get; set; }
+        
+        [Required, MaxLength(255)]
+        public string Description { get; set; }
 
+        public DateTime? LastBuildDate { get; set; }
+        
         public bool IsUpdating { get; set; }
-
+        
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
+        
         public DateTime DateFeedUpdated { get; set; }
-
+        
         public List<NewsSourceNews> News { get; set; }
         public List<UserNewsSource> Users { get; set; }
     }

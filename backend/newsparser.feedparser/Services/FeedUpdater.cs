@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using newsparser.FeedParser.Models;
 using NewsParser.BL.Exceptions;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.FeedParser;
+using NewsParser.FeedParser.Exceptions;
+using NewsParser.FeedParser.Helpers;
+using NewsParser.FeedParser.Services;
 
-namespace newsparser.feedparser
+namespace newsparser.FeedParser.Services
 {
     /// <summary>
     /// Class implements IFeedUpdater
@@ -143,7 +147,16 @@ namespace newsparser.feedparser
 
             try
             {
-                var newsSource = await _feedParser.ParseRssSource(rssUrl);
+                var newsSourceModel = await _feedParser.ParseRssSource(rssUrl);
+                var newsSource = new NewsSource
+                {
+                    Name = newsSourceModel.Name?.CropString(100),
+                    Description = newsSourceModel.Description?.CropString(255),
+                    ImageUrl = newsSourceModel.ImageUrl,
+                    RssUrl = newsSourceModel.RssUrl,
+                    WebsiteUrl = newsSourceModel.WebsiteUrl,
+                    LastBuildDate = newsSourceModel.LastBuildDate
+                };
                 var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
                 UpdateSource(addedNewsSource.Id);
 
@@ -166,7 +179,7 @@ namespace newsparser.feedparser
             _newsSourceBusinessService.UpdateNewsSource(newsSource);
         }
 
-        private void SaveNewsItems(int sourceId, List<NewsItemParseModel> newsItems)
+        private void SaveNewsItems(int sourceId, List<NewsItemModel> newsItems)
         {
             foreach (var newsItem in newsItems)
             {

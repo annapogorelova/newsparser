@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace newsparser.feedparser
+namespace newsparser.FeedParser.Models
 {
-    public class NewsItemParseModel
+    public class NewsItemModel
     {
         public string Title { get; set; } = "Untitled";
         public string Description { get; set; }

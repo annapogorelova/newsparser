@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace NewsParser.FeedParser
+namespace NewsParser.FeedParser.Helpers
 {
     /// <summary>
     /// Class contains extension methods for html strings
@@ -29,21 +29,21 @@ namespace NewsParser.FeedParser
         }
 
         /// <summary>
-        /// Crops the html string to the max length specified
+        /// Crops the string to the max length specified
         /// </summary>
-        /// <param name="html">Html string</param>
+        /// <param name="input">String</param>
         /// <param name="maxLength">Max length</param>
-        /// <returns>Cropped html string</returns>
-        public static string CropHtmlString(this string html, int maxLength)
+        /// <returns>Cropped string</returns>
+        public static string CropString(this string input, int maxLength)
         {
-            if (html.Length < maxLength)
+            if (input.Length < maxLength)
             {
-                return html;
+                return input;
             }
 
-           var croppedHtmlString = html.Substring(0, maxLength - 3);
-            return $"{croppedHtmlString.Substring(0, croppedHtmlString.LastIndexOf(' '))}...";
+            var croppedString = input.Substring(0, maxLength - 3);
+            return $"{croppedString.Substring(0, croppedString.LastIndexOf(' '))}...";
         }
-        
+
     }
 }

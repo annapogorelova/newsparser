@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MySQL.Data.EntityFrameworkCore.Extensions;
-using newsparser.feedparser;
+using newsparser.FeedParser.Services;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.BL.Services.NewsTags;
@@ -18,6 +18,7 @@ using NewsParser.DAL.Repositories.News;
 using NewsParser.DAL.Repositories.NewsSources;
 using NewsParser.DAL.Repositories.Users;
 using NewsParser.FeedParser;
+using NewsParser.FeedParser.Services;
 using NewsParser.Scheduler;
 using static System.Int32;
 

@@ -6,9 +6,12 @@ using NewsParser.DAL.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using newsparser.feedparser;
+using NewsParser.FeedParser.Models;
+using NewsParser.FeedParser.Exceptions;
+using newsparser.FeedParser.Models;
+using NewsParser.FeedParser.Helpers;
 
-namespace NewsParser.FeedParser
+namespace NewsParser.FeedParser.Services
 {
     /// <summary>
     /// Class contains methods for parsing the news from the specified sources
@@ -20,7 +23,7 @@ namespace NewsParser.FeedParser
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>Async Task object</returns>
-        public async Task<List<NewsItemParseModel>> ParseNewsSource(NewsSource newsSource)
+        public async Task<List<NewsItemModel>> ParseNewsSource(NewsSource newsSource)
         {
             try
             {
@@ -39,22 +42,44 @@ namespace NewsParser.FeedParser
         /// </summary>
         /// <param name="rssUrl">RSS url</param>
         /// <returns>Task</returns>
-        public async Task<NewsSource> ParseRssSource(string rssUrl)
+        public async Task<NewsSourceModel> ParseRssSource(string rssUrl)
         {
             try
             {
                 XElement xmlItems = await GetRssXml(rssUrl);
-                string sourceName = xmlItems.Descendants("channel")?.First()?.Element("title")?.Value;
-                var newsSource = new NewsSource
+                XElement sourceInfo = xmlItems.Descendants("channel")?.First();
+                if(sourceInfo == null)
+                {
+                    throw new FeedParsingException("Failed to parse RSS source");
+                }
+
+                var newsSourceModel = new NewsSourceModel
                 {
                     RssUrl = rssUrl,
-                    Name = sourceName ?? "Unknown"
+                    Name = sourceInfo.Element("title")?.Value ?? "Unknown",
+                    Description = sourceInfo.Element("description")?.Value,
+                    WebsiteUrl = sourceInfo.Element("link")?.Value
                 };
-                return newsSource;
+
+                if(sourceInfo.Descendants("image").Any())
+                {
+                    newsSourceModel.ImageUrl = sourceInfo.Descendants("image").First()
+                        .Element("url")?.Value;
+                }
+
+                if(sourceInfo.Element("lastBuildDate") != null && 
+                    !string.IsNullOrEmpty(sourceInfo.Element("lastBuildDate").Value))
+                {
+                    DateTime lastBuildDate;
+                    DateTime.TryParse(sourceInfo.Element("lastBuildDate").Value, out lastBuildDate);
+                    newsSourceModel.LastBuildDate = lastBuildDate;
+                }
+
+                return newsSourceModel;
             }
             catch (Exception e)
             {
-                throw new FeedParsingException("Failed to parse RSS feed", e);
+                throw e;
             }
         }
 
@@ -83,9 +108,9 @@ namespace NewsParser.FeedParser
         /// <param name="xmlElements">The list of XML elements of RSS feed</param>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>List of NewsItem</returns>
-        private List<NewsItemParseModel> ParseNewsSourceRss(List<XElement> xmlElements)
+        private List<NewsItemModel> ParseNewsSourceRss(List<XElement> xmlElements)
         {
-            var newsItems = new List<NewsItemParseModel>();
+            var newsItems = new List<NewsItemModel>();
 
             try
             {
@@ -102,11 +127,11 @@ namespace NewsParser.FeedParser
                         throw new FeedParsingException($"Failed to parse published date for {rssItem.Element("title").Value} rss item.");
                     }
                     
-                    var newsItem = new NewsItemParseModel
+                    var newsItem = new NewsItemModel
                     {                       
                         Title = rssItem.Element("title").Value,
-                        Author = rssItem.Element("author")?.Value?.CropHtmlString(100),
-                        Description = rssItemDescription.RemoveHtmlTags().CropHtmlString(500),
+                        Author = rssItem.Element("author")?.Value?.CropString(100),
+                        Description = rssItemDescription.RemoveHtmlTags().CropString(500),
                         DatePublished = pubDate.ToUniversalTime(),
                         LinkToSource = rssItem.Element("link").Value,
                         ImageUrl = imageUrl,

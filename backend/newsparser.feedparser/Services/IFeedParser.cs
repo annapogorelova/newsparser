@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using newsparser.feedparser;
+using newsparser.FeedParser.Models;
 using NewsParser.DAL.Models;
+using NewsParser.FeedParser.Models;
 
-namespace NewsParser.FeedParser
+namespace NewsParser.FeedParser.Services
 {
     /// <summary>
     /// Interface contains methods for feed parsing
@@ -15,13 +16,13 @@ namespace NewsParser.FeedParser
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
         /// <returns>List of NewsItemParseModel</returns>
-        Task<List<NewsItemParseModel>> ParseNewsSource(NewsSource newsSource);
+        Task<List<NewsItemModel>> ParseNewsSource(NewsSource newsSource);
 
         /// <summary>
         /// Get the basic info of RSS source (channel name, etc.)
         /// </summary>
         /// <param name="rssUrl">RSS url</param>
         /// <returns>NewsSource object</returns>
-        Task<NewsSource> ParseRssSource(string rssUrl);
+        Task<NewsSourceModel> ParseRssSource(string rssUrl);
     }
 }

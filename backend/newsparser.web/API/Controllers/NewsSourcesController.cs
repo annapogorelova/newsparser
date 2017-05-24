@@ -7,18 +7,17 @@ using NewsParser.API.Models;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using newsparser.feedparser;
 using NewsParser.Auth;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Cache;
+using newsparser.FeedParser.Services;
 
 namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    // [ResponseCache(CacheProfileName = "Default")]
     public class NewsSourcesController: BaseController
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
