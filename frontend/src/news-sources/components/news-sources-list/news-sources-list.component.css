@@ -8,6 +8,15 @@
     padding: 5px 5px 5px 5px;
 }
 
+:host /deep/ .news-source-item span {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+}
+
 :host /deep/ .news-source-item.active {
     color: white;
 }

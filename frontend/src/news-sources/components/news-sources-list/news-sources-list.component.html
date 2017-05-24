@@ -14,7 +14,11 @@
                (click)="(isSelected(newsSource) || isSubscribed(newsSource)) ?
                     deselectNewsSource(newsSource) : selectNewsSource(newsSource)"
                [attr.title]="newsSource.name">
-                {{newsSource.name}}
+                <span [ngStyle]="{'background-image': newsSource.imageUrl ?
+                                         'url(' + newsSource.imageUrl + ')' :
+                                         'url(\'../../../../public/images/default-rss-icon.png\')'}"
+                        class="pull-left"></span>
+                <span>{{newsSource.name}}</span>
                 <i class="fa fa-check pull-right" *ngIf="isSubscribed(newsSource)"></i>
             </a>
         </div>
