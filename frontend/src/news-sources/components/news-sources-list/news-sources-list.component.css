@@ -22,6 +22,10 @@
     color: white;
 }
 
+:host /deep/ .news-source-item.active:hover {
+    color: #CCCCCC;
+}
+
 :host /deep/ .news-source-item-container {
     display: inline-block;
     padding-right: 5px;
