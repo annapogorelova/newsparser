@@ -9,13 +9,16 @@
     overflow-y: auto;
 }
 
-:host /deep/ .tag-item {
+:host /deep/ .tag {
     cursor: pointer;
-    overflow:hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 70%;
     max-width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
 }
 
 :host /deep/ .no-tags-text {
@@ -51,10 +54,11 @@
     cursor: not-allowed;
 }
 
-:host /deep/ span.badge-default {
-    background-color: #4d5257;
+:host /deep/ span.tag.badge {
+    background-color: #0093D1;
 }
 
-:host /deep/ span.badge-default:hover {
-    background-color: #818a91;
+:host /deep/ span.tag.badge.selected,
+    span.tag.badge:hover {
+    background-color: #0075A7;
 }

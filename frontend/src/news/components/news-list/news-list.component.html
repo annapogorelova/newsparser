@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="news-item-info-container">
-                                            <span class="badge badge-primary"
+                                            <span class="badge"
                                                   [attr.title]="newsItem.sources[0].name">
                                                 {{newsItem.sources[0].name}}
                                             </span>
@@ -66,7 +66,7 @@
                                     <div class="news-item-footer">
                                         <div class="news-item-tag-container" *ngFor="let tag of newsItem.tags">
                                             <h6>
-                                            <span class="tag badge badge-default"
+                                            <span class="tag badge"
                                                   (click)="selectTag(tag)"
                                                   ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
                                                 {{tag}}

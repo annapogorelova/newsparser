@@ -9,7 +9,7 @@
     </div>
     <div class="card-block">
         <div class="tag-container" *ngFor="let tag of tags">
-            <span class="tag-item badge badge-default" (click)="deselectTag(tag)" [attr.title]="tag">
+            <span class="tag badge" (click)="deselectTag(tag)" [attr.title]="tag">
                 #{{tag}}
             </span>
         </div>
