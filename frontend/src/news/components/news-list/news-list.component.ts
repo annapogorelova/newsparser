@@ -74,8 +74,8 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
      */
     reload(refresh: boolean = false, sourcesIds: Array<number> = [], tags: Array<string> = []) {
         window.scrollTo(0, 0);
-        this.selectedSourcesIds = sourcesIds;
-        this.selectedTags = tags;
+        this.selectedSourcesIds = sourcesIds.length ? sourcesIds : this.selectedSourcesIds;
+        this.selectedTags = tags.length ? tags : this.selectedTags;
         return this.requestLocker.lock(() => this.reloadData(this.getRequestParams(), refresh))
             .then(() => this.setPageUrlQueryParam())
             .catch((error: any) => this.onReloadFailed(error));
