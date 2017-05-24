@@ -74,8 +74,8 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
      */
     reload(refresh: boolean = false, sourcesIds: Array<number> = [], tags: Array<string> = []) {
         window.scrollTo(0, 0);
-        this.selectedSourcesIds = sourcesIds.length ? sourcesIds : this.selectedSourcesIds;
-        this.selectedTags = tags.length ? tags : this.selectedTags;
+        this.selectedSourcesIds = sourcesIds;
+        this.selectedTags = tags;
         return this.requestLocker.lock(() => this.reloadData(this.getRequestParams(), refresh))
             .then(() => this.setPageUrlQueryParam())
             .catch((error: any) => this.onReloadFailed(error));
@@ -86,7 +86,7 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
     };
 
     refresh = () => {
-        this.reload(true);
+        this.reload(true, this.selectedSourcesIds, this.selectedTags);
     };
 
     loadMore = () => {
@@ -113,7 +113,7 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
     searchNews = (search: string) => {
         this.search = search;
         this.onSearch.emit({search: this.search});
-        this.reload(true);
+        this.reload(true, this.selectedSourcesIds, this.selectedTags);
     };
     
     getOtherSources = (newsItem: any) => {
