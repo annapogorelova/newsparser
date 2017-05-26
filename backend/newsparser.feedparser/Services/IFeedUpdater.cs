@@ -40,8 +40,9 @@ namespace newsparser.FeedParser.Services
         /// Adds the news source by RSS url
         /// </summary>
         /// <param name="rssUrl">RSS url</param>
+        /// <param name="isPrivate">Indicates whether this news source is private</param>
         /// <param name="userId">User id to add news source to</param>
         /// <returns>NewsSource object</returns>
-        Task<NewsSource> AddNewsSource(string rssUrl, int? userId = null);
+        Task<NewsSource> AddNewsSource(string rssUrl, bool isPrivate, int userId);
     }
 }

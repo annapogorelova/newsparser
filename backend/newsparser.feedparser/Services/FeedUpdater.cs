@@ -138,7 +138,7 @@ namespace newsparser.FeedParser.Services
             }
         }
 
-        public async Task<NewsSource> AddNewsSource(string rssUrl, int? userId = null)
+        public async Task<NewsSource> AddNewsSource(string rssUrl, bool isPrivate, int userId)
         {
             if (string.IsNullOrEmpty(rssUrl))
             {
@@ -155,15 +155,13 @@ namespace newsparser.FeedParser.Services
                     ImageUrl = newsSourceModel.ImageUrl,
                     RssUrl = newsSourceModel.RssUrl,
                     WebsiteUrl = newsSourceModel.WebsiteUrl,
-                    LastBuildDate = newsSourceModel.LastBuildDate
+                    LastBuildDate = newsSourceModel.LastBuildDate,
+                    IsPrivate = isPrivate,
+                    CreatorId = userId
                 };
                 var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
                 UpdateSource(addedNewsSource.Id);
-
-                if (userId.HasValue)
-                {
-                    _newsSourceBusinessService.AddNewsSourceToUser(addedNewsSource.Id, userId.Value);
-                }
+                _newsSourceBusinessService.AddNewsSourceToUser(addedNewsSource.Id, userId);
                 return addedNewsSource;
             }
             catch (Exception e)

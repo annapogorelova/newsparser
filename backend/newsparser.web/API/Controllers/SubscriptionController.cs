@@ -39,7 +39,7 @@ namespace NewsParser.API.Controllers
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             if(_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.Forbidden, "User is already subscribed to this news source");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this news source");
             }
             _newsSourceBusinessService.AddNewsSourceToUser(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
@@ -51,7 +51,7 @@ namespace NewsParser.API.Controllers
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             if(!_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.Forbidden, "User is not subscribed to this news source");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this news source");
             }
             _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");

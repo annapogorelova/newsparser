@@ -30,7 +30,7 @@ namespace NewsParser.Scheduler
             {
                 try
                 {
-                    var newsSourcs = _newsSourceBusinessService.GetNewsSources(true).ToList();
+                    var newsSourcs = _newsSourceBusinessService.GetAllNewsSources(true).ToList();
                     foreach (var newsSource in newsSourcs)
                     {
                         _feedUpdater.UpdateSource(newsSource.Id);

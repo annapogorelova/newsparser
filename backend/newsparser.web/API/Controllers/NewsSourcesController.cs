@@ -42,7 +42,7 @@ namespace NewsParser.API.Controllers
             var user = _authService.GetCurrentUser();
             int total;
             var newsSources = _newsSourceBusinessService
-                .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())
+                .GetNewsSourcesPage(user.GetId(), out total, pageIndex, pageSize, search, subscribed)
                 .ToList();
             var newsSourcesModels = Mapper.Map<List<NewsSourceSubscriptionModel>>(newsSources);
             return new JsonResult(new { data = newsSourcesModels, total });
@@ -54,6 +54,11 @@ namespace NewsParser.API.Controllers
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
+            var user = _authService.GetCurrentUser();
+            if(newsSource.IsPrivate && newsSource.CreatorId != user.GetId())
+            {
+                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
+            }
             return new JsonResult(Mapper.Map<NewsSourceSubscriptionModel>(newsSource));
         }
 
@@ -67,7 +72,7 @@ namespace NewsParser.API.Controllers
             }
 
             var user = _authService.FindUserByUserName(HttpContext.User.Identity.Name);
-            var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
+            var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, newsSourceModel.IsPrivate, user.GetId());
             var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceSubscriptionModel>(addedNewsSource);
             return MakeSuccessResponse(HttpStatusCode.Created, 
                 new { data = addedNewsSourceModel, 

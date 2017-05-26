@@ -9,12 +9,12 @@ namespace NewsParser.BL.Services.NewsSources
     public interface INewsSourceBusinessService
     {
         /// <summary>
-        /// Get all news sources
+        /// Get all news sources, including the private ones
         /// </summary>
         /// <param name="hasUsers">By default false; 
         /// If true - query will include only news sources with at least one subscribed user</param>
         /// <returns>IEnumerable of NewsSource</returns>
-        IEnumerable<NewsSource> GetNewsSources(bool hasUsers = false);
+        IEnumerable<NewsSource> GetAllNewsSources(bool hasUsers = false);
 
         /// <summary>
         /// Gets news sources that user is subscribed to
@@ -33,6 +33,7 @@ namespace NewsParser.BL.Services.NewsSources
 
         /// <summary>
         /// Get news sources that are available for the user specified
+        /// (excluding the private news sources in database, that belong to some other user)
         /// </summary>
         /// <param name="userId">User id</param>
         /// <returns>IEnumerable of NewsSource</returns>
@@ -41,14 +42,21 @@ namespace NewsParser.BL.Services.NewsSources
         /// <summary>
         /// Get a page of available news sources
         /// </summary>
+        /// <param name="userId">User id to select available news sources for</param>
         /// <param name="total">Total count of filtered news sources</param>
         /// <param name="search">Search term</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="subscribed">If true and userId present only user subscribed sources will be returned, otherwise - all</param>
-        /// <param name="userId">User id to select available news sources for</param>
         /// <returns>IEnumerable of NewsSource</returns>
-        IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null, bool subscribed = false, int? userId = null);
+        IEnumerable<NewsSource> GetNewsSourcesPage(
+            int userId, 
+            out int total, 
+            int pageIndex = 0, 
+            int pageSize = 5, 
+            string search = null, 
+            bool subscribed = false
+        );
 
         /// <summary>
         /// Get news source by id

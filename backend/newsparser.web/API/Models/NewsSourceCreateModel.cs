@@ -11,5 +11,7 @@ namespace NewsParser.API.Models
         [Url(ErrorMessage = "RSS url must be a valid fully-qualified http or https URL string")]
         [Required(ErrorMessage = "RSS url is required")]
         public string RssUrl { get; set; }
+
+        public bool IsPrivate { get; set; }
     }
 }

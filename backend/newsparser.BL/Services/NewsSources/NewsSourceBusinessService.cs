@@ -20,27 +20,39 @@ namespace NewsParser.BL.Services.NewsSources
             _userRepository = userRepository;
         }
 
-        public IEnumerable<NewsSource> GetNewsSources(bool hasUsers = false)
+        public IEnumerable<NewsSource> GetAllNewsSources(bool withUsers = false)
         {
             var newsSources = _newsSourceRepository.GetNewsSources().Include(n => n.Users);
-            return hasUsers ?
+            return withUsers ?
                 newsSources.Where(n => n.Users.Any()) :
                 newsSources;
+        }
+
+        public IEnumerable<NewsSource> GetAllNewsSourcesForUser(int userId)
+        {
+            return _newsSourceRepository.GetNewsSources()
+                .Include(s => s.Users)
+                .Where(s => !s.IsPrivate);
         }
 
         public IEnumerable<NewsSource> GetAvailableNewsSources(int userId)
         {
             return _newsSourceRepository.GetNewsSources()
                     .Include(s => s.Users)
-                    .Where(s => s.Users.All(u => u.UserId != userId));
+                    .Where(s => s.Users.All(u => u.UserId != userId) && !s.IsPrivate);
         }
 
-        public IEnumerable<NewsSource> GetNewsSourcesPage(out int total, int pageIndex = 0, int pageSize = 5, string search = null,
-            bool subscribed = false, int? userId = null)
+        public IEnumerable<NewsSource> GetNewsSourcesPage(
+            int userId, 
+            out int total, 
+            int pageIndex = 0, 
+            int pageSize = 5, 
+            string search = null, 
+            bool subscribed = false)
         {
-            var newsSources = subscribed && userId.HasValue ?
-                GetNewsSourcesByUser(userId.Value) :
-                GetNewsSources();
+            var newsSources = subscribed ?
+                GetNewsSourcesByUser(userId) :
+                GetAllNewsSourcesForUser(userId);
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -124,12 +136,13 @@ namespace NewsParser.BL.Services.NewsSources
         {
             if (_userRepository.GetUserById(userId) == null)
             {
-                throw new BusinessLayerException($"User with id {userId} does not exist");
+                throw new BusinessLayerException("User does not exist");
             }
 
-            if (GetNewsSourceById(sourceId) == null)
+            var newsSource = GetNewsSourceById(sourceId);
+            if (newsSource == null || (newsSource.IsPrivate && newsSource.CreatorId != userId))
             {
-                throw new BusinessLayerException($"News source with id {sourceId} does not exist");
+                throw new BusinessLayerException("News source does not exist");
             }
 
             try
@@ -146,12 +159,13 @@ namespace NewsParser.BL.Services.NewsSources
         {
             if (_userRepository.GetUserById(userId) == null)
             {
-                throw new BusinessLayerException($"User with id {userId} does not exist");
+                throw new BusinessLayerException("User does not exist");
             }
 
-            if (GetNewsSourceById(sourceId) == null)
+            var newsSource = GetNewsSourceById(sourceId);
+            if (newsSource == null || (newsSource.IsPrivate && newsSource.CreatorId != userId))
             {
-                throw new BusinessLayerException($"News source with id {sourceId} does not exist");
+                throw new BusinessLayerException("News source does not exist");
             }
 
             try
