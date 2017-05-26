@@ -32,19 +32,27 @@ namespace NewsParser.API.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
+        [HttpPost("{id:int}")]
         [ValidateModel]
-        public async Task<JsonResult> Post([FromBody]CreateSubscriptionModel model)
+        public async Task<JsonResult> Post(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, user.GetId());
+            if(_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
+            {
+                return MakeErrorResponse(HttpStatusCode.Forbidden, "User is already subscribed to this news source");
+            }
+            _newsSourceBusinessService.AddNewsSourceToUser(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<JsonResult> Delete(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if(!_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
+            {
+                return MakeErrorResponse(HttpStatusCode.Forbidden, "User is not subscribed to this news source");
+            }
             _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
         }

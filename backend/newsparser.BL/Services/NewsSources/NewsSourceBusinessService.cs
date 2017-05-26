@@ -168,5 +168,10 @@ namespace NewsParser.BL.Services.NewsSources
         {
             return _newsSourceRepository.GetNewsSourcesByUser(userId).Include(n => n.Users);
         }
+
+        public bool IsUserSubscribed(int sourceId, int userId)
+        {
+            return _newsSourceRepository.GetNewsSourcesByUser(userId).Any(s => s.Id == sourceId);
+        }
     }
 }

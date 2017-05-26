@@ -23,7 +23,15 @@ namespace NewsParser.BL.Services.NewsSources
         /// <returns>IEnumerable of NewsSource</returns>
         IEnumerable<NewsSource> GetNewsSourcesByUser(int userId);
 
-            /// <summary>
+        /// <summary>
+        /// Determines, whether user is already subscribed to this news source
+        /// </summary>
+        /// <param name="sourceId">News source id</param>
+        /// <param name="userId">User id</param>
+        /// <returns>True if user is subscribed, false - if not</returns>
+        bool IsUserSubscribed(int sourceId, int userId);
+
+        /// <summary>
         /// Get news sources that are available for the user specified
         /// </summary>
         /// <param name="userId">User id</param>
