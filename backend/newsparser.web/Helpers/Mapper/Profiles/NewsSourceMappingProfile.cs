@@ -16,11 +16,13 @@ namespace NewsParser.Helpers.Mapper.Profiles
     {
         public NewsSourceMappingProfile()
         {
-            CreateMap<NewsSource, NewsSourceApiModel>()
-                .ForMember(m => m.IsSubscribed, opt => opt.Ignore());
+            CreateMap<NewsSource, NewsSourceApiModel>();
+            CreateMap<NewsSource, NewsSourceSubscriptionModel>()
+                .ForMember(s => s.IsSubscribed, opt => opt.Ignore())
+                .AfterMap(SetSubscribedState);
         }
 
-        private void SetSubscribedState(NewsSource newsSource, NewsSourceApiModel model)
+        private void SetSubscribedState(NewsSource newsSource, NewsSourceSubscriptionModel model)
         {
             var userManager = ServiceLocator.Instance.GetService<UserManager<ApplicationUser>>();
             var httpContextAccessor = ServiceLocator.Instance.GetService<IHttpContextAccessor>();

@@ -166,7 +166,7 @@ namespace NewsParser.BL.Services.NewsSources
 
         public IEnumerable<NewsSource> GetNewsSourcesByUser(int userId)
         {
-            return _newsSourceRepository.GetNewsSourcesByUser(userId);
+            return _newsSourceRepository.GetNewsSourcesByUser(userId).Include(n => n.Users);
         }
     }
 }

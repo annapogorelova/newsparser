@@ -54,7 +54,7 @@ namespace NewsParser.API.Controllers
                 var user = _authService.FindUserByEmail(model.Email);
                 string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
                 await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
-                return MakeResponse(HttpStatusCode.Created, "Account was created");
+                return MakeSuccessResponse(HttpStatusCode.Created, "Account was created");
             }
 
             return MakeIdentityErrorResponse(
@@ -72,14 +72,14 @@ namespace NewsParser.API.Controllers
             
             if(user.EmailConfirmed)
             {
-                return MakeResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
+                return MakeErrorResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
             }
 
             var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
             
             if(result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.OK, "Email was successfully confirmed");
+                return MakeSuccessResponse(HttpStatusCode.OK, "Email was successfully confirmed");
             }
 
             return MakeIdentityErrorResponse(
@@ -96,7 +96,7 @@ namespace NewsParser.API.Controllers
             var user = _authService.FindUserByEmail(model.Email);
             string passwordResetToken = await _authService.GeneratePasswordResetTokenAsync(user);
             await _mailService.SendPasswordResetEmail(user.Email, Base64EncodingUtility.Encode(passwordResetToken));
-            return MakeResponse(HttpStatusCode.OK, "Password reset email was sent.");
+            return MakeSuccessResponse(HttpStatusCode.OK, "Password reset email was sent.");
         }
 
         [HttpPost("{email}/passwordRecovery")]
@@ -110,7 +110,7 @@ namespace NewsParser.API.Controllers
                 
             if (result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.OK, "Password was reset. You can sign in now.");
+                return MakeSuccessResponse(HttpStatusCode.OK, "Password was reset. You can sign in now.");
             }
 
             return MakeIdentityErrorResponse(
@@ -131,7 +131,7 @@ namespace NewsParser.API.Controllers
             
             if(emailChanged && !_userBusinessService.EmailAvailable(model.Email))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Email is already taken.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "Email is already taken.");
             }
 
             user.Email = model.Email;
@@ -150,7 +150,7 @@ namespace NewsParser.API.Controllers
                         If you don't confirm it, you won't be able to sign in with it next time.";
                 }
 
-                return MakeResponse(HttpStatusCode.OK, responseMessage);
+                return MakeSuccessResponse(HttpStatusCode.OK, responseMessage);
             }
 
             return MakeIdentityErrorResponse(
@@ -170,7 +170,7 @@ namespace NewsParser.API.Controllers
             
             if(result.Succeeded)
             {
-                return MakeResponse(HttpStatusCode.OK, "Password was successfully changed");
+                return MakeSuccessResponse(HttpStatusCode.OK, "Password was successfully changed");
             }
 
             return MakeIdentityErrorResponse(
@@ -184,7 +184,7 @@ namespace NewsParser.API.Controllers
         {
             string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
             string fullErrorMessage = $"{errorMessage}. {detailedErrorMessage}";
-            return MakeResponse(HttpStatusCode.InternalServerError, fullErrorMessage);
+            return MakeErrorResponse(HttpStatusCode.InternalServerError, fullErrorMessage);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace NewsParser.API.Controllers
             var newsSources = _newsSourceBusinessService
                 .GetNewsSourcesPage(out total, pageIndex, pageSize, search, subscribed, user.GetId())
                 .ToList();
-            var newsSourcesModels = Mapper.Map<List<NewsSourceApiModel>>(newsSources);
+            var newsSourcesModels = Mapper.Map<List<NewsSourceSubscriptionModel>>(newsSources);
             return new JsonResult(new { data = newsSourcesModels, total });
         }
 
@@ -54,7 +54,7 @@ namespace NewsParser.API.Controllers
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
-            return new JsonResult(Mapper.Map<NewsSourceApiModel>(newsSource));
+            return new JsonResult(Mapper.Map<NewsSourceSubscriptionModel>(newsSource));
         }
 
         [HttpPost]
@@ -63,13 +63,13 @@ namespace NewsParser.API.Controllers
         {
             if (_newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl) != null)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, new { message = "RSS source already exists" });
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "RSS source already exists");
             }
 
             var user = _authService.FindUserByUserName(HttpContext.User.Identity.Name);
             var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, user.GetId());
-            var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceApiModel>(addedNewsSource);
-            return MakeResponse(HttpStatusCode.Created, 
+            var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceSubscriptionModel>(addedNewsSource);
+            return MakeSuccessResponse(HttpStatusCode.Created, 
                 new { data = addedNewsSourceModel, 
                     message = "RSS source was added to the list of your subscriptions" });
         }

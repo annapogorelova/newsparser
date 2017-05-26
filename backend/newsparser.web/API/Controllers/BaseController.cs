@@ -16,10 +16,16 @@ namespace NewsParser.API.Controllers
         /// <param name="statusCode">Status code</param>
         /// <param name="data">Data object</param>
         /// <returns>JsonResult</returns>
-        protected JsonResult MakeResponse(HttpStatusCode statusCode, object data)
+        protected JsonResult MakeSuccessResponse(HttpStatusCode statusCode, object data)
         {
             Response.StatusCode = (int)statusCode;
             return new JsonResult(data);
+        }
+
+        protected JsonResult MakeSuccessResponse(HttpStatusCode statusCode, string message)
+        {
+            Response.StatusCode = (int)statusCode;
+            return new JsonResult(new { Message = message });
         }
 
         /// <summary>
@@ -28,7 +34,7 @@ namespace NewsParser.API.Controllers
         /// <param name="statusCode">Status code</param>
         /// <param name="message">Message</param>
         /// <returns>JsonResult</returns>
-        protected JsonResult MakeResponse(HttpStatusCode statusCode, string message)
+        protected JsonResult MakeErrorResponse(HttpStatusCode statusCode, string message)
         {
             throw new WebLayerException(statusCode, message);
         }

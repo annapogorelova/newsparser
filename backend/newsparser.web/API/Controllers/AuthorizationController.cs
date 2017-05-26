@@ -95,19 +95,19 @@ namespace NewsParser.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Assertion))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
             var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Facebook);
             
             if (!externalUser.IsVerified)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
             }
             
             if(string.IsNullOrEmpty(externalUser.Email))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, @"Email is required. 
+                return MakeErrorResponse(HttpStatusCode.BadRequest, @"Email is required. 
                     Please, make sure that you have it set on your facebook account.");
             }
             
@@ -136,13 +136,13 @@ namespace NewsParser.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Assertion))
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "The mandatory 'assertion' parameter was missing.");
             }
 
             var externalUser = await _externalAuthService.VerifyAccessTokenAsync(request.Assertion, ExternalAuthProvider.Google);
             if (!externalUser.IsVerified)
             {
-                return MakeResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "Facebook user is not verified.");
             }
 
             var user = _authService.FindUserByEmail(externalUser.Email);
@@ -168,7 +168,7 @@ namespace NewsParser.API.Controllers
                 var user = await _authService.GetUserAsync(info.Principal);
                 if (user == null)
                 {
-                    return MakeResponse(HttpStatusCode.BadRequest,"The refresh token is no longer valid.");
+                    return MakeErrorResponse(HttpStatusCode.BadRequest,"The refresh token is no longer valid.");
                 }
 
                 // Ensure the user is still allowed to sign in.

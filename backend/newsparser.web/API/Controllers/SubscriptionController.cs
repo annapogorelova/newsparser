@@ -38,7 +38,7 @@ namespace NewsParser.API.Controllers
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             _newsSourceBusinessService.AddNewsSourceToUser(model.SourceId, user.GetId());
-            return MakeResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
+            return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
         }
 
         [HttpDelete]
@@ -46,7 +46,7 @@ namespace NewsParser.API.Controllers
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
-            return MakeResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
+            return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
         }
     }
 }
