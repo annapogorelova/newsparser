@@ -14,8 +14,10 @@ import {
     PasswordResetComponent,
     AccountSettingsComponent,
     EditProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+	SubscriptionsComponent
 } from './components';
+import {NewsSourcesModule} from '../news-sources';
 
 let authProviders = {
     google: {
@@ -34,7 +36,8 @@ let authProviders = {
         ExternalAuthModule.initWithProviders(authProviders),
         SharedModule,
         AccountRouting,
-        NgbModule
+        NgbModule,
+        NewsSourcesModule
     ],
     declarations: [
         SignInComponent,
@@ -45,7 +48,8 @@ let authProviders = {
         PasswordResetComponent,
         AccountSettingsComponent,
         EditProfileComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+	    SubscriptionsComponent
     ],
     providers: [AccountRoutingProviders]
 })

@@ -18,12 +18,13 @@
                 </div>
                 <div class="card-block">
                     <div class="news-sources-container">
-                        <news-sources #newsSourcesList (onSelect)="onSelectSource($event)"
+                        <news-sources-multiselect-list #newsSourcesList
+                                      (onSelect)="onSelectSource($event)"
                                       (onDeselect)="onDeselectSource($event)"
                                       [onlySubscribed]="true"
                                       [initiallySelectedSourcesIds]="selectedSourcesIds"
                                       [noDataText]="'No subscribed RSS sources'">
-                        </news-sources>
+                        </news-sources-multiselect-list>
                     </div>
                 </div>
             </div>

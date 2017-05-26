@@ -3,17 +3,34 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {SharedModule} from '../shared';
-import {NewsSourcesRouting, NewsSourcesRoutingProviders} from './news-sources.routing';
 import {
-    SubscriptionsComponent,
-    NewsSourcesListComponent,
-    AddNewsSourceComponent
+    AddNewsSourceComponent,
+	SubscriptionItemComponent,
+	NewsSourceListItemComponent,
+	NewsSourcesMultiSelectList,
+	NewsSourcesSingleSelectList
 } from './components';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-    imports: [NewsSourcesRouting, BrowserModule, SharedModule, FormsModule, InfiniteScrollModule],
-    declarations: [SubscriptionsComponent, AddNewsSourceComponent, NewsSourcesListComponent],
-    providers: [NewsSourcesRoutingProviders],
-    exports: [NewsSourcesListComponent]
+    imports: [
+        BrowserModule,
+        SharedModule,
+        FormsModule,
+        InfiniteScrollModule,
+	    NgbModule
+    ],
+    declarations: [
+	    AddNewsSourceComponent,
+	    SubscriptionItemComponent,
+	    NewsSourceListItemComponent,
+	    NewsSourcesMultiSelectList,
+	    NewsSourcesSingleSelectList
+    ],
+    exports: [
+	    AddNewsSourceComponent,
+	    NewsSourcesMultiSelectList,
+	    NewsSourcesSingleSelectList
+    ]
 })
 export class NewsSourcesModule {}

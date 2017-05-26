@@ -5,3 +5,7 @@
 :host /deep/ button, change-password button {
     cursor: pointer;
 }
+
+:host /deep/ .tab-content {
+    padding: 5px;
+}

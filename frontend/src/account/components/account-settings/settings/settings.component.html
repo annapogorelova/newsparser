@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-            <p>Edit your profile</p>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h3>Edit your profile settings</h3>
             <ngb-tabset [activeId]="selectedTabId">
                 <ngb-tab id="profile" title="Profile">
                     <template ngbTabContent>
@@ -14,8 +14,13 @@
                         <change-password></change-password>
                     </template>
                 </ngb-tab>
+                <ngb-tab id="subscriptions" title="Subscriptions">
+                    <template ngbTabContent>
+                        <subscriptions></subscriptions>
+                    </template>
+                </ngb-tab>
             </ngb-tabset>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-2"></div>
     </div>
 </div>

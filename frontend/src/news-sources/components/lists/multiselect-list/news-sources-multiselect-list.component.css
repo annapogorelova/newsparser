@@ -107,3 +107,39 @@
 :host /deep/ .paging div {
     display: inline;
 }
+
+:host /deep/ .news-source-popover-content span, p {
+    font-size: 12px;
+}
+
+:host /deep/ .news-source-popover-content {
+    padding: 0;
+}
+
+:host /deep/ .popover-content span.news-source-image {
+    width: 25px;
+    height: 25px;
+}
+
+:host /deep/ div.popover-content {
+    padding: 8px;
+}
+
+:host /deep/ div.popover-content .subscription-info {
+    max-height: 150px;
+    overflow-x: auto;
+    padding: 5px 0 5px 0;
+}
+
+:host /deep/ div.popover-content .subscription-info p {
+    margin-bottom: 3px;
+}
+
+:host /deep/ div.popover-content .subscription-info p.subscription-title {
+    margin-bottom: 10px;
+}
+
+:host /deep/ .popover {
+    width: 300px;
+    margin-left: 15%;
+}

@@ -22,3 +22,7 @@ body {
 .btn-primary:hover {
     background-color: #28516C !important;
 }
+
+button {
+    cursor: pointer;
+}

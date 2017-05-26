@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
     templateUrl: 'settings.component.html',
     styleUrls: ['settings.component.css'],
-    selector: 'account-settings'
+    selector: 'settings'
 })
 
 /**

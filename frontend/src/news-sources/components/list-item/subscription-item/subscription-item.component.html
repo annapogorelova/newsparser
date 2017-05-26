@@ -1,0 +1,13 @@
+<a class="news-source-item list-group-item list-group-item-action"
+   [class.active]="isSelected"
+   [ngbPopover]="popContent"
+   #popover="ngbPopover"
+   triggers="manual"
+   (click)="handleClick()">
+    <span [ngStyle]="{'background-image': source.imageUrl ?
+        'url(' + source.imageUrl + ')' :
+        'url(\'../../../../public/images/default-rss-icon.png\')'}"
+        class="news-source-image pull-left"></span>
+    <span class="news-source-name">{{source.name}}</span>
+    <i class="fa fa-check pull-right" *ngIf="source.isSubscribed"></i>
+</a>

@@ -58,8 +58,8 @@ export class ApiService {
      * @param headers - custom request headers
      * @returns {Promise<any>}
      */
-    delete = (url: string, id: number, headers: any = null) => {
-        var requestUrl = this.getAbsoluteUrl(url) + '?id=' + id;
+    delete = (url: string, headers: any = null) => {
+        var requestUrl = this.getAbsoluteUrl(url);
 
         return this.request(requestUrl, 'DELETE', null, null, headers);
     };
