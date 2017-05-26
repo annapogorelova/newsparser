@@ -12,7 +12,7 @@ import {ActivatedRoute} from '@angular/router';
  * Component contains methods for subscribing to and unsubscribing from news sources
  */
 export class SubscriptionsComponent implements OnInit {
-	selectedTabId: string;
+	selectedTabId: string = 'subscribedSources';
 	responseMessage: string;
 	submitSucceeded: boolean;
 	submitFailed: boolean;
@@ -30,6 +30,10 @@ export class SubscriptionsComponent implements OnInit {
         this.navigator.navigate([], {fragment: 'subscriptions'});
 	    this.resetForm();
     }
+
+	setActiveTab(event: any){
+		this.selectedTabId = event.nextId;
+	};
 
 	resetForm(){
 		this.submitSucceeded = false;
@@ -102,10 +106,18 @@ export class SubscriptionsComponent implements OnInit {
     };
 
 	private refreshList(){
-		if(this.selectedTabId === "subscribedSources"){
+		if(this.selectedTabId === 'subscribedSources'){
 			this.subscribedSourcesList.reload();
-		} else if(this.selectedTabId === "allSources"){
+		} else if(this.selectedTabId === 'allSources'){
 			this.allSourcesList.reload();
+		}
+	};
+	
+	private hideSubscriptionInfo(){
+		if(this.selectedTabId === 'subscribedSources'){
+			this.subscribedSourcesList.hideSubscriptionInfo();
+		} else if(this.selectedTabId === 'allSources'){
+			this.allSourcesList.hideSubscriptionInfo();
 		}
 	};
 }

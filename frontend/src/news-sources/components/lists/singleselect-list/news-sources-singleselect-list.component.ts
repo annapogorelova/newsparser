@@ -12,8 +12,8 @@ export class NewsSourcesSingleSelectList
 	implements ISelectList {
 
 	protected apiRoute: string = 'newsSources';
-	public selectedSource: any = null;
-	public currentPopover: any;
+	selectedSource: any = null;
+	currentPopover: any;
 
 	@Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
@@ -69,5 +69,16 @@ export class NewsSourcesSingleSelectList
 
 		this.currentPopover = event.popover;
 		this.currentPopover.isOpen() ? this.currentPopover.close() : this.currentPopover.open();
+	};
+	
+	hideSubscriptionInfo(){
+		if(this.selectedSource){
+			this.selectedSource = null;
+		}
+		
+		if(this.currentPopover){
+			this.currentPopover.isOpen() && this.currentPopover.close();
+			this.currentPopover = null;
+		}	
 	};
 }
