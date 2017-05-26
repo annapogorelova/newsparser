@@ -81,4 +81,14 @@ export class NewsSourcesSingleSelectList
 			this.currentPopover = null;
 		}	
 	};
+
+	updateSubscriptionState(sourceId: number, isSubscribed: boolean) {
+		var sources = this.items.filter(function (s) {
+			return s.id === sourceId;
+		});
+
+		if(sources.length){
+			sources[0].isSubscribed = isSubscribed;
+		}
+	};
 }

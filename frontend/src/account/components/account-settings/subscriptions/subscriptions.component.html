@@ -16,7 +16,10 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <ngb-tabset type="pills" [activeId]="selectedTabId" (tabChange)="setActiveTab($event)">
+            <ngb-tabset type="pills"
+                        [activeId]="selectedTabId"
+                        [destroyOnHide]="false"
+                        (tabChange)="onTabChange($event)">
                 <ngb-tab id="subscribedSources" title="Subscribed">
                     <template ngbTabContent>
                         <div class="news-sources-container">

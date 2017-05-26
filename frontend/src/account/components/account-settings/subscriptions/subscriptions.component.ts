@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit} from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit} from '@angular/core';
 import {NavigatorService, ApiService} from '../../../../shared';
 import {ActivatedRoute} from '@angular/router';
 
@@ -11,7 +11,7 @@ import {ActivatedRoute} from '@angular/router';
 /**
  * Component contains methods for subscribing to and unsubscribing from news sources
  */
-export class SubscriptionsComponent implements OnInit {
+export class SubscriptionsComponent implements OnInit, AfterViewInit {
 	selectedTabId: string = 'subscribedSources';
 	responseMessage: string;
 	submitSucceeded: boolean;
@@ -22,17 +22,28 @@ export class SubscriptionsComponent implements OnInit {
     @ViewChild('subscribedSourcesList') subscribedSourcesList: any;
     @ViewChild('allSourcesList') allSourcesList: any;
 
+	tabsComponentsMap: any;
+
     constructor(private apiService: ApiService,
                 private navigator: NavigatorService,
                 private route: ActivatedRoute) {}
 
-    ngOnInit(){
+    ngOnInit() {
         this.navigator.navigate([], {fragment: 'subscriptions'});
 	    this.resetForm();
-    }
+    };
 
-	setActiveTab(event: any){
+	ngAfterViewInit() {
+		this.tabsComponentsMap = {
+			'subscribedSources': this.subscribedSourcesList,
+			'allSources': this.allSourcesList
+		};
+	};
+
+	onTabChange(event: any){
 		this.selectedTabId = event.nextId;
+		this.resetForm();
+		this.tabsComponentsMap[this.selectedTabId].reload();
 	};
 
 	resetForm(){
@@ -58,17 +69,17 @@ export class SubscriptionsComponent implements OnInit {
     subscribe = (event: any) => {
 	    this.resetForm();
 	    this.submitInProgress = true;
-        this.apiService.post(`subscription/${ event.source.id}`, null)
-            .then(response => this.onSubscribeSucceeded(response))
+        this.apiService.post(`subscription/${event.source.id}`, null)
+            .then(response => this.onSubscribeSucceeded(response, event.source.id))
             .catch(error => this.onSubscribeFailed(error));
     };
 
     /**
      * Successful subscription callback
      */
-    onSubscribeSucceeded = (response: any) => {
+    onSubscribeSucceeded = (response: any, subscriptionId: number) => {
 	    this.setRequestCompleted(true, response.message);
-	    this.refreshList();
+	    this.updateSubscriptionInfo(subscriptionId, true);
     };
 
     /**
@@ -84,17 +95,17 @@ export class SubscriptionsComponent implements OnInit {
      * @param event
      */
     unsubscribe = (event: any) => {
-        this.apiService.delete(`subscription/${ event.source.id}`)
-            .then(response => this.onUnsubscribeSucceeded(response))
+        this.apiService.delete(`subscription/${event.source.id}`)
+            .then(response => this.onUnsubscribeSucceeded(response, event.source.id))
             .catch(error => this.onUnsubscribeFailed(error));
     };
 
     /**
      * Successful unsubscription callback
      */
-    onUnsubscribeSucceeded(response: any) {
+    onUnsubscribeSucceeded(response: any, subscriptionId: number) {
 	    this.setRequestCompleted(true, response.message);
-	    this.refreshList();
+	    this.updateSubscriptionInfo(subscriptionId, false);
     };
 
     /**
@@ -112,12 +123,9 @@ export class SubscriptionsComponent implements OnInit {
 			this.allSourcesList.reload();
 		}
 	};
-	
-	private hideSubscriptionInfo(){
-		if(this.selectedTabId === 'subscribedSources'){
-			this.subscribedSourcesList.hideSubscriptionInfo();
-		} else if(this.selectedTabId === 'allSources'){
-			this.allSourcesList.hideSubscriptionInfo();
-		}
+
+	private updateSubscriptionInfo(sourceId: number, isSubscribed: boolean){
+		this.tabsComponentsMap[this.selectedTabId].updateSubscriptionState(sourceId, isSubscribed);
+		this.tabsComponentsMap[this.selectedTabId].hideSubscriptionInfo();
 	};
 }
