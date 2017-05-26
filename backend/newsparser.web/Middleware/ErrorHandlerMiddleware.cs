@@ -9,6 +9,7 @@ using NewsParser.API.Models;
 using NewsParser.BL.Exceptions;
 using NewsParser.Exceptions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 
 namespace NewsParser.Middleware
@@ -65,7 +66,11 @@ namespace NewsParser.Middleware
             }
 
 
-            var result = JsonConvert.SerializeObject(new ErrorModel { Message = ex.Message });
+            var result = JsonConvert.SerializeObject(new ErrorModel { Message = ex.Message }, 
+                new JsonSerializerSettings 
+                { 
+                    ContractResolver = new CamelCasePropertyNamesContractResolver() 
+                });
             context.Response.ContentType = "application/json; charset=utf-8";
             context.Response.StatusCode = (int)statusCode;
 

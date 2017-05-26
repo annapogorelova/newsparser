@@ -106,9 +106,9 @@ namespace NewsParser
                 {
                     options.UseCommaDelimitedArrayModelBinding();
                 }
-            ).AddJsonOptions(opt =>
+            ).AddJsonOptions(options =>
                 {
-                    opt.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+                    options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                 }
             );
         }
