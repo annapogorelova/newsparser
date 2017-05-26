@@ -29,6 +29,8 @@ namespace NewsParser.DAL.Models
 
         public List<UserExternalId> UserExternalIds { get; set; }
 
+        public List<NewsSource> CreatedNewsSources { get; set; }
+
         public User()
         {
             Sources = new List<UserNewsSource>();
