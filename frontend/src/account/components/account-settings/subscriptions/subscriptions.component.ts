@@ -43,7 +43,10 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit {
 	onTabChange(event: any){
 		this.selectedTabId = event.nextId;
 		this.resetForm();
-		this.tabsComponentsMap[this.selectedTabId].reload();
+		var activeComponent = this.tabsComponentsMap[this.selectedTabId];
+		if(activeComponent && typeof activeComponent['reload'] === 'function'){
+			activeComponent.reload();
+		}
 	};
 
 	resetForm(){

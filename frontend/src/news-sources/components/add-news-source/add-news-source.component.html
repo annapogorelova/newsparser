@@ -19,17 +19,29 @@
                    required
                    [(ngModel)]="formData.rssUrl"
                    #rssUrl="ngModel"
-                   pattern="^(http[s]?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
+                   pattern="(https|http)?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)"
                    placeholder="Paste RSS url"/>
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-outline-success btn-sm"
                         [disabled]="!f.valid || submitInProgress">
-                    <i class="fa fa-plus"></i>
+                    <i *ngIf="!submitInProgress" class="fa fa-plus"></i>
+                    <i *ngIf="submitInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw"></i>
                 </button>
             </span>
         </div>
         <small [hidden]="rssUrl.valid || (rssUrl.pristine && !f.submitted)" class="text-danger">
             RSS url is not valid
         </small>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input id="isPrivate" name="isPrivate" type="checkbox"
+                       class="form-check-input" [(ngModel)]="formData.isPrivate">
+                Private
+            </label>
+            <small class="form-text text-muted">If marked as private, this source will be accessible only by you.
+                When you unsubscribe from this source, it will be deleted.</small>
+        </div>
     </div>
 </form>

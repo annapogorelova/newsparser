@@ -1,5 +1,6 @@
 <a class="news-source-item list-group-item list-group-item-action"
    [class.active]="isSelected"
+   [class.private]="source.isPrivate"
    [ngbPopover]="popContent"
    #popover="ngbPopover"
    triggers="manual"
@@ -9,5 +10,9 @@
         'url(\'../../../../public/images/default-rss-icon.png\')'}"
         class="news-source-image pull-left"></span>
     <span class="news-source-name">{{source.name}}</span>
-    <i class="fa fa-check pull-right" *ngIf="source.isSubscribed"></i>
+    <div class="pull-right">
+        <i class="fa fa-lock private-icon" aria-hidden="true"
+           *ngIf="source.isPrivate" title="This source is private"></i>
+        <i class="fa fa-check" aria-hidden="true" *ngIf="source.isSubscribed"></i>
+    </div>
 </a>

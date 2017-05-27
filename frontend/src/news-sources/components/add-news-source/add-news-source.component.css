@@ -5,3 +5,8 @@
 :host /deep/ div.input-group {
     padding: 8px 0 8px 0;
 }
+
+:host /deep/ .input-group-btn {
+    width: 35px;
+    height: 30px;
+}

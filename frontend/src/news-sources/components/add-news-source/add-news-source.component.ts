@@ -19,7 +19,8 @@ export class AddNewsSourceComponent extends BaseForm{
     showResponseMessage: boolean = false;
 
     formData: any = {
-        rssUrl: ''
+        rssUrl: '',
+        isPrivate: false
     };
 
     @ViewChild('f') form: NgForm;
