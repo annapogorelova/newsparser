@@ -20,6 +20,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
         {
             CreateMap<NewsSource, NewsSourceApiModel>();
             CreateMap<NewsSource, NewsSourceSubscriptionModel>()
+                .ForMember(d => d.SubscribersCount, opt => opt.MapFrom(s => s.UsersSources.Count()))
                 .ForMember(d => d.IsPrivate, opt => opt.Ignore())
                 .ForMember(d => d.IsSubscribed, opt => opt.Ignore())
                 .AfterMap(FinalizeSourceMapping);

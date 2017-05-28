@@ -33,6 +33,6 @@ namespace NewsParser.DAL.Models
         
         public List<NewsSourceNews> NewsSources { get; set; }
 
-        public List<UserNewsSource> UsersSources { get; set; }
+        public List<UserNewsSource> UsersSources { get; set; } = new List<UserNewsSource>();
     }
 }
