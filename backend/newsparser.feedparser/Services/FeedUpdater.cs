@@ -197,7 +197,7 @@ namespace newsparser.FeedParser.Services
                 }
                 else 
                 {
-                    existingItem = _newsBusinessService.GetNewsItemByGuid(newsItem.Guid.GuidString);
+                    existingItem = _newsBusinessService.GetNewsItemByGuid(newsItemIdentifier);
                 }
 
                 _newsBusinessService.UpdateNewsItem(existingItem.Id, sourceId, newsItem.Categories);

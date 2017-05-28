@@ -125,7 +125,7 @@ namespace NewsParser.FeedParser.Services
                     
                     if(!result)
                     {
-                        throw new FeedParsingException($"Failed to parse published date for {rssItem.Element("title").Value} rss item.");
+                        pubDate = DateTime.UtcNow;
                     }
                     
                     var newsItem = new NewsItemModel
