@@ -126,8 +126,9 @@ namespace NewsParser.DAL.Repositories.NewsSources
 
         public bool IsSourceVisibleToUser(int sourceId, int userId)
         {
-            return !_dbContext.UserSources.Where(us => us.SourceId == sourceId)
-                .All(us => us.UserId != userId  && us.IsPrivate);
+            return !_dbContext.UserSources.Any(us => us.SourceId == sourceId) ||
+                _dbContext.UserSources.Where(us => us.SourceId == sourceId)
+                    .All(us => us.UserId != userId  && us.IsPrivate);
         }
 
         public IQueryable<NewsSource> GetUsersPrivateNewsSources(int userId)
