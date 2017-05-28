@@ -14,5 +14,6 @@
         <i class="fa fa-lock private-icon" aria-hidden="true"
            *ngIf="source.isPrivate" title="This source is private"></i>
         <i class="fa fa-check" aria-hidden="true" *ngIf="source.isSubscribed"></i>
+        <span class="badge badge-default" title="Subscribed users">{{source.subscribersCount}}</span>
     </div>
 </a>

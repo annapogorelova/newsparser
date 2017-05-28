@@ -4,6 +4,9 @@
 
 :host /deep/ .private-icon {
     color: #e50000;
+}
+
+:host /deep/ i {
     padding-right: 10px;
 }
 
