@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute} from '@angular/router';
+import {NavigatorService} from '../../../../shared/services/navigator/navigator.service';
 
 @Component({
     templateUrl: 'settings.component.html',
@@ -12,11 +13,16 @@ import {ActivatedRoute} from "@angular/router";
  */
 export class AccountSettingsComponent implements OnInit{
     selectedTabId: string;
+	tabsIds: Array<string> = ['profile', 'password'];
 
-    constructor(private route: ActivatedRoute){}
+    constructor(private route: ActivatedRoute, private navigator: NavigatorService){}
 
     ngOnInit(){
-        this.route.fragment
-            .subscribe((fragment: string) => this.selectedTabId = fragment);
-    }
+        this.route.fragment.subscribe((fragment: string) => this.setActiveTab(fragment));
+    };
+
+	setActiveTab(fragment: string){
+		this.selectedTabId = fragment || this.tabsIds[0];
+		this.navigator.navigate([], {fragment: this.selectedTabId});
+	};
 }

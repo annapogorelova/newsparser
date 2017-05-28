@@ -13,8 +13,11 @@
             <ul class="navbar-nav mr-auto">
             </ul>
             <div class="navbar-nav">
-                <a role="link" title="Account Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account-settings">
-                    <i class="fa fa-cog"></i>
+                <a role="link" title="Account Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account">
+                    <i class="fa fa-user-circle"></i>
+                </a>
+                <a role="link" title="Subscriptions Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/subscriptions">
+                    <i class="fa fa-feed"></i>
                 </a>
                 <a role="link" title="Sign Out" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>

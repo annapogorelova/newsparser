@@ -15,7 +15,7 @@ import {
     AccountSettingsComponent,
     EditProfileComponent,
     ChangePasswordComponent,
-	SubscriptionsComponent
+    SubscriptionsSettingsComponent
 } from './components';
 import {NewsSourcesModule} from '../news-sources';
 
@@ -49,7 +49,7 @@ let authProviders = {
         AccountSettingsComponent,
         EditProfileComponent,
         ChangePasswordComponent,
-	    SubscriptionsComponent
+        SubscriptionsSettingsComponent
     ],
     providers: [AccountRoutingProviders]
 })

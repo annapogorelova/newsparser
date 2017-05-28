@@ -1,18 +1,18 @@
 import {Component, ViewChild, OnInit, AfterViewInit} from '@angular/core';
-import {NavigatorService, ApiService} from '../../../../shared';
+import {NavigatorService, ApiService} from '../../../shared';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-    selector: 'subscriptions',
-    templateUrl: 'subscriptions.component.html',
-    styleUrls: ['./subscriptions.component.css']
+    selector: 'subscriptions-settings',
+    templateUrl: 'subscriptions-settings.component.html',
+    styleUrls: ['./subscriptions-settings.component.css']
 })
 
 /**
  * Component contains methods for subscribing to and unsubscribing from news sources
  */
-export class SubscriptionsComponent implements OnInit, AfterViewInit {
-	selectedTabId: string = 'subscribedSources';
+export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
+	selectedTabId: string = 'subscribed';
 	responseMessage: string;
 	submitSucceeded: boolean;
 	submitFailed: boolean;
@@ -23,25 +23,33 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit {
     @ViewChild('allSourcesList') allSourcesList: any;
 
 	tabsComponentsMap: any;
+	tabsIds: Array<any> = ['subscribed', 'all', 'add'];
 
     constructor(private apiService: ApiService,
                 private navigator: NavigatorService,
                 private route: ActivatedRoute) {}
 
     ngOnInit() {
-        this.navigator.navigate([], {fragment: 'subscriptions'});
 	    this.resetForm();
     };
 
+	setActiveTab(fragment: string){
+		this.selectedTabId = fragment || this.tabsIds[0];
+		this.navigator.navigate([], {fragment: this.selectedTabId});
+	};
+
 	ngAfterViewInit() {
 		this.tabsComponentsMap = {
-			'subscribedSources': this.subscribedSourcesList,
-			'allSources': this.allSourcesList
+			'subscribed': this.subscribedSourcesList,
+			'all': this.allSourcesList
 		};
+
+		this.route.fragment.subscribe((fragment: string) => this.setActiveTab(fragment));
 	};
 
 	onTabChange(event: any){
 		this.selectedTabId = event.nextId;
+		this.navigator.navigate([], {fragment: this.selectedTabId});
 		this.resetForm();
 		var activeComponent = this.tabsComponentsMap[this.selectedTabId];
 		if(activeComponent && typeof activeComponent['reload'] === 'function'){
