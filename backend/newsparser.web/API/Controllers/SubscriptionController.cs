@@ -37,11 +37,15 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Post(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
+            {
+                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
+            }
             if(_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
                 return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this news source");
             }
-            _newsSourceBusinessService.AddNewsSourceToUser(id, user.GetId());
+            _newsSourceBusinessService.SubscribeUser(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
         }
 
@@ -49,11 +53,15 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Delete(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
+            {
+                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
+            }
             if(!_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
                 return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this news source");
             }
-            _newsSourceBusinessService.DeleteUserNewsSource(id, user.GetId());
+            _newsSourceBusinessService.UnsubscribeUser(id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
         }
     }

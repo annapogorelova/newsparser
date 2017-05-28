@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using NewsParser.API.Models;
+using NewsParser.Auth;
+using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
 using NewsParser.Identity.Models;
 
@@ -18,16 +20,16 @@ namespace NewsParser.Helpers.Mapper.Profiles
         {
             CreateMap<NewsSource, NewsSourceApiModel>();
             CreateMap<NewsSource, NewsSourceSubscriptionModel>()
-                .ForMember(s => s.IsSubscribed, opt => opt.Ignore())
-                .AfterMap(SetSubscribedState);
+                .ForMember(d => d.IsPrivate, opt => opt.Ignore())
+                .ForMember(d => d.IsSubscribed, opt => opt.Ignore())
+                .AfterMap(FinalizeSourceMapping);
         }
 
-        private void SetSubscribedState(NewsSource newsSource, NewsSourceSubscriptionModel model)
+        private void FinalizeSourceMapping(NewsSource newsSource, NewsSourceSubscriptionModel model)
         {
-            var userManager = ServiceLocator.Instance.GetService<UserManager<ApplicationUser>>();
-            var httpContextAccessor = ServiceLocator.Instance.GetService<IHttpContextAccessor>();
-            var user = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
-            model.IsSubscribed = newsSource.Users == null ? false : newsSource.Users.Any(u => u.UserId == user.GetId());
+            var newsSourceBusinessService = ServiceLocator.Instance.GetService<INewsSourceBusinessService>();
+            model.IsSubscribed = newsSourceBusinessService.IsUserSubscribed(newsSource.Id, CurrentUser.GetCurrentUser().GetId());
+            model.IsPrivate = newsSourceBusinessService.IsSourcePrivateToUser(newsSource.Id, CurrentUser.GetCurrentUser().GetId());
         }
     }
 }

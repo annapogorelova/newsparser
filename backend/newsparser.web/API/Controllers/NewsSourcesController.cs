@@ -55,7 +55,7 @@ namespace NewsParser.API.Controllers
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);
             var user = _authService.GetCurrentUser();
-            if(newsSource.IsPrivate && newsSource.CreatorId != user.GetId())
+            if(!_newsSourceBusinessService.IsSourceVisibleToUser(newsSource.Id, user.GetId()))
             {
                 return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
             }
@@ -66,14 +66,21 @@ namespace NewsParser.API.Controllers
         [ValidateModel]
         public async Task<JsonResult> Post([FromBody]NewsSourceCreateModel newsSourceModel)
         {
-            if (_newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl) != null)
+            var newsSource = _newsSourceBusinessService.GetNewsSourceByUrl(newsSourceModel.RssUrl);
+            var user = _authService.GetCurrentUser();
+            NewsSource createdNewsSource;
+
+            if(newsSource != null)
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "RSS source already exists");
+                createdNewsSource = newsSource;
+                _newsSourceBusinessService.SubscribeUser(newsSource.Id, user.GetId(), newsSourceModel.IsPrivate);
+            }
+            else
+            {
+                createdNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, newsSourceModel.IsPrivate, user.GetId());
             }
 
-            var user = _authService.FindUserByUserName(HttpContext.User.Identity.Name);
-            var addedNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, newsSourceModel.IsPrivate, user.GetId());
-            var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceSubscriptionModel>(addedNewsSource);
+            var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceSubscriptionModel>(createdNewsSource);
             return MakeSuccessResponse(HttpStatusCode.Created, 
                 new { data = addedNewsSourceModel, 
                     message = "RSS source was added to the list of your subscriptions" });

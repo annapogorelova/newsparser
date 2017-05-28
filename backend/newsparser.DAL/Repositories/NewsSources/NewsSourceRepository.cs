@@ -33,7 +33,9 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// <returns>IQueryable of NewsSource</returns>
         public IQueryable<NewsSource> GetNewsSourcesByUser(int userId)
         {
-            return _dbContext.NewsSources.Where(n => n.Users.Any(u => u.UserId == userId));
+            return _dbContext.NewsSources
+                .Include(s => s.UsersSources)
+                .Where(n => n.UsersSources.Any(us => us.UserId == userId));
         }
 
         /// <summary>
@@ -98,9 +100,9 @@ namespace NewsParser.DAL.Repositories.NewsSources
             _dbContext.SaveChanges();
         }
 
-        public void AddNewsSourceToUser(int sourceId, int userId)
+        public void AddNewsSourceToUser(UserNewsSource userNewsSource)
         {
-            _dbContext.UserSources.Add(new UserNewsSource { SourceId = sourceId, UserId = userId });
+            _dbContext.UserSources.Add(userNewsSource);
             _dbContext.SaveChanges();
         }
 
@@ -115,6 +117,24 @@ namespace NewsParser.DAL.Repositories.NewsSources
 
             _dbContext.UserSources.Remove(userNewsSource);
             _dbContext.SaveChanges();
+        }
+
+        public IQueryable<UserNewsSource> GetSourceUsers(int sourceId)
+        {
+            return _dbContext.UserSources.Where(s => s.SourceId == sourceId);
+        }
+
+        public bool IsSourceVisibleToUser(int sourceId, int userId)
+        {
+            return !_dbContext.UserSources.Where(us => us.SourceId == sourceId)
+                .All(us => us.UserId != userId  && us.IsPrivate);
+        }
+
+        public IQueryable<NewsSource> GetUsersPrivateNewsSources(int userId)
+        {
+            return _dbContext.NewsSources
+                .Include(s => s.UsersSources)
+                .Where(s => s.UsersSources.Any(us => us.UserId == userId && us.IsPrivate));
         }
     }
 }

@@ -84,7 +84,8 @@ namespace NewsParser.BL.Services.NewsSources
         /// </summary>
         /// <param name="sourceId">News source id</param>
         /// <param name="userId">User id</param>
-        void AddNewsSourceToUser(int sourceId, int userId);
+        /// <param name="isPrivate">Indicates whether the source should be private</param>
+        void SubscribeUser(int sourceId, int userId, bool isPrivate = false);
 
         /// <summary>
         /// Updates a news source
@@ -95,8 +96,8 @@ namespace NewsParser.BL.Services.NewsSources
         /// <summary>
         /// Deletes news source
         /// </summary>
-        /// <param name="id">News source id</param>
-        void DeleteNewsSource(int id);
+        /// <param name="NewsSource">News source object</param>
+        void DeleteNewsSource(NewsSource source);
 
         /// <summary>
         /// Delete news source from user
@@ -104,5 +105,36 @@ namespace NewsParser.BL.Services.NewsSources
         /// <param name="sourceId">News source id</param>
         /// <param name="userId">User id</param>
         void DeleteUserNewsSource(int sourceId, int userId);
+
+        /// <summary>
+        /// Unsubscribes user from the public source or removes the source if it's private to this user
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="userId">User id</param>
+        void UnsubscribeUser(int sourceId, int userId);
+
+        /// <summary>
+        /// Determines whether the news source is in the list of user's private sources
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="userId">User id</param>
+        /// <returns></returns>
+        bool IsSourcePrivateToUser(int sourceId, int userId);
+
+        /// <summary>
+        /// Determines whether the user can delete the source
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="userId">User id</param>
+        /// <returns></returns>
+        bool CanDeletePrivateSource(int sourceId, int userId);
+
+        /// <summary>
+        /// Determines whether this news source is visible for this user
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="userId">User id</param>
+        /// <returns>true if visible, false if not</returns>
+        bool IsSourceVisibleToUser(int sourceId, int userId);
     }
 }

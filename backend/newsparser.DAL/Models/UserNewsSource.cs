@@ -10,6 +10,8 @@
         public int UserId { get; set; }
         public int SourceId { get; set; }
 
+        public bool IsPrivate { get; set; }
+
         public User User { get; set; }
         public NewsSource Source { get; set; }
     }

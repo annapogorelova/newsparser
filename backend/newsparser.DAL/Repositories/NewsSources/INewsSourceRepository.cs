@@ -22,6 +22,13 @@ namespace NewsParser.DAL.Repositories.NewsSources
         IQueryable<NewsSource> GetNewsSourcesByUser(int userId);
 
         /// <summary>
+        /// Gets the user's private news sources
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <returns>IQueryable of NewsSource</returns>
+        IQueryable<NewsSource> GetUsersPrivateNewsSources(int userId);
+
+        /// <summary>
         /// Gets news source by id
         /// </summary>
         /// <param name="id">News source id</param>
@@ -43,6 +50,21 @@ namespace NewsParser.DAL.Repositories.NewsSources
         NewsSource AddNewsSource(NewsSource newsSource);
 
         /// <summary>
+        /// Get users subscribed to this source
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <returns>IQueryable of UserNewsSource</returns>
+        IQueryable<UserNewsSource> GetSourceUsers(int sourceId);
+
+        /// <summary>
+        /// Determines whether the source is visible to user
+        /// </summary>
+        /// <param name="sourceId">Source id</param>
+        /// <param name="userId">User id</param>
+        /// <returns>True if visible, false - if not</returns>
+        bool IsSourceVisibleToUser(int sourceId, int userId);
+
+        /// <summary>
         /// Updates a news source
         /// </summary>
         /// <param name="newsSource">NewsSource object</param>
@@ -57,9 +79,8 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// <summary>
         /// Adds a news source to user
         /// </summary>
-        /// <param name="sourceId">News source id</param>
-        /// <param name="userId">User id</param>
-        void AddNewsSourceToUser(int sourceId, int userId);
+        /// <param name="userNewsSource">User news source relation object</param>
+        void AddNewsSourceToUser(UserNewsSource userNewsSource);
 
         /// <summary>
         /// Delete news source from user

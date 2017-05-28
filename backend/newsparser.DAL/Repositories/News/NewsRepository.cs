@@ -41,7 +41,7 @@ namespace NewsParser.DAL.Repositories.News
                     || n.Title.Contains(search) 
                     || n.Description.Contains(search))
                     && (sourcesIds == null || n.Sources.Any(s => sourcesIds.Contains(s.SourceId)))
-                    && (userId == null || n.Sources.Select(s => s.Source).Any(s => s.Users.Any(u => u.UserId == userId)))
+                    && (userId == null || n.Sources.Select(s => s.Source).Any(s => s.UsersSources.Any(u => u.UserId == userId)))
                     && (tags == null || n.Tags.Any(t => tags.Contains(t.Tag.Name))))
                 .OrderByDescending(n => n.DatePublished)
                 .Skip(pageIndex)
@@ -59,7 +59,7 @@ namespace NewsParser.DAL.Repositories.News
                     .Include(n => n.Sources)
                     .ThenInclude(s => s.Source)
                     .Where(n => n.Sources.Select(s => s.Source)
-                    .Any(s => s.Users.Any(u => u.UserId == userId)));
+                    .Any(s => s.UsersSources.Any(u => u.UserId == userId)));
         }
 
         /// <summary>

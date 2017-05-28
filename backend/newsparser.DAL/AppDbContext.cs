@@ -38,7 +38,7 @@ namespace NewsParser.DAL
 
             modelBuilder.Entity<UserNewsSource>()
                 .HasOne(ns => ns.Source)
-                .WithMany(s => s.Users)
+                .WithMany(s => s.UsersSources)
                 .HasForeignKey(ns => ns.SourceId);
 
             modelBuilder.Entity<UserExternalId>().ToTable("user_external_ids");
@@ -56,7 +56,7 @@ namespace NewsParser.DAL
             
             modelBuilder.Entity<NewsSourceNews>()
                 .HasOne(ns => ns.Source)
-                .WithMany(s => s.News)
+                .WithMany(s => s.NewsSources)
                 .HasForeignKey(nt => nt.SourceId);
             modelBuilder.Entity<NewsSourceNews>()
                 .HasOne(ns => ns.NewsItem)
@@ -79,10 +79,6 @@ namespace NewsParser.DAL
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("news_sources");
-            modelBuilder.Entity<NewsSource>()
-                .HasOne(s => s.Creator)
-                .WithMany(u => u.CreatedNewsSources)
-                .HasForeignKey(s => s.CreatorId);
 
             modelBuilder.Entity<Token>().ToTable("tokens");
         }

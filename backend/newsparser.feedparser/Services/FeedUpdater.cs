@@ -155,13 +155,11 @@ namespace newsparser.FeedParser.Services
                     ImageUrl = newsSourceModel.ImageUrl,
                     RssUrl = newsSourceModel.RssUrl,
                     WebsiteUrl = newsSourceModel.WebsiteUrl,
-                    LastBuildDate = newsSourceModel.LastBuildDate,
-                    IsPrivate = isPrivate,
-                    CreatorId = userId
+                    LastBuildDate = newsSourceModel.LastBuildDate
                 };
                 var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
                 UpdateSource(addedNewsSource.Id);
-                _newsSourceBusinessService.AddNewsSourceToUser(addedNewsSource.Id, userId);
+                _newsSourceBusinessService.SubscribeUser(addedNewsSource.Id, userId, isPrivate);
                 return addedNewsSource;
             }
             catch (Exception e)

@@ -95,6 +95,7 @@ namespace NewsParser.Auth
         public ApplicationUser GetCurrentUser()
         {
             var user = _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name).Result;
+            CurrentUser.SetCurrentUser(user);
             return user;
         }
 

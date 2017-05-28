@@ -22,24 +22,27 @@ namespace NewsParser.BL.Services.NewsSources
 
         public IEnumerable<NewsSource> GetAllNewsSources(bool withUsers = false)
         {
-            var newsSources = _newsSourceRepository.GetNewsSources().Include(n => n.Users);
+            var newsSources = _newsSourceRepository.GetNewsSources().Include(n => n.UsersSources);
             return withUsers ?
-                newsSources.Where(n => n.Users.Any()) :
+                newsSources.Where(n => n.UsersSources.Any()) :
                 newsSources;
         }
 
         public IEnumerable<NewsSource> GetAllNewsSourcesForUser(int userId)
         {
             return _newsSourceRepository.GetNewsSources()
-                .Include(s => s.Users)
-                .Where(s => !s.IsPrivate);
+                .Include(s => s.UsersSources)
+                .Where(s =>  !s.UsersSources.Any() || 
+                    s.UsersSources.Any(us => !us.IsPrivate || us.UserId == userId));
         }
 
         public IEnumerable<NewsSource> GetAvailableNewsSources(int userId)
         {
             return _newsSourceRepository.GetNewsSources()
-                    .Include(s => s.Users)
-                    .Where(s => s.Users.All(u => u.UserId != userId) && !s.IsPrivate);
+                    .Include(s => s.UsersSources)
+                    .Where(s => !s.UsersSources.Any() 
+                        || (s.UsersSources.All(us => us.UserId != userId)
+                        && s.UsersSources.Any(us => !us.IsPrivate)));
         }
 
         public IEnumerable<NewsSource> GetNewsSourcesPage(
@@ -109,30 +112,22 @@ namespace NewsParser.BL.Services.NewsSources
             }
         }
 
-        public void DeleteNewsSource(int id)
-        {
-            var newsSource = _newsSourceRepository.GetNewsSourceById(id);
-            if (newsSource == null)
-            {
-                throw new BusinessLayerException($"News source with id {id} does not exist");
-            }
-
-            try
-            {
-                _newsSourceRepository.DeleteNewsSource(newsSource);
-            }
-            catch (Exception e)
-            {
-                throw new BusinessLayerException($"Failed to delete news source with id {newsSource.Id}", e);
-            }
-        }
-
         public NewsSource GetNewsSourceByUrl(string rssUrl)
         {
             return _newsSourceRepository.GetNewsSourceByUrl(rssUrl);
         }
 
-        public void AddNewsSourceToUser(int sourceId, int userId)
+        public IEnumerable<NewsSource> GetNewsSourcesByUser(int userId)
+        {
+            return _newsSourceRepository.GetNewsSourcesByUser(userId).Include(n => n.UsersSources);
+        }
+
+        public bool IsUserSubscribed(int sourceId, int userId)
+        {
+            return _newsSourceRepository.GetNewsSourcesByUser(userId).Any(s => s.Id == sourceId);
+        }
+
+        public void SubscribeUser(int sourceId, int userId, bool isPrivate = false)
         {
             if (_userRepository.GetUserById(userId) == null)
             {
@@ -140,14 +135,18 @@ namespace NewsParser.BL.Services.NewsSources
             }
 
             var newsSource = GetNewsSourceById(sourceId);
-            if (newsSource == null || (newsSource.IsPrivate && newsSource.CreatorId != userId))
+            if (newsSource == null)
             {
                 throw new BusinessLayerException("News source does not exist");
             }
 
             try
             {
-                _newsSourceRepository.AddNewsSourceToUser(sourceId, userId);
+                _newsSourceRepository.AddNewsSourceToUser(new UserNewsSource {
+                    SourceId = sourceId,
+                    UserId = userId,
+                    IsPrivate = isPrivate
+                });
             }
             catch (Exception e)
             {
@@ -157,17 +156,6 @@ namespace NewsParser.BL.Services.NewsSources
 
         public void DeleteUserNewsSource(int sourceId, int userId)
         {
-            if (_userRepository.GetUserById(userId) == null)
-            {
-                throw new BusinessLayerException("User does not exist");
-            }
-
-            var newsSource = GetNewsSourceById(sourceId);
-            if (newsSource == null || (newsSource.IsPrivate && newsSource.CreatorId != userId))
-            {
-                throw new BusinessLayerException("News source does not exist");
-            }
-
             try
             {
                 _newsSourceRepository.DeleteUserNewsSource(sourceId, userId);
@@ -178,14 +166,58 @@ namespace NewsParser.BL.Services.NewsSources
             }
         }
 
-        public IEnumerable<NewsSource> GetNewsSourcesByUser(int userId)
+        public void DeleteNewsSource(NewsSource source)
         {
-            return _newsSourceRepository.GetNewsSourcesByUser(userId).Include(n => n.Users);
+            if (source == null)
+            {
+                throw new BusinessLayerException($"News source cannot be null");
+            }
+
+            try
+            {
+                _newsSourceRepository.DeleteNewsSource(source);
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLayerException($"Failed to delete news source with id {source.Id}", e);
+            }
         }
 
-        public bool IsUserSubscribed(int sourceId, int userId)
+        public bool IsSourcePrivateToUser(int sourceId, int userId)
         {
-            return _newsSourceRepository.GetNewsSourcesByUser(userId).Any(s => s.Id == sourceId);
+            return _newsSourceRepository.GetUsersPrivateNewsSources(userId).Any(s => s.Id == sourceId);
+        }
+
+        public bool CanDeletePrivateSource(int sourceId, int userId)
+        {
+            return IsSourcePrivateToUser(sourceId, userId) 
+                && _newsSourceRepository.GetSourceUsers(sourceId).Count() == 1;
+        }
+
+        public bool IsSourceVisibleToUser(int sourceId, int userId)
+        {
+            return _newsSourceRepository.IsSourceVisibleToUser(sourceId, userId);
+        }
+
+        public void UnsubscribeUser(int sourceId, int userId)
+        {
+            var source = GetNewsSourceById(sourceId);
+            if(!IsSourceVisibleToUser(source.Id, userId))
+            {
+                throw new EntityNotFoundException("News source was not found");
+            }
+            
+            // If this source is private to some users, we first need to check
+            // if the current user is the only one left subscribed. If it's true,
+            // we can safely remove the source, if not - just unsubscribe the current user.
+            if(CanDeletePrivateSource(sourceId, userId))
+            {
+                DeleteNewsSource(source);
+            }
+            else
+            {
+                DeleteUserNewsSource(sourceId, userId);
+            }
         }
     }
 }

@@ -26,19 +26,13 @@ namespace NewsParser.DAL.Models
         public DateTime? LastBuildDate { get; set; }
         
         public bool IsUpdating { get; set; }
-
-        public int CreatorId { get; set; }
-
-        public bool IsPrivate { get; set; }
         
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         
         public DateTime DateFeedUpdated { get; set; }
         
-        public List<NewsSourceNews> News { get; set; }
+        public List<NewsSourceNews> NewsSources { get; set; }
 
-        public List<UserNewsSource> Users { get; set; }
-
-        public User Creator { get; set; }
+        public List<UserNewsSource> UsersSources { get; set; }
     }
 }
