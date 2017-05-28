@@ -45,12 +45,16 @@ namespace NewsParser.DAL.Repositories.NewsSources
         /// <returns>NewsSource object</returns>
         public NewsSource GetNewsSourceById(int id)
         {
-            return _dbContext.NewsSources.Find(id);
+            return _dbContext.NewsSources
+                .Include(s => s.UsersSources)
+                .FirstOrDefault(s => s.Id == id);
         }
 
         public NewsSource GetNewsSourceByUrl(string rssUrl)
         {
-            return _dbContext.NewsSources.FirstOrDefault(n => n.RssUrl == rssUrl);
+            return _dbContext.NewsSources
+                .Include(s => s.UsersSources)
+                .FirstOrDefault(n => n.RssUrl == rssUrl);
         }
 
         /// <summary>
@@ -127,7 +131,7 @@ namespace NewsParser.DAL.Repositories.NewsSources
         public bool IsSourceVisibleToUser(int sourceId, int userId)
         {
             return !_dbContext.UserSources.Any(us => us.SourceId == sourceId) ||
-                _dbContext.UserSources.Where(us => us.SourceId == sourceId)
+                !_dbContext.UserSources.Where(us => us.SourceId == sourceId)
                     .All(us => us.UserId != userId  && us.IsPrivate);
         }
 

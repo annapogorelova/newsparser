@@ -50,7 +50,7 @@ namespace NewsParser.API.Controllers
 
         [HttpGet("{id:int}")]
         [ResponseCache(Duration = 3600)]
-        [Cache(Duration = 3600, DeferByUser = false)]
+        [Cache(Duration = 3600, DeferByUser = true)]
         public JsonResult Get(int id)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(id);

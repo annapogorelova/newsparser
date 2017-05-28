@@ -29,8 +29,9 @@ namespace NewsParser.Helpers.Mapper.Profiles
         private void FinalizeSourceMapping(NewsSource newsSource, NewsSourceSubscriptionModel model)
         {
             var newsSourceBusinessService = ServiceLocator.Instance.GetService<INewsSourceBusinessService>();
-            model.IsSubscribed = newsSourceBusinessService.IsUserSubscribed(newsSource.Id, CurrentUser.GetCurrentUser().GetId());
-            model.IsPrivate = newsSourceBusinessService.IsSourcePrivateToUser(newsSource.Id, CurrentUser.GetCurrentUser().GetId());
+            var currentUserId = CurrentUser.GetCurrentUser().GetId();
+            model.IsSubscribed = newsSource.UsersSources.Any(us => us.UserId == currentUserId);
+            model.IsPrivate = newsSource.UsersSources.Any(us => us.UserId == currentUserId && us.IsPrivate);
         }
     }
 }
