@@ -117,7 +117,8 @@ namespace NewsParser.FeedParser.Services
                 foreach (var rssItem in xmlElements)
                 {
                     var rssItemDescription = rssItem.Element("description")?.Value?.RemoveTabulation(" ");
-                    string imageUrl = ExtractFirstImage(rssItemDescription);
+                    string imageUrl = rssItemDescription != null ? 
+                        ExtractFirstImage(rssItemDescription) : null;
                     
                     DateTime pubDate;
                     var result = DateTime.TryParse(rssItem.Element("pubDate").Value, out pubDate);
@@ -131,7 +132,7 @@ namespace NewsParser.FeedParser.Services
                     {                       
                         Title = rssItem.Element("title").Value,
                         Author = rssItem.Element("author")?.Value?.CropString(100),
-                        Description = rssItemDescription.RemoveHtmlTags().CropString(500),
+                        Description = rssItemDescription?.RemoveHtmlTags().CropString(500),
                         DatePublished = pubDate.ToUniversalTime(),
                         LinkToSource = rssItem.Element("link").Value,
                         ImageUrl = imageUrl,

@@ -180,7 +180,9 @@ namespace newsparser.FeedParser.Services
             foreach (var newsItem in newsItems)
             {
                 NewsItem existingItem;
-                if (!_newsBusinessService.NewsItemExists(newsItem.Guid.GuidString))
+                string newsItemIdentifier = newsItem.Guid != null ? 
+                    newsItem.Guid.GuidString : newsItem.LinkToSource;
+                if (!_newsBusinessService.NewsItemExists(newsItemIdentifier))
                 {
                     existingItem = _newsBusinessService.AddNewsItem(new NewsItem()
                     {
@@ -189,8 +191,8 @@ namespace newsparser.FeedParser.Services
                         ImageUrl = newsItem.ImageUrl,
                         LinkToSource = (newsItem.Guid != null && newsItem.Guid.IsPermaLink) ? 
                             newsItem.Guid.GuidString : newsItem.LinkToSource,
-                        Title = newsItem.Title,
-                        Guid = newsItem.Guid?.GuidString ?? newsItem.LinkToSource
+                        Title = newsItem.Title ?? "Untitled",
+                        Guid = newsItemIdentifier
                     });
                 }
                 else 

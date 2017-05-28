@@ -12,7 +12,6 @@ namespace NewsParser.DAL.Models
         [MaxLength(255)]
         public string Title { get; set; }
 
-        [Required]
         [MaxLength(500)]
         public string Description { get; set; }
 
