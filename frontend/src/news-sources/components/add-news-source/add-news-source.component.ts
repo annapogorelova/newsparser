@@ -12,7 +12,7 @@ import {NgForm} from '@angular/forms';
     styleUrls: ['./add-news-source.component.css']
 })
 
-export class AddNewsSourceComponent extends BaseForm{
+export class AddNewsSourceComponent extends BaseForm {
     protected apiRoute: string = 'newsSources';
     protected method: string = 'post';
     
@@ -31,6 +31,11 @@ export class AddNewsSourceComponent extends BaseForm{
         super(apiService);
     }
 
+    reset(){
+        this.form.resetForm();
+        this.formData.isPrivate = false;
+    }
+
     submit(isValid: boolean){
         super.submit(isValid)
             .then((response: any) => this.handleSubmit(response))
@@ -39,7 +44,7 @@ export class AddNewsSourceComponent extends BaseForm{
     
     handleSubmit(response: any){
         this.showResponseMessage = true;
-        this.form.resetForm();
+        this.reset();
         this.onSourceAdded.emit(response.data);
     };
     
