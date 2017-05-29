@@ -44,7 +44,7 @@ namespace NewsParser.DAL.NewsTags
         /// <returns>NewsTag object</returns>
         public NewsTag GetNewsTagByName(string name)
         {
-            return _dbContext.NewsTags.FirstOrDefault(t => t.Name == name);
+            return _dbContext.NewsTags.FirstOrDefault(t => t.Name == name.ToLowerInvariant());
         }
 
         /// <summary>

@@ -109,8 +109,12 @@ namespace NewsParser.BL.Services.News
         {
             foreach (var tag in tags)
             {
-                var newsTag = _newsTagRepository.GetNewsTagByName(tag) ??
-                                      _newsTagRepository.AddNewsTag(new NewsTag { Name = tag });
+                var newsTag = _newsTagRepository.GetNewsTagByName(tag);
+                if(newsTag == null)
+                {
+                    newsTag = _newsTagRepository.AddNewsTag(new NewsTag { Name = tag.ToLowerInvariant() });
+                }
+
                 AddTagToNewsItem(newsItemId, newsTag.Id);
             }
         }
@@ -157,7 +161,7 @@ namespace NewsParser.BL.Services.News
                     AddSourceToNewsItem(newsItemId, sourceId);
                 }
 
-                var newsItemTags = _newsTagRepository.GetNewsTagsByNewsItemId(newsItemId);
+                var newsItemTags = _newsTagRepository.GetNewsTagsByNewsItemId(newsItemId).ToList();
                 var newTags = tags.Except(newsItemTags.Select(t => t.Name)).ToList();
 
                 if(newTags.Any())

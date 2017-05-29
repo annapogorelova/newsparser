@@ -200,7 +200,7 @@ namespace NewsParser.FeedParser.Services
         private List<string> ExtractRssItemTags(XElement rssItem)
         {
             var categoryElements = rssItem.Elements("category").ToList();
-            return categoryElements.Select(e => e.Value.ToLower()).ToList();
+            return categoryElements.Select(e => e.Value.ToLowerInvariant()).Distinct().ToList();
         }
     }
 }
