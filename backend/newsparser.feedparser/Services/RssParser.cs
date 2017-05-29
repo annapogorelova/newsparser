@@ -18,6 +18,11 @@ namespace NewsParser.FeedParser.Services
     /// </summary>
     public class RssParser : IFeedParser
     {
+        private readonly string[] ImageMIMETypes = new string[] 
+        {
+            "image/gif", "image/png", "image/jpeg", "image/bmp", "image/webp"
+        };
+
         /// <summary>
         /// Parses news source's RSS and saves new news into database
         /// </summary>
@@ -117,8 +122,9 @@ namespace NewsParser.FeedParser.Services
                 foreach (var rssItem in xmlElements)
                 {
                     var rssItemDescription = rssItem.Element("description")?.Value?.RemoveTabulation(" ");
-                    string imageUrl = rssItemDescription != null ? 
-                        ExtractFirstImage(rssItemDescription) : null;
+                    string imageUrl = GetEnclosureImage(rssItem) ?? 
+                        (rssItemDescription != null ? 
+                            ExtractFirstImage(rssItemDescription) : null);
                     
                     DateTime pubDate;
                     var result = DateTime.TryParse(rssItem.Element("pubDate").Value, out pubDate);
@@ -160,6 +166,19 @@ namespace NewsParser.FeedParser.Services
             {
                 throw new FeedParsingException("Failed to parse source", e);
             }
+        }
+
+        private string GetEnclosureImage(XElement rssItem)
+        {
+            var enclosure = rssItem.Element("enclosure");
+            if(enclosure != null && !string.IsNullOrEmpty(enclosure.Attribute("type")?.Value)
+                && !string.IsNullOrEmpty(enclosure.Attribute("url")?.Value)
+                && ImageMIMETypes.Contains(enclosure.Attribute("type").Value))
+            {
+                return enclosure.Attribute("url").Value;
+            }
+
+            return null;
         }
 
         /// <summary>

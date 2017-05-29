@@ -78,16 +78,15 @@ namespace newsparser.FeedParser.Services
 
         public async Task UpdateSourceAsync(int sourceId)
         {
+            var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
+            if (newsSource.IsUpdating)
+            {
+                _log.LogError($"News source {sourceId} is currently being updated");
+                return;
+            }
+
             try
             {
-                var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-
-                if (newsSource.IsUpdating)
-                {
-                    _log.LogError($"News source {sourceId} is currently being updated");
-                    return;
-                }
-
                 SetNewsSourceUpdatingState(newsSource, true);
                 var news = await _feedParser.ParseNewsSource(newsSource);
                 SaveNewsItems(newsSource.Id, news);
@@ -103,22 +102,22 @@ namespace newsparser.FeedParser.Services
                 }
 
                 _log.LogError(errorMessage);
+                SetNewsSourceUpdatingState(newsSource, false);
                 throw new FeedUpdatingException(errorMessage, e);
             }
         }
 
         public void UpdateSource(int sourceId)
         {
+            var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
+            if (newsSource.IsUpdating)
+            {
+                _log.LogInformation($"News source {sourceId} is currently being updated");
+                return;
+            }
+
             try
             {
-                var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
-
-                if (newsSource.IsUpdating)
-                {
-                    _log.LogInformation($"News source {sourceId} is currently being updated");
-                    return;
-                }
-
                 SetNewsSourceUpdatingState(newsSource, true);
                 var news = _feedParser.ParseNewsSource(newsSource).Result;
                 SaveNewsItems(newsSource.Id, news);
@@ -134,6 +133,7 @@ namespace newsparser.FeedParser.Services
                 }
 
                 _log.LogError(errorMessage);
+                SetNewsSourceUpdatingState(newsSource, false);
                 throw new FeedUpdatingException(errorMessage, e);
             }
         }
