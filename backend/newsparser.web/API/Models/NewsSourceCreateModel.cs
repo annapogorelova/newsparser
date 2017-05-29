@@ -12,6 +12,6 @@ namespace NewsParser.API.Models
         [Required(ErrorMessage = "RSS url is required")]
         public string RssUrl { get; set; }
 
-        public bool IsPrivate { get; set; }
+        public bool IsPrivate { get; set; } = false;
     }
 }
