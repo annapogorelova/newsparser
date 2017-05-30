@@ -22,8 +22,6 @@ namespace NewsParser.DAL.Models
         
         [MaxLength(255)]
         public string Description { get; set; }
-
-        public DateTime? LastBuildDate { get; set; }
         
         public bool IsUpdating { get; set; }
         
@@ -31,7 +29,9 @@ namespace NewsParser.DAL.Models
         
         public DateTime DateFeedUpdated { get; set; }
 
-        public FeedFormat FeedFormat { get; set; }        
+        public FeedFormat FeedFormat { get; set; }
+
+        public int UpdateIntervalMinutes { get; set; }
         
         public List<NewsSourceNews> NewsSources { get; set; }
 

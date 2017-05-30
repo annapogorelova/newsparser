@@ -83,12 +83,10 @@ namespace NewsParser.FeedParser.Services
                     ImageUrl = _feedParsers[feedFormat].GetSourceImageUrl(sourceElement)
                 };
 
-                string lastBuildDateString = _feedParsers[feedFormat].GetSourceLastUpdatedDate(sourceElement);
-                if(!string.IsNullOrEmpty(lastBuildDateString))
+                var sourceUpdateInterval = _feedParsers[feedFormat].GetSourceUpdateInterval(sourceElement);
+                if(sourceUpdateInterval != null)
                 {
-                    DateTime lastBuildDate;
-                    var succeeded = DateTime.TryParse(lastBuildDateString, out lastBuildDate);
-                    feedSource.LastBuildDate = succeeded ? (Nullable<DateTime>)lastBuildDate : null;
+                    feedSource.UpdateIntervalMinutes = Convert.ToInt32(sourceUpdateInterval);
                 }
 
                 return feedSource;

@@ -80,6 +80,7 @@ namespace NewsParser.DAL
 
             modelBuilder.Entity<NewsSource>().ToTable("news_sources");
             modelBuilder.Entity<NewsSource>().HasIndex(s => s.FeedFormat);
+            modelBuilder.Entity<NewsSource>().HasIndex(s => s.FeedUrl);
 
             modelBuilder.Entity<Token>().ToTable("tokens");
         }

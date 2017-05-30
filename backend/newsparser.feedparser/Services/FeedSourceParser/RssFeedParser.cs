@@ -28,11 +28,6 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
             return categoryElements.Select(e => e.Value.ToLowerInvariant()).Distinct().ToList();
         }
 
-        public string GetSourceLastUpdatedDate(XElement xml)
-        {
-            return xml.Element("lastBuildDate")?.Value;
-        }
-
         public string GetSourceWebsiteUrl(XElement xml)
         {
             return xml.Element("link")?.Value;
@@ -152,6 +147,11 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
         public XElement GetSourceElement(XElement xml)
         {
             return xml.Descendants("channel").FirstOrDefault();
+        }
+
+        public string GetSourceUpdateInterval(XElement xml)
+        {
+            return xml.Element("ttl")?.Value;
         }
     }
 }

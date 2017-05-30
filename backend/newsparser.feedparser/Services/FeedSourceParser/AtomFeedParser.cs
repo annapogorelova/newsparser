@@ -91,11 +91,6 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
             return xml;
         }
 
-        public string GetSourceLastUpdatedDate(XElement xml)
-        {
-            return GetElement(xml, "updated")?.Value;
-        }
-
         public string GetSourceImageUrl(XElement xml)
         {
             return GetElement(xml, "logo")?.Value;
@@ -104,6 +99,11 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
         public string GetSourceTitle(XElement xml)
         {
             return GetElement(xml, "title")?.Value;
+        }
+
+        public string GetSourceUpdateInterval(XElement xml)
+        {
+            return null;
         }
 
         public string GetSourceWebsiteUrl(XElement xml)

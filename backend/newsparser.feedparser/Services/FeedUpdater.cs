@@ -176,8 +176,8 @@ namespace newsparser.FeedParser.Services
                     ImageUrl = feedSourceModel.ImageUrl,
                     FeedUrl = feedSourceModel.FeedUrl,
                     WebsiteUrl = feedSourceModel.WebsiteUrl,
-                    LastBuildDate = feedSourceModel.LastBuildDate,
-                    FeedFormat = feedSourceModel.FeedFormat
+                    FeedFormat = feedSourceModel.FeedFormat,
+                    UpdateIntervalMinutes = feedSourceModel.UpdateIntervalMinutes
                 };
 
                 var addedFeedSource = _newsSourceBusinessService.AddNewsSource(newsSource);
