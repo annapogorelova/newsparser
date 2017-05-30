@@ -98,7 +98,7 @@ namespace newsparser.scheduler
 
         private void InitializeJobScheduler()
         {
-            int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateInterval"]);
+            int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateIntervalMinutes"]);
             JobManager.Initialize(new JobRegistry(feedUpdateInterval));
         }
     }

@@ -17,6 +17,12 @@ namespace NewsParser.BL.Services.NewsSources
         IEnumerable<NewsSource> GetAllNewsSources(bool hasUsers = false);
 
         /// <summary>
+        /// Get news sources to be updated
+        /// </summary>
+        /// <returns>IEnumerable of NewsSource</returns>
+        IEnumerable<NewsSource> GetNewsSourcesForUpdate();
+
+        /// <summary>
         /// Gets news sources that user is subscribed to
         /// </summary>
         /// <param name="userId">User id</param>

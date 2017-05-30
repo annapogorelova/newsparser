@@ -6,6 +6,7 @@ using newsparser.scheduler;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.FeedParser.Exceptions;
 using newsparser.FeedParser.Services;
+using System;
 
 namespace NewsParser.Scheduler
 {
@@ -30,8 +31,13 @@ namespace NewsParser.Scheduler
             {
                 try
                 {
-                    var newsSourcs = _newsSourceBusinessService.GetAllNewsSources(true).ToList();
-                    foreach (var newsSource in newsSourcs)
+                    var newsSources = _newsSourceBusinessService.GetNewsSourcesForUpdate();
+                    if(!newsSources.Any())
+                    {
+                        return;
+                    }
+
+                    foreach (var newsSource in newsSources)
                     {
                         _feedUpdater.UpdateFeedSource(newsSource.Id);
                     }

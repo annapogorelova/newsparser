@@ -26,6 +26,13 @@ namespace NewsParser.DAL.Repositories.NewsSources
             return _dbContext.NewsSources;
         }
 
+        public IQueryable<NewsSource> GetNewsSourcesByUpdateDate()
+        {
+            return _dbContext.NewsSources
+                .FromSql(@"SELECT * FROM news_sources 
+                    WHERE DATE_ADD(DateFeedUpdated, INTERVAL UpdateIntervalMinutes MINUTE) <= NOW()");
+        }
+
         /// <summary>
         /// Gets news sources by user id
         /// </summary>

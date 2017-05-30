@@ -15,6 +15,12 @@ namespace NewsParser.DAL.Repositories.NewsSources
         IQueryable<NewsSource> GetNewsSources();
 
         /// <summary>
+        /// Gets the news sources that need updating now
+        /// </summary>
+        /// <returns>IQueryable of NewsSource</returns>
+        IQueryable<NewsSource> GetNewsSourcesByUpdateDate();
+
+        /// <summary>
         /// Gets news sources by user id
         /// </summary>
         /// <param name="userId">User id</param>

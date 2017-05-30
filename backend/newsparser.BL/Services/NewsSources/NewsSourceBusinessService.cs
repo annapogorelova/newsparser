@@ -28,6 +28,15 @@ namespace NewsParser.BL.Services.NewsSources
                 newsSources;
         }
 
+        public IEnumerable<NewsSource> GetNewsSourcesForUpdate()
+        {
+            return _newsSourceRepository
+                .GetNewsSourcesByUpdateDate()
+                .Include(s => s.UsersSources)
+                .Where(s => s.UsersSources.Any())
+                .OrderByDescending(s => s.UsersSources.Count());
+        }
+
         public IEnumerable<NewsSource> GetAllNewsSourcesForUser(int userId)
         {
             return _newsSourceRepository.GetNewsSources()

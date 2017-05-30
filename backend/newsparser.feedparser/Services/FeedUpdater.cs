@@ -195,7 +195,11 @@ namespace newsparser.FeedParser.Services
         private void SetNewsSourceUpdatingState(NewsSource newsSource, bool isUpdating)
         {
             newsSource.IsUpdating = isUpdating;
-            newsSource.DateFeedUpdated = DateTime.UtcNow;
+            // If finished updating -> update the DateFeedUpdated property
+            if(!isUpdating)
+            {
+                newsSource.DateFeedUpdated = DateTime.UtcNow;
+            }
             _newsSourceBusinessService.UpdateNewsSource(newsSource);
         }
 
