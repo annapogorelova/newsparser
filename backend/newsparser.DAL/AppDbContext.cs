@@ -79,6 +79,7 @@ namespace NewsParser.DAL
                 .HasForeignKey(nt => nt.NewsItemId);
 
             modelBuilder.Entity<NewsSource>().ToTable("news_sources");
+            modelBuilder.Entity<NewsSource>().HasIndex(s => s.FeedFormat);
 
             modelBuilder.Entity<Token>().ToTable("tokens");
         }

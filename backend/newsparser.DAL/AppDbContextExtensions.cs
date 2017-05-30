@@ -36,7 +36,7 @@ namespace NewsParser.DAL
             {
                 new NewsSource
                 {
-                    RssUrl = "https://habrahabr.ru/rss/all/",
+                    FeedUrl = "https://habrahabr.ru/rss/all/",
                     Name = "Хабрахабр / Все публикации",
                     Description = "Все публикации на Хабрахабре",
                     ImageUrl = "https://habrahabr.ru/images/logo.png",
@@ -44,7 +44,7 @@ namespace NewsParser.DAL
                 },
                 new NewsSource
                 {
-                    RssUrl = "https://geektimes.ru/rss/all/",
+                    FeedUrl = "https://geektimes.ru/rss/all/",
                     Name = "Geektimes / Все публикации",
                     Description = "Все публикации на Geektimes",
                     ImageUrl = "https://geektimes.ru/images/logo.png",
@@ -52,14 +52,14 @@ namespace NewsParser.DAL
                 },
                 new NewsSource
                 {
-                    RssUrl = "https://css-tricks.com/feed/",
+                    FeedUrl = "https://css-tricks.com/feed/",
                     Name = "CSS-Tricks",
                     Description = "Tips, Tricks, and Techniques on using Cascading Style Sheets.",
                     WebsiteUrl = "https://css-tricks.com/"
                 },
                 new NewsSource
                 {
-                    RssUrl = "http://arzamas.academy/feed_v1.rss",
+                    FeedUrl = "http://arzamas.academy/feed_v1.rss",
                     Name = "Arzamas | Всё",
                     Description = "Новые курсы каждый четверг и дополнительные материалы в течение недели",
                     ImageUrl = "http://arzamas.academy/apple-touch-icon.png",
@@ -67,7 +67,7 @@ namespace NewsParser.DAL
                 },
                 new NewsSource
                 {
-                    RssUrl = "https://habrahabr.ru/rss/flows/develop/all/",
+                    FeedUrl = "https://habrahabr.ru/rss/flows/develop/all/",
                     Name = "Хабрахабр / Все публикации в потоке Разработка",
                     Description = "Все публикации в потоке Разработка на Хабрахабре",
                     ImageUrl = "https://habrahabr.ru/images/logo.png",
@@ -75,7 +75,7 @@ namespace NewsParser.DAL
                 },
                 new NewsSource
                 {
-                    RssUrl = "https://habrahabr.ru/rss/hub/programming/",
+                    FeedUrl = "https://habrahabr.ru/rss/hub/programming/",
                     Name = "Хабрахабр / Программирование / Интересные публикации",
                     Description = "Интересные публикации из хаба «Программирование» на Хабрахабре",
                     ImageUrl = "https://habrahabr.ru/images/logo.png",
@@ -83,7 +83,7 @@ namespace NewsParser.DAL
                 },
                 new NewsSource
                 {
-                    RssUrl = "https://postnauka.ru/feed",
+                    FeedUrl = "https://postnauka.ru/feed",
                     Name = "ПостНаука",
                     Description = "все, что вы хотели знать о науке, но не знали, у кого спросить",
                     WebsiteUrl = "https://postnauka.ru/"

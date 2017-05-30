@@ -54,7 +54,7 @@ namespace NewsParser.DAL.Repositories.NewsSources
         {
             return _dbContext.NewsSources
                 .Include(s => s.UsersSources)
-                .FirstOrDefault(n => n.RssUrl == rssUrl);
+                .FirstOrDefault(n => n.FeedUrl == rssUrl);
         }
 
         /// <summary>

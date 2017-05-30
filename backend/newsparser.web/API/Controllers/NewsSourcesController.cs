@@ -77,7 +77,7 @@ namespace NewsParser.API.Controllers
             }
             else
             {
-                createdNewsSource = await _feedUpdater.AddNewsSource(newsSourceModel.RssUrl, newsSourceModel.IsPrivate, user.GetId());
+                createdNewsSource = await _feedUpdater.AddFeedSource(newsSourceModel.RssUrl, newsSourceModel.IsPrivate, user.GetId());
             }
 
             var addedNewsSourceModel = Mapper.Map<NewsSource, NewsSourceSubscriptionModel>(createdNewsSource);

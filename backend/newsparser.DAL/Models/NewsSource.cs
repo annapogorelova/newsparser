@@ -12,7 +12,7 @@ namespace NewsParser.DAL.Models
         public string Name { get; set; }
         
         [Required, MaxLength(255)]
-        public string RssUrl { get; set; }
+        public string FeedUrl { get; set; }
         
         [MaxLength(255)]
         public string ImageUrl { get; set; }
@@ -20,7 +20,7 @@ namespace NewsParser.DAL.Models
         [MaxLength(255)]
         public string WebsiteUrl { get; set; }
         
-        [Required, MaxLength(255)]
+        [MaxLength(255)]
         public string Description { get; set; }
 
         public DateTime? LastBuildDate { get; set; }
@@ -30,9 +30,17 @@ namespace NewsParser.DAL.Models
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         
         public DateTime DateFeedUpdated { get; set; }
+
+        public FeedFormat FeedFormat { get; set; }        
         
         public List<NewsSourceNews> NewsSources { get; set; }
 
         public List<UserNewsSource> UsersSources { get; set; } = new List<UserNewsSource>();
+    }
+
+    public enum FeedFormat
+    {
+        RSS = 1,
+        Atom = 2
     }
 }

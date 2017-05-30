@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using newsparser.FeedParser.Models;
 using NewsParser.BL.Exceptions;
 using NewsParser.BL.Services.News;
 using NewsParser.BL.Services.NewsSources;
 using NewsParser.DAL.Models;
-using NewsParser.FeedParser;
+using NewsParser.FeedParser.Models;
 using NewsParser.FeedParser.Exceptions;
 using NewsParser.FeedParser.Helpers;
+using System.Xml.Linq;
+using System.Net.Http;
+using NewsParser.FeedParser.Services.FeedSourceParser;
 using NewsParser.FeedParser.Services;
 
 namespace newsparser.FeedParser.Services
@@ -22,16 +24,27 @@ namespace newsparser.FeedParser.Services
     {
         private readonly INewsSourceBusinessService _newsSourceBusinessService;
         private readonly INewsBusinessService _newsBusinessService;
-        private readonly IFeedParser _feedParser;
         private readonly ILogger<FeedUpdater> _log;
 
-        public FeedUpdater(INewsSourceBusinessService newsSourceBusinessService, 
-            INewsBusinessService newsBusinessService, IFeedParser feedParser, ILogger<FeedUpdater> log)
+        private readonly Dictionary<FeedFormat, IFeedParser> _feedParsers = 
+            new Dictionary<FeedFormat, IFeedParser>
+        {
+            { FeedFormat.RSS, new RssFeedParser() },
+            { FeedFormat.Atom, new AtomFeedParser() }
+        };
+
+        private readonly IFeedConnector _feedConnector;
+
+        public FeedUpdater(
+            INewsSourceBusinessService newsSourceBusinessService, 
+            INewsBusinessService newsBusinessService, 
+            ILogger<FeedUpdater> log,
+            IFeedConnector feedConnector)
         {
             _newsSourceBusinessService = newsSourceBusinessService;
             _newsBusinessService = newsBusinessService;
-            _feedParser = feedParser;
             _log = log;
+            _feedConnector = feedConnector;
         }
 
         public void UpdateFeed(IEnumerable<NewsSource> newsSources)
@@ -42,7 +55,7 @@ namespace newsparser.FeedParser.Services
             {
                 try
                 {
-                    UpdateSourceAsync(newsSource.Id).Wait();
+                    UpdateFeedSourceAsync(newsSource.Id).Wait();
                 }
                 catch (Exception e)
                 {
@@ -63,7 +76,7 @@ namespace newsparser.FeedParser.Services
             {
                 try
                 {
-                    await UpdateSourceAsync(newsSource.Id);
+                    await UpdateFeedSourceAsync(newsSource.Id);
                 }
                 catch (Exception e)
                 {
@@ -76,7 +89,7 @@ namespace newsparser.FeedParser.Services
             _log.LogInformation("Finished updating news sources");
         }
 
-        public async Task UpdateSourceAsync(int sourceId)
+        public async Task UpdateFeedSourceAsync(int sourceId)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
             if (newsSource.IsUpdating)
@@ -88,8 +101,8 @@ namespace newsparser.FeedParser.Services
             try
             {
                 SetNewsSourceUpdatingState(newsSource, true);
-                var news = await _feedParser.ParseNewsSource(newsSource);
-                SaveNewsItems(newsSource.Id, news);
+                var news = await _feedConnector.GetFeed(newsSource.FeedUrl, GetNewsSourceFeedFormat(newsSource));
+                SaveFeedItems(newsSource.Id, news);
                 SetNewsSourceUpdatingState(newsSource, false);
             }
             catch (Exception e)
@@ -107,7 +120,7 @@ namespace newsparser.FeedParser.Services
             }
         }
 
-        public void UpdateSource(int sourceId)
+        public void UpdateFeedSource(int sourceId)
         {
             var newsSource = _newsSourceBusinessService.GetNewsSourceById(sourceId);
             if (newsSource.IsUpdating)
@@ -119,8 +132,8 @@ namespace newsparser.FeedParser.Services
             try
             {
                 SetNewsSourceUpdatingState(newsSource, true);
-                var news = _feedParser.ParseNewsSource(newsSource).Result;
-                SaveNewsItems(newsSource.Id, news);
+                var news = _feedConnector.GetFeed(newsSource.FeedUrl, newsSource.FeedFormat).Result;
+                SaveFeedItems(newsSource.Id, news);
                 SetNewsSourceUpdatingState(newsSource, false);
             }
             catch (Exception e)
@@ -138,33 +151,44 @@ namespace newsparser.FeedParser.Services
             }
         }
 
-        public async Task<NewsSource> AddNewsSource(string rssUrl, bool isPrivate, int userId)
+        public async Task<NewsSource> AddFeedSource(string feedUrl, bool isPrivate, int userId)
         {
-            if (string.IsNullOrEmpty(rssUrl))
+            if (string.IsNullOrEmpty(feedUrl))
             {
-                throw new ArgumentNullException(nameof(rssUrl), "RSS url cannot be null or empty");
+                throw new ArgumentNullException(nameof(feedUrl), "RSS url cannot be null or empty");
             }
 
             try
             {
-                var newsSourceModel = await _feedParser.ParseRssSource(rssUrl);
+                var feedSourceModel = await _feedConnector.GetFeedSource(feedUrl);
                 var newsSource = new NewsSource
                 {
-                    Name = newsSourceModel.Name?.CropString(100),
-                    Description = newsSourceModel.Description?.CropString(255),
-                    ImageUrl = newsSourceModel.ImageUrl,
-                    RssUrl = newsSourceModel.RssUrl,
-                    WebsiteUrl = newsSourceModel.WebsiteUrl,
-                    LastBuildDate = newsSourceModel.LastBuildDate
+                    Name = feedSourceModel.Name?
+                            .RemoveTabulation(" ")
+                            .RemoveHtmlTags()
+                            .RemoveNonAlphanumericCharacters()
+                            .CropString(100) ?? "Untitled",
+                    Description = feedSourceModel.Description?
+                            .RemoveTabulation(" ")
+                            .RemoveHtmlTags()
+                            .RemoveNonAlphanumericCharacters()
+                            .CropString(255),
+                    ImageUrl = feedSourceModel.ImageUrl,
+                    FeedUrl = feedSourceModel.FeedUrl,
+                    WebsiteUrl = feedSourceModel.WebsiteUrl,
+                    LastBuildDate = feedSourceModel.LastBuildDate,
+                    FeedFormat = feedSourceModel.FeedFormat
                 };
-                var addedNewsSource = _newsSourceBusinessService.AddNewsSource(newsSource);
-                UpdateSource(addedNewsSource.Id);
-                _newsSourceBusinessService.SubscribeUser(addedNewsSource.Id, userId, isPrivate);
-                return addedNewsSource;
+
+                var addedFeedSource = _newsSourceBusinessService.AddNewsSource(newsSource);
+                UpdateFeedSource(addedFeedSource.Id);
+                _newsSourceBusinessService.SubscribeUser(addedFeedSource.Id, userId, isPrivate);
+                
+                return addedFeedSource;
             }
             catch (Exception e)
             {
-                throw new FeedUpdatingException($"Failed to get RSS {rssUrl} source info", e);
+                throw new FeedUpdatingException($"Failed to get RSS {feedUrl} source info", e);
             }
         }
 
@@ -175,33 +199,51 @@ namespace newsparser.FeedParser.Services
             _newsSourceBusinessService.UpdateNewsSource(newsSource);
         }
 
-        private void SaveNewsItems(int sourceId, List<NewsItemModel> newsItems)
+        private void SaveFeedItems(int sourceId, List<FeedItem> feedItems)
         {
-            foreach (var newsItem in newsItems)
+            foreach (var feedItem in feedItems)
             {
                 NewsItem existingItem;
-                string newsItemIdentifier = newsItem.Guid != null ? 
-                    newsItem.Guid.GuidString : newsItem.LinkToSource;
-                if (!_newsBusinessService.NewsItemExists(newsItemIdentifier))
+                if (!_newsBusinessService.NewsItemExists(feedItem.Id))
                 {
-                    existingItem = _newsBusinessService.AddNewsItem(new NewsItem()
+                    try
                     {
-                        DatePublished = newsItem.DatePublished,
-                        Description = newsItem.Description,
-                        ImageUrl = newsItem.ImageUrl,
-                        LinkToSource = (newsItem.Guid != null && newsItem.Guid.IsPermaLink) ? 
-                            newsItem.Guid.GuidString : newsItem.LinkToSource,
-                        Title = newsItem.Title ?? "Untitled",
-                        Guid = newsItemIdentifier
-                    });
+                        existingItem = _newsBusinessService.AddNewsItem(new NewsItem()
+                        {
+                            DatePublished = feedItem.DatePublished,
+                            Description = feedItem.Description?
+                                .RemoveTabulation(" ")
+                                .RemoveHtmlTags()
+                                .RemoveNonAlphanumericCharacters()
+                                .CropString(500),
+                            ImageUrl = feedItem.ImageUrl,
+                            LinkToSource = feedItem.Link,
+                            Title = feedItem.Title?
+                                .RemoveTabulation(" ")
+                                .RemoveHtmlTags()
+                                .RemoveNonAlphanumericCharacters()
+                                .CropString(255) ?? "Untitled",
+                            Guid = feedItem.Id
+                        });
+                    }
+                    catch(Exception e)
+                    {
+                        _log.LogError($"Failed to add a news item {feedItem.Id}", e);
+                        continue;
+                    }
                 }
                 else 
                 {
-                    existingItem = _newsBusinessService.GetNewsItemByGuid(newsItemIdentifier);
+                    existingItem = _newsBusinessService.GetNewsItemByGuid(feedItem.Id);
                 }
 
-                _newsBusinessService.UpdateNewsItem(existingItem.Id, sourceId, newsItem.Categories);
+                _newsBusinessService.UpdateNewsItem(existingItem.Id, sourceId, feedItem.Categories);
             }
+        }
+
+        private FeedFormat GetNewsSourceFeedFormat(NewsSource source)
+        {
+            return (FeedFormat)((int)source.FeedFormat);
         }
     }
 }

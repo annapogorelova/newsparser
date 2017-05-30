@@ -27,14 +27,14 @@ namespace newsparser.FeedParser.Services
         /// </summary>
         /// <param name="sourceId">Source id</param>
         /// <returns></returns>
-        void UpdateSource(int sourceId);
+        void UpdateFeedSource(int sourceId);
 
         /// <summary>
         /// Updates a single news source (async)
         /// </summary>
         /// <param name="sourceId">Source id</param>
         /// <returns></returns>
-        Task UpdateSourceAsync(int sourceId);
+        Task UpdateFeedSourceAsync(int sourceId);
 
         /// <summary>
         /// Adds the news source by RSS url
@@ -43,6 +43,6 @@ namespace newsparser.FeedParser.Services
         /// <param name="isPrivate">Indicates whether this news source is private</param>
         /// <param name="userId">User id to add news source to</param>
         /// <returns>NewsSource object</returns>
-        Task<NewsSource> AddNewsSource(string rssUrl, bool isPrivate, int userId);
+        Task<NewsSource> AddFeedSource(string rssUrl, bool isPrivate, int userId);
     }
 }

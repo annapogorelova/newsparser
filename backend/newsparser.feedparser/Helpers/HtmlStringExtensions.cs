@@ -45,5 +45,9 @@ namespace NewsParser.FeedParser.Helpers
             return $"{croppedString.Substring(0, croppedString.LastIndexOf(' '))}...";
         }
 
+        public static string RemoveNonAlphanumericCharacters(this string input)
+        {
+            return Regex.Replace(input, @"\p{Cs}", string.Empty);
+        }
     }
 }

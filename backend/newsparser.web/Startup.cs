@@ -290,8 +290,7 @@ namespace NewsParser
             services.AddTransient<INewsTagBusinessService, NewsTagBusinessService>();
             services.AddTransient<IUserBusinessService, UserBusinessService>();
 
-            // Feed parser and updater
-            services.AddTransient<IFeedParser, RssParser>();
+            services.AddTransient<IFeedConnector, FeedConnector>();
             services.AddTransient<IFeedUpdater, FeedUpdater>();
 
             services.AddScoped<IRoleStore<Role>, RoleStore>();

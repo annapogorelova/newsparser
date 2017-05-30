@@ -79,10 +79,10 @@ namespace NewsParser.BL.Services.NewsSources
                 throw new ArgumentNullException(nameof(newsSource), $"News source cannot be null");
             }
 
-            var existingNewsSource = _newsSourceRepository.GetNewsSourceByUrl(newsSource.RssUrl);
+            var existingNewsSource = _newsSourceRepository.GetNewsSourceByUrl(newsSource.FeedUrl);
             if (existingNewsSource != null)
             {
-                throw new BusinessLayerException($"News source with RSS url {newsSource.RssUrl} already exists");
+                throw new BusinessLayerException($"News source with RSS url {newsSource.FeedUrl} already exists");
             }
 
             try
@@ -91,7 +91,7 @@ namespace NewsParser.BL.Services.NewsSources
             }
             catch (Exception e)
             {
-                throw new BusinessLayerException($"Failed inserting a news source with RSS url {newsSource.RssUrl}", e);
+                throw new BusinessLayerException($"Failed inserting a news source with RSS url {newsSource.FeedUrl}", e);
             }
         }
 
