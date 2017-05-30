@@ -31,7 +31,7 @@ namespace NewsParser.DAL.Models
 
         public FeedFormat FeedFormat { get; set; }
 
-        public int UpdateIntervalMinutes { get; set; }
+        public int UpdateIntervalMinutes { get; set; } = DALConstants.DefaultFeedUpdateIntervalMinutes;
         
         public List<NewsSourceNews> NewsSources { get; set; }
 
