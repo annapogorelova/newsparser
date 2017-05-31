@@ -30,6 +30,9 @@
                                   class="news-source-image pull-left"></span>
                             <strong class="news-source-name">{{selectedSource.name}}</strong>
                         </p>
+                        <p *ngIf="selectedSource.language">
+                            Language: <span class="source-language badge badge-info">{{selectedSource.language}}</span>
+                        </p>
                         <p>{{selectedSource.description}}</p>
                         <p><a href="{{selectedSource.websiteUrl}}" target="_blank">{{selectedSource.websiteUrl}}</a></p>
                     </div>

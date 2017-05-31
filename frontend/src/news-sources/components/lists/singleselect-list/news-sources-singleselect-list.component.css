@@ -143,3 +143,7 @@
     width: 300px;
     margin-left: 15%;
 }
+
+:host /deep/ .source-language {
+    font-size: 10px;
+}
