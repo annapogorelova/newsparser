@@ -18,6 +18,7 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
         string GetSourceWebsiteUrl(XElement xml);
         List<string> GetSourceCategories(XElement xml);
         string GetSourceUpdateInterval(XElement xml);
+        string GetSourceLanguage(XElement xml);
 
 
         string GetItemId(XElement xml);

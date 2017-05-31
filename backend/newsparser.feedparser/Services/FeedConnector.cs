@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NewsParser.DAL.Models;
@@ -24,24 +25,25 @@ namespace NewsParser.FeedParser.Services
         {
             try
             {
+                var feedParser = _feedParsers[feedFormat];
                 XElement feedXml = await GetFeedXml(feedUrl);
-                var feedItemsXml = _feedParsers[feedFormat].GetItems(feedXml);
+                var feedItemsXml = feedParser.GetItems(feedXml);
                 var feedItemsList = new List<FeedItem>();
 
                 foreach(var feedItemXml in feedItemsXml)
                 {
                     var feedItem = new FeedItem
                     {
-                        Id = _feedParsers[feedFormat].GetItemId(feedItemXml),
-                        Title = _feedParsers[feedFormat].GetItemTitle(feedItemXml),
-                        Author = _feedParsers[feedFormat].GetItemAuthor(feedItemXml)?.CropString(100),
-                        Categories = _feedParsers[feedFormat].GetItemCategories(feedItemXml),
-                        ImageUrl = _feedParsers[feedFormat].GetItemImageUrl(feedItemXml),
-                        Link = _feedParsers[feedFormat].GetItemLink(feedItemXml),
-                        Description = _feedParsers[feedFormat].GetItemDescription(feedItemXml)
+                        Id = feedParser.GetItemId(feedItemXml),
+                        Title = feedParser.GetItemTitle(feedItemXml),
+                        Author = feedParser.GetItemAuthor(feedItemXml)?.CropString(100),
+                        Categories = feedParser.GetItemCategories(feedItemXml),
+                        ImageUrl = feedParser.GetItemImageUrl(feedItemXml),
+                        Link = feedParser.GetItemLink(feedItemXml),
+                        Description = feedParser.GetItemDescription(feedItemXml)
                     };
 
-                    string datePublishedString = _feedParsers[feedFormat].GetItemDatePublished(feedItemXml);
+                    string datePublishedString = feedParser.GetItemDatePublished(feedItemXml);
                     if(!string.IsNullOrEmpty(datePublishedString))
                     {
                         DateTime datePublished;
@@ -73,17 +75,26 @@ namespace NewsParser.FeedParser.Services
                     throw new FeedParsingException("Failed to parse RSS source");
                 }
 
+                var feedParser = _feedParsers[feedFormat];
+
                 var feedSource = new FeedSource
                 {
                     FeedUrl = feedUrl,
-                    Name = _feedParsers[feedFormat].GetSourceTitle(sourceElement),
-                    Description = _feedParsers[feedFormat].GetSourceDescription(sourceElement),
-                    WebsiteUrl = _feedParsers[feedFormat].GetSourceWebsiteUrl(sourceElement),
+                    Name = feedParser.GetSourceTitle(sourceElement),
+                    Description = feedParser.GetSourceDescription(sourceElement),
+                    WebsiteUrl = feedParser.GetSourceWebsiteUrl(sourceElement),
                     FeedFormat = feedFormat,
-                    ImageUrl = _feedParsers[feedFormat].GetSourceImageUrl(sourceElement)
+                    ImageUrl = feedParser.GetSourceImageUrl(sourceElement)
                 };
 
-                var sourceUpdateInterval = _feedParsers[feedFormat].GetSourceUpdateInterval(sourceElement);
+                var language = feedParser.GetSourceLanguage(sourceElement);
+                if(!string.IsNullOrEmpty(language) && 
+                    Regex.Matches(language, "^[a-z]{2}$", RegexOptions.IgnoreCase).Count > 0)
+                {
+                    feedSource.Language = language;
+                }
+
+                var sourceUpdateInterval = feedParser.GetSourceUpdateInterval(sourceElement);
                 if(sourceUpdateInterval != null)
                 {
                     feedSource.UpdateIntervalMinutes = Convert.ToInt32(sourceUpdateInterval);

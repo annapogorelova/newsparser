@@ -96,6 +96,19 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
             return GetElement(xml, "logo")?.Value;
         }
 
+        public string GetSourceLanguage(XElement xml)
+        {
+            var languageElement = GetElements(xml, "link")
+                .FirstOrDefault(e => e.Attribute("hreflang") != null);
+            if(languageElement == null)
+            {
+                return null;
+            }
+
+            var languageValue = languageElement.Attribute("hreflang").Value;
+            return string.IsNullOrEmpty(languageValue) ? null : languageValue.ToLower().Split('-')[0];
+        }
+
         public string GetSourceTitle(XElement xml)
         {
             return GetElement(xml, "title")?.Value;

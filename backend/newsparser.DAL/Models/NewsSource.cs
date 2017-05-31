@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NewsParser.DAL.Models
 {
@@ -24,11 +25,15 @@ namespace NewsParser.DAL.Models
         public string Description { get; set; }
         
         public bool IsUpdating { get; set; }
+
+        [Column(TypeName = "CHAR(2)")]
+        public string Language { get; set; }
         
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         
         public DateTime DateFeedUpdated { get; set; }
 
+        [Column(TypeName = "TINYINT")]
         public FeedFormat FeedFormat { get; set; }
 
         public int UpdateIntervalMinutes { get; set; } = DALConstants.DefaultFeedUpdateIntervalMinutes;

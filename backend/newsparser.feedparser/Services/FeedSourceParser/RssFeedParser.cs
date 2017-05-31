@@ -153,5 +153,11 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
         {
             return xml.Element("ttl")?.Value;
         }
+
+        public string GetSourceLanguage(XElement xml)
+        {
+            var language = xml.Element("language")?.Value;
+            return string.IsNullOrEmpty(language) ? null : language.ToLower().Split('-')[0];
+        }
     }
 }

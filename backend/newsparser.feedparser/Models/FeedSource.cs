@@ -12,5 +12,6 @@ namespace NewsParser.FeedParser.Models
         public string ImageUrl { get; set; }
         public FeedFormat FeedFormat { get; set; }
         public int UpdateIntervalMinutes { get; set; }
+        public string Language { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace NewsParser.API.Models
         public bool IsSubscribed { get; set; }
         public bool IsPrivate { get; set; }
         public int SubscribersCount { get; set; }
+        public string Language { get; set; }
     }
 }

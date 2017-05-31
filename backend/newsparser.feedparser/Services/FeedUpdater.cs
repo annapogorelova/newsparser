@@ -177,8 +177,13 @@ namespace newsparser.FeedParser.Services
                     FeedUrl = feedSourceModel.FeedUrl,
                     WebsiteUrl = feedSourceModel.WebsiteUrl,
                     FeedFormat = feedSourceModel.FeedFormat,
-                    UpdateIntervalMinutes = feedSourceModel.UpdateIntervalMinutes
+                    Language = feedSourceModel.Language
                 };
+
+                if(feedSourceModel.UpdateIntervalMinutes != 0)
+                {
+                    newsSource.UpdateIntervalMinutes = feedSourceModel.UpdateIntervalMinutes;
+                }
 
                 var addedFeedSource = _newsSourceBusinessService.AddNewsSource(newsSource);
                 UpdateFeedSource(addedFeedSource.Id);
