@@ -5,14 +5,14 @@
             <h3>Edit your profile settings</h3>
             <ngb-tabset [activeId]="selectedTabId">
                 <ngb-tab id="profile" title="Profile">
-                    <template ngbTabContent>
+                    <ng-template ngbTabContent>
                         <edit-profile></edit-profile>
-                    </template>
+                    </ng-template>
                 </ngb-tab>
                 <ngb-tab id="password" title="Password">
-                    <template ngbTabContent>
+                    <ng-template ngbTabContent>
                         <change-password></change-password>
-                    </template>
+                    </ng-template>
                 </ngb-tab>
             </ngb-tabset>
         </div>

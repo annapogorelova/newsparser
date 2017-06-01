@@ -20,7 +20,7 @@
                     </subscription-item>
                 </div>
                 <!-- Popover content -->
-                <template #popContent class="news-source-popover-content">
+                <ng-template #popContent class="news-source-popover-content">
                     <i class="fa fa-fa-times pull-right" title="Close" (click)="currentPopover.close()"></i>
                     <div class="subscription-info">
                         <p class="subscription-title">
@@ -44,7 +44,7 @@
                             (click)="handleUnsubscription(selectedSource)">
                         Unsubscribe
                     </button>
-                </template>
+                </ng-template>
             </div>
         </div>
         <div *ngIf="loadingInProgress" class="loading-more-icon-container">

@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {InfiniteScrollModule} from 'angular2-infinite-scroll';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {SharedModule} from '../shared';
 import {
     AddNewsSourceComponent,

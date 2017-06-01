@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
-import {InfiniteScrollModule} from 'angular2-infinite-scroll';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NewsListComponent, NewsPageComponent} from './components';
 import {NewsRouting, NewsRoutingProviders} from './news.routing';

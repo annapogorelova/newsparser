@@ -27,7 +27,7 @@
                             [destroyOnHide]="false"
                             (tabChange)="onTabChange($event)">
                     <ngb-tab id="subscribed" title="Subscribed">
-                        <template ngbTabContent>
+                        <ng-template ngbTabContent>
                             <div class="news-sources-container">
                                 <news-sources-singleselect-list #subscribedSourcesList
                                               (onSelect)="subscribe($event)"
@@ -36,10 +36,10 @@
                                               [onlySubscribed]="true">
                                 </news-sources-singleselect-list>
                             </div>
-                        </template>
+                        </ng-template>
                     </ngb-tab>
                     <ngb-tab id="all" title="All">
-                        <template ngbTabContent>
+                        <ng-template ngbTabContent>
                             <div class="news-sources-container">
                                 <news-sources-singleselect-list #allSourcesList
                                               (onSelect)="subscribe($event)"
@@ -48,12 +48,12 @@
                                               [onlySubscribed]="false">
                                 </news-sources-singleselect-list>
                             </div>
-                        </template>
+                        </ng-template>
                     </ngb-tab>
                     <ngb-tab id="add" title="Add">
-                        <template ngbTabContent>
+                        <ng-template ngbTabContent>
                             <add-news-source></add-news-source>
-                        </template>
+                        </ng-template>
                     </ngb-tab>
                 </ngb-tabset>
             </div>
