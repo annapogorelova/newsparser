@@ -13,21 +13,20 @@ import {AppSettings} from '../../../app/app.settings';
 export class SearchComponent {
     constructor(){}
 
-    @Input()
-    private search: string = null;
+    @Input() private search: string = null;
+    private prevSearchValue: string = null;
 
-    @Input()
-    private placeholderCaption: string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
+    @Input() private placeholderCaption: string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
 
     @Output() onSearch: EventEmitter<any> = new EventEmitter<any>();
     @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
 
-    onKeyUp(event: any) {
-        // Prevent action triggering when user hits functional buttons
-        if(event.keyCode > 8 && event.keyCode < 48){
+    onKeyUp(event: KeyboardEvent) {
+        if(this.prevSearchValue === this.search){
             return;
         }
 
+        this.prevSearchValue = this.search;
         this.onSearch.emit({inputValue: this.search});
     };
 
