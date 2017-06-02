@@ -1,107 +1,104 @@
-import {Component, Output, Input, EventEmitter, Inject} from '@angular/core';
+import {Component, Output, Input, EventEmitter, Inject, OnInit} from '@angular/core';
 import {BaseNewsSourcesListComponent} from '../base-news-sources-list';
 import {AbstractDataProviderService, PagerServiceProvider, ISelectList} from '../../../../shared';
 
 @Component({
-	selector: 'news-sources-singleselect-list',
-	templateUrl: './news-sources-singleselect-list.component.html',
-	styleUrls: ['./news-sources-singleselect-list.component.css']
+    selector: 'news-sources-singleselect-list',
+    templateUrl: './news-sources-singleselect-list.component.html',
+    styleUrls: ['./news-sources-singleselect-list.component.css']
 })
-export class NewsSourcesSingleSelectList
-	extends BaseNewsSourcesListComponent
-	implements ISelectList {
+export class NewsSourcesSingleSelectList extends BaseNewsSourcesListComponent implements ISelectList, OnInit {
+    protected apiRoute:string = 'newsSources';
+    protected onlySubscribed:boolean;
 
-	protected apiRoute: string = 'newsSources';
-	protected onlySubscribed: boolean;
+    selectedSource:any = null;
+    currentPopover:any;
 
-	selectedSource: any = null;
-	currentPopover: any;
-	
-	@Input() subscribed: boolean;
-	
-	@Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
-	@Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
+    @Input() subscribed:boolean;
 
-	constructor(protected dataProvider: AbstractDataProviderService,
-	            @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider){
-		super(dataProvider, pagerProvider);
-	}
+    @Output() onSelect:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onDeselect:EventEmitter<any> = new EventEmitter<any>();
 
-	ngOnInit(){
-		this.onlySubscribed = this.subscribed;
-		super.resetPage();
-	};
+    constructor(protected dataProvider:AbstractDataProviderService,
+                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider) {
+        super(dataProvider, pagerProvider);
+    }
 
-	select(source:any): void {
-		this.selectedSource = source;
-	};
+    ngOnInit() {
+        this.onlySubscribed = this.subscribed;
+        super.resetPage();
+    };
 
-	deselect(source:any): void {
-		this.selectedSource = source;
-	};
+    select(source:any):void {
+        this.selectedSource = source;
+    };
 
-	handleSubscription() {
-		this.onSelect.emit({source: this.selectedSource});
-	};
+    deselect(source:any):void {
+        this.selectedSource = source;
+    };
 
-	handleUnsubscription() {
-		this.onDeselect.emit({source: this.selectedSource});
-	};
+    handleSubscription() {
+        this.onSelect.emit({source: this.selectedSource});
+    };
 
-	isSelected(source:any): boolean {
-		return this.selectedSource && this.selectedSource.id === source.id;
-	};
+    handleUnsubscription() {
+        this.onDeselect.emit({source: this.selectedSource});
+    };
 
-	setCurrentSource(event: any){
-		// if the source is selected first time or the selected source changed
-		// close the existing popup
-		if(!this.selectedSource || event.source.id !== this.selectedSource.id){
-			this.selectedSource = event.source;
-			if(this.currentPopover && this.currentPopover.isOpen()){
-				this.currentPopover.close();
-			}
-		} else if(this.selectedSource && event.source.id === this.selectedSource.id){
-			this.selectedSource = null;
-		}
+    isSelected(source:any):boolean {
+        return this.selectedSource && this.selectedSource.id === source.id;
+    };
 
-		this.currentPopover = event.popover;
-		this.currentPopover.isOpen() ? this.currentPopover.close() : this.currentPopover.open();
-	};
-	
-	hideSubscriptionInfo(){
-		if(this.selectedSource){
-			this.selectedSource = null;
-		}
-		
-		if(this.currentPopover){
-			this.currentPopover.isOpen() && this.currentPopover.close();
-			this.currentPopover = null;
-		}	
-	};
+    setCurrentSource(event:any) {
+        // if the source is selected first time or the selected source changed
+        // close the existing popup
+        if (!this.selectedSource || event.source.id !== this.selectedSource.id) {
+            this.selectedSource = event.source;
+            if (this.currentPopover && this.currentPopover.isOpen()) {
+                this.currentPopover.close();
+            }
+        } else if (this.selectedSource && event.source.id === this.selectedSource.id) {
+            this.selectedSource = null;
+        }
 
-	updateSubscriptionState(sourceId: number, isSubscribed: boolean) {
-		var sources = this.items.filter(function (s) {
-			return s.id === sourceId;
-		});
+        this.currentPopover = event.popover;
+        this.currentPopover.isOpen() ? this.currentPopover.close() : this.currentPopover.open();
+    };
 
-		if(sources.length){
-			sources[0].isSubscribed = isSubscribed;
-		}
-	};
+    hideSubscriptionInfo() {
+        if (this.selectedSource) {
+            this.selectedSource = null;
+        }
 
-	nextPage(): Promise<any> {
-		return super.nextPage(true);
-	};
+        if (this.currentPopover) {
+            this.currentPopover.isOpen() && this.currentPopover.close();
+            this.currentPopover = null;
+        }
+    };
 
-	prevPage(): Promise<any> {
-		return super.prevPage(true);
-	};
+    updateSubscriptionState(sourceId:number, isSubscribed:boolean) {
+        var sources = this.items.filter(function (s) {
+            return s.id === sourceId;
+        });
 
-	firstPage(): Promise<any> {
-		return super.firstPage(true);
-	};
+        if (sources.length) {
+            sources[0].isSubscribed = isSubscribed;
+        }
+    };
 
-	lastPage(): Promise<any> {
-		return super.lastPage(true);
-	};
+    nextPage():Promise<any> {
+        return super.nextPage(true);
+    };
+
+    prevPage():Promise<any> {
+        return super.prevPage(true);
+    };
+
+    firstPage():Promise<any> {
+        return super.firstPage(true);
+    };
+
+    lastPage():Promise<any> {
+        return super.lastPage(true);
+    };
 }

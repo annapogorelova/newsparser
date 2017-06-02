@@ -1,13 +1,13 @@
 import {
-	Component,
-	EventEmitter,
-	Output,
-	style,
-	state,
-	animate,
-	transition,
-	trigger,
-	Input, ViewChild
+    Component,
+    EventEmitter,
+    Output,
+    style,
+    state,
+    animate,
+    transition,
+    trigger,
+    Input, ViewChild
 } from '@angular/core';
 import {AppSettings} from '../../../app/app.settings';
 
@@ -41,65 +41,65 @@ import {AppSettings} from '../../../app/app.settings';
     ]
 })
 export class SidebarComponent {
-    protected animationState: string = 'in';
-	@ViewChild('newsSourcesList') newsSourcesList: any;
+    protected animationState:string = 'in';
+    @ViewChild('newsSourcesList') newsSourcesList:any;
 
-    @Output() onShow: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onHide: EventEmitter<any> = new EventEmitter<any>();
-    
-    @Output() onSourceSelected: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onSourceDeselected: EventEmitter<any> = new EventEmitter<any>();
-	@Output() onSourcesCleared: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
 
-    @Output() onTagDeselected: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onTagsCleared: EventEmitter<any> = new EventEmitter<any>();
-    
-    @Input() selectedTags: Array<string> = [];
-    @Input() selectedSourcesIds: Array<number> = [];
-    
-    defaultWidth: number = AppSettings.SIDEBAR_WIDTH_PX;
+    @Output() onSourceSelected:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSourceDeselected:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSourcesCleared:EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(){
+    @Output() onTagDeselected:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onTagsCleared:EventEmitter<any> = new EventEmitter<any>();
+
+    @Input() selectedTags:Array<string> = [];
+    @Input() selectedSourcesIds:Array<number> = [];
+
+    defaultWidth:number = AppSettings.SIDEBAR_WIDTH_PX;
+
+    constructor() {
     }
 
-    show(){
+    show() {
         this.animationState = 'in';
         this.onShow.emit();
     };
 
-    hide(){
+    hide() {
         this.animationState = 'out';
         this.onHide.emit();
     };
 
-    isVisible(): boolean {
+    isVisible():boolean {
         return this.animationState === 'in';
     };
 
-    toggle(){
+    toggle() {
         this.isVisible() ? this.hide() : this.show();
     };
-    
-    onSelectSource(event: any){
+
+    onSelectSource(event:any) {
         this.onSourceSelected.emit(event);
     };
-    
-    onDeselectSource(event: any){
+
+    onDeselectSource(event:any) {
         this.onSourceDeselected.emit(event);
     };
 
-	clearSources(event: any){
-		if(!this.selectedSourcesIds.length){
-			return;
-		}
-		this.newsSourcesList.clearSources();
-		this.onSourcesCleared.emit(event);
-	};
+    clearSources(event:any) {
+        if (!this.selectedSourcesIds.length) {
+            return;
+        }
+        this.newsSourcesList.clearSources();
+        this.onSourcesCleared.emit(event);
+    };
 
-    onDeselectTag = (event: any) => {
+    onDeselectTag = (event:any) => {
         this.onTagDeselected.emit(event);
     };
-    
+
     onClearTags = () => {
         this.onTagsCleared.emit();
     };

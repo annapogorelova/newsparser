@@ -8,41 +8,42 @@ import {AuthService, IForm, NoticesService} from '../../../shared';
     selector: 'sign-in'
 })
 export class SignInComponent implements IForm {
-    public submitCompleted: boolean;
-    public validationErrors: Array<string>;
-    public submitInProgress: boolean;
-    public submitFailed: boolean;
-    public submitSucceeded: boolean;
+    submitCompleted:boolean;
+    validationErrors:Array<string>;
+    submitInProgress:boolean;
+    submitFailed:boolean;
+    submitSucceeded:boolean;
 
-    public formData: any = {
+    formData:any = {
         email: '',
         password: ''
     };
 
-    constructor(private router: Router,
-                private authService: AuthService,
-                private notices: NoticesService){
+    constructor(private router:Router,
+                private authService:AuthService,
+                private notices:NoticesService) {
 
     }
 
-    reset(){}
+    reset():void {
+    };
 
-    onSubmitSucceeded = (response: any) => {
+    onSubmitSucceeded(response:any):Promise<any> {
         this.submitInProgress = false;
         this.submitSucceeded = true;
         this.router.navigate(['/news']);
         return Promise.resolve(response);
     };
 
-    onSubmitFailed = (error: any) => {
+    onSubmitFailed(error:any):Promise<any> {
         this.submitInProgress = false;
         this.submitFailed = true;
         this.notices.error(error.message || 'Failed to sign in the user.');
         return Promise.reject(error);
     };
 
-    submit = (isValid: boolean) => {
-        if(!isValid){
+    submit(isValid:boolean):Promise<any> {
+        if (!isValid) {
             return;
         }
         this.submitInProgress = true;
@@ -51,7 +52,7 @@ export class SignInComponent implements IForm {
             .catch(error => this.onSubmitFailed(error));
     };
 
-    disableInputs = () => {
+    disableInputs() {
         this.submitInProgress = true;
     };
 }

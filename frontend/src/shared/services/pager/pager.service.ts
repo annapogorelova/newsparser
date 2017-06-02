@@ -6,16 +6,16 @@ import {AppSettings} from '../../../app/app.settings';
  */
 @Injectable()
 export class PagerService {
-    private page: number;
-    private pageSize: number;
-    private total?: number;
+    private page:number;
+    private pageSize:number;
+    private total:number;
 
     /**
      * Initializes a pager
      * @param {number} pageNumber - Initial page number for list
      * @param {number} pageSize - pageSize of the list's page
      */
-    constructor(page?: number, pageSize?: number){
+    constructor(page:number, pageSize:number) {
         this.reset(page);
         this.pageSize = pageSize || AppSettings.DEFAULT_PAGE_SIZE;
     };
@@ -24,7 +24,7 @@ export class PagerService {
      * Resets a pager
      * @param {number} page - Initial page index for list
      */
-    reset = (page: number = 1) => {
+    reset = (page:number = 1) => {
         this.page = page;
     };
 
@@ -40,7 +40,7 @@ export class PagerService {
      * Set total amount of list items
      * @param total
      */
-    setTotal = (total: number) => {
+    setTotal = (total:number) => {
         this.total = total;
     };
 
@@ -63,7 +63,7 @@ export class PagerService {
     /**
      * Sets the page number
      */
-    setPage = (page: number) => {
+    setPage = (page:number) => {
         this.page = page;
     };
 
@@ -80,8 +80,8 @@ export class PagerService {
      * @returns {number}
      */
     getPagesAmount = () => {
-        if(this.total !== undefined){
-            return Math.ceil(this.total/this.pageSize);
+        if (this.total !== undefined) {
+            return Math.ceil(this.total / this.pageSize);
         }
     };
 }

@@ -1,11 +1,10 @@
 import {Routes, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import {CanActivateAuth} from '../shared/services/auth/can-activate';
-import {PageNotFoundComponent} from '../shared/components/page-not-found/page-not-found.component';
+import {CanActivateAuth, PageNotFoundComponent} from '../shared';
 
-const appRoutes: Routes = [
-    { path: '', redirectTo: '/news', pathMatch: 'full', canActivate: [CanActivateAuth] },
-    { path: '**', component: PageNotFoundComponent }
+const appRoutes:Routes = [
+    {path: '', redirectTo: '/news', pathMatch: 'full', canActivate: [CanActivateAuth]},
+    {path: '**', component: PageNotFoundComponent}
 ];
 
 export const AppRoutingProviders:any[] = [];

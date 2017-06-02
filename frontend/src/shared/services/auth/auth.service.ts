@@ -5,14 +5,14 @@ import {AppSettings} from '../../../app/app.settings';
 
 @Injectable()
 export class AuthService {
-    private supportedExternalProviders: Array<string> = ['facebook', 'google'];
+    private supportedExternalProviders:Array<string> = ['facebook', 'google'];
 
-    constructor(private http: Http,
-                private authProvider: AuthProviderService) {
+    constructor(private http:Http,
+                private authProvider:AuthProviderService) {
     }
 
-    loadUser(refresh: boolean = false): Promise<any> {
-        if(!this.authProvider.hasAuth()){
+    loadUser(refresh:boolean = false):Promise<any> {
+        if (!this.authProvider.hasAuth()) {
             return Promise.reject('User is not authenticated');
         }
 
@@ -22,18 +22,18 @@ export class AuthService {
 
         var requestOptions = new RequestOptions({headers: headers});
 
-        if(refresh){
+        if (refresh) {
             requestOptions.search = new URLSearchParams;
             requestOptions.search.set('autotimestamp', Date.now().toString());
         }
 
         return this.http.get(this.getAbsoluteUrl('account'), requestOptions)
             .toPromise()
-            .then((response: any) => this.extractData(response))
-            .then((response: any) => this.authProvider.setUser(response.data))
-            .catch((error: any) => this.onAccountRequestFailed(error))
-            .catch((error: any) => {
-                if(error.retry){
+            .then((response:any) => this.extractData(response))
+            .then((response:any) => this.authProvider.setUser(response.data))
+            .catch((error:any) => this.onAccountRequestFailed(error))
+            .catch((error:any) => {
+                if (error.retry) {
                     return this.loadUser(refresh);
                 }
 
@@ -41,7 +41,7 @@ export class AuthService {
             });
     };
 
-    signIn = function (username: string, password: string): Promise<any> {
+    signIn = function (username:string, password:string):Promise<any> {
         return new Promise((resolve, reject) => {
             var requestBody = `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&scope=offline_access`;
             return this.postToken(requestBody)
@@ -51,16 +51,16 @@ export class AuthService {
         });
     };
 
-    externalSignIn = function (accessToken: string, provider: string): Promise<any> {
-        if(this.supportedExternalProviders.indexOf(provider.toLowerCase()) === -1){
+    externalSignIn = function (accessToken:string, provider:string):Promise<any> {
+        if (this.supportedExternalProviders.indexOf(provider.toLowerCase()) === -1) {
             throw new Error(`${provider} external auth provider is no supported`);
         }
         return this.postExternalAuth(accessToken, provider.toLowerCase())
-            .then((auth: any) => this.authProvider.setAuth(auth))
-            .then((auth: any) => this.loadUser(true));
+            .then((auth:any) => this.authProvider.setAuth(auth))
+            .then((auth:any) => this.loadUser(true));
     };
 
-    signOut = function (): Promise<any> {
+    signOut = function ():Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
                 let user:any = this.authProvider.getUser();
@@ -73,7 +73,7 @@ export class AuthService {
         });
     };
 
-    refreshAuth = (): Promise<any> => {
+    refreshAuth = ():Promise<any> => {
         return new Promise((resolve, reject) => {
             var refreshToken = this.authProvider.getRefreshToken();
             if (!refreshToken) {
@@ -81,55 +81,55 @@ export class AuthService {
             }
             var requestBody = `grant_type=refresh_token&refresh_token=${refreshToken}&scope=offline_access`;
             return this.postToken(requestBody)
-                .then((auth: any) => this.authProvider.setAuth(auth))
-                .then((response: any) => resolve(response))
-                .catch((error: any) => reject(error));
+                .then((auth:any) => this.authProvider.setAuth(auth))
+                .then((response:any) => resolve(response))
+                .catch((error:any) => reject(error));
         });
     };
 
-    private postToken = (requestBody: string) => {
+    private postToken = (requestBody:string) => {
         return new Promise((resolve, reject) => {
             var requestHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
             var requestOptions = new RequestOptions({headers: requestHeaders});
             return this.http.post(this.getAbsoluteUrl('token'), requestBody, requestOptions)
                 .toPromise()
-                .then((response: any) => resolve(this.extractData(response)))
-                .catch((error: any) => reject(error));
+                .then((response:any) => resolve(this.extractData(response)))
+                .catch((error:any) => reject(error));
         });
     };
 
-    private postExternalAuth = (accessToken: string, provider: string) => {
+    private postExternalAuth = (accessToken:string, provider:string) => {
         var requestBody = `grant_type=urn:ietf:params:oauth:grant-type:${provider}_access_token&assertion=${encodeURIComponent(accessToken)}`;
         return this.postToken(requestBody);
     };
 
-    private onAccountRequestFailed(error: any){
-        if(error.status === 401){
+    private onAccountRequestFailed(error:any) {
+        if (error.status === 401) {
             return this.handleUnauthorizedError();
         }
         return Promise.reject(error);
     };
 
-    private handleUnauthorizedError(){
+    private handleUnauthorizedError() {
         return new Promise((resolve, reject) => {
-            if(this.authProvider.isAuthenticated()){
+            if (this.authProvider.isAuthenticated()) {
                 return this.refreshAuth()
                     .then(() => {
                         var response = {retry: true};
                         reject(response);
                     })
-                    .catch((error: any) => reject(error));
+                    .catch((error:any) => reject(error));
             }
 
             reject();
         });
     };
 
-    private getAbsoluteUrl(route: string): string {
+    private getAbsoluteUrl(route:string):string {
         return AppSettings.API_ENDPOINT + route;
     };
 
-    private extractData(response: Response) {
+    private extractData(response:Response) {
         return response.json() || {};
     };
 }

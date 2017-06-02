@@ -14,18 +14,18 @@ export class RefreshButtonComponent {
      * Event fires user defined refresh handler
      * @type {any}
      */
-    @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onRefresh:EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * flag to apply the spinning animation
      * @type {boolean}
      */
-    @Input() isSpinning: boolean = false;
+    @Input() isSpinning:boolean = false;
 
     /**
      * Function executes custom refresh handler if specified
      */
-    refresh = () => {
+    refresh() {
         this.onRefresh.emit({});
     };
 }

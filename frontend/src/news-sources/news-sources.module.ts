@@ -4,10 +4,10 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../shared';
 import {
     AddNewsSourceComponent,
-	SubscriptionItemComponent,
-	NewsSourceListItemComponent,
-	NewsSourcesMultiSelectList,
-	NewsSourcesSingleSelectList
+    SubscriptionItemComponent,
+    NewsSourceListItemComponent,
+    NewsSourcesMultiSelectList,
+    NewsSourcesSingleSelectList
 } from './components';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,19 +16,20 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         BrowserModule,
         SharedModule,
         FormsModule,
-	    NgbModule
+        NgbModule
     ],
     declarations: [
-	    AddNewsSourceComponent,
-	    SubscriptionItemComponent,
-	    NewsSourceListItemComponent,
-	    NewsSourcesMultiSelectList,
-	    NewsSourcesSingleSelectList
+        AddNewsSourceComponent,
+        SubscriptionItemComponent,
+        NewsSourceListItemComponent,
+        NewsSourcesMultiSelectList,
+        NewsSourcesSingleSelectList
     ],
     exports: [
-	    AddNewsSourceComponent,
-	    NewsSourcesMultiSelectList,
-	    NewsSourcesSingleSelectList
+        AddNewsSourceComponent,
+        NewsSourcesMultiSelectList,
+        NewsSourcesSingleSelectList
     ]
 })
-export class NewsSourcesModule {}
+export class NewsSourcesModule {
+}

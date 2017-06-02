@@ -4,48 +4,48 @@ import {AppSettings} from '../../../app/app.settings';
 
 
 export abstract class BaseNewsSourcesListComponent extends PagedList {
-	protected search: string = null;
-	protected abstract apiRoute: string = 'newsSources';
-	protected abstract onlySubscribed: boolean;
-	
-	@Input() initiallySelectedSourcesIds: Array<any> = [];
-	@Input() useSearch: boolean = false;
-	@Input() noDataText: string = 'No news sources';
+    protected search:string = null;
+    protected abstract apiRoute:string = 'newsSources';
+    protected abstract onlySubscribed:boolean;
 
-	constructor(dataProvider: AbstractDataProviderService,
-	            pagerProvider:PagerServiceProvider){
-		super(dataProvider, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
-	}
+    @Input() initiallySelectedSourcesIds:Array<any> = [];
+    @Input() useSearch:boolean = false;
+    @Input() noDataText:string = 'No news sources';
 
-	nextPage(refresh: boolean = false): Promise<any> {
-		return super.nextPage(this.getRequestParams(), refresh);
-	};
+    constructor(dataProvider:AbstractDataProviderService,
+                pagerProvider:PagerServiceProvider) {
+        super(dataProvider, pagerProvider.getInstance(1, AppSettings.NEWS_SOURCES_PAGE_SIZE));
+    }
 
-	firstPage(refresh: boolean = false): Promise<any> {
-		return super.firstPage(this.getRequestParams(), refresh);
-	};
+    nextPage(refresh:boolean = false):Promise<any> {
+        return super.nextPage(this.getRequestParams(), refresh);
+    };
 
-	prevPage(refresh: boolean = false): Promise<any> {
-		return super.prevPage(this.getRequestParams(), refresh);
-	};
+    firstPage(refresh:boolean = false):Promise<any> {
+        return super.firstPage(this.getRequestParams(), refresh);
+    };
 
-	lastPage(refresh: boolean = false): Promise<any> {
-		return super.lastPage(this.getRequestParams(), refresh);
-	};
+    prevPage(refresh:boolean = false):Promise<any> {
+        return super.prevPage(this.getRequestParams(), refresh);
+    };
 
-	resetPage(): Promise<any> {
-		return super.resetPage(this.getRequestParams());
-	};
+    lastPage(refresh:boolean = false):Promise<any> {
+        return super.lastPage(this.getRequestParams(), refresh);
+    };
 
-	searchNewsSource(search: string): Promise<any> {
-		this.search = search;
-		return this.resetPage();
-	};
+    resetPage():Promise<any> {
+        return super.resetPage(this.getRequestParams());
+    };
 
-	getRequestParams() {
-		return {
-			search: this.search,
-			subscribed: this.onlySubscribed
-		};
-	};
+    searchNewsSource(search:string):Promise<any> {
+        this.search = search;
+        return this.resetPage();
+    };
+
+    getRequestParams() {
+        return {
+            search: this.search,
+            subscribed: this.onlySubscribed
+        };
+    };
 }

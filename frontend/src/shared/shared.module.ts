@@ -45,7 +45,7 @@ import {
         AbstractDataProviderService,
         {
             provide: NavigatorService,
-            useFactory: (router: Router, activatedRoute: ActivatedRoute) =>
+            useFactory: (router:Router, activatedRoute:ActivatedRoute) =>
                 new NavigatorService(router, activatedRoute),
             deps: [Router, ActivatedRoute]
         },
@@ -72,7 +72,7 @@ import {
         ExternalAuthModule,
         EqualityValidator,
         PaginationComponent,
-	    NoticesModule
+        NoticesModule
     ]
 })
 
@@ -85,10 +85,10 @@ export function getApiService(http:Http,
     return new ApiService(
         http,
         AppSettings.API_ENDPOINT,
-        function onResponseSuccess(response: Response) {
+        function onResponseSuccess(response:Response) {
             return response.json() || {};
         },
-        function onResponseError(response: Response) {
+        function onResponseError(response:Response) {
             return errorHandler.onRequestFailed(response);
         },
         function provideDefaultHeaders() {

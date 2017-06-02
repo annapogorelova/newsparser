@@ -5,17 +5,17 @@ import {NoticesService} from '../../modules';
  * Interface contains a declaration of methods and properties for a basic form
  */
 export interface IForm {
-    submitInProgress: boolean;
-    submitCompleted: boolean;
-    submitFailed: boolean;
-    submitSucceeded: boolean;
-    validationErrors: Array<string>;
-    formData: any;
+    submitInProgress:boolean;
+    submitCompleted:boolean;
+    submitFailed:boolean;
+    submitSucceeded:boolean;
+    validationErrors:Array<string>;
+    formData:any;
 
-    submit(isValid: boolean): Promise<any>;
-    onSubmitSucceeded(response: any): Promise<any>;
-    onSubmitFailed (error: any): Promise<any>;
-    reset(): void;
+    submit(isValid:boolean):Promise<any>;
+    onSubmitSucceeded(response:any):Promise<any>;
+    onSubmitFailed (error:any):Promise<any>;
+    reset():void;
 }
 
 /**
@@ -23,17 +23,19 @@ export interface IForm {
  * to be extended by specific components that represent forms
  */
 export abstract class BaseForm implements IForm {
-    submitInProgress: boolean;
-    submitCompleted: boolean;
-    submitFailed: boolean;
-    submitSucceeded: boolean;
-    validationErrors: Array<string>;
-    abstract formData: any;
+    submitInProgress:boolean;
+    submitCompleted:boolean;
+    submitFailed:boolean;
+    submitSucceeded:boolean;
+    validationErrors:Array<string>;
+    abstract formData:any;
 
-    protected abstract apiRoute: string;
-    protected abstract method: string;
-    constructor(protected apiService: ApiService,
-                protected notices: NoticesService){}
+    protected abstract apiRoute:string;
+    protected abstract method:string;
+
+    constructor(protected apiService:ApiService,
+                protected notices:NoticesService) {
+    }
 
     /**
      * Resets the form settings
@@ -50,8 +52,8 @@ export abstract class BaseForm implements IForm {
      * @param isValid
      * @returns {Promise<T>|Promise<TResult|T>|Promise<R>|any}
      */
-    submit(isValid: boolean): Promise<any>{
-        if(!isValid){
+    submit(isValid:boolean):Promise<any> {
+        if (!isValid) {
             return;
         }
 
@@ -65,42 +67,44 @@ export abstract class BaseForm implements IForm {
      * Callback to be executed on submit success
      * @param response
      */
-    onSubmitSucceeded = (response: any) => {
+    onSubmitSucceeded(response:any) {
         this.submitInProgress = false;
         this.submitCompleted = true;
         this.submitSucceeded = true;
         this.submitFailed = false;
-        if(response){
+        if (response) {
             this.notices.success(response.message);
         }
 
-        return Promise.resolve(response);
+        return response;
     };
 
     /**
      * Callback to be executed on submit fail
      * @param error
      */
-    onSubmitFailed = (error: any) => {
+    onSubmitFailed(error:any) {
         this.submitInProgress = false;
         this.submitCompleted = true;
         this.submitSucceeded = false;
         this.submitFailed = true;
-        
-        if(error){
-	        if(error.message){
-		        this.notices.error(error.message);
-	        }
 
-            if(error.validationErrors){
-                this.validationErrors = error.validationErrors.map(function(e: any){ return e['message'];});
+        if (error) {
+            if (error.message) {
+                this.notices.error(error.message);
             }
 
-	        for(var i = 0; i < this.validationErrors.length; i++){
-		        this.notices.error(this.validationErrors[i]);
-	        }
+            if (error.validationErrors) {
+                this.validationErrors = error.validationErrors.map(function (e:any) {
+                    return e['message'];
+                });
+            }
+
+            for (var i = 0; i < this.validationErrors.length; i++) {
+                this.notices.error(this.validationErrors[i]);
+            }
         }
 
-        return Promise.reject(error);
+        return error;
     };
 }

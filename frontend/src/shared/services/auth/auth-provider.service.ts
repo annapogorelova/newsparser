@@ -3,15 +3,15 @@ import {CacheService} from '../cache/cache.service';
 
 @Injectable()
 export class AuthProviderService {
-    constructor(protected cacheService: CacheService) {
+    constructor(protected cacheService:CacheService) {
     }
 
-    setAuth(data: any): any {
+    setAuth(data:any):any {
         this.cacheService.set('auth', data);
         return data;
     }
-    
-    clearAuth(): void {
+
+    clearAuth():void {
         this.cacheService.remove('auth');
     }
 
@@ -33,12 +33,12 @@ export class AuthProviderService {
         return auth ? auth.refresh_token : null;
     }
 
-    setUser(data: any): any {
+    setUser(data:any):any {
         this.cacheService.set('user', data, data.expires_in);
         return data;
     }
 
-    clearUser(): void {
+    clearUser():void {
         this.cacheService.remove('user');
     }
 

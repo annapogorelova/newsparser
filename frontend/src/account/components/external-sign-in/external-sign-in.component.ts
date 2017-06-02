@@ -10,65 +10,64 @@ import {AuthService, ExternalAuthService, IForm, NoticesService} from '../../../
 /**
  * Component for signing in via external auth providers
  */
-export class ExternalSignInComponent implements IForm{
-    submitInProgress: boolean;
-    submitCompleted: boolean;
-    submitFailed: boolean;
-    submitSucceeded: boolean;
-    validationErrors: Array<string>;
-    formData: any;
+export class ExternalSignInComponent implements IForm {
+    submitInProgress:boolean;
+    submitCompleted:boolean;
+    submitFailed:boolean;
+    submitSucceeded:boolean;
+    validationErrors:Array<string>;
+    formData:any;
 
-    @Input() provider: string;
-    @Input() buttonIcon: string;
-    @Input() buttonClass: string;
-    @Input() inputDisabled: boolean;
+    @Input() provider:string;
+    @Input() buttonIcon:string;
+    @Input() buttonClass:string;
+    @Input() inputDisabled:boolean;
 
-    @Output() onSignInSucceeded: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onSignInFailed: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onSignInInProgress: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInSucceeded:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInFailed:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSignInInProgress:EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(private authService: AuthService,
-                private notices: NoticesService,
-                public externalAuthService: ExternalAuthService){
+    constructor(private authService:AuthService,
+                private notices:NoticesService,
+                public externalAuthService:ExternalAuthService) {
     }
 
-    submit(isValid: boolean): Promise<any> {
+    submit(isValid:boolean):Promise<any> {
         this.onSignInInProgress.emit();
         return this.externalAuthService.login(this.provider)
-            .then((data: any) => this.onExternalAuthSucceeded(data))
-            .catch((error: any) => this.onExternalAuthFailed(error));
-    }
+            .then((data:any) => this.onExternalAuthSucceeded(data))
+            .catch((error:any) => this.onExternalAuthFailed(error));
+    };
 
-    onSubmitSucceeded(response: any): Promise<any> {
+    onSubmitSucceeded(response:any):Promise<any> {
         this.submitInProgress = false;
         this.submitFailed = false;
         this.onSignInSucceeded.emit(response);
-        return Promise.resolve(response);
-    }
+        return response;
+    };
 
-    onSubmitFailed(errorResponse: any): Promise<any> {
+    onSubmitFailed(errorResponse:any):Promise<any> {
         var error = errorResponse || {};
-        if(!error.message){
+        if (!error.message) {
             error.message = 'Failed to sign in the external user';
         }
         this.submitInProgress = false;
         this.submitFailed = true;
-        this.notices.error(error.message);
         this.onSignInFailed.emit(error);
-        return Promise.reject(error);
-    }
-
-    reset(): void {
-    }
-
-    private onExternalAuthSucceeded = (data: any) => {
-        this.submitInProgress = true;
-        this.authService.externalSignIn(data['token'], this.provider)
-            .then((response: any) => this.onSubmitSucceeded(response))
-            .catch((error: any) => this.onSubmitFailed(error));
+        return error;
     };
 
-    private onExternalAuthFailed = (error: any) => {
+    reset():void {
+    };
+
+    private onExternalAuthSucceeded(data:any) {
+        this.submitInProgress = true;
+        this.authService.externalSignIn(data['token'], this.provider)
+            .then((response:any) => this.onSubmitSucceeded(response))
+            .catch((error:any) => this.onSubmitFailed(error));
+    };
+
+    private onExternalAuthFailed(error:any) {
         this.onSubmitFailed(error);
     };
 }

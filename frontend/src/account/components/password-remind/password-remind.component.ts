@@ -10,20 +10,20 @@ import {ApiService, BaseForm, NoticesService, NavigatorService} from '../../../s
     selector: 'password-remind'
 })
 export class PasswordRemindComponent extends BaseForm {
-    protected method: string = 'post';
-    protected apiRoute: string = 'account/passwordRecovery';
+    protected method:string = 'post';
+    protected apiRoute:string = 'account/passwordRecovery';
 
-    formData: any = {
+    formData:any = {
         email: ''
     };
 
-    constructor(@Inject(ApiService) apiService: ApiService,
-                @Inject(NoticesService) notices: NoticesService,
-                private navigator: NavigatorService){
+    constructor(@Inject(ApiService) apiService:ApiService,
+                @Inject(NoticesService) notices:NoticesService,
+                private navigator:NavigatorService) {
         super(apiService, notices);
     }
 
-	submit(isValid: boolean): Promise<any>{
-		return super.submit(isValid).then(() => this.navigator.navigate(['']));
-	}
+    submit(isValid:boolean):Promise<any> {
+        return super.submit(isValid).then(() => this.navigator.navigate(['']));
+    };
 }

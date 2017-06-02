@@ -1,16 +1,16 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {
-	AccountSettingsComponent,
-	PasswordResetComponent,
-	PasswordRemindComponent,
-	EmailConfirmationComponent,
-	SignUpComponent,
-	SignInComponent,
-	SubscriptionsSettingsComponent
+    AccountSettingsComponent,
+    PasswordResetComponent,
+    PasswordRemindComponent,
+    EmailConfirmationComponent,
+    SignUpComponent,
+    SignInComponent,
+    SubscriptionsSettingsComponent
 } from './components';
 
-const accountRoutes: Routes = [
+const accountRoutes:Routes = [
     {path: 'sign-in', component: SignInComponent},
     {path: 'sign-up', component: SignUpComponent},
     {path: 'email-confirmation', component: EmailConfirmationComponent},
@@ -21,4 +21,4 @@ const accountRoutes: Routes = [
 ];
 
 export const AccountRoutingProviders:any[] = [];
-export const AccountRouting: ModuleWithProviders = RouterModule.forRoot(accountRoutes);
+export const AccountRouting:ModuleWithProviders = RouterModule.forRoot(accountRoutes);

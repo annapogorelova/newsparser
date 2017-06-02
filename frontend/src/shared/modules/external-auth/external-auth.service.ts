@@ -1,23 +1,23 @@
-declare let gapi: any;
-declare let FB: any;
+declare let gapi:any;
+declare let FB:any;
 
 export interface IProviders {
-    [provider: string]: IProvider;
+    [provider:string]:IProvider;
 }
 
 export interface IProvider {
-    clientId: string;
-    apiVersion?: string;
+    clientId:string;
+    apiVersion?:string;
 }
 
 /**
  * Service contains methods for authentication with  external providers
  */
 export class ExternalAuthService {
-    gauth: any;
+    gauth:any;
 
-    login = (provider: string): Promise<any> => {
-        switch(provider){
+    login = (provider:string):Promise<any> => {
+        switch (provider) {
             case 'google':
                 return this.loginViaGoogle();
             case 'facebook':
@@ -25,15 +25,15 @@ export class ExternalAuthService {
         }
     };
 
-    private loginViaFacebook = (): Promise<any> => {
+    private loginViaFacebook = ():Promise<any> => {
         return new Promise((resolve, reject) => {
-            FB.getLoginStatus((response: any) => {
-                if(response.status === 'connected'){
+            FB.getLoginStatus((response:any) => {
+                if (response.status === 'connected') {
                     return resolve(this.getFacebookUserDetails(response));
                 }
-                else{
-                    FB.login((response: any) => {
-                        if(response.status === 'connected'){
+                else {
+                    FB.login((response:any) => {
+                        if (response.status === 'connected') {
                             return resolve(this.getFacebookUserDetails(response));
                         }
 
@@ -44,9 +44,9 @@ export class ExternalAuthService {
         });
     };
 
-    private getFacebookUserDetails = (response: any): Promise<any> => {
+    private getFacebookUserDetails = (response:any):Promise<any> => {
         return new Promise((resolve, reject) => {
-            FB.api('/me?fields=email', (res: any) => {
+            FB.api('/me?fields=email', (res:any) => {
                 if (!res || res.error) {
                     return reject(res.error);
                 } else {
@@ -61,7 +61,7 @@ export class ExternalAuthService {
         });
     };
 
-    private loginViaGoogle = (): Promise<any> => {
+    private loginViaGoogle = ():Promise<any> => {
         return new Promise((resolve, reject) => {
             if (typeof(this.gauth) == 'undefined') {
                 this.gauth = gapi.auth2.getAuthInstance();

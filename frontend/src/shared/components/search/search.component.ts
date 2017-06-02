@@ -11,18 +11,19 @@ import {AppSettings} from '../../../app/app.settings';
  * Component for handling the new sources search
  */
 export class SearchComponent {
-    constructor(){}
+    constructor() {
+    }
 
-    @Input() private search: string = null;
-    private prevSearchValue: string = null;
+    @Input() private search:string = null;
+    private prevSearchValue:string = null;
 
-    @Input() private placeholderCaption: string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
+    @Input() private placeholderCaption:string = AppSettings.DEFAULT_SEARCH_PLACEHOLDER_TEXT;
 
-    @Output() onSearch: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onClear: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSearch:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onClear:EventEmitter<any> = new EventEmitter<any>();
 
-    onKeyUp(event: KeyboardEvent) {
-        if(this.prevSearchValue === this.search){
+    onKeyUp(event:KeyboardEvent) {
+        if (this.prevSearchValue === this.search) {
             return;
         }
 
@@ -30,7 +31,7 @@ export class SearchComponent {
         this.onSearch.emit({inputValue: this.search});
     };
 
-    clear(){
+    clear() {
         this.search = null;
         this.onClear.emit();
     };

@@ -8,26 +8,27 @@ import {Injectable} from '@angular/core';
  */
 @Injectable()
 export class AbstractDataProviderService {
-    constructor(private apiService: ApiService){}
+    constructor(private apiService:ApiService) {
+    }
 
-    get(apiRoute: string, params: any, headers: any, refresh: boolean = false){
+    get(apiRoute:string, params:any, headers:any, refresh:boolean = false) {
         return this.apiService.get(apiRoute, params, headers, refresh)
-            .then((response: any) => this.onRequestSucceeded(response));
+            .then((response:any) => this.onRequestSucceeded(response));
     };
 
-    post(apiRoute: string, params: any, headers: any){
+    post(apiRoute:string, params:any, headers:any) {
         return this.apiService.post(apiRoute, params, headers);
     };
 
-    put(apiRoute: string, params: any, headers: any){
+    put(apiRoute:string, params:any, headers:any) {
         return this.apiService.put(apiRoute, params, headers);
     };
 
-    delete(apiRoute: string, id: number){
+    delete(apiRoute:string, id:number) {
         return this.apiService.delete(apiRoute, id);
     };
 
-    private onRequestSucceeded(response: any){
+    private onRequestSucceeded(response:any) {
         return Promise.resolve(response);
     };
 }

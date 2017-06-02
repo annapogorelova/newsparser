@@ -8,32 +8,32 @@ import {ApiService, BaseForm, NavigatorService, NoticesService} from '../../../.
 })
 
 export class ChangePasswordComponent extends BaseForm implements OnInit {
-    protected apiRoute: string = 'account/passwordChange';
-    protected method: string = 'put';
+    protected apiRoute:string = 'account/passwordChange';
+    protected method:string = 'put';
 
-    formData: any = {
+    formData:any = {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: ''
     };
 
-    @ViewChild('f') form: NgForm;
+    @ViewChild('f') form:NgForm;
 
-    constructor(@Inject(ApiService) apiService: ApiService,
-                @Inject(NoticesService) notices: NoticesService,
-                private navigator: NavigatorService){
+    constructor(@Inject(ApiService) apiService:ApiService,
+                @Inject(NoticesService) notices:NoticesService,
+                private navigator:NavigatorService) {
         super(apiService, notices);
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.navigator.navigate([], {fragment: 'password'});
-    }
+    };
 
-    reset(){
+    reset() {
         this.form.resetForm();
     };
 
-    submit(isValid: boolean): Promise<any>{
+    submit(isValid:boolean):Promise<any> {
         return super.submit(isValid).then(() => this.reset());
     };
 }

@@ -6,8 +6,8 @@ import {Http, Headers, RequestOptions, URLSearchParams} from '@angular/http';
  */
 @Injectable()
 export class ApiService {
-    constructor(protected http: Http,
-                protected apiUrl: string,
+    constructor(protected http:Http,
+                protected apiUrl:string,
                 protected onResponseSuccess:any,
                 protected onResponseError:any,
                 protected provideDefaultHeaders:any = null) {
@@ -20,9 +20,9 @@ export class ApiService {
      * @param headers - custom request headers
      * @returns {Promise<any>}
      */
-    get = (url: string, params: any = null, headers: any = null, refresh: boolean = false) => {
+    get = (url:string, params:any = null, headers:any = null, refresh:boolean = false) => {
         var absoluteUrl = this.getAbsoluteUrl(url);
-        if(params){
+        if (params) {
             params.refresh = refresh;
         }
 
@@ -36,7 +36,7 @@ export class ApiService {
      * @param headers - custom request headers
      * @returns {Promise<any>}
      */
-    post = (url: string, params: any, headers: any = null) => {
+    post = (url:string, params:any, headers:any = null) => {
         return this.request(this.getAbsoluteUrl(url), 'POST', params, null, headers);
     };
 
@@ -47,7 +47,7 @@ export class ApiService {
      * @param headers - cusrom request headers
      * @returns {Promise<any>}
      */
-    put = (url: string, params: any, headers: any = null) => {
+    put = (url:string, params:any, headers:any = null) => {
         return this.request(this.getAbsoluteUrl(url), 'PUT', params, null, headers);
     };
 
@@ -58,7 +58,7 @@ export class ApiService {
      * @param headers - custom request headers
      * @returns {Promise<any>}
      */
-    delete = (url: string, headers: any = null) => {
+    delete = (url:string, headers:any = null) => {
         var requestUrl = this.getAbsoluteUrl(url);
 
         return this.request(requestUrl, 'DELETE', null, null, headers);
@@ -73,11 +73,11 @@ export class ApiService {
      * @param headers
      * @returns {Promise<any|T>|Promise<any>}
      */
-    private request = (url: string,
-               method: string,
-               body: any = null,
-               params: any = null,
-               headers: any = null): Promise<any> => {
+    private request = (url:string,
+                       method:string,
+                       body:any = null,
+                       params:any = null,
+                       headers:any = null):Promise<any> => {
         var requestOptions = new RequestOptions({
             method: method,
             headers: this.initializeHeaders(headers),
@@ -88,7 +88,7 @@ export class ApiService {
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError)
-            .catch((error: any) => this.afterError(error, url, method, body, params, headers));
+            .catch((error:any) => this.afterError(error, url, method, body, params, headers));
     };
 
     /**
@@ -101,13 +101,13 @@ export class ApiService {
      * @param headers
      * @returns {any}
      */
-    private afterError = (error: any,
-                          url: string,
-                          method: string,
-                          body: any = null,
-                          params: any = null,
-                          headers: any = null): Promise<any> => {
-        if(error.retry){
+    private afterError = (error:any,
+                          url:string,
+                          method:string,
+                          body:any = null,
+                          params:any = null,
+                          headers:any = null):Promise<any> => {
+        if (error.retry) {
             return Promise.resolve(this.request(url, method, body, params, headers));
         }
 
@@ -119,7 +119,7 @@ export class ApiService {
      * @param route - API resource route
      * @returns {string} - absolute url
      */
-    private getAbsoluteUrl(route: string): string {
+    private getAbsoluteUrl(route:string):string {
         return this.apiUrl + route;
     };
 
@@ -128,7 +128,7 @@ export class ApiService {
      * @param body
      * @returns {any|{}}
      */
-    private initializeBody = (body?: any) => {
+    private initializeBody = (body?:any) => {
         return body || {};
     };
 
@@ -137,7 +137,7 @@ export class ApiService {
      * @param customHeaders
      * @returns {Headers}
      */
-    private initializeHeaders(headers?: any):Headers {
+    private initializeHeaders(headers?:any):Headers {
         var initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (let name in headers) {
@@ -172,7 +172,7 @@ export class ApiService {
      * @param params
      * @returns {URLSearchParams}
      */
-    private initializeParams = (params: any, refresh: boolean = false): URLSearchParams => {
+    private initializeParams = (params:any, refresh:boolean = false):URLSearchParams => {
         var searchParams = new URLSearchParams();
 
         for (var key in params) {

@@ -5,19 +5,19 @@ import {NoticesComponent} from './components';
 import {NoticesService} from './services';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-	],
-	declarations: [
-		NoticesComponent,
-	],
-	exports: [
-		NoticesComponent,
-	],
-	providers: [
-		NoticesService,
-	],
+    imports: [
+        CommonModule,
+        FormsModule,
+    ],
+    declarations: [
+        NoticesComponent,
+    ],
+    exports: [
+        NoticesComponent,
+    ],
+    providers: [
+        NoticesService,
+    ],
 })
 export class NoticesModule {
 }
