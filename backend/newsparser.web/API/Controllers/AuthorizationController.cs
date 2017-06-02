@@ -68,7 +68,7 @@ namespace NewsParser.API.Controllers
             var user = _authService.FindUserByEmail(request.Username);
             if (user == null)
             {
-                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password");
+                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password.");
             }
 
             if (!await _signInManager.CanSignInAsync(user))
@@ -78,7 +78,7 @@ namespace NewsParser.API.Controllers
 
             if (!_authService.CheckUserPassword(user, request.Password))
             {
-                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password");
+                throw new WebLayerException(HttpStatusCode.BadRequest, "Invalid username or password.");
             }
 
             var principal = await _authService.CreateUserPrincipalAsync(user);

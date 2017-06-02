@@ -39,14 +39,14 @@ namespace NewsParser.API.Controllers
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
+                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found.");
             }
             if(_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this news source");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this news source.");
             }
             _newsSourceBusinessService.SubscribeUser(id, user.GetId());
-            return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source");
+            return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source.");
         }
 
         [HttpDelete("{id:int}")]
@@ -55,14 +55,14 @@ namespace NewsParser.API.Controllers
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found");
+                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found.");
             }
             if(!_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this news source");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this news source.");
             }
             _newsSourceBusinessService.UnsubscribeUser(id, user.GetId());
-            return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source");
+            return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source.");
         }
     }
 }

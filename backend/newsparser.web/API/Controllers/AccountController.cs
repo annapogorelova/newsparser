@@ -84,7 +84,7 @@ namespace NewsParser.API.Controllers
 
             return MakeIdentityErrorResponse(
                 HttpStatusCode.InternalServerError, 
-                "Failed to confirm the email", 
+                "Failed to confirm the email.", 
                 result
             );
         }
@@ -115,7 +115,7 @@ namespace NewsParser.API.Controllers
 
             return MakeIdentityErrorResponse(
                 HttpStatusCode.InternalServerError, 
-                "Failed to reset the password", 
+                "Failed to reset the password.", 
                 result
             );
         }
@@ -145,9 +145,8 @@ namespace NewsParser.API.Controllers
                 {
                     string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
                     await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
-                    responseMessage += $@" We have send you an confirmation email to {model.Email}. 
-                        Please confirm your new email address by following the link in the letter.
-                        If you don't confirm it, you won't be able to sign in with it next time.";
+                    responseMessage = $@"The confirmation email was sent to {model.Email}.
+                        Please, confirm it to be able to sign in with it next time.";
                 }
 
                 return MakeSuccessResponse(HttpStatusCode.OK, responseMessage);
@@ -155,7 +154,7 @@ namespace NewsParser.API.Controllers
 
             return MakeIdentityErrorResponse(
                 HttpStatusCode.InternalServerError, 
-                "Failed to update the account", 
+                "Failed to update the account.", 
                 result
             );
         }
@@ -170,12 +169,12 @@ namespace NewsParser.API.Controllers
             
             if(result.Succeeded)
             {
-                return MakeSuccessResponse(HttpStatusCode.OK, "Password was successfully changed");
+                return MakeSuccessResponse(HttpStatusCode.OK, "Password was successfully changed.");
             }
 
             return MakeIdentityErrorResponse(
                 HttpStatusCode.InternalServerError, 
-                "Failed to change the password", 
+                "Failed to change the password.", 
                 result
             );
         }
