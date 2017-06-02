@@ -21,6 +21,10 @@ export class AppComponent {
     ngOnInit() {
         this.setAppMinContentHeight();
         this.authService.loadUser(true);
+
+        this.router.events.subscribe(() => {
+            this.isNavbarCollapsed = true;
+        });
     }
 
     @HostListener("window:resize")
