@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../../../shared/services/auth/auth.service';
-import {IForm} from '../../../shared/abstract/base-form/base-form';
+import {AuthService, IForm, NoticesService} from '../../../shared';
 
 @Component({
     templateUrl: 'sign-in.component.html',
@@ -14,7 +13,6 @@ export class SignInComponent implements IForm {
     public submitInProgress: boolean;
     public submitFailed: boolean;
     public submitSucceeded: boolean;
-    public responseMessage: string;
 
     public formData: any = {
         email: '',
@@ -22,7 +20,8 @@ export class SignInComponent implements IForm {
     };
 
     constructor(private router: Router,
-                private authService: AuthService){
+                private authService: AuthService,
+                private notices: NoticesService){
 
     }
 
@@ -38,7 +37,7 @@ export class SignInComponent implements IForm {
     onSubmitFailed = (error: any) => {
         this.submitInProgress = false;
         this.submitFailed = true;
-        this.responseMessage = error.message;
+        this.notices.error(error.message || 'Failed to sign in the user.');
         return Promise.reject(error);
     };
 

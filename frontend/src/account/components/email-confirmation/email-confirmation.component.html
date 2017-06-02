@@ -2,17 +2,14 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div class="alert alert-danger" role="alert" *ngIf="submitFailed">
-                {{responseMessage || 'Account confirmation failed'}}
-                <p *ngFor="let validationError of validationErrors">
-                    {{validationError}}
-                </p>
+            <div *ngIf="submitFailed">
+                Email confirmation failed. Please, try again later.
             </div>
-            <div class="alert alert-success" role="alert" *ngIf="submitSucceeded">
-                {{responseMessage || 'Account confirmation succeeded'}}
+            <div *ngIf="submitSucceeded">
+                Account confirmation succeeded.
             </div>
-            <a *ngIf="!authService.isAuthenticated()" href="#"
-               class="btn btn-primary btn-md pull-right" routerLink="/sign-in">
+            <a *ngIf="!authProvider.isAuthenticated() && submitCompleted && !submitFailed" role="button"
+               class="btn btn-success btn-md pull-right" routerLink="/sign-in">
                 Sign In
             </a>
         </div>

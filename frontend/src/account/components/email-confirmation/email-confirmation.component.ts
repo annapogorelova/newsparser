@@ -1,8 +1,6 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {ApiService} from '../../../shared/services/api/api.service';
+import {ApiService, AuthProviderService, BaseForm, NoticesService} from '../../../shared';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../../shared/services/auth/auth.service';
-import {BaseForm} from '../../../shared/abstract/base-form/base-form';
 
 /**
  * Component contains functionality for the confirmation of email
@@ -22,10 +20,11 @@ export class EmailConfirmationComponent extends BaseForm implements OnInit {
     email: string;
 
     public constructor(@Inject(ApiService) apiService: ApiService,
-                       private authService: AuthService,
+                       @Inject(NoticesService) notices: NoticesService,
+                       private authProvider: AuthProviderService,
                        private route: ActivatedRoute,
                        private router: Router){
-        super(apiService);
+        super(apiService, notices);
     }
 
     ngOnInit() {
@@ -43,10 +42,12 @@ export class EmailConfirmationComponent extends BaseForm implements OnInit {
             this.router.navigate(['/sign-in']);
         }
 
-        this.submit(true);
-    }
+        this.submit(true)
+	        .then(() => this.router.navigate(['']))
+	        .catch(() => this.router.navigate(['']));
+    };
 
-    onEmailRetrieved = (email: string) => {
+    onEmailRetrieved(email: string) {
         this.email = email;
         this.apiRoute = `account/${this.email}/confirmation`;
     };

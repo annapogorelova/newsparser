@@ -1,8 +1,6 @@
 import {Component, Inject, ViewChild, OnInit} from '@angular/core';
-import {ApiService} from '../../../../shared/services/api/api.service';
-import {BaseForm} from '../../../../shared/abstract/base-form/base-form';
 import {NgForm} from '@angular/forms';
-import {NavigatorService} from "../../../../shared/services/navigator/navigator.service";
+import {ApiService, BaseForm, NavigatorService, NoticesService} from '../../../../shared';
 
 @Component({
     templateUrl: 'change-password.component.html',
@@ -22,8 +20,9 @@ export class ChangePasswordComponent extends BaseForm implements OnInit {
     @ViewChild('f') form: NgForm;
 
     constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(NoticesService) notices: NoticesService,
                 private navigator: NavigatorService){
-        super(apiService);
+        super(apiService, notices);
     }
 
     ngOnInit(){
@@ -34,7 +33,7 @@ export class ChangePasswordComponent extends BaseForm implements OnInit {
         this.form.resetForm();
     };
 
-    submit(isValid: boolean){
-        super.submit(isValid).then(() => this.reset());
+    submit(isValid: boolean): Promise<any>{
+        return super.submit(isValid).then(() => this.reset());
     };
 }

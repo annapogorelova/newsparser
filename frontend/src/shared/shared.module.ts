@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
-import {ExternalAuthModule} from './modules';
 import {EqualityValidator} from './directives';
 import {Http, Response} from '@angular/http';
 import {AppSettings} from '../app/app.settings';
@@ -27,6 +26,10 @@ import {
     TagListComponent,
     PaginationComponent
 } from './components';
+import {
+    ExternalAuthModule,
+    NoticesModule
+} from './modules';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, GoTopButtonModule],
@@ -68,7 +71,8 @@ import {
         TagListComponent,
         ExternalAuthModule,
         EqualityValidator,
-        PaginationComponent
+        PaginationComponent,
+	    NoticesModule
     ]
 })
 

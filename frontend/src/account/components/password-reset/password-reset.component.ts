@@ -1,7 +1,6 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {ApiService} from '../../../shared/services/api/api.service';
 import {ActivatedRoute} from '@angular/router';
-import {BaseForm} from '../../../shared/abstract/base-form/base-form';
+import {ApiService, BaseForm, NoticesService} from '../../../shared';
 
 /**
  * Component contains functionality for the password reset
@@ -22,8 +21,9 @@ export class PasswordResetComponent extends BaseForm implements OnInit{
     email: string;
 
     constructor(@Inject(ApiService) apiService: ApiService,
-                       private route: ActivatedRoute){
-        super(apiService);
+                @Inject(NoticesService) notices: NoticesService,
+                private route: ActivatedRoute){
+        super(apiService, notices);
     }
 
     ngOnInit(){

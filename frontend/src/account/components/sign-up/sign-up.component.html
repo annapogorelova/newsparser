@@ -2,10 +2,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <div *ngIf="submitFailed" class="alert alert-danger" role="alert">
-                {{responseMessage || 'Failed to create the account. Please, try again later.'}}
-            </div>
-            <div *ngIf="submitSucceeded" class="alert alert-success" role="alert">
+            <div *ngIf="submitSucceeded">
                 {{'Nearly done! Please check your email to confirm the registration.'}}
             </div>
 

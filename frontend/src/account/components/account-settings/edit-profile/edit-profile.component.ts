@@ -1,8 +1,5 @@
 import {Component, OnInit, Inject, ViewChild} from '@angular/core';
-import {ApiService} from '../../../../shared/services/api/api.service';
-import {BaseForm} from '../../../../shared/abstract/base-form/base-form';
-import {AuthService} from '../../../../shared/services/auth/auth.service';
-import {NavigatorService} from '../../../../shared/services/navigator/navigator.service';
+import {ApiService, BaseForm, AuthService, NavigatorService, NoticesService} from '../../../../shared';
 
 @Component({
     templateUrl: 'edit-profile.component.html',
@@ -26,9 +23,10 @@ export class EditProfileComponent extends BaseForm implements OnInit {
     @ViewChild('f') form: any;
 
     constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(NoticesService) notices: NoticesService,
                 private authService: AuthService,
                 private navigator: NavigatorService){
-        super(apiService);
+        super(apiService, notices);
     }
 
     ngOnInit(){
@@ -62,7 +60,7 @@ export class EditProfileComponent extends BaseForm implements OnInit {
         this.formData.email = data.email;
     };
 
-    submit(isValid: boolean) {
-        super.submit(isValid).then(() => this.loadAccount(true));
+    submit(isValid: boolean): Promise<any>{
+        return super.submit(isValid).then(() => this.loadAccount(true));
     };
 }

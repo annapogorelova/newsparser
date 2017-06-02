@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {ApiService} from '../../../shared/services/api/api.service';
-import {BaseForm} from '../../../shared/abstract/base-form/base-form';
+import {ApiService, BaseForm, NoticesService, NavigatorService} from '../../../shared';
 
 /**
  * Component contains functionality for the password reset
@@ -18,7 +17,13 @@ export class PasswordRemindComponent extends BaseForm {
         email: ''
     };
 
-    constructor(@Inject(ApiService) apiService: ApiService){
-        super(apiService);
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(NoticesService) notices: NoticesService,
+                private navigator: NavigatorService){
+        super(apiService, notices);
     }
+
+	submit(isValid: boolean): Promise<any>{
+		return super.submit(isValid).then(() => this.navigator.navigate(['']));
+	}
 }

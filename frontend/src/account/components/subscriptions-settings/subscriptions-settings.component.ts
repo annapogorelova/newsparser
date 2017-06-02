@@ -1,6 +1,6 @@
 import {Component, ViewChild, OnInit, AfterViewInit} from '@angular/core';
-import {NavigatorService, ApiService} from '../../../shared';
 import {ActivatedRoute} from '@angular/router';
+import {ApiService, NoticesService, NavigatorService} from '../../../shared';
 
 @Component({
     selector: 'subscriptions-settings',
@@ -13,7 +13,6 @@ import {ActivatedRoute} from '@angular/router';
  */
 export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 	selectedTabId: string = 'subscribed';
-	responseMessage: string;
 	submitSucceeded: boolean;
 	submitFailed: boolean;
 	submitCompleted: boolean;
@@ -27,7 +26,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 
     constructor(private apiService: ApiService,
                 private navigator: NavigatorService,
-                private route: ActivatedRoute) {}
+                private route: ActivatedRoute,
+                private notices: NoticesService) {}
 
     ngOnInit() {
 	    this.resetForm();
@@ -62,7 +62,6 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 		this.submitFailed = false;
 		this.submitCompleted = false;
 		this.submitInProgress = false;
-		this.responseMessage = null;
 	};
 
 	setRequestCompleted(succeeded: boolean, message: string){
@@ -70,7 +69,7 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 		this.submitCompleted = true;
 		this.submitSucceeded = succeeded;
 		this.submitFailed = !this.submitSucceeded;
-		this.responseMessage = message;
+		this.submitSucceeded ? this.notices.success(message) : this.notices.error(message);
 	};
 
     /**

@@ -1,7 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {AuthService} from '../../../shared/services/auth/auth.service';
-import {ExternalAuthService} from '../../../shared/modules/external-auth/external-auth.service';
-import {IForm} from '../../../shared/abstract/base-form/base-form';
+import {AuthService, ExternalAuthService, IForm, NoticesService} from '../../../shared';
 
 @Component({
     templateUrl: 'external-sign-in.component.html',
@@ -17,7 +15,6 @@ export class ExternalSignInComponent implements IForm{
     submitCompleted: boolean;
     submitFailed: boolean;
     submitSucceeded: boolean;
-    responseMessage: string;
     validationErrors: Array<string>;
     formData: any;
 
@@ -31,6 +28,7 @@ export class ExternalSignInComponent implements IForm{
     @Output() onSignInInProgress: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private authService: AuthService,
+                private notices: NoticesService,
                 public externalAuthService: ExternalAuthService){
     }
 
@@ -44,7 +42,6 @@ export class ExternalSignInComponent implements IForm{
     onSubmitSucceeded(response: any): Promise<any> {
         this.submitInProgress = false;
         this.submitFailed = false;
-        this.responseMessage = '';
         this.onSignInSucceeded.emit(response);
         return Promise.resolve(response);
     }
@@ -56,7 +53,7 @@ export class ExternalSignInComponent implements IForm{
         }
         this.submitInProgress = false;
         this.submitFailed = true;
-        this.responseMessage = error.message;
+        this.notices.error(error.message);
         this.onSignInFailed.emit(error);
         return Promise.reject(error);
     }

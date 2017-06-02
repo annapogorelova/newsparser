@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {ApiService} from "../../../shared/services/api/api.service";
-import {BaseForm} from "../../../shared/abstract/base-form/base-form";
+import {ApiService, BaseForm, NoticesService} from '../../../shared';
 
 /**
  * Component contains functionality for creating user account
@@ -20,7 +19,8 @@ export class SignUpComponent extends BaseForm  {
         confirmPassword: ''
     };
     
-    constructor(@Inject(ApiService) apiService: ApiService){
-        super(apiService);
+    constructor(@Inject(ApiService) apiService: ApiService,
+                @Inject(NoticesService) notices: NoticesService){
+        super(apiService, notices);
     }
 }

@@ -1,4 +1,5 @@
-import {ApiService} from "../../services/api/api.service";
+import {ApiService} from '../../services';
+import {NoticesService} from '../../modules';
 
 /**
  * Interface contains a declaration of methods and properties for a basic form
@@ -8,7 +9,6 @@ export interface IForm {
     submitCompleted: boolean;
     submitFailed: boolean;
     submitSucceeded: boolean;
-    responseMessage: string;
     validationErrors: Array<string>;
     formData: any;
 
@@ -27,14 +27,13 @@ export abstract class BaseForm implements IForm {
     submitCompleted: boolean;
     submitFailed: boolean;
     submitSucceeded: boolean;
-    responseMessage: string;
     validationErrors: Array<string>;
     abstract formData: any;
 
     protected abstract apiRoute: string;
     protected abstract method: string;
-
-    constructor(protected apiService: ApiService){}
+    constructor(protected apiService: ApiService,
+                protected notices: NoticesService){}
 
     /**
      * Resets the form settings
@@ -44,7 +43,6 @@ export abstract class BaseForm implements IForm {
         this.submitCompleted = false;
         this.submitFailed = false;
         this.submitSucceeded = false;
-        this.responseMessage = '';
     };
 
     /**
@@ -52,7 +50,7 @@ export abstract class BaseForm implements IForm {
      * @param isValid
      * @returns {Promise<T>|Promise<TResult|T>|Promise<R>|any}
      */
-    submit(isValid: boolean) {
+    submit(isValid: boolean): Promise<any>{
         if(!isValid){
             return;
         }
@@ -73,7 +71,7 @@ export abstract class BaseForm implements IForm {
         this.submitSucceeded = true;
         this.submitFailed = false;
         if(response){
-            this.responseMessage = response.message;
+            this.notices.success(response.message);
         }
 
         return Promise.resolve(response);
@@ -90,10 +88,17 @@ export abstract class BaseForm implements IForm {
         this.submitFailed = true;
         
         if(error){
-            this.responseMessage = error.message;
+	        if(error.message){
+		        this.notices.error(error.message);
+	        }
+
             if(error.validationErrors){
                 this.validationErrors = error.validationErrors.map(function(e: any){ return e['message'];});
             }
+
+	        for(var i = 0; i < this.validationErrors.length; i++){
+		        this.notices.error(this.validationErrors[i]);
+	        }
         }
 
         return Promise.reject(error);
