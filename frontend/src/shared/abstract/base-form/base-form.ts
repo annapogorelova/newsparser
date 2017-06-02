@@ -1,5 +1,6 @@
 import {ApiService} from '../../services';
 import {NoticesService} from '../../modules';
+import {AppSettings} from '../../../app/app.settings';
 
 /**
  * Interface contains a declaration of methods and properties for a basic form
@@ -90,9 +91,8 @@ export abstract class BaseForm implements IForm {
         this.submitFailed = true;
 
         if (error) {
-            if (error.message) {
-                this.notices.error(error.message);
-            }
+            var errorMessage = error.message || AppSettings.DEFAULT_ERROR_MESSAGE;
+            this.notices.error(errorMessage);
 
             if (error.validationErrors) {
                 this.validationErrors = error.validationErrors.map(function (e:any) {

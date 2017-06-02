@@ -10,5 +10,7 @@ export class AppSettings {
     public static FACEBOOK_CLIENT_ID = '514371415617815';
     public static FACEBOOK_API_VERSION = 'v2.8';
     
+    public static DEFAULT_ERROR_MESSAGE = 'Something went wrong';
+    
     public static SIDEBAR_WIDTH_PX = 350;
 }
