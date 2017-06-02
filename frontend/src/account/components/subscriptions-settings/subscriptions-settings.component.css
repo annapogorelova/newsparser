@@ -7,10 +7,6 @@
     padding-bottom: 15px;
 }
 
-:host /deep/ .news-sources-container {
-    height: 40vh;
-}
-
 :host /deep/ .tab-content {
     padding: 5px 0 5px 0;
 }

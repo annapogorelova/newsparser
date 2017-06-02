@@ -69,13 +69,13 @@ export abstract class BaseList {
      * @param params
      * @returns {any}
      */
-    protected loadMoreData = (params: any) => {
+    protected loadMoreData = (params: any, refresh: boolean = false) => {
         if(this.loadingInProgress){
             return Promise.reject({});
         }
 
         this.pager.setPage(this.pager.getPage() + 1);
-        return this.loadData(params);
+        return this.loadData(params, refresh);
     };
 
     /**

@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Inject} from '@angular/core';
+import {Component, Output, EventEmitter, Inject, Input} from '@angular/core';
 import {ISelectList, AbstractDataProviderService, PagerServiceProvider} from '../../../../shared';
 import {BaseNewsSourcesListComponent} from '../base-news-sources-list';
 
@@ -12,7 +12,11 @@ export class NewsSourcesMultiSelectList
 	implements ISelectList {
 
 	protected apiRoute: string = 'newsSources';
-	public selectedSourcesIds: Array<any> = [];
+	protected onlySubscribed: boolean;
+
+	selectedSourcesIds: Array<any> = [];
+
+	@Input() subscribed: boolean;
 
 	@Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
@@ -23,7 +27,8 @@ export class NewsSourcesMultiSelectList
 	}
 
 	ngOnInit(){
-		this.loadData(super.getRequestParams(), true).then(() => this.handleLoadedNewsSources());
+		this.onlySubscribed = this.subscribed;
+		super.resetPage().then(() => this.handleLoadedNewsSources());
 	};
 
 	handleLoadedNewsSources() {
@@ -54,11 +59,11 @@ export class NewsSourcesMultiSelectList
 		return this.selectedSourcesIds.indexOf(source.id) !== -1;
 	};
 
-	reload(): Promise<any> {
-		return super.reload().then(() => this.onReload());
+	reset(): Promise<any> {
+		return super.resetPage().then(() => this.onReset());
 	};
 
-	onReload() {
+	onReset() {
 		this.selectedSourcesIds = [];
 	};
 

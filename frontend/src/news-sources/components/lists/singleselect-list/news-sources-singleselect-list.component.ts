@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Inject} from '@angular/core';
+import {Component, Output, Input, EventEmitter, Inject} from '@angular/core';
 import {BaseNewsSourcesListComponent} from '../base-news-sources-list';
 import {AbstractDataProviderService, PagerServiceProvider, ISelectList} from '../../../../shared';
 
@@ -12,9 +12,13 @@ export class NewsSourcesSingleSelectList
 	implements ISelectList {
 
 	protected apiRoute: string = 'newsSources';
+	protected onlySubscribed: boolean;
+
 	selectedSource: any = null;
 	currentPopover: any;
-
+	
+	@Input() subscribed: boolean;
+	
 	@Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
 	@Output() onDeselect: EventEmitter<any> = new EventEmitter<any>();
 
@@ -24,7 +28,8 @@ export class NewsSourcesSingleSelectList
 	}
 
 	ngOnInit(){
-		this.loadData(super.getRequestParams(), true);
+		this.onlySubscribed = this.subscribed;
+		super.resetPage();
 	};
 
 	select(source:any): void {
@@ -45,14 +50,6 @@ export class NewsSourcesSingleSelectList
 
 	isSelected(source:any): boolean {
 		return this.selectedSource && this.selectedSource.id === source.id;
-	};
-
-	reload(): Promise<any> {
-		return super.reload().then(() => this.onReload());
-	};
-
-	onReload = () => {
-		this.selectedSource = null;
 	};
 
 	setCurrentSource(event: any){
@@ -90,5 +87,21 @@ export class NewsSourcesSingleSelectList
 		if(sources.length){
 			sources[0].isSubscribed = isSubscribed;
 		}
+	};
+
+	nextPage(): Promise<any> {
+		return super.nextPage(true);
+	};
+
+	prevPage(): Promise<any> {
+		return super.prevPage(true);
+	};
+
+	firstPage(): Promise<any> {
+		return super.firstPage(true);
+	};
+
+	lastPage(): Promise<any> {
+		return super.lastPage(true);
 	};
 }

@@ -52,8 +52,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 		this.navigator.navigate([], {fragment: this.selectedTabId});
 		this.resetForm();
 		var activeComponent = this.tabsComponentsMap[this.selectedTabId];
-		if(activeComponent && typeof activeComponent['reload'] === 'function'){
-			activeComponent.reload();
+		if(activeComponent && typeof activeComponent['resetPage'] === 'function'){
+			activeComponent.resetPage();
 		}
 	};
 
@@ -129,9 +129,9 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 
 	private refreshList(){
 		if(this.selectedTabId === 'subscribedSources'){
-			this.subscribedSourcesList.reload();
+			this.subscribedSourcesList.resetPage();
 		} else if(this.selectedTabId === 'allSources'){
-			this.allSourcesList.reload();
+			this.allSourcesList.resetPage();
 		}
 	};
 

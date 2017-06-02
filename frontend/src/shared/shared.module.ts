@@ -24,7 +24,8 @@ import {
     PageNotFoundComponent,
     RefreshButtonComponent,
     SearchComponent,
-    TagListComponent
+    TagListComponent,
+    PaginationComponent
 } from './components';
 
 @NgModule({
@@ -56,7 +57,8 @@ import {
         RefreshButtonComponent,
         SearchComponent,
         TagListComponent,
-        EqualityValidator
+        EqualityValidator,
+        PaginationComponent
     ],
     exports: [
         PageNotFoundComponent,
@@ -65,7 +67,8 @@ import {
         GoTopButtonModule,
         TagListComponent,
         ExternalAuthModule,
-        EqualityValidator
+        EqualityValidator,
+        PaginationComponent
     ]
 })
 

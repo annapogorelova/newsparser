@@ -34,9 +34,7 @@
 }
 
 :host /deep/ .news-sources-list-container {
-    border: 1px solid #2780E3;
     height: 100%;
-    overflow-y: auto;
 }
 
 :host /deep/ .news-sources-list .list-group-item {

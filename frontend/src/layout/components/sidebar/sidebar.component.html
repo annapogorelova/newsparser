@@ -21,7 +21,7 @@
                         <news-sources-multiselect-list #newsSourcesList
                                       (onSelect)="onSelectSource($event)"
                                       (onDeselect)="onDeselectSource($event)"
-                                      [onlySubscribed]="true"
+                                      [subscribed]="true"
                                       [initiallySelectedSourcesIds]="selectedSourcesIds"
                                       [noDataText]="'No subscribed RSS sources'">
                         </news-sources-multiselect-list>
