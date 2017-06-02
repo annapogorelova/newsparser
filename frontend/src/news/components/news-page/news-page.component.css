@@ -10,6 +10,7 @@
 
 :host /deep/ .sidebar-toggler-container i {
     color: white;
+    vertical-align: baseline;
 }
 
 :host /deep/ .card-block {

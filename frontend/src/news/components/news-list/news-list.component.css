@@ -129,7 +129,6 @@
 
 :host /deep/ .news-item-info-container span.badge {
     display: block;
-    cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

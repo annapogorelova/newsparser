@@ -5,3 +5,7 @@
 :host /deep/ button {
     cursor: pointer;
 }
+
+:host /deep/ i {
+    vertical-align: baseline;
+}
