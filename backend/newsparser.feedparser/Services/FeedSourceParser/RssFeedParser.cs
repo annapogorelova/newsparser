@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NewsParser.FeedParser.Exceptions;
+using NewsParser.FeedParser.Helpers;
 
 namespace NewsParser.FeedParser.Services.FeedSourceParser
 {
@@ -88,9 +89,19 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
             {
                 return enclosureImageUrl;
             }
+
+            string firstImageUrl = null;
+            if(!string.IsNullOrEmpty(xml.Element("description")?.Value))
+            {
+                firstImageUrl = ExtractFirstImage(xml.Element("description").Value.RemoveTabulation(" "));
+            }
             
-            return !string.IsNullOrEmpty(xml.Element("description")?.Value) ? 
-                ExtractFirstImage(xml.Element("description").Value) : null;
+            if(string.IsNullOrEmpty(firstImageUrl))
+            {
+                firstImageUrl = ExtractFirstImage(xml.Value.RemoveTabulation(" "));
+            }
+            
+            return firstImageUrl;
         }
 
         public string GetItemLink(XElement xml)
