@@ -10,3 +10,7 @@
 :host /deep/ .tab-content {
     padding: 5px 0 5px 0;
 }
+
+:host /deep/ h5 {
+    padding-bottom: 10px;
+}

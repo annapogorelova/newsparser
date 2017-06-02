@@ -9,3 +9,11 @@
 :host /deep/ .tab-content {
     padding: 5px;
 }
+
+:host /deep/ h5 {
+    padding-bottom: 10px;
+}
+
+:host /deep/ .validation-error-text {
+    color: #BD362F;
+}

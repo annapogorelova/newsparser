@@ -10,3 +10,7 @@
     width: 35px;
     height: 30px;
 }
+
+:host /deep/ .validation-error-text {
+    color: #BD362F;
+}

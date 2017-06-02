@@ -13,3 +13,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+:host /deep/ .validation-error-text {
+    color: #BD362F;
+}
