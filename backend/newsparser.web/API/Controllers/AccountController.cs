@@ -179,6 +179,26 @@ namespace NewsParser.API.Controllers
             );
         }
 
+        [Authorize]
+        [HttpPost("passwordCreation")]
+        [ValidateModel]
+        public async Task<JsonResult> Post([FromBody]PasswordCreateModel model)
+        {
+            var user = _authService.GetCurrentUser();
+            var result = await _authService.AddPasswordAsync(user, model.Password);
+
+            if(result.Succeeded)
+            {
+                return MakeSuccessResponse(HttpStatusCode.OK, "Password was successfully created.");
+            }
+
+            return MakeIdentityErrorResponse(
+                HttpStatusCode.InternalServerError, 
+                "Failed to create the password.", 
+                result
+            );
+        }
+
         private JsonResult MakeIdentityErrorResponse(HttpStatusCode status, string errorMessage, IdentityResult result)
         {
             string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;

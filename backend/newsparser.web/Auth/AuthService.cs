@@ -201,6 +201,11 @@ namespace NewsParser.Auth
             return _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
+        public Task<IdentityResult> AddPasswordAsync(ApplicationUser user, string password)
+        {
+            return _userManager.AddPasswordAsync(user, password);
+        }
+
         public Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal)
         {
             return _userManager.GetUserAsync(principal);

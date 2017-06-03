@@ -46,6 +46,8 @@ namespace NewsParser.Auth
 
         Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword);
 
+        Task<IdentityResult> AddPasswordAsync(ApplicationUser user, string password);
+        
         Task<IdentityResult> UpdateAsync(ApplicationUser user);
 
         Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal);
