@@ -145,7 +145,7 @@
 }
 
 :host /deep/ .selected-sources-count {
-    margin-top: 5px;
+    margin-top: 2px;
     padding: 5px 10px 5px 10px;
     color: #373a3c;
 }

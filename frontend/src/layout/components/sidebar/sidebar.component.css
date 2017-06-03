@@ -63,6 +63,7 @@
 
 :host /deep/ div.news-sources-card div.card-block {
     padding: 0;
+    background-color: #F7F7F9;
 }
 
 :host /deep/ div.news-sources-card .list-group-item {
