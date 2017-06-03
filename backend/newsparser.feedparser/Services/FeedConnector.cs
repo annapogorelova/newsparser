@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -113,8 +114,9 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 HttpClient httpClient = new HttpClient();
-                string result = await httpClient.GetStringAsync(rssUrl);
-                return XElement.Parse(result);
+                var response = await httpClient.GetByteArrayAsync(rssUrl);
+                var responseString = Encoding.UTF8.GetString(response, 0, response.Length);
+                return XElement.Parse(responseString);
             }
             catch (Exception e)
             {
