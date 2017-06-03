@@ -2,13 +2,15 @@ import {Injectable} from '@angular/core';
 import {AuthProviderService} from './auth-provider.service';
 import {Http, Headers, RequestOptions, Response, URLSearchParams} from '@angular/http';
 import {AppSettings} from '../../../app/app.settings';
+import {CacheService} from '../cache/cache.service';
 
 @Injectable()
 export class AuthService {
     private supportedExternalProviders:Array<string> = ['facebook', 'google'];
 
     constructor(private http:Http,
-                private authProvider:AuthProviderService) {
+                private authProvider:AuthProviderService,
+                private cacheService:CacheService) {
     }
 
     loadUser(refresh:boolean = false):Promise<any> {
@@ -41,7 +43,7 @@ export class AuthService {
             });
     };
 
-    signIn = function (username:string, password:string):Promise<any> {
+    signIn(username:string, password:string):Promise<any> {
         return new Promise((resolve, reject) => {
             var requestBody = `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&scope=offline_access`;
             return this.postToken(requestBody)
@@ -51,7 +53,7 @@ export class AuthService {
         });
     };
 
-    externalSignIn = function (accessToken:string, provider:string):Promise<any> {
+    externalSignIn(accessToken:string, provider:string):Promise<any> {
         if (this.supportedExternalProviders.indexOf(provider.toLowerCase()) === -1) {
             throw new Error(`${provider} external auth provider is no supported`);
         }
@@ -60,12 +62,11 @@ export class AuthService {
             .then((auth:any) => this.loadUser(true));
     };
 
-    signOut = function ():Promise<any> {
+    signOut():Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
                 let user:any = this.authProvider.getUser();
-                this.authProvider.clearAuth();
-                this.authProvider.clearUser();
+                this.cacheService.clear();
                 resolve(user);
             } else {
                 reject();
@@ -73,7 +74,7 @@ export class AuthService {
         });
     };
 
-    refreshAuth = ():Promise<any> => {
+    refreshAuth():Promise<any> {
         return new Promise((resolve, reject) => {
             var refreshToken = this.authProvider.getRefreshToken();
             if (!refreshToken) {
@@ -87,7 +88,7 @@ export class AuthService {
         });
     };
 
-    private postToken = (requestBody:string) => {
+    private postToken(requestBody:string) {
         return new Promise((resolve, reject) => {
             var requestHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
             var requestOptions = new RequestOptions({headers: requestHeaders});
@@ -98,7 +99,7 @@ export class AuthService {
         });
     };
 
-    private postExternalAuth = (accessToken:string, provider:string) => {
+    private postExternalAuth(accessToken:string, provider:string) {
         var requestBody = `grant_type=urn:ietf:params:oauth:grant-type:${provider}_access_token&assertion=${encodeURIComponent(accessToken)}`;
         return this.postToken(requestBody);
     };

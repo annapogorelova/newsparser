@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {NavigatorService} from '../../../shared';
+import {NavigatorService, CacheService} from '../../../shared';
 import {AppSettings} from '../../../app/app.settings';
 
 @Component({
@@ -24,7 +24,8 @@ export class NewsPageComponent implements OnInit {
     marginLeft:number = this.defaultMarginLeft;
 
     constructor(private navigator:NavigatorService,
-                private route:ActivatedRoute) {
+                private route:ActivatedRoute,
+                private cacheService:CacheService) {
         this.marginLeft = AppSettings.SIDEBAR_WIDTH_PX;
     }
 
@@ -41,12 +42,37 @@ export class NewsPageComponent implements OnInit {
 
         this.route.queryParams
             .map((queryParams) => queryParams['tags'])
-            .subscribe((tags:string) => this.selectedTags = tags ? tags.split(',') : []);
+            .subscribe((tags:string) => this.initializeSelectedTags(tags));
 
         this.route.queryParams
             .map((queryParams) => queryParams['sources'])
-            .subscribe((sources:string) =>
-                this.selectedSourcesIds = sources ? sources.split(',').map(id => parseInt(id)) : []);
+            .subscribe((sources:string) => this.initializeSelectedSources(sources));
+    };
+
+    private initializeSelectedSources(sources:string) {
+        var sourcesIdsFromUrl = sources ? sources.split(',').map(id => parseInt(id)) : [];
+        var sourcesIdsFromCache = this.cacheService.get('selectedSourcesIds') || [];
+
+        if (sourcesIdsFromUrl.length) {
+            this.selectedSourcesIds = sourcesIdsFromUrl;
+            this.cacheService.set('selectedSourcesIds', this.selectedSourcesIds);
+        } else if (sourcesIdsFromCache.length) {
+            this.selectedSourcesIds = sourcesIdsFromCache;
+            this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
+        }
+    };
+
+    private initializeSelectedTags(tags:string) {
+        var tagsFromUrl = tags ? tags.split(',') : [];
+        var tagsFromCache = this.cacheService.get('selectedTags') || [];
+
+        if (tagsFromUrl.length) {
+            this.selectedTags = tagsFromUrl;
+            this.cacheService.set('selectedTags', this.selectedTags);
+        } else if (tagsFromCache.length) {
+            this.selectedTags = tagsFromCache;
+            this.navigator.setQueryParam('tags', this.selectedTags.join(','));
+        }
     };
 
     onSidebarHidden() {
@@ -59,6 +85,11 @@ export class NewsPageComponent implements OnInit {
 
     onSourceSelected(event:any) {
         this.selectedSourcesIds.push(event.source.id);
+
+        var selectedSources = this.cacheService.get('selectedSourcesIds') || [];
+        selectedSources.push(event.source.id);
+        this.cacheService.set('selectedSourcesIds', selectedSources);
+
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
         this.reloadNews();
     };
@@ -67,18 +98,33 @@ export class NewsPageComponent implements OnInit {
         this.selectedSourcesIds = this.selectedSourcesIds.filter(function (item) {
             return item !== event.source.id;
         });
+
+        var selectedSources = this.cacheService.get('selectedSourcesIds');
+        if (selectedSources) {
+            selectedSources = selectedSources.filter(function (item:number) {
+                return item !== event.source.id;
+            });
+            this.cacheService.set('selectedSourcesIds', selectedSources);
+        }
+
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
         this.reloadNews();
     };
 
     onSourcesCleared(event:any) {
         this.selectedSourcesIds = [];
+        this.cacheService.set('selectedSourcesIds', null);
         this.navigator.setQueryParam('sources', this.selectedSourcesIds.join(','));
         this.reloadNews();
     };
 
     onTagSelected(event:any) {
         this.selectedTags.push(event.tag);
+
+        var selectedTags = this.cacheService.get('selectedTags') || [];
+        selectedTags.push(event.tag);
+        this.cacheService.set('selectedTags', selectedTags);
+
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reloadNews();
     };
@@ -88,12 +134,21 @@ export class NewsPageComponent implements OnInit {
             return selectedTag !== event.tag;
         });
 
+        var selectedTags = this.cacheService.get('selectedTags');
+        if (selectedTags) {
+            selectedTags = selectedTags.filter(function (item:number) {
+                return item !== event.tag;
+            });
+            this.cacheService.set('selectedTags', selectedTags);
+        }
+
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
         this.reloadNews();
     };
 
     onTagsCleared() {
         this.selectedTags = [];
+        this.cacheService.set('selectedTags', null);
         this.navigator.setQueryParam('tags', null);
         this.reloadNews();
     };
