@@ -72,7 +72,11 @@ namespace NewsParser.BL.Services.NewsSources
             }
 
             total = newsSources.Count();
-            return newsSources.OrderBy(s => s.Name).Skip(pageIndex).Take(pageSize);
+            return newsSources
+                .OrderByDescending(s => s.UsersSources.Count())
+                .ThenBy(s => s.Name)
+                .Skip(pageIndex)
+                .Take(pageSize);
         }
 
         public NewsSource GetNewsSourceById(int id)
