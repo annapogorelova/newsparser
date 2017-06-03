@@ -20,6 +20,10 @@
         <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
     </div>
 </div>
+<div class="selected-sources-count pull-left">
+    <small *ngIf="selectedSourcesIds.length">{{selectedSourcesIds.length}} selected</small>
+    <small *ngIf="!selectedSourcesIds.length">Nothing selected</small>
+</div>
 <div class="pagination pull-right">
     <pagination [isFirstPage]="isFirstPage()"
                 [isLastPage]="isLastPage()"

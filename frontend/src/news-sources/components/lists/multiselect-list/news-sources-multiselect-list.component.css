@@ -143,3 +143,9 @@
     width: 300px;
     margin-left: 15%;
 }
+
+:host /deep/ .selected-sources-count {
+    margin-top: 5px;
+    padding: 5px 10px 5px 10px;
+    color: #373a3c;
+}
