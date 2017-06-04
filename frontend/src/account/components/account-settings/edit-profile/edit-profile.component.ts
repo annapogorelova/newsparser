@@ -1,5 +1,10 @@
-import {Component, OnInit, Inject, ViewChild} from '@angular/core';
-import {ApiService, BaseForm, AuthService, NavigatorService, NoticesService} from '../../../../shared';
+import {Component, OnInit, Inject, ViewChild, Input} from '@angular/core';
+import {
+    ApiService,
+    BaseForm,
+    NavigatorService,
+    NoticesService
+} from '../../../../shared';
 
 @Component({
     templateUrl: 'edit-profile.component.html',
@@ -18,20 +23,19 @@ export class EditProfileComponent extends BaseForm implements OnInit {
     };
 
     formDataChanged:boolean;
-    user:any;
+    @Input() user:any;
 
     @ViewChild('f') form:any;
 
     constructor(@Inject(ApiService) apiService:ApiService,
                 @Inject(NoticesService) notices:NoticesService,
-                private authService:AuthService,
                 private navigator:NavigatorService) {
         super(apiService, notices);
     }
 
     ngOnInit() {
         this.navigator.navigate([], {fragment: 'profile'});
-        this.loadAccount();
+        this.initializeFormData(this.user);
     };
 
     ngAfterViewInit() {
@@ -51,16 +55,12 @@ export class EditProfileComponent extends BaseForm implements OnInit {
         this.formDataChanged = false;
     };
 
-    loadAccount(refresh:boolean = false) {
-        this.authService.loadUser(refresh).then((data:any) => this.initializeFormData(data));
-    };
-
     initializeFormData(data:any) {
         this.user = data;
         this.formData.email = data.email;
     };
 
     submit(isValid:boolean):Promise<any> {
-        return super.submit(isValid).then(() => this.loadAccount(true));
+        return super.submit(isValid);
     };
 }

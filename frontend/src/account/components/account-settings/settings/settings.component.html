@@ -3,15 +3,17 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <h5>Edit your profile settings</h5>
-            <ngb-tabset [activeId]="selectedTabId">
+            <ngb-tabset [activeId]="selectedTabId"
+                        (tabChange)="onTabChange($event)">
                 <ngb-tab id="profile" title="Profile">
                     <ng-template ngbTabContent>
-                        <edit-profile></edit-profile>
+                        <edit-profile *ngIf="user" [user]="user"></edit-profile>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab id="password" title="Password">
                     <ng-template ngbTabContent>
-                        <change-password></change-password>
+                        <change-password *ngIf="user && user.hasPassword"></change-password>
+                        <password-creation *ngIf="user && !user.hasPassword"></password-creation>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
