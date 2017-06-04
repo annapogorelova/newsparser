@@ -21,6 +21,7 @@
 
 :host /deep/ .news-source-item.active {
     color: white;
+    margin-bottom: 0;
 }
 
 :host /deep/ .news-source-item.active:hover {
