@@ -36,6 +36,7 @@
 
 :host /deep/ .news-sources-list-container {
     height: 100%;
+    overflow-y: auto;
 }
 
 :host /deep/ .news-sources-list .list-group-item {
