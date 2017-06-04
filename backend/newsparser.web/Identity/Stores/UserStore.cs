@@ -151,7 +151,8 @@ namespace NewsParser.Identity.Stores
 
         public Task<string> GetPasswordHashAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.PasswordHash);
+            string passwordHash = string.IsNullOrEmpty(user.PasswordHash) ? null : user.PasswordHash;
+            return Task.FromResult(passwordHash);
         }
 
         public Task<bool> HasPasswordAsync(ApplicationUser user, CancellationToken cancellationToken)
