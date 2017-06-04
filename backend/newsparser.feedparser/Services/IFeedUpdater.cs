@@ -12,37 +12,37 @@ namespace newsparser.FeedParser.Services
         /// <summary>
         /// Updates all feed
         /// </summary>
-        /// <param name="newsSources">News sources to update</param>
-        void UpdateFeed(IEnumerable<NewsSource> newsSources);
+        /// <param name="channels">Channels to update</param>
+        void UpdateFeed(IEnumerable<Channel> channels);
 
         /// <summary>
         /// Updates all feed (async mode)
         /// </summary>
-        /// <param name="newsSources">News sources to update</param>
+        /// <param name="channels">Channels to update</param>
         /// <returns>Task</returns>
-        Task UpdateFeedAsync(IEnumerable<NewsSource> newsSources);
+        Task UpdateFeedAsync(IEnumerable<Channel> channels);
 
         /// <summary>
-        /// Updates a single news source
+        /// Updates a single channel
         /// </summary>
-        /// <param name="sourceId">Source id</param>
+        /// <param name="sourceId">Channel id</param>
         /// <returns></returns>
-        void UpdateFeedSource(int sourceId);
+        void UpdateChannel(int sourceId);
 
         /// <summary>
-        /// Updates a single news source (async)
+        /// Updates a single channel (async)
         /// </summary>
-        /// <param name="sourceId">Source id</param>
+        /// <param name="sourceId">Channel id</param>
         /// <returns></returns>
-        Task UpdateFeedSourceAsync(int sourceId);
+        Task UpdateChannelAsync(int sourceId);
 
         /// <summary>
-        /// Adds the news source by RSS url
+        /// Adds the channel
         /// </summary>
-        /// <param name="rssUrl">RSS url</param>
-        /// <param name="isPrivate">Indicates whether this news source is private</param>
-        /// <param name="userId">User id to add news source to</param>
-        /// <returns>NewsSource object</returns>
-        Task<NewsSource> AddFeedSource(string rssUrl, bool isPrivate, int userId);
+        /// <param name="feedUrl">Feed url</param>
+        /// <param name="isPrivate">Indicates whether this channel is private</param>
+        /// <param name="userId">User id to add channel to</param>
+        /// <returns>Channel object</returns>
+        Task<Channel> AddFeedChannel(string feedUrl, bool isPrivate, int userId);
     }
 }

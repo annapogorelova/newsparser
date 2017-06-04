@@ -3,7 +3,7 @@ using FluentScheduler;
 using NewsParser.FeedParser;
 using Microsoft.Extensions.DependencyInjection;
 using newsparser.scheduler;
-using NewsParser.BL.Services.NewsSources;
+using NewsParser.BL.Services.Channels;
 using NewsParser.FeedParser.Exceptions;
 using newsparser.FeedParser.Services;
 using System;
@@ -16,13 +16,13 @@ namespace NewsParser.Scheduler
     public class FeedUpdateJob : IJob
     {
         private readonly IFeedUpdater _feedUpdater;
-        private readonly INewsSourceBusinessService _newsSourceBusinessService;
+        private readonly IChannelDataService _channelDataService;
         private readonly object _feedUpadteLock = new object();
 
         public FeedUpdateJob()
         {
             _feedUpdater = ServiceLocator.Instance.GetService<IFeedUpdater>();
-            _newsSourceBusinessService = ServiceLocator.Instance.GetService<INewsSourceBusinessService>();
+            _channelDataService = ServiceLocator.Instance.GetService<IChannelDataService>();
         }
 
         public void Execute()
@@ -31,20 +31,20 @@ namespace NewsParser.Scheduler
             {
                 try
                 {
-                    var newsSources = _newsSourceBusinessService.GetNewsSourcesForUpdate();
-                    if(!newsSources.Any())
+                    var channels = _channelDataService.GetForUpdate();
+                    if(!channels.Any())
                     {
                         return;
                     }
 
-                    foreach (var newsSource in newsSources)
+                    foreach (var channel in channels)
                     {
-                        _feedUpdater.UpdateFeedSource(newsSource.Id);
+                        _feedUpdater.UpdateChannel(channel.Id);
                     }
                 }
                 catch (FeedParsingException e)
                 {
-                    throw new JobExecutionException($"Failed to update feed update", e);
+                    throw new JobExecutionException($"Failed to update the feed", e);
                 }
             }
         }

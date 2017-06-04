@@ -11,12 +11,12 @@ namespace NewsParser.DAL
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<NewsItem> News { get; set; }
-        public DbSet<NewsSource> NewsSources { get; set; }
-        public DbSet<NewsTag> NewsTags { get; set; }
-        public DbSet<NewsTagsNews> NewsTagsNews { get; set; }
-        public DbSet<NewsSourceNews> NewsSourcesNews { get; set; }
-        public DbSet<UserNewsSource> UserSources { get; set; }
+        public DbSet<FeedItem> FeedItems { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<TagFeedItem> TagFeedItems { get; set; }
+        public DbSet<ChannelFeedItem> ChannelFeedItems { get; set; }
+        public DbSet<UserChannel> UserChannels { get; set; }
         public DbSet<UserExternalId> UserExternalIds { get; set; }
         public DbSet<Token> Tokens { get; set; }
 
@@ -29,59 +29,59 @@ namespace NewsParser.DAL
         {
             modelBuilder.Entity<User>().ToTable("users");
 
-            modelBuilder.Entity<UserNewsSource>().ToTable("user_news_sources");
+            modelBuilder.Entity<UserChannel>().ToTable("user_channels");
 
-            modelBuilder.Entity<UserNewsSource>()
-                .HasOne(ns => ns.User)
-                .WithMany(u => u.Sources)
-                .HasForeignKey(ns => ns.UserId);
+            modelBuilder.Entity<UserChannel>()
+                .HasOne(us => us.User)
+                .WithMany(u => u.Channels)
+                .HasForeignKey(us => us.UserId);
 
-            modelBuilder.Entity<UserNewsSource>()
-                .HasOne(ns => ns.Source)
-                .WithMany(s => s.UsersSources)
-                .HasForeignKey(ns => ns.SourceId);
+            modelBuilder.Entity<UserChannel>()
+                .HasOne(us => us.Channel)
+                .WithMany(c => c.Users)
+                .HasForeignKey(us => us.ChannelId);
 
             modelBuilder.Entity<UserExternalId>().ToTable("user_external_ids");
 
             modelBuilder.Entity<UserExternalId>()
-                .HasOne(s => s.User)
+                .HasOne(ue => ue.User)
                 .WithMany(u => u.UserExternalIds)
-                .HasForeignKey(s => s.UserId);
+                .HasForeignKey(ue => ue.UserId);
 
-            modelBuilder.Entity<NewsItem>()
-                .ToTable("news")
-                .HasIndex(n => n.LinkToSource);
+            modelBuilder.Entity<FeedItem>()
+                .ToTable("feed_items")
+                .HasIndex(f => f.LinkToSource);
 
-            modelBuilder.Entity<NewsSourceNews>().ToTable("news_source_news");
+            modelBuilder.Entity<ChannelFeedItem>().ToTable("channels_feed_items");
             
-            modelBuilder.Entity<NewsSourceNews>()
-                .HasOne(ns => ns.Source)
-                .WithMany(s => s.NewsSources)
-                .HasForeignKey(nt => nt.SourceId);
-            modelBuilder.Entity<NewsSourceNews>()
-                .HasOne(ns => ns.NewsItem)
-                .WithMany(n => n.Sources)
-                .HasForeignKey(ns => ns.NewsItemId);
+            modelBuilder.Entity<ChannelFeedItem>()
+                .HasOne(cf => cf.Channel)
+                .WithMany(c => c.Feed)
+                .HasForeignKey(cf => cf.ChannelId);
+            modelBuilder.Entity<ChannelFeedItem>()
+                .HasOne(cf => cf.FeedItem)
+                .WithMany(f => f.Channels)
+                .HasForeignKey(cf => cf.FeedItemId);
 
-            modelBuilder.Entity<NewsTag>()
-                .ToTable("news_tags")
+            modelBuilder.Entity<Tag>()
+                .ToTable("tags")
                 .HasIndex(t => t.Name);
 
-            modelBuilder.Entity<NewsTagsNews>().ToTable("news_tags_news");
+            modelBuilder.Entity<TagFeedItem>().ToTable("tags_feed_items");
 
-            modelBuilder.Entity<NewsTagsNews>()
-                .HasOne(nt => nt.Tag)
-                .WithMany(t => t.TagNewsItems)
-                .HasForeignKey(nt => nt.TagId);
-            modelBuilder.Entity<NewsTagsNews>()
-                .HasOne(nt => nt.NewsItem)
+            modelBuilder.Entity<TagFeedItem>()
+                .HasOne(tf => tf.Tag)
+                .WithMany(t => t.Feed)
+                .HasForeignKey(tf => tf.TagId);
+            modelBuilder.Entity<TagFeedItem>()
+                .HasOne(tf => tf.FeedItem)
                 .WithMany(t => t.Tags)
-                .HasForeignKey(nt => nt.NewsItemId);
+                .HasForeignKey(tf => tf.FeedItemId);
 
-            modelBuilder.Entity<NewsSource>().ToTable("news_sources");
-            modelBuilder.Entity<NewsSource>().HasIndex(s => s.FeedFormat);
-            modelBuilder.Entity<NewsSource>().HasIndex(s => s.FeedUrl);
-            modelBuilder.Entity<NewsSource>().HasIndex(s => s.Language);
+            modelBuilder.Entity<Channel>().ToTable("channels");
+            modelBuilder.Entity<Channel>().HasIndex(s => s.FeedFormat);
+            modelBuilder.Entity<Channel>().HasIndex(s => s.FeedUrl);
+            modelBuilder.Entity<Channel>().HasIndex(s => s.Language);
 
             modelBuilder.Entity<Token>().ToTable("tokens");
         }

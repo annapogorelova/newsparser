@@ -6,28 +6,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsParser.API.Models;
-using NewsParser.BL.Services.NewsSources;
+using NewsParser.BL.Services.Channels;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Identity.Models;
 
 namespace NewsParser.API.Controllers
 {
     /// <summary>
-    /// Controller for managing news sources subscriptions
+    /// Controller for managing channels subscriptions
     /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     public class SubscriptionController: BaseController
     {
-        private readonly INewsSourceBusinessService _newsSourceBusinessService;
+        private readonly IChannelDataService _channelDataService;
         private readonly ILogger<SubscriptionController> _log;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public SubscriptionController(INewsSourceBusinessService newsSourceBusinessService, 
+        public SubscriptionController(IChannelDataService channelDataService, 
             ILogger<SubscriptionController> log,
             UserManager<ApplicationUser> userManager)
         {
-            _newsSourceBusinessService = newsSourceBusinessService;
+            _channelDataService = channelDataService;
             _log = log;
             _userManager = userManager;
         }
@@ -37,32 +37,33 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Post(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
+            if(!_channelDataService.IsVisibleToUser(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found.");
+                return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found.");
             }
-            if(_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
+            if(_channelDataService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this news source.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is already subscribed to this channel.");
             }
-            _newsSourceBusinessService.SubscribeUser(id, user.GetId());
-            return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to news source.");
+
+            _channelDataService.SubscribeUser(id, user.GetId());
+            return MakeSuccessResponse(HttpStatusCode.Created, "Successfully subscribed to channel.");
         }
 
         [HttpDelete("{id:int}")]
         public async Task<JsonResult> Delete(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            if(!_newsSourceBusinessService.IsSourceVisibleToUser(id, user.GetId()))
+            if(!_channelDataService.IsVisibleToUser(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.NotFound, "News source was not found.");
+                return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found.");
             }
-            if(!_newsSourceBusinessService.IsUserSubscribed(id, user.GetId()))
+            if(!_channelDataService.IsUserSubscribed(id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this news source.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this channel.");
             }
-            _newsSourceBusinessService.UnsubscribeUser(id, user.GetId());
-            return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from news source.");
+            _channelDataService.UnsubscribeUser(id, user.GetId());
+            return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from channel.");
         }
     }
 }

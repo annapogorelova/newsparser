@@ -17,14 +17,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NewsParser.Auth;
 using NewsParser.Auth.ExternalAuth;
-using NewsParser.BL.Services.News;
-using NewsParser.BL.Services.NewsSources;
-using NewsParser.BL.Services.NewsTags;
+using NewsParser.BL.Services.Feed;
+using NewsParser.BL.Services.Channels;
+using NewsParser.BL.Services.Tags;
 using NewsParser.BL.Services.Users;
 using NewsParser.DAL;
-using NewsParser.DAL.NewsTags;
-using NewsParser.DAL.Repositories.News;
-using NewsParser.DAL.Repositories.NewsSources;
+using NewsParser.DAL.Tags;
+using NewsParser.DAL.Repositories.Feed;
+using NewsParser.DAL.Repositories.Channels;
 using NewsParser.DAL.Repositories.Users;
 using NewsParser.FeedParser;
 using NewsParser.Helpers.Extensions;
@@ -278,16 +278,16 @@ namespace NewsParser
         private void RegisterDependencies(IServiceCollection services)
         {
             // Data repositories
-            services.AddTransient<INewsRepository, NewsRepository>();
-            services.AddTransient<INewsSourceRepository, NewsSourceRepository>();
-            services.AddTransient<INewsTagRepository, NewsTagRepository>();
+            services.AddTransient<IFeedRepository, FeedRepository>();
+            services.AddTransient<IChannelRepository, ChannelRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITokenRepository, TokenRepository>();
 
             // Business layer services
-            services.AddTransient<INewsBusinessService, NewsBusinessService>();
-            services.AddTransient<INewsSourceBusinessService, NewsSourceBusinessService>();
-            services.AddTransient<INewsTagBusinessService, NewsTagBusinessService>();
+            services.AddTransient<IFeedDataService, FeedDataService>();
+            services.AddTransient<IChannelDataService, ChannelDataService>();
+            services.AddTransient<ITagDataService, TagDataService>();
             services.AddTransient<IUserBusinessService, UserBusinessService>();
 
             services.AddTransient<IFeedConnector, FeedConnector>();

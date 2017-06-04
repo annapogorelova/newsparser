@@ -25,15 +25,15 @@ namespace NewsParser.DAL.Models
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
         
-        public List<UserNewsSource> Sources { get; set; }
+        public List<UserChannel> Channels { get; set; }
 
         public List<UserExternalId> UserExternalIds { get; set; }
 
-        public List<NewsSource> CreatedNewsSources { get; set; }
+        public List<Channel> CreatedChannels { get; set; }
 
         public User()
         {
-            Sources = new List<UserNewsSource>();
+            Channels = new List<UserChannel>();
             UserExternalIds = new List<UserExternalId>();
         }
     }

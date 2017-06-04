@@ -55,7 +55,7 @@ namespace NewsParser.DAL.Repositories.Users
         public IQueryable<User> GetUsersByNewsSource(int sourceId)
         {
             return
-                _dbContext.Users.Where(u => u.Sources.Any(ns => ns.SourceId == sourceId));
+                _dbContext.Users.Where(u => u.Channels.Any(ns => ns.ChannelId == sourceId));
         }
 
         /// <summary>
