@@ -1,7 +1,6 @@
 <div *ngIf="useSearch">
     <search (onSearch)="searchNewsSource($event.inputValue)"
-            (onClear)="searchNewsSource($event)"
-            [placeholderCaption]="'Type news source name...'"></search>
+            (onClear)="searchNewsSource($event)"></search>
 </div>
 <div class="news-sources-list-container">
     <div *ngIf="hasItems()" class="news-sources-list">

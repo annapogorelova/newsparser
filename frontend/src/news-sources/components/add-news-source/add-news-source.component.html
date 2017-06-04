@@ -6,7 +6,7 @@
                    [(ngModel)]="formData.rssUrl"
                    #rssUrl="ngModel"
                    pattern="(https|http)?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)"
-                   placeholder="Paste RSS url"/>
+                   placeholder="Paste feed url"/>
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-outline-success btn-sm"
                         [disabled]="!f.valid || submitInProgress">
@@ -16,7 +16,7 @@
             </span>
         </div>
         <small [hidden]="rssUrl.valid || (rssUrl.pristine && !f.submitted)" class="validation-error-text">
-            RSS url is not valid
+            Feed url is not valid
         </small>
     </div>
     <div class="form-group">
@@ -26,8 +26,8 @@
                        class="form-check-input" [(ngModel)]="formData.isPrivate">
                 Private
             </label>
-            <small class="form-text text-muted">If marked as private, this source will be accessible only by you.
-                When you unsubscribe from this source, it will be deleted.</small>
+            <small class="form-text text-muted">If marked as private, this feed channel will be accessible only by you.
+                When you unsubscribe from this feed channel, it will be deleted.</small>
         </div>
     </div>
 </form>

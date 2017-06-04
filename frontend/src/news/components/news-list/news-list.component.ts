@@ -74,7 +74,6 @@ export class NewsListComponent extends BaseList implements OnInit, AfterViewInit
 
     /**
      * Load the fresh list of news
-     * (without launching the RSS sources refresh action on server)
      */
     reload(refresh:boolean = false, sourcesIds:Array<number> = [], tags:Array<string> = []) {
         window.scrollTo(0, 0);
