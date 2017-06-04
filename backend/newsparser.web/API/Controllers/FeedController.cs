@@ -16,13 +16,13 @@ namespace NewsParser.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class NewsController : BaseController
+    public class FeedController : BaseController
     {
         private readonly IFeedDataService _feedDataService;
         private readonly IAuthService _authService;
         private readonly IDistributedCache _distributedCache;
 
-        public NewsController(
+        public FeedController(
             IFeedDataService feedDataService, 
             IAuthService authService, 
             IDistributedCache distributedCache)
