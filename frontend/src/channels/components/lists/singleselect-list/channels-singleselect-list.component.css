@@ -112,6 +112,10 @@
     font-size: 12px;
 }
 
+:host /deep/ .popover-content i {
+    padding-right: 0;
+}
+
 :host /deep/ .news-source-popover-content {
     padding: 0;
 }

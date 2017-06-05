@@ -67,6 +67,11 @@ export class ChannelsSingleSelectList
         this.currentPopover = event.popover;
         this.currentPopover.isOpen() ? this.currentPopover.close() : this.currentPopover.open();
     };
+    
+    unsetCurrentChannel() {
+        this.selectedChannel = null;
+        this.currentPopover.close();
+    };
 
     hideSubscriptionInfo() {
         if (this.selectedChannel) {

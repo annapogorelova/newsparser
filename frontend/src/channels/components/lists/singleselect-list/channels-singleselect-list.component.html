@@ -15,32 +15,6 @@
             <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
         </div>
     </div>
-    <!-- Popover content -->
-    <ng-template #popContent class="news-source-popover-content">
-        <i class="fa fa-fa-times pull-right" title="Close" (click)="currentPopover.close()"></i>
-        <div class="subscription-info">
-            <p class="subscription-title">
-                            <span [ngStyle]="{'background-image': selectedChannel.imageUrl ?
-                                'url(' + selectedChannel.imageUrl + ')' :
-                                'url(\'../../../../public/images/default-rss-icon.png\')'}"
-                                  class="news-source-image pull-left"></span>
-                <strong class="news-source-name">{{selectedChannel.name}}</strong>
-            </p>
-            <p *ngIf="selectedChannel.language">
-                Language: <span class="source-language badge badge-info">{{selectedChannel.language}}</span>
-            </p>
-            <p>{{selectedChannel.description}}</p>
-            <p><a href="{{selectedChannel.websiteUrl}}" target="_blank">{{selectedChannel.websiteUrl}}</a></p>
-        </div>
-        <button *ngIf="!selectedChannel.isSubscribed" class="btn btn-success btn-sm btn-full-length"
-                (click)="handleSubscription(selectedChannel)">
-            Subscribe
-        </button>
-        <button *ngIf="selectedChannel.isSubscribed" class="btn btn-warning btn-sm btn-full-length"
-                (click)="handleUnsubscription(selectedChannel)">
-            Unsubscribe
-        </button>
-    </ng-template>
     <div *ngIf="!hasItems()" class="loading-status-container">
         <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
         <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
@@ -55,3 +29,35 @@
                 (onPrevPage)="prevPage()">
     </pagination>
 </div>
+
+<!-- Popover content -->
+<ng-template #popContent class="news-source-popover-content">
+    <p>
+        <a role="button" class="pull-right" (click)="unsetCurrentChannel()">
+            <i class="fa fa-times" title="Close"></i>
+        </a>
+    </p>
+    <div class="subscription-info">
+        <p class="subscription-title">
+                            <span [ngStyle]="{'background-image': selectedChannel.imageUrl ?
+                                'url(' + selectedChannel.imageUrl + ')' :
+                                'url(\'../../../../public/images/default-rss-icon.png\')'}"
+                                  class="news-source-image pull-left"></span>
+            <strong class="news-source-name">{{selectedChannel.name}}</strong>
+        </p>
+        <p *ngIf="selectedChannel.language">
+            Language: <span class="source-language badge badge-info">{{selectedChannel.language}}</span>
+        </p>
+        <p>{{selectedChannel.description}}</p>
+        <p><a href="{{selectedChannel.websiteUrl}}" target="_blank">{{selectedChannel.websiteUrl}}</a></p>
+    </div>
+    <button *ngIf="!selectedChannel.isSubscribed" class="btn btn-success btn-sm btn-full-length"
+            (click)="handleSubscription(selectedChannel)">
+        Subscribe
+    </button>
+    <button *ngIf="selectedChannel.isSubscribed" class="btn btn-warning btn-sm btn-full-length"
+            (click)="handleUnsubscription(selectedChannel)">
+        Unsubscribe
+    </button>
+</ng-template>
+<!-- Popover content ends -->
