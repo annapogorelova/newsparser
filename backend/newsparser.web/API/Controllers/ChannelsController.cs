@@ -76,6 +76,11 @@ namespace NewsParser.API.Controllers
 
             if(channel != null)
             {
+                if(_channelDataService.IsUserSubscribed(channel.Id, user.GetId()))
+                {
+                    return MakeErrorResponse(HttpStatusCode.BadRequest, "You are already subscribed to this channel.");
+                }
+
                 createdChannel = channel;
                 _channelDataService.SubscribeUser(channel.Id, user.GetId(), channelModel.IsPrivate);
             }
