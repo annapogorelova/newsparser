@@ -87,7 +87,7 @@
 }
 
 :host /deep/ .news-sources-container {
-    height: 45vh;
+    height: 40vh;
 }
 
 :host /deep/ .news-sources-container .search-container {
