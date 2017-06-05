@@ -6,7 +6,7 @@
                 [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
             <i [attr.class]="isNavbarCollapsed ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
         </a>
-        <a class="navbar-brand" routerLink="/news" title="News">
+        <a class="navbar-brand" routerLink="/feed" title="Feed">
             <img src="../../../../public/images/app-icon.png" alt="NewsParser"/>
         </a>
         <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">

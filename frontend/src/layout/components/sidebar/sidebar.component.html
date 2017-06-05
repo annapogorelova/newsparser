@@ -9,22 +9,22 @@
         <div class="sidebar-main-content">
             <div class="news-sources-card card card-outline-primary text-xs-center">
                 <div class="card-header">
-                    <h5 class="pull-left">Feed channels</h5>
+                    <h5 class="pull-left">Channels</h5>
                     <span title="Clear" class="btn btn-sm clear pull-right"
-                          (click)="clearSources()"
-                          [attr.disabled]="!selectedSourcesIds.length">
+                          (click)="clearChannels()"
+                          [attr.disabled]="!selectedChannelsIds.length">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </span>
                 </div>
                 <div class="card-block">
                     <div class="news-sources-container">
-                        <news-sources-multiselect-list #newsSourcesList
-                                      (onSelect)="onSelectSource($event)"
-                                      (onDeselect)="onDeselectSource($event)"
+                        <channels-multiselect-list #channelsList
+                                      (onSelect)="onSelectChannel($event)"
+                                      (onDeselect)="onDeselectChannel($event)"
                                       [subscribed]="true"
-                                      [initiallySelectedSourcesIds]="selectedSourcesIds"
-                                      [noDataText]="'No subscribed RSS sources'">
-                        </news-sources-multiselect-list>
+                                      [initiallySelectedChannelsIds]="selectedChannelsIds"
+                                      [noDataText]="'No subscribed channels'">
+                        </channels-multiselect-list>
                     </div>
                 </div>
             </div>

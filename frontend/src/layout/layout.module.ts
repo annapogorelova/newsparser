@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {NewsSourcesModule} from '../news-sources';
+import {ChannelsModule} from '../channels';
 import {SharedModule} from '../shared';
 import {SidebarComponent} from './components';
 
 @NgModule({
     imports: [
         BrowserModule,
-        NewsSourcesModule,
+        ChannelsModule,
         SharedModule
     ],
     declarations: [

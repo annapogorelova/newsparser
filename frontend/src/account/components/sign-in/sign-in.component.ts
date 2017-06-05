@@ -31,7 +31,7 @@ export class SignInComponent implements IForm {
     onSubmitSucceeded(response:any):Promise<any> {
         this.submitInProgress = false;
         this.submitSucceeded = true;
-        this.router.navigate(['/news']);
+        this.router.navigate(['/feed']);
         return Promise.resolve(response);
     };
 

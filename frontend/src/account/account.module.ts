@@ -18,7 +18,7 @@ import {
     SubscriptionsSettingsComponent,
     PasswordCreationComponent
 } from './components';
-import {NewsSourcesModule} from '../news-sources';
+import {ChannelsModule} from '../channels';
 
 let authProviders = {
     google: {
@@ -38,7 +38,7 @@ let authProviders = {
         SharedModule,
         AccountRouting,
         NgbModule,
-        NewsSourcesModule
+        ChannelsModule
     ],
     declarations: [
         SignInComponent,

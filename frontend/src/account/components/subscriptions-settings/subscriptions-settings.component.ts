@@ -9,7 +9,7 @@ import {ApiService, NoticesService, NavigatorService} from '../../../shared';
 })
 
 /**
- * Component contains methods for subscribing to and unsubscribing from news sources
+ * Component contains methods for subscribing to and unsubscribing from feed channels
  */
 export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
     selectedTabId:string = 'subscribed';
@@ -18,11 +18,11 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
     submitCompleted:boolean;
     submitInProgress:boolean;
 
-    @ViewChild('subscribedSourcesList') subscribedSourcesList:any;
-    @ViewChild('allSourcesList') allSourcesList:any;
+    @ViewChild('subscribedChannelsList') subscribedChannelsList:any;
+    @ViewChild('allChannelsList') allChannelsList:any;
 
     tabsComponentsMap:any;
-    tabsIds:Array<any> = ['subscribed', 'all', 'add'];
+    tabsIds:Array<any> = ['subscribed', 'all', 'create'];
 
     constructor(private apiService:ApiService,
                 private navigator:NavigatorService,
@@ -41,8 +41,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.tabsComponentsMap = {
-            'subscribed': this.subscribedSourcesList,
-            'all': this.allSourcesList
+            'subscribed': this.subscribedChannelsList,
+            'all': this.allChannelsList
         };
 
         this.route.fragment.subscribe((fragment:string) => this.setActiveTab(fragment));
@@ -80,8 +80,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
     subscribe(event:any) {
         this.resetForm();
         this.submitInProgress = true;
-        this.apiService.post(`subscription/${event.source.id}`, null)
-            .then(response => this.onSubscribeSucceeded(response, event.source.id))
+        this.apiService.post(`subscription/${event.channel.id}`, null)
+            .then(response => this.onSubscribeSucceeded(response, event.channel.id))
             .catch(error => this.onSubscribeFailed(error));
     };
 
@@ -106,8 +106,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
      * @param event
      */
     unsubscribe(event:any) {
-        this.apiService.delete(`subscription/${event.source.id}`)
-            .then(response => this.onUnsubscribeSucceeded(response, event.source.id))
+        this.apiService.delete(`subscription/${event.channel.id}`)
+            .then(response => this.onUnsubscribeSucceeded(response, event.channel.id))
             .catch(error => this.onUnsubscribeFailed(error));
     };
 
@@ -127,8 +127,8 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
         this.setRequestCompleted(false, error.message);
     };
 
-    private updateSubscriptionInfo(sourceId:number, isSubscribed:boolean) {
-        this.tabsComponentsMap[this.selectedTabId].updateSubscriptionState(sourceId, isSubscribed);
+    private updateSubscriptionInfo(channelId:number, isSubscribed:boolean) {
+        this.tabsComponentsMap[this.selectedTabId].updateSubscriptionState(channelId, isSubscribed);
         this.tabsComponentsMap[this.selectedTabId].hideSubscriptionInfo();
     };
 }

@@ -5,10 +5,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SharedModule} from '../shared/shared.module';
 import {AppComponent}  from './components';
-import {NewsModule} from '../news';
+import {FeedModule} from '../feed';
 import {AppRoutingProviders, AppRouting} from './app.routing';
 import {AccountModule} from '../account';
-import {NewsSourcesModule} from '../news-sources';
+import {ChannelsModule} from '../channels';
 
 
 @NgModule({
@@ -17,8 +17,8 @@ import {NewsSourcesModule} from '../news-sources';
         BrowserAnimationsModule,
         SharedModule,
         HttpModule,
-        NewsModule,
-        NewsSourcesModule,
+        FeedModule,
+        ChannelsModule,
         AccountModule,
         AppRouting,
         NgbModule.forRoot()

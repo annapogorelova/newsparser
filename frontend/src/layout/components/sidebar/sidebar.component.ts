@@ -42,20 +42,20 @@ import {AppSettings} from '../../../app/app.settings';
 })
 export class SidebarComponent {
     protected animationState:string = 'in';
-    @ViewChild('newsSourcesList') newsSourcesList:any;
+    @ViewChild('channelsList') channelsList:any;
 
     @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
 
-    @Output() onSourceSelected:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onSourceDeselected:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onSourcesCleared:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onChannelSelected:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onChannelDeselected:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onChannelsCleared:EventEmitter<any> = new EventEmitter<any>();
 
     @Output() onTagDeselected:EventEmitter<any> = new EventEmitter<any>();
     @Output() onTagsCleared:EventEmitter<any> = new EventEmitter<any>();
 
     @Input() selectedTags:Array<string> = [];
-    @Input() selectedSourcesIds:Array<number> = [];
+    @Input() selectedChannelsIds:Array<number> = [];
 
     defaultWidth:number = AppSettings.SIDEBAR_WIDTH_PX;
 
@@ -80,20 +80,20 @@ export class SidebarComponent {
         this.isVisible() ? this.hide() : this.show();
     };
 
-    onSelectSource(event:any) {
-        this.onSourceSelected.emit(event);
+    onSelectChannel(event:any) {
+        this.onChannelSelected.emit(event);
     };
 
-    onDeselectSource(event:any) {
-        this.onSourceDeselected.emit(event);
+    onDeselectChannel(event:any) {
+        this.onChannelDeselected.emit(event);
     };
 
-    clearSources(event:any) {
-        if (!this.selectedSourcesIds.length) {
+    clearChannels(event:any) {
+        if (!this.selectedChannelsIds.length) {
             return;
         }
-        this.newsSourcesList.clearSources();
-        this.onSourcesCleared.emit(event);
+        this.channelsList.clearChannels();
+        this.onChannelsCleared.emit(event);
     };
 
     onDeselectTag = (event:any) => {

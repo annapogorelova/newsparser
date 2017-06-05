@@ -17,30 +17,30 @@
                     <ngb-tab id="subscribed" title="Subscribed">
                         <ng-template ngbTabContent>
                             <div class="news-sources-container">
-                                <news-sources-singleselect-list #subscribedSourcesList
+                                <channels-singleselect-list #subscribedChannelsList
                                               (onSelect)="subscribe($event)"
                                               (onDeselect)="unsubscribe($event)"
                                               [useSearch]="true"
                                               [subscribed]="true">
-                                </news-sources-singleselect-list>
+                                </channels-singleselect-list>
                             </div>
                         </ng-template>
                     </ngb-tab>
                     <ngb-tab id="all" title="All">
                         <ng-template ngbTabContent>
                             <div class="news-sources-container">
-                                <news-sources-singleselect-list #allSourcesList
+                                <channels-singleselect-list #allChannelsList
                                               (onSelect)="subscribe($event)"
                                               (onDeselect)="unsubscribe($event)"
                                               [useSearch]="true"
                                               [subscribed]="false">
-                                </news-sources-singleselect-list>
+                                </channels-singleselect-list>
                             </div>
                         </ng-template>
                     </ngb-tab>
-                    <ngb-tab id="add" title="Add">
+                    <ngb-tab id="create" title="Create">
                         <ng-template ngbTabContent>
-                            <add-news-source></add-news-source>
+                            <channel-creation-form></channel-creation-form>
                         </ng-template>
                     </ngb-tab>
                 </ngb-tabset>

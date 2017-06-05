@@ -1,1 +1,0 @@
-export * from './news-sources-singleselect-list.component';

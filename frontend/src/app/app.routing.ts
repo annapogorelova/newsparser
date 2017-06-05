@@ -3,7 +3,7 @@ import {ModuleWithProviders} from '@angular/core';
 import {CanActivateAuth, PageNotFoundComponent} from '../shared';
 
 const appRoutes:Routes = [
-    {path: '', redirectTo: '/news', pathMatch: 'full', canActivate: [CanActivateAuth]},
+    {path: '', redirectTo: '/feed', pathMatch: 'full', canActivate: [CanActivateAuth]},
     {path: '**', component: PageNotFoundComponent}
 ];
 
