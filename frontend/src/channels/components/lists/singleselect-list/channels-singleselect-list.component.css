@@ -125,6 +125,13 @@
     height: 25px;
 }
 
+:host /deep/ ngb-popover-window {
+    position: fixed;
+    top: 15% !important;
+    right: 5% !important;
+    left: auto !important;
+}
+
 :host /deep/ div.popover-content {
     padding: 8px;
 }
