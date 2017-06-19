@@ -31,7 +31,7 @@ namespace NewsParser.BL.Services.Channels
         public IEnumerable<Channel> GetForUpdate()
         {
             return _channelRepository
-                .GetByUpdateDate()
+                .GetOutdated()
                 .Include(s => s.Users)
                 .Where(s => s.Users.Any())
                 .OrderByDescending(s => s.Users.Count());

@@ -22,7 +22,7 @@ namespace NewsParser.DAL.Repositories.Channels
             return _dbContext.Channels;
         }
 
-        public IQueryable<Channel> GetByUpdateDate()
+        public IQueryable<Channel> GetOutdated()
         {
             return _dbContext.Channels
                 .FromSql(@"SELECT * FROM channels 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.Repositories.Channels
@@ -18,7 +19,7 @@ namespace NewsParser.DAL.Repositories.Channels
         /// Gets the channels that need updating now
         /// </summary>
         /// <returns>IQueryable of Channel</returns>
-        IQueryable<Channel> GetByUpdateDate();
+        IQueryable<Channel> GetOutdated();
 
         /// <summary>
         /// Gets channels by user id
