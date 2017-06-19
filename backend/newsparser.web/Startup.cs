@@ -63,11 +63,6 @@ namespace NewsParser
                 builder.AddUserSecrets<Startup>();
             }
 
-            if (env.IsDevelopment())
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
             Configuration = builder.Build();
 
             Console.WriteLine(Configuration["Authentication:SecretKey"]);
@@ -78,9 +73,6 @@ namespace NewsParser
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
-
             // Registering dependencies
             RegisterDependencies(services);
 
@@ -121,8 +113,6 @@ namespace NewsParser
             }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddFile("logs/newsparser.web-{Date}.txt");
-
-            app.UseApplicationInsightsRequestTelemetry();
 
             if (env.IsDevelopment())
             {
