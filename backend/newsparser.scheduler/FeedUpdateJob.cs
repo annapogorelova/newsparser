@@ -2,10 +2,10 @@
 using FluentScheduler;
 using NewsParser.FeedParser;
 using Microsoft.Extensions.DependencyInjection;
-using newsparser.scheduler;
+using NewsParser.Scheduler;
 using NewsParser.BL.Services.Channels;
 using NewsParser.FeedParser.Exceptions;
-using newsparser.FeedParser.Services;
+using NewsParser.FeedParser.Services;
 using System;
 
 namespace NewsParser.Scheduler

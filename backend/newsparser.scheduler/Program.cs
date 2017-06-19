@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace newsparser.scheduler
+namespace NewsParser.Scheduler
 {
     public class Program
     {

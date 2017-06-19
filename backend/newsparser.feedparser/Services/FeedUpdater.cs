@@ -13,9 +13,8 @@ using NewsParser.FeedParser.Helpers;
 using System.Xml.Linq;
 using System.Net.Http;
 using NewsParser.FeedParser.Services.FeedSourceParser;
-using NewsParser.FeedParser.Services;
 
-namespace newsparser.FeedParser.Services
+namespace NewsParser.FeedParser.Services
 {
     /// <summary>
     /// Class implements IFeedUpdater

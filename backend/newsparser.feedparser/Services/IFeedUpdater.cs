@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using NewsParser.DAL.Models;
 
-namespace newsparser.FeedParser.Services
+namespace NewsParser.FeedParser.Services
 {
     /// <summary>
     /// Interface contains a declaration of methods for updating the RSS feed

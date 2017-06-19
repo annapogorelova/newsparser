@@ -40,7 +40,6 @@ using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Caching.Distributed;
 using NewsParser.Cache;
 using NewsParser.FeedParser.Services;
-using newsparser.FeedParser.Services;
 
 namespace NewsParser
 {

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MySQL.Data.EntityFrameworkCore.Extensions;
-using newsparser.FeedParser.Services;
 using NewsParser.BL.Services.Feed;
 using NewsParser.BL.Services.Channels;
 using NewsParser.BL.Services.Tags;
@@ -22,7 +21,7 @@ using NewsParser.FeedParser.Services;
 using NewsParser.Scheduler;
 using static System.Int32;
 
-namespace newsparser.scheduler
+namespace NewsParser.Scheduler
 {
     public static class ServiceLocator
     {

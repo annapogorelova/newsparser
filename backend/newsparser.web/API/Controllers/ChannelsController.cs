@@ -12,7 +12,7 @@ using NewsParser.BL.Services.Channels;
 using NewsParser.DAL.Models;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Cache;
-using newsparser.FeedParser.Services;
+using NewsParser.FeedParser.Services;
 
 namespace NewsParser.API.Controllers
 {
