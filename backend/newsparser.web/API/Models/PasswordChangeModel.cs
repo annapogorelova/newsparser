@@ -11,7 +11,7 @@ namespace NewsParser.API.Models
         [Required(ErrorMessage = "Current password is required")]
         public string CurrentPassword { get; set; }
 
-        [Required(ErrorMessage = "New password is required")]
+        [Required(ErrorMessage = "New password is required"), MinLength(8)]
         [NotEqual(PropertyName = "CurrentPassword", 
             ErrorMessage = "New password must be different from the current password")]
         public string NewPassword { get; set; }
