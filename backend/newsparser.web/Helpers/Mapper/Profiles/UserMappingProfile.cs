@@ -12,7 +12,7 @@ namespace NewsParser.Helpers.Mapper.Profiles
     {
         public UserMappingProfile()
         {
-            CreateMap<ApplicationUser, AccountApiModel>()
+            CreateMap<ApplicationUser, AccountModel>()
                 .ForMember(m => m.Id, opt => opt.MapFrom(u => u.GetId()))
                 .ForMember(m => m.HasPassword, opt => opt.MapFrom(u => !string.IsNullOrEmpty(u.PasswordHash)));
 
