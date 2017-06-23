@@ -39,7 +39,7 @@ namespace NewsParser.API.Controllers
         public JsonResult Get()
         {
             var user = _authService.GetCurrentUser();
-            var userModel = Mapper.Map<AccountApiModel>(user);
+            var userModel = Mapper.Map<AccountModel>(user);
             return new JsonResult(new { data = userModel });
         }
 
@@ -124,7 +124,7 @@ namespace NewsParser.API.Controllers
         [Authorize]
         [HttpPut]
         [ValidateModel]
-        public async Task<JsonResult> Put([FromBody]AccountApiModel model)
+        public async Task<JsonResult> Put([FromBody]AccountModel model)
         {
             var user = _authService.GetCurrentUser();
             bool emailChanged = user.Email != model.Email;
