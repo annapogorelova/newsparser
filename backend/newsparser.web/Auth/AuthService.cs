@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using newsparser.DAL.Models;
 using NewsParser.Auth.ExternalAuth;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
+using NewsParser.Exceptions;
 using NewsParser.Identity;
 using NewsParser.Identity.Models;
 using OpenIddict.Core;
@@ -159,9 +161,17 @@ namespace NewsParser.Auth
                 FindUserByExternalId(user.ExternalId, user.AuthProvider);
         }
 
-        public Task<IdentityResult> CreateAsync(string email, string password)
+        public async Task<IdentityResult> CreateAsync(string email, string password)
         {
-            return _userManager.CreateAsync(new ApplicationUser(){ Email = email, UserName = Guid.NewGuid().ToString() }, password);
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if(existingUser != null)
+            {
+                throw new WebLayerException(HttpStatusCode.BadRequest, $"User with email {email} already exists.");
+            }
+            return _userManager.CreateAsync(new ApplicationUser { 
+                Email = email, 
+                UserName = Guid.NewGuid().ToString() 
+            }, password).Result;
         }
 
         public Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)

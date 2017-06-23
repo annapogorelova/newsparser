@@ -11,6 +11,8 @@ using NewsParser.API.Models;
 using NewsParser.Auth;
 using NewsParser.BL.Services.Users;
 using NewsParser.Cache;
+using NewsParser.DAL.Models;
+using NewsParser.Exceptions;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Helpers.Utilities;
 using NewsParser.Identity.Models;
@@ -68,14 +70,15 @@ namespace NewsParser.API.Controllers
         [ValidateModel]
         public async Task<JsonResult> Post(string email, [FromBody]EmailConfirmationModel model)
         {
-            var user = _authService.FindUserByEmail(email);
+            var user = _userBusinessService.GetUserByEmail(email);
+            var appUser = Mapper.Map<User,ApplicationUser>(user);
             
             if(user.EmailConfirmed)
             {
                 return MakeErrorResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
             }
 
-            var result = await _authService.ConfirmEmail(user, Base64EncodingUtility.Decode(model.ConfirmationToken));
+            var result = await _authService.ConfirmEmail(appUser, Base64EncodingUtility.Decode(model.ConfirmationToken));
             
             if(result.Succeeded)
             {
@@ -93,8 +96,15 @@ namespace NewsParser.API.Controllers
         [ValidateModel]
         public async Task<JsonResult> Post([FromBody]PasswordResetRequestModel model)
         {
-            var user = _authService.FindUserByEmail(model.Email);
-            string passwordResetToken = await _authService.GeneratePasswordResetTokenAsync(user);
+            var user = _userBusinessService.GetUserByEmail(model.Email);
+            if(!user.EmailConfirmed)
+            {
+                throw new WebLayerException(HttpStatusCode.BadRequest, 
+                    "Password reset is not allowed until the user is not confirmed.");
+            }
+            var appUser = Mapper.Map<User,ApplicationUser>(user);
+            
+            string passwordResetToken = await _authService.GeneratePasswordResetTokenAsync(appUser);
             await _mailService.SendPasswordResetEmail(user.Email, Base64EncodingUtility.Encode(passwordResetToken));
             return MakeSuccessResponse(HttpStatusCode.OK, "Password reset email was sent.");
         }
@@ -103,8 +113,15 @@ namespace NewsParser.API.Controllers
         [ValidateModel]
         public async Task<JsonResult> Post([Required]string email, [FromBody]PasswordResetModel model)
         {
-            var user = _authService.FindUserByEmail(email);
-            var result = await _authService.ResetPasswordAsync(user, 
+            var user = _userBusinessService.GetUserByEmail(email);
+            if(!user.EmailConfirmed)
+            {
+                throw new WebLayerException(HttpStatusCode.BadRequest, 
+                    "Password reset is not allowed until the user is not confirmed.");
+            }
+            var appUser = Mapper.Map<User,ApplicationUser>(user);
+
+            var result = await _authService.ResetPasswordAsync(appUser, 
                 Base64EncodingUtility.Decode(model.PasswordResetToken), 
                 model.NewPassword);
                 
@@ -127,15 +144,25 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Put([FromBody]AccountModel model)
         {
             var user = _authService.GetCurrentUser();
-            bool emailChanged = user.Email != model.Email;
-            
-            if(emailChanged && !_userBusinessService.EmailAvailable(model.Email))
+            if(!user.EmailConfirmed)
             {
-                return MakeErrorResponse(HttpStatusCode.BadRequest, "Email is already taken.");
+                throw new WebLayerException(HttpStatusCode.BadRequest, 
+                    "Password reset is not allowed until the user is not confirmed.");
             }
 
-            user.Email = model.Email;
-            user.EmailConfirmed = false;
+            bool emailChanged = user.Email != model.Email;
+            
+            if(emailChanged)
+            {              
+                if(!_userBusinessService.EmailAvailable(model.Email))
+                {
+                    return MakeErrorResponse(HttpStatusCode.BadRequest, "Email is already taken.");
+                }
+
+                user.Email = model.Email;
+                user.EmailConfirmed = false;
+            }
+
             var result = await _authService.UpdateAsync(user);
             
             if(result.Succeeded)
@@ -165,6 +192,12 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Put([FromBody]PasswordChangeModel model)
         {
             var user = _authService.GetCurrentUser();
+            if(!user.EmailConfirmed)
+            {
+                throw new WebLayerException(HttpStatusCode.BadRequest, 
+                    "Password reset is not allowed until the user is not confirmed.");
+            }
+
             var result = await _authService.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             
             if(result.Succeeded)
@@ -185,6 +218,12 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Post([FromBody]PasswordCreateModel model)
         {
             var user = _authService.GetCurrentUser();
+            if(!user.EmailConfirmed)
+            {
+                throw new WebLayerException(HttpStatusCode.BadRequest, 
+                    "Password reset is not allowed until the user is not confirmed.");
+            }
+            
             var result = await _authService.AddPasswordAsync(user, model.Password);
 
             if(result.Succeeded)
