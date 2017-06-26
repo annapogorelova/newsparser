@@ -20,11 +20,6 @@ namespace NewsParser.DAL
         public DbSet<UserExternalId> UserExternalIds { get; set; }
         public DbSet<Token> Tokens { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseMySql("server=localhost;userid=root;pwd=tolochko;port=3306;database=news_parser_db;sslmode=none;charset=utf8;");
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
