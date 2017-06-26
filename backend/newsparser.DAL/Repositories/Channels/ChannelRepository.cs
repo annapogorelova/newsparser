@@ -108,11 +108,10 @@ namespace NewsParser.DAL.Repositories.Channels
             return _dbContext.UserChannels.Where(s => s.ChannelId == sourceId);
         }
 
-        public bool IsVisibleToUser(int sourceId, int userId)
+        public bool IsVisibleToUser(int channelId, int userId)
         {
-            return !_dbContext.UserChannels.Any(us => us.ChannelId == sourceId) ||
-                !_dbContext.UserChannels.Where(us => us.ChannelId == sourceId)
-                    .All(us => us.UserId != userId  && us.IsPrivate);
+            var userChannels = _dbContext.UserChannels.Where(us => us.ChannelId == channelId);
+            return userChannels.Any(us => us.UserId == userId) || userChannels.All(us => !us.IsPrivate);
         }
 
         public IQueryable<Channel> GetPrivateByUser(int userId)

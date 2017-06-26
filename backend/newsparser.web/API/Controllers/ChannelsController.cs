@@ -39,8 +39,8 @@ namespace NewsParser.API.Controllers
         [Cache(Duration = 3600, DeferByUser = true)]
         public JsonResult Get(
             bool subscribed = false, 
-            string search = null, int 
-            pageIndex = 0, 
+            string search = null, 
+            int pageIndex = 0, 
             int pageSize = 5)
         {
             var user = _authService.GetCurrentUser();
@@ -63,7 +63,7 @@ namespace NewsParser.API.Controllers
             {
                 return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found");
             }
-            return new JsonResult(Mapper.Map<ChannelSubscriptionModel>(channel));
+            return new JsonResult(new { data = Mapper.Map<ChannelSubscriptionModel>(channel) });
         }
 
         [HttpPost]
@@ -73,6 +73,7 @@ namespace NewsParser.API.Controllers
             var channel = _channelDataService.GetByUrl(channelModel.FeedUrl);
             var user = _authService.GetCurrentUser();
             Channel createdChannel;
+            bool isCreatedSubscriptionPrivate = channelModel.IsPrivate;
 
             if(channel != null)
             {
@@ -82,16 +83,23 @@ namespace NewsParser.API.Controllers
                 }
 
                 createdChannel = channel;
-                _channelDataService.SubscribeUser(channel.Id, user.GetId(), channelModel.IsPrivate);
+                isCreatedSubscriptionPrivate = channel.Users.All(u => u.IsPrivate) && channelModel.IsPrivate;
+                _channelDataService.SubscribeUser(channel.Id, user.GetId(), isCreatedSubscriptionPrivate);
             }
             else
             {
                 createdChannel = await _feedUpdater.AddFeedChannel(channelModel.FeedUrl, channelModel.IsPrivate, user.GetId());
             }
 
-            var createdChannedModel = Mapper.Map<Channel, ChannelSubscriptionModel>(createdChannel);
+            string responseMessage = "Feed channel was added to the list of your subscriptions.";
+            if(channelModel.IsPrivate && !isCreatedSubscriptionPrivate)
+            {
+                responseMessage += $@" Your subscription could not be marked as private 
+                    because it already exists and is public.";
+            }
+            var createdChannelModel = Mapper.Map<Channel, ChannelSubscriptionModel>(createdChannel);
             return MakeSuccessResponse(HttpStatusCode.Created, 
-                new { data = createdChannedModel, 
+                new { data = createdChannelModel, 
                     message = "Feed channel was added to the list of your subscriptions" });
         }
     }
