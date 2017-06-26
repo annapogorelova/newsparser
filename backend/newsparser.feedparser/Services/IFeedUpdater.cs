@@ -25,16 +25,16 @@ namespace NewsParser.FeedParser.Services
         /// <summary>
         /// Updates a single channel
         /// </summary>
-        /// <param name="sourceId">Channel id</param>
+        /// <param name="channelId">Channel id</param>
         /// <returns></returns>
-        void UpdateChannel(int sourceId);
+        void UpdateChannel(int channelId);
 
         /// <summary>
         /// Updates a single channel (async)
         /// </summary>
-        /// <param name="sourceId">Channel id</param>
+        /// <param name="channelId">Channel id</param>
         /// <returns></returns>
-        Task UpdateChannelAsync(int sourceId);
+        Task UpdateChannelAsync(int channelId);
 
         /// <summary>
         /// Adds the channel

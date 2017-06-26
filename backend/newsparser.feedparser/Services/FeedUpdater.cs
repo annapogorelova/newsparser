@@ -100,7 +100,8 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 SetChannelUpdatingState(channel, true);
-                var news = await _feedConnector.GetFeed(channel.FeedUrl, GetchannelFeedFormat(channel));
+                var feedXml = await _feedConnector.LoadFeedXml(channel.FeedUrl);
+                var news = _feedConnector.ParseFeed(feedXml, GetChannelFeedFormat(channel));
                 SaveFeed(channel.Id, news);
                 SetChannelUpdatingState(channel, false);
             }
@@ -131,7 +132,8 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 SetChannelUpdatingState(channel, true);
-                var news = _feedConnector.GetFeed(channel.FeedUrl, channel.FeedFormat).Result;
+                var feedXml = _feedConnector.LoadFeedXml(channel.FeedUrl).Result;
+                var news = _feedConnector.ParseFeed(feedXml, channel.FeedFormat);
                 SaveFeed(channel.Id, news);
                 SetChannelUpdatingState(channel, false);
             }
@@ -249,7 +251,7 @@ namespace NewsParser.FeedParser.Services
             }
         }
 
-        private FeedFormat GetchannelFeedFormat(Channel channel)
+        private FeedFormat GetChannelFeedFormat(Channel channel)
         {
             return (FeedFormat)((int)channel.FeedFormat);
         }

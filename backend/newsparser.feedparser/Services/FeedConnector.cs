@@ -22,12 +22,11 @@ namespace NewsParser.FeedParser.Services
             { FeedFormat.Atom, new AtomFeedParser() }
         };
         
-        public async Task<List<FeedItemModel>> GetFeed(string feedUrl, FeedFormat feedFormat)
+        public List<FeedItemModel> ParseFeed(XElement feedXml, FeedFormat feedFormat)
         {
             try
             {
                 var feedParser = _feedParsers[feedFormat];
-                XElement feedXml = await GetFeedXml(feedUrl);
                 var feedItemsXml = feedParser.GetItems(feedXml);
                 var feedItemsList = new List<FeedItemModel>();
 
@@ -63,11 +62,11 @@ namespace NewsParser.FeedParser.Services
             }
         }
 
-        public async Task<Models.ChannelModel> GetFeedSource(string feedUrl)
+        public async Task<ChannelModel> GetFeedSource(string feedUrl)
         {
             try
             {
-                XElement feedXml = await GetFeedXml(feedUrl);
+                XElement feedXml = await LoadFeedXml(feedUrl);
                 var feedFormat = DetectFeedFormat(feedXml);
                 XElement sourceElement = _feedParsers[feedFormat].GetSourceElement(feedXml);
 
@@ -109,7 +108,7 @@ namespace NewsParser.FeedParser.Services
             }
         }
 
-        private async Task<XElement> GetFeedXml(string rssUrl)
+        public async Task<XElement> LoadFeedXml(string rssUrl)
         {
             try
             {
