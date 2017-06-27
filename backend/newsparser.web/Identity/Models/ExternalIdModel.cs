@@ -1,6 +1,6 @@
 ﻿using newsparser.DAL.Models;
 
-namespace NewsParser.Identity.Models
+namespace NewsParser.Web.Identity.Models
 {
     /// <summary>
     /// Class represents the external id model

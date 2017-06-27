@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NewsParser.Identity
+namespace NewsParser.Web.Identity
 {
     /// <summary>
     /// Class represents an exception to be thrown by identity services

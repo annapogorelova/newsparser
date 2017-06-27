@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace NewsParser.Identity.Models
+namespace NewsParser.Web.Identity.Models
 {
     /// <summary>
     /// Application user class

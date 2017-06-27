@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NewsParser.API.Models;
-using NewsParser.Auth;
 using NewsParser.BL.Services.Users;
 using NewsParser.Cache;
 using NewsParser.DAL.Models;
 using NewsParser.Exceptions;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Helpers.Utilities;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 using NewsParser.Services;
+using NewsParser.Web.Auth;
 
 namespace NewsParser.API.Controllers
 {

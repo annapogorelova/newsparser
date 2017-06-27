@@ -3,9 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using newsparser.DAL.Models;
-using NewsParser.Identity;
+using NewsParser.Web.Identity;
 
-namespace NewsParser.Auth.ExternalAuth
+namespace NewsParser.Web.Auth.ExternalAuth
 {
     public class ExternalAuthService : IExternalAuthService
     {

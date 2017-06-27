@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace NewsParser.Identity.Models
+namespace NewsParser.Web.Identity.Models
 {
     /// <summary>
     /// Role class

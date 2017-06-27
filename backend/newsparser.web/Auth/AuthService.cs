@@ -13,15 +13,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using newsparser.DAL.Models;
-using NewsParser.Auth.ExternalAuth;
+using NewsParser.Web.Auth.ExternalAuth;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
 using NewsParser.Exceptions;
-using NewsParser.Identity;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity;
+using NewsParser.Web.Identity.Models;
 using OpenIddict.Core;
 
-namespace NewsParser.Auth
+namespace NewsParser.Web.Auth
 {
     public class AuthService : IAuthService
     {

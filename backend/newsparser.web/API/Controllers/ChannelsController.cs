@@ -7,12 +7,12 @@ using NewsParser.API.Models;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using NewsParser.Auth;
 using NewsParser.BL.Services.Channels;
 using NewsParser.DAL.Models;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Cache;
 using NewsParser.FeedParser.Services;
+using NewsParser.Web.Auth;
 
 namespace NewsParser.API.Controllers
 {

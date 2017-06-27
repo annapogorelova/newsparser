@@ -12,7 +12,7 @@ using Xunit;
 using System.Linq;
 using System.Collections.Generic;
 using NewsParser.Helpers.Utilities;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 using newsparser.DAL.Models;
 
 namespace NewsParser.IntegrationTests.Tests

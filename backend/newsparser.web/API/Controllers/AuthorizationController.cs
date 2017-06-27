@@ -6,10 +6,10 @@ using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using newsparser.DAL.Models;
-using NewsParser.Auth;
-using NewsParser.Auth.ExternalAuth;
+using NewsParser.Web.Auth.ExternalAuth;
 using NewsParser.Exceptions;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
+using NewsParser.Web.Auth;
 
 namespace NewsParser.API.Controllers
 {

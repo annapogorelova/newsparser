@@ -2,9 +2,9 @@
 using AutoMapper;
 using newsparser.DAL.Models;
 using NewsParser.API.Models;
-using NewsParser.Auth.ExternalAuth;
+using NewsParser.Web.Auth.ExternalAuth;
 using NewsParser.DAL.Models;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 
 namespace NewsParser.Helpers.Mapper.Profiles
 {

@@ -7,7 +7,7 @@ using NewsParser.BL.Services.Feed;
 using NewsParser.DAL.Models;
 using System.Linq;
 using System.Net;
-using NewsParser.Auth;
+using NewsParser.Web.Auth;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using Microsoft.Extensions.Caching.Distributed;
 using NewsParser.Cache;

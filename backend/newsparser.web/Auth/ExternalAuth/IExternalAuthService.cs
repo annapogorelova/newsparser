@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using newsparser.DAL.Models;
 
-namespace NewsParser.Auth.ExternalAuth
+namespace NewsParser.Web.Auth.ExternalAuth
 {
     public interface IExternalAuthService
     {

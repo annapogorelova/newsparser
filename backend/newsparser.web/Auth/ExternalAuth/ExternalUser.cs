@@ -1,6 +1,6 @@
 ﻿using newsparser.DAL.Models;
 
-namespace NewsParser.Auth.ExternalAuth
+namespace NewsParser.Web.Auth.ExternalAuth
 {
     public class ExternalUser
     {

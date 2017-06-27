@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using NewsParser.API.Models;
 using NewsParser.BL.Services.Channels;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 
 namespace NewsParser.API.Controllers
 {

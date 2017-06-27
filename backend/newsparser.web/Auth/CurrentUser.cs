@@ -1,6 +1,6 @@
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 
-namespace NewsParser.Auth
+namespace NewsParser.Web.Auth
 {
     public static class CurrentUser
     {

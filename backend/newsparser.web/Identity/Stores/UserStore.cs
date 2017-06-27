@@ -10,9 +10,9 @@ using NewsParser.BL.Exceptions;
 using NewsParser.BL.Services.Users;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Users;
-using NewsParser.Identity.Models;
+using NewsParser.Web.Identity.Models;
 
-namespace NewsParser.Identity.Stores
+namespace NewsParser.Web.Identity.Stores
 {
     /// <summary>
     /// Class contains implementation of <see cref="IUserPasswordStore{TUser}"/>

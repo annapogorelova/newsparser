@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using NewsParser.Auth;
+using NewsParser.Web.Auth;
 using NewsParser.DAL;
 using NewsParser.DAL.Models;
 using NewsParser.DAL.Repositories.Channels;

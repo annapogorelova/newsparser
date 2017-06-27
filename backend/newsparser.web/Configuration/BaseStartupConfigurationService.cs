@@ -1,3 +1,4 @@
+
 using System;
 using System.Net;
 using System.Text;
@@ -16,8 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NewsParser.Auth;
-using NewsParser.Auth.ExternalAuth;
 using NewsParser.BL.Services.Channels;
 using NewsParser.BL.Services.Feed;
 using NewsParser.BL.Services.Tags;
@@ -32,10 +31,12 @@ using NewsParser.DAL.Tags;
 using NewsParser.FeedParser.Services;
 using NewsParser.Helpers.Extensions;
 using NewsParser.Helpers.Mapper;
-using NewsParser.Identity.Models;
-using NewsParser.Identity.Stores;
+using NewsParser.Web.Identity.Models;
+using NewsParser.Web.Identity.Stores;
 using NewsParser.Middleware;
 using NewsParser.Services;
+using NewsParser.Web.Auth;
+using NewsParser.Web.Auth.ExternalAuth;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
