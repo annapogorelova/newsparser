@@ -54,15 +54,16 @@ namespace NewsParser.API.Controllers
         public async Task<JsonResult> Delete(int id)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            if(!_channelDataService.IsVisibleToUser(id, user.GetId()))
+            var channel = _channelDataService.GetById(id);
+            if(!_channelDataService.IsVisibleToUser(channel.Id, user.GetId()))
             {
                 return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found.");
             }
-            if(!_channelDataService.IsUserSubscribed(id, user.GetId()))
+            if(!_channelDataService.IsUserSubscribed(channel.Id, user.GetId()))
             {
                 return MakeErrorResponse(HttpStatusCode.BadRequest, "User is not subscribed to this channel.");
             }
-            _channelDataService.UnsubscribeUser(id, user.GetId());
+            _channelDataService.UnsubscribeUser(channel.Id, user.GetId());
             return MakeSuccessResponse(HttpStatusCode.OK, "Successfully unsubscribed from channel.");
         }
     }
