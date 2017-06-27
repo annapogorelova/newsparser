@@ -100,9 +100,8 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 SetChannelUpdatingState(channel, true);
-                var feedXml = await _feedConnector.LoadFeedXml(channel.FeedUrl);
-                var news = _feedConnector.ParseFeed(feedXml, GetChannelFeedFormat(channel));
-                SaveFeed(channel.Id, news);
+                var feed = await _feedConnector.ParseFeed(channel.FeedUrl, GetChannelFeedFormat(channel));
+                SaveFeed(channel.Id, feed);
                 SetChannelUpdatingState(channel, false);
             }
             catch (Exception e)
@@ -132,9 +131,8 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 SetChannelUpdatingState(channel, true);
-                var feedXml = _feedConnector.LoadFeedXml(channel.FeedUrl).Result;
-                var news = _feedConnector.ParseFeed(feedXml, channel.FeedFormat);
-                SaveFeed(channel.Id, news);
+                var feed = _feedConnector.ParseFeed(channel.FeedUrl, channel.FeedFormat).Result;
+                SaveFeed(channel.Id, feed);
                 SetChannelUpdatingState(channel, false);
             }
             catch (Exception e)
@@ -161,7 +159,7 @@ namespace NewsParser.FeedParser.Services
 
             try
             {
-                var channelModel = await _feedConnector.GetFeedSource(feedUrl);
+                var channelModel = await _feedConnector.ParseFeedSource(feedUrl);
                 var channel = new Channel
                 {
                     Name = channelModel.Name?

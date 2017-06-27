@@ -15,6 +15,13 @@ namespace NewsParser.FeedParser.Services
 {
     public class FeedConnector : IFeedConnector
     {
+        private readonly IFeedProvider _feedProvider;
+
+        public FeedConnector(IFeedProvider feedProvider)
+        {
+            _feedProvider = feedProvider;
+        }
+
         private readonly Dictionary<FeedFormat, IFeedParser> _feedParsers = 
             new Dictionary<FeedFormat, IFeedParser>
         {
@@ -22,10 +29,11 @@ namespace NewsParser.FeedParser.Services
             { FeedFormat.Atom, new AtomFeedParser() }
         };
         
-        public List<FeedItemModel> ParseFeed(XElement feedXml, FeedFormat feedFormat)
+        public async Task<List<FeedItemModel>> ParseFeed(string feedUrl, FeedFormat feedFormat)
         {
             try
             {
+                var feedXml = await _feedProvider.GetFeedXml(feedUrl);
                 var feedParser = _feedParsers[feedFormat];
                 var feedItemsXml = feedParser.GetItems(feedXml);
                 var feedItemsList = new List<FeedItemModel>();
@@ -62,11 +70,11 @@ namespace NewsParser.FeedParser.Services
             }
         }
 
-        public async Task<ChannelModel> GetFeedSource(string feedUrl)
+        public async Task<ChannelModel> ParseFeedSource(string feedUrl)
         {
             try
             {
-                XElement feedXml = await LoadFeedXml(feedUrl);
+                XElement feedXml = await _feedProvider.GetFeedXml(feedUrl);
                 var feedFormat = DetectFeedFormat(feedXml);
                 XElement sourceElement = _feedParsers[feedFormat].GetSourceElement(feedXml);
 
@@ -105,21 +113,6 @@ namespace NewsParser.FeedParser.Services
             catch (Exception e)
             {
                 throw e;
-            }
-        }
-
-        public async Task<XElement> LoadFeedXml(string rssUrl)
-        {
-            try
-            {
-                HttpClient httpClient = new HttpClient();
-                var response = await httpClient.GetByteArrayAsync(rssUrl);
-                var responseString = Encoding.UTF8.GetString(response, 0, response.Length);
-                return XElement.Parse(responseString);
-            }
-            catch (Exception e)
-            {
-                throw new FeedParsingException($"Failed to parse RSS {rssUrl} source", e);
             }
         }
 

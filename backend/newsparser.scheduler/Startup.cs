@@ -43,8 +43,6 @@ namespace NewsParser.Scheduler
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             RegisterServices(services);
@@ -57,7 +55,6 @@ namespace NewsParser.Scheduler
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
@@ -93,6 +90,7 @@ namespace NewsParser.Scheduler
 
             services.AddTransient<IFeedConnector, FeedConnector>();
             services.AddTransient<IFeedUpdater, FeedUpdater>();
+            services.AddTransient<IFeedProvider, FeedProvider>();
         }
 
         private void InitializeJobScheduler()
