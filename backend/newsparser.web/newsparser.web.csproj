@@ -9,11 +9,6 @@
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="wwwroot\**\*">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="../newsparser.BL/newsparser.BL.csproj" />
     <ProjectReference Include="../newsparser.DAL/newsparser.DAL.csproj" />
     <ProjectReference Include="../newsparser.feedparser/newsparser.feedparser.csproj" />
@@ -55,10 +50,11 @@
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.0" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="7.0.7-m61" />
   </ItemGroup>
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
+  <Target Name="PrebuildScript" BeforeTargets="Build">
     <Exec Command="dotnet restore" />
-    <Exec Command="dotnet test newsparser.integrationTests/newsparser.integrationTests.csproj" />
-    <Exec Command="dotnet bundle" />
+  </Target>
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
+    <Exec Command="dotnet test ../newsparser.integrationTests/newsparser.integrationTests.csproj" />
   </Target>
   <ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
