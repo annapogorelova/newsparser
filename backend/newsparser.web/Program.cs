@@ -15,7 +15,7 @@ namespace NewsParser
             .UseContentRoot(Directory.GetCurrentDirectory())
             .UseIISIntegration()
             .UseStartup<Startup>()
-            .UseUrls("http://0.0.0.0:50451")
+            .UseUrls("http://0.0.0.0:5000")
             .ConfigureServices(s => s.AddSingleton<IStartupConfigurationService, StartupConfigurationService>())
             .Build()
             .Run();
