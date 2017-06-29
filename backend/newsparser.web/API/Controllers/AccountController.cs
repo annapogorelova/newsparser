@@ -56,12 +56,12 @@ namespace NewsParser.API.Controllers
                 var user = _authService.FindUserByEmail(model.Email);
                 string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
                 await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
-                return MakeSuccessResponse(HttpStatusCode.Created, "Account was created");
+                return MakeSuccessResponse(HttpStatusCode.Created, "Account was created.");
             }
 
             return MakeIdentityErrorResponse(
                 HttpStatusCode.InternalServerError, 
-                "Failed to create the account", 
+                "Failed to create the account.", 
                 result
             );
         }
@@ -75,14 +75,14 @@ namespace NewsParser.API.Controllers
             
             if(user.EmailConfirmed)
             {
-                return MakeErrorResponse(HttpStatusCode.Forbidden, "Email has already been confirmed");
+                return MakeErrorResponse(HttpStatusCode.Forbidden, "Email has already been confirmed.");
             }
 
             var result = await _authService.ConfirmEmail(appUser, Base64EncodingUtility.Decode(model.ConfirmationToken));
             
             if(result.Succeeded)
             {
-                return MakeSuccessResponse(HttpStatusCode.OK, "Email was successfully confirmed");
+                return MakeSuccessResponse(HttpStatusCode.OK, "Email was successfully confirmed.");
             }
 
             return MakeIdentityErrorResponse(

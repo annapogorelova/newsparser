@@ -61,7 +61,7 @@ namespace NewsParser.API.Controllers
             var user = _authService.GetCurrentUser();
             if(!_channelDataService.IsVisibleToUser(channel.Id, user.GetId()))
             {
-                return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found");
+                return MakeErrorResponse(HttpStatusCode.NotFound, "Channel was not found.");
             }
             return new JsonResult(new { data = Mapper.Map<ChannelSubscriptionModel>(channel) });
         }
@@ -100,7 +100,7 @@ namespace NewsParser.API.Controllers
             var createdChannelModel = Mapper.Map<Channel, ChannelSubscriptionModel>(createdChannel);
             return MakeSuccessResponse(HttpStatusCode.Created, 
                 new { data = createdChannelModel, 
-                    message = "Feed channel was added to the list of your subscriptions" });
+                    message = "Feed channel was added to the list of your subscriptions." });
         }
     }
 }
