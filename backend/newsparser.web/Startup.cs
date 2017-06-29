@@ -28,7 +28,7 @@ namespace NewsParser
                     reloadOnChange: true)
                 .AddEnvironmentVariables();
             
-            if (env.IsDevelopment() || env.EnvironmentName == "Test")
+            if (env.IsDevelopment())
             {
                 builder.AddUserSecrets<Startup>();
             }
