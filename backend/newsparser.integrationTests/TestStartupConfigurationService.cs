@@ -19,15 +19,6 @@ namespace NewsParser.IntegrationTests
             base.ConfigureEnvironment(env, configuration);
         }
 
-        public override void ConfigureStorage(IServiceCollection services)
-        {
-            var connection = _configuration.GetConnectionString("TestAppDbContext");
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
-            });
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);

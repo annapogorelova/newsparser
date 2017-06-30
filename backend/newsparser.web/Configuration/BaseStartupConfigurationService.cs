@@ -111,6 +111,11 @@ namespace NewsParser.Web.Configuration
 
         public virtual void ConfigureStorage(IServiceCollection services)
         {
+            var connection = EnvConfigurationProvider.GetDbConnectionString();
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
+            });
         }
 
         protected virtual void InitializeDatabase(AppDbContext dbContext)
@@ -171,7 +176,7 @@ namespace NewsParser.Web.Configuration
 
         private void ConfigureJwtAuthentication(IApplicationBuilder app)
         {
-            var secretKey = _configuration["Authentication:SecretKey"];
+            var secretKey = EnvConfigurationProvider.AuthSecretKey;
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -207,7 +212,7 @@ namespace NewsParser.Web.Configuration
 
         private void ConfigureIdentityServices(IServiceCollection services)
         {
-            var secretKey = _configuration["Authentication:SecretKey"];
+            var secretKey = EnvConfigurationProvider.AuthSecretKey;
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var accessTokenLifetime = int.Parse(_configuration.GetSection("Security")["AccessTokenLifetimeMinutes"]);
             var refreshTokenLifetime = int.Parse(_configuration.GetSection("Security")["RefreshTokenLifetimeDays"]);

@@ -3,6 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
+using NewsParser.Web.Configuration;
 
 namespace NewsParser.Services 
 {
@@ -20,7 +21,7 @@ namespace NewsParser.Services
 
         public Task SendAccountConfirmationEmail(string email, string confirmationToken)
         {
-            string websiteUrl = _config["WebsiteUrl"];
+            string websiteUrl = EnvConfigurationProvider.WebsiteUrl;
             string confirmationLink = $"{websiteUrl}/email-confirmation?confirmationToken={confirmationToken}&email={email}";
             string mailContent = $@"Please confirm your email by following <a href='{confirmationLink}'>this link</a>.";
             
@@ -29,14 +30,14 @@ namespace NewsParser.Services
 
         public async Task SendEmail(string email, string subject, string message)
         {
-            var mailerConfig = _config.GetSection("Mailer");
+            //var mailerConfig = _config.GetSection("Mailer");
             var emailMessage = CreateHtmlMessage(email, subject, message);
         
             using (var client = new SmtpClient())
             {
-                var smtpConfig = mailerConfig.GetSection("SMTP");
-                await client.ConnectAsync(smtpConfig["Server"], 
-                    int.Parse(smtpConfig["Port"]), SecureSocketOptions.None).ConfigureAwait(false);
+                //var smtpConfig = mailerConfig.GetSection("SMTP");
+                await client.ConnectAsync(EnvConfigurationProvider.MailerHost, 
+                    int.Parse(EnvConfigurationProvider.MailerPort), SecureSocketOptions.None).ConfigureAwait(false);
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
@@ -44,7 +45,7 @@ namespace NewsParser.Services
 
         public Task SendPasswordResetEmail(string email, string passwordResetToken)
         {
-            string websiteUrl = _config["WebsiteUrl"];
+            string websiteUrl = EnvConfigurationProvider.WebsiteUrl;
             string resetPasswordLink = $"{websiteUrl}/password-reset?passwordResetToken={passwordResetToken}&email={email}";
             string mailContent = $@"You have requested a password reset on NewsParser.
                 Please set a new password by following <a href='{resetPasswordLink}'>this link</a>.";
@@ -54,10 +55,13 @@ namespace NewsParser.Services
 
         private MimeMessage CreateHtmlMessage(string email, string subject, string htmlContent)
         {
-            var mailerConfig = _config.GetSection("Mailer");
+            //var mailerConfig = _config.GetSection("Mailer");
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(mailerConfig["SenderName"], mailerConfig["SenderEmail"]));
+            emailMessage.From.Add(new MailboxAddress(
+                EnvConfigurationProvider.MailerSenderName, 
+                EnvConfigurationProvider.MailerSenderEmail
+            ));
             emailMessage.To.Add(new MailboxAddress(string.Empty, email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart("html") { Text = htmlContent };

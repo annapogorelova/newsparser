@@ -2,6 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NewsParser.DAL;
+using NewsParser.Web.Configuration;
 
 namespace NewsParser.IntegrationTests.Fixtures
 {
@@ -16,7 +17,7 @@ namespace NewsParser.IntegrationTests.Fixtures
         public AppDbContext CreateDbContext()
         {
             var configuration = ServiceLocator.Instance.GetService(typeof(IConfiguration)) as IConfiguration;
-            var connection = configuration.GetSection("ConnectionStrings")["TestAppDbContext"];
+            var connection = EnvConfigurationProvider.GetDbConnectionString();
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
             _dbContext = new AppDbContext(optionsBuilder.Options);

@@ -21,19 +21,18 @@ namespace NewsParser
 
         public Startup(IHostingEnvironment env, IStartupConfigurationService externalConfigService)
         {
+            string envName = env.EnvironmentName.ToLower();
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", 
-                    optional: false, 
-                    reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{envName}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-            
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
 
             Configuration = builder.Build();
+
+            string envFileName = $"{Configuration["AppName"]}.{envName}.env";
+            DotNetEnv.Env.Load($"{Configuration["EnvFilePath"]}/{envFileName}");
 
             _externalConfigService = externalConfigService;
             _externalConfigService.ConfigureEnvironment(env, Configuration);

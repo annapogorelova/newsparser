@@ -19,7 +19,7 @@ namespace NewsParser.IntegrationTests.Fixtures
         {
             var builder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseEnvironment("Development")
+                .UseEnvironment("Test")
                 .UseStartup<Startup>()
                 .ConfigureServices(
                     s => s.AddSingleton<IStartupConfigurationService, TestStartupConfigurationService>());

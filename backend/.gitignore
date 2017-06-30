@@ -246,3 +246,7 @@ newsparser.web/logs
 newsparser.scheduler/logs
 
 .vscode/
+
+appsettings.*.json
+!appsettings.example.json
+*.env

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using newsparser.DAL.Models;
+using NewsParser.Web.Configuration;
 using NewsParser.Web.Identity;
 
 namespace NewsParser.Web.Auth.ExternalAuth
@@ -68,7 +69,7 @@ namespace NewsParser.Web.Auth.ExternalAuth
             var content = await response.Content.ReadAsStringAsync();
             dynamic appObj = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
-            return appObj["id"] == _config["Authentication:Facebook:AppId"];
+            return appObj["id"] == EnvConfigurationProvider.FacebookAppId;
         }
 
         private async Task<ExternalUser> VerifyGoogleTokenAsync(string token)
@@ -87,7 +88,7 @@ namespace NewsParser.Web.Auth.ExternalAuth
                 string content = await response.Content.ReadAsStringAsync();
                 dynamic userObj = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
-                if (userObj["aud"] == _config["Authentication:Google:ClientID"])
+                if (userObj["aud"] == EnvConfigurationProvider.GoogleClientId)
                 {
                     externalUser.ExternalId = userObj["sub"];
                     externalUser.AuthProvider = ExternalAuthProvider.Google;
