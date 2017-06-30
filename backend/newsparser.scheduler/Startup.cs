@@ -32,13 +32,18 @@ namespace NewsParser.Scheduler
     {
         public Startup(IHostingEnvironment env)
         {
+            string envName = env.EnvironmentName.ToLower();
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{envName}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+
+            string envFileName = $"{Configuration["AppName"]}.{envName}.env";
+            DotNetEnv.Env.Load($"{Configuration["EnvFilePath"]}/{envFileName}");
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -47,8 +52,7 @@ namespace NewsParser.Scheduler
         {
             RegisterServices(services);
 
-            // Database
-            var connection = Configuration.GetConnectionString("SchedulerDbContext");
+            var connection = GetDbConnectionString();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
@@ -63,11 +67,6 @@ namespace NewsParser.Scheduler
             }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddFile("logs/newsparser.scheduler-{Date}.txt");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
             ServiceLocator.Instance = app.ApplicationServices;
 
@@ -97,6 +96,16 @@ namespace NewsParser.Scheduler
         {
             int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateIntervalMinutes"]);
             JobManager.Initialize(new JobRegistry(feedUpdateInterval));
+        }
+
+        private string GetDbConnectionString()
+        {
+            string dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            string dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+            string dbName = Environment.GetEnvironmentVariable("DB_NAME");
+            string dbUser = Environment.GetEnvironmentVariable("DB_USER");
+            string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+            return $"server={dbHost};userid={dbUser};pwd={dbPassword};port={dbPort};database={dbName};sslmode=none;charset=utf8;";
         }
     }
 }
