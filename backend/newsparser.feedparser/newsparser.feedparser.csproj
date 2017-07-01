@@ -4,6 +4,9 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>newsparser.feedparser</AssemblyName>
     <PackageId>newsparser.feedparser</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Anna Pohorielova</Authors>
+    <Description>Newsparser feed parser project.</Description>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

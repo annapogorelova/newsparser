@@ -4,6 +4,9 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>newsparser.DAL</AssemblyName>
     <PackageId>newsparser.DAL</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Anna Pohorielova</Authors>
+    <Description>Newsparser data access layer project.</Description>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

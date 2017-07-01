@@ -4,6 +4,9 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>newsparser.BL</AssemblyName>
     <PackageId>newsparser.BL</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Anna Pohorielova</Authors>
+    <Description>Newsparser business logic layer project.</Description>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

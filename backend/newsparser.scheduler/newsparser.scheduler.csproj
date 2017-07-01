@@ -5,6 +5,9 @@
     <AssemblyName>newsparser.scheduler</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>newsparser.scheduler</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Anna Pohorielova</Authors>
+    <Description>Newsparser scheduler project.</Description>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
