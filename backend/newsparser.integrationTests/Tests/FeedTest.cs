@@ -9,7 +9,7 @@ using NewsParser.FeedParser.Services;
 using NewsParser.DAL.Repositories.Feed;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Internal;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 
 namespace NewsParser.IntegrationTests.Tests
 {

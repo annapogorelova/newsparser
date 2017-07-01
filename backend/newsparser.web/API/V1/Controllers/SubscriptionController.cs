@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.BL.Services.Channels;
 using NewsParser.Helpers.ActionFilters.ModelValidation;
 using NewsParser.Web.Identity.Models;
 
-namespace NewsParser.API.Controllers
+namespace NewsParser.API.V1.Controllers
 {
     /// <summary>
     /// Controller for managing channels subscriptions

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using newsparser.DAL.Models;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.Web.Auth.ExternalAuth;
 using NewsParser.DAL.Models;
 using NewsParser.Web.Identity.Models;

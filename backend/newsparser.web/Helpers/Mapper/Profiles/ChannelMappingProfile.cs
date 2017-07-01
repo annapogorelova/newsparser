@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.BL.Services.Channels;
 using NewsParser.DAL.Models;
 using NewsParser.Web.Identity.Models;

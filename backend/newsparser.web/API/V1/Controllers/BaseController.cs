@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using NewsParser.API.Models;
 using NewsParser.Exceptions;
 
-namespace NewsParser.API.Controllers
+namespace NewsParser.API.V1.Controllers
 {
     /// <summary>
     /// Base controller class that contains common api controller methods

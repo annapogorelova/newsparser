@@ -1,4 +1,4 @@
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     /// <summary>
     /// Class represent a NewsSource model to be passed over API

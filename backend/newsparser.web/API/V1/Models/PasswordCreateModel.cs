@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     public class PasswordCreateModel
     {

@@ -7,7 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.BL.Services.Users;
 using NewsParser.Cache;
 using NewsParser.DAL.Models;
@@ -18,7 +18,7 @@ using NewsParser.Web.Identity.Models;
 using NewsParser.Services;
 using NewsParser.Web.Auth;
 
-namespace NewsParser.API.Controllers
+namespace NewsParser.API.V1.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : BaseController

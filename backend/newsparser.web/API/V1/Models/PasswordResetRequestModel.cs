@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     /// <summary>
     /// Class contains a properties for the password reset request

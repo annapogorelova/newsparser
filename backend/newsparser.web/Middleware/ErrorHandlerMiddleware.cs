@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.BL.Exceptions;
 using NewsParser.Exceptions;
 using Newtonsoft.Json;

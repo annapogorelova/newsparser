@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.Helpers.Mapper.Profiles

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.DAL.Models;
 using NewsParser.IntegrationTests.Fixtures;
 using Newtonsoft.Json;

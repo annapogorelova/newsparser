@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using NewsParser.Helpers.ValidationAttributes;
 
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     /// <summary>
     /// Class contains a properties for the password change

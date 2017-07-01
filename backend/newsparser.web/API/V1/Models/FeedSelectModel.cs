@@ -1,7 +1,7 @@
 ﻿using System;
 using NewsParser.Helpers.ValidationAttributes;
 
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     /// <summary>
     /// Model contains a feed GET request parameters

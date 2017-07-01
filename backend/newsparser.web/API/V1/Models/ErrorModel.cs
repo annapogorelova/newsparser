@@ -1,4 +1,4 @@
-namespace NewsParser.API.Models
+namespace NewsParser.API.V1.Models
 {
     public class ErrorModel
     {

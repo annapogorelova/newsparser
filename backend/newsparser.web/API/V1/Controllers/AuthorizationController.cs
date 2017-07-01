@@ -11,7 +11,7 @@ using NewsParser.Exceptions;
 using NewsParser.Web.Identity.Models;
 using NewsParser.Web.Auth;
 
-namespace NewsParser.API.Controllers
+namespace NewsParser.API.V1.Controllers
 {
     /// <summary>
     /// Controller contains methods for authorizing users

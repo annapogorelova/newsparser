@@ -2,7 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NewsParser.API.Models;
+using NewsParser.API.V1.Models;
 using NewsParser.BL.Services.Feed;
 using NewsParser.DAL.Models;
 using System.Linq;
@@ -12,7 +12,7 @@ using NewsParser.Helpers.ActionFilters.ModelValidation;
 using Microsoft.Extensions.Caching.Distributed;
 using NewsParser.Cache;
 
-namespace NewsParser.API.Controllers
+namespace NewsParser.API.V1.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
