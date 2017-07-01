@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-md-12">
+        <form novalidate #f="ngForm" (ngSubmit)="submit(f.valid)" (ngModelChange)="onFormChanged()">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" class="form-control" name="email" [(ngModel)]="formData.email"
+                       required  #email="ngModel"
+                       pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"/>
+                <small [hidden]="email.valid || (email.pristine && !f.submitted)" class="validation-error-text">
+                    Email is not in valid format.
+                </small>
+            </div>
+            <button type="submit" class="btn btn-info pull-right"
+                    [disabled]="!f.valid || submitInProgress || !formDataChanged">Submit</button>
+        </form>
+    </div>
+</div>

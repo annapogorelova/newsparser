@@ -1,0 +1,28 @@
+:host /deep/ .social-button {
+    margin-bottom: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+:host /deep/ .social-button i {
+    float: left;
+    padding-right: 10px;
+}
+
+:host /deep/ .btn-facebook {
+    background-color: #4867AA;
+    color: white;
+}
+
+:host /deep/ .btn-facebook:hover {
+    background-color: #395288;
+}
+
+:host /deep/ .btn-google {
+    background-color: #EA4335;
+    color: white;
+}
+
+:host /deep/ .btn-google:hover {
+    background-color: #BB352A;
+}

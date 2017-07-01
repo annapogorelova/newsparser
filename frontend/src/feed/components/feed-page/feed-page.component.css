@@ -1,0 +1,29 @@
+@media (max-width: 600px) {
+    :host /deep/ .news-container-hidden {
+        display: none !important;
+    }
+}
+
+:host /deep/ .sidebar-toggler-container {
+    padding-bottom: 5px;
+}
+
+:host /deep/ .sidebar-toggler-container i {
+    color: white;
+    vertical-align: baseline;
+}
+
+:host /deep/ .card-block {
+    background-color: white;
+}
+
+:host /deep/ div.lock {
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    background-color: black;
+    opacity: 0.03;
+    display: block;
+    position: fixed;
+    top: 0;
+}

@@ -1,0 +1,19 @@
+:host /deep/ .sign-in-form {
+    padding-bottom: 10px;
+    min-width: 230px;
+}
+
+:host /deep/ .btn-full-length {
+    width: 100%;
+}
+
+:host /deep/ button {
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+:host /deep/ .validation-error-text {
+    color: #BD362F;
+}

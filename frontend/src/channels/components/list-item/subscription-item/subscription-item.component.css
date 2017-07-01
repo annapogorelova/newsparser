@@ -1,0 +1,15 @@
+:host /deep/ button.btn-full-length {
+    width: 100%;
+}
+
+:host /deep/ .private-icon {
+    color: #e50000;
+}
+
+:host /deep/ i {
+    padding-right: 10px;
+}
+
+:host /deep/ a.news-source-item.private {
+    background-color: #fce5e5;
+}

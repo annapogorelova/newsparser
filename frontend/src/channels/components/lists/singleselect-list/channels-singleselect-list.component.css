@@ -1,0 +1,160 @@
+:host /deep/ .news-source-item {
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 70%;
+    padding: 5px 5px 5px 5px;
+}
+
+:host /deep/ span.news-source-image {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    background-color: white;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+}
+
+:host /deep/ .news-source-item.active {
+    color: white;
+    margin-bottom: 0;
+}
+
+:host /deep/ .news-source-item.active:hover {
+    color: #CCCCCC;
+}
+
+:host /deep/ .news-source-item-container {
+    display: inline-block;
+    padding-right: 5px;
+    max-width: 100%;
+}
+
+:host /deep/ .news-sources-list-container {
+    height: 100%;
+    overflow-y: auto;
+}
+
+:host /deep/ .news-sources-list .list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+:host /deep/ .news-sources-list .list-group-item:first-child {
+    border-top: none;
+}
+
+:host /deep/ .news-sources-list .list-group-item:first-child {
+    border-bottom: none;
+}
+
+:host /deep/ .loading-more-icon-container {
+    display: table;
+    margin: auto;
+}
+
+:host /deep/ .loading-status-container {
+    padding: 10px 10px 10px 10px;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+:host /deep/ .loading-status-container h5, i {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+:host /deep/ .paging {
+    text-align: center;
+}
+
+:host /deep/ .paging-button {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-decoration: none;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    padding: 0;
+    border-radius: 3px 3px 3px 3px;
+}
+
+:host /deep/ .paging-button:not([disabled]) {
+    cursor: pointer;
+}
+
+:host /deep/ .paging-button:hover:not([disabled]), .paging-button:focus:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    color: white;
+}
+
+:host /deep/ .paging-button[disabled] {
+    opacity: 0.7;
+}
+
+:host /deep/ .paging {
+    padding-top: 5px;
+}
+
+:host /deep/ .paging div {
+    display: inline;
+}
+
+:host /deep/ .news-source-popover-content span, p {
+    font-size: 12px;
+}
+
+:host /deep/ .popover-content i {
+    padding-right: 0;
+}
+
+:host /deep/ .news-source-popover-content {
+    padding: 0;
+}
+
+:host /deep/ .popover-content span.news-source-image {
+    width: 25px;
+    height: 25px;
+}
+
+:host /deep/ ngb-popover-window {
+    position: fixed;
+    top: 15% !important;
+    right: 5% !important;
+    left: auto !important;
+}
+
+:host /deep/ div.popover-content {
+    padding: 8px;
+}
+
+:host /deep/ div.popover-content .subscription-info {
+    max-height: 150px;
+    overflow-x: auto;
+    padding: 5px 0 5px 0;
+}
+
+:host /deep/ div.popover-content .subscription-info p {
+    margin-bottom: 3px;
+}
+
+:host /deep/ div.popover-content .subscription-info p.subscription-title {
+    margin-bottom: 10px;
+}
+
+:host /deep/ .popover {
+    width: 300px;
+    margin-left: 15%;
+}
+
+:host /deep/ .source-language {
+    font-size: 10px;
+}

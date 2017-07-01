@@ -1,0 +1,29 @@
+:host /deep/ .container {
+    padding-top: 10px;
+}
+
+:host /deep/ a[role=link] {
+    cursor: pointer;
+}
+
+:host /deep/ .container-fluid {
+    padding: 10px;
+}
+
+:host /deep/ a.navbar-toggler {
+    border: none;
+}
+
+:host /deep/ .navbar-toggler i {
+    color: white;
+    font-size: medium;
+}
+
+:host /deep/ .page-content {
+    min-width: 250px;
+}
+
+:host /deep/ .navbar-brand img {
+    height: 28px;
+    width: 28px;
+}

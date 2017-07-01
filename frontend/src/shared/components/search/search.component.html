@@ -1,0 +1,17 @@
+<div class="search-container">
+    <div class="input-group input-group-sm">
+        <input name="search" type="text" class="form-control form-control-sm"
+               (keyup)="onKeyUp($event)"
+               [(ngModel)]="search"
+               [attr.placeholder]="placeholderCaption"
+               required="true"/>
+        <span class="input-group-btn">
+            <button type="submit" class="btn btn-outline-secondary btn-sm"
+                    (click)="clear()"
+                    [disabled]="!search"
+                    title="Clear">
+                <i class="fa fa-times"></i>
+            </button>
+        </span>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<ul class="pagination pagination-sm">
+    <li class="page-item" [ngClass]="isFirstPage ? 'disabled' : ''">
+        <a role="button" class="page-link" aria-label="Previous" (click)="firstPage()">
+            <span aria-hidden="true"><i class="fa fa-angle-double-left"></i></span>
+            <span class="sr-only">First</span>
+        </a>
+    </li>
+    <li class="page-item" [ngClass]="isFirstPage ? 'disabled' : ''">
+        <a role="button" class="page-link" aria-label="Previous" (click)="prevPage()">
+            <span aria-hidden="true"><i class="fa fa-angle-left"></i></span>
+            <span class="sr-only">Previous</span>
+        </a>
+    </li>
+    <li class="page-item" [ngClass]="isLastPage ? 'disabled' : ''">
+        <a role="button" class="page-link" aria-label="Next" (click)="nextPage()">
+            <span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </li>
+    <li class="page-item" [ngClass]="isLastPage ? 'disabled' : ''">
+        <a role="button" class="page-link" aria-label="Next" (click)="lastPage()">
+            <span aria-hidden="true"><i class="fa fa-angle-double-right"></i></span>
+            <span class="sr-only">Last</span>
+        </a>
+    </li>
+</ul>

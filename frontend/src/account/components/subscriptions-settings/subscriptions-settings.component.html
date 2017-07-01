@@ -1,0 +1,51 @@
+<div class="container-fluid">
+    <div class="news-sources-settings-container">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <h5>Manage your subscriptions</h5>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <ngb-tabset type="pills"
+                            [activeId]="selectedTabId"
+                            [destroyOnHide]="false"
+                            (tabChange)="onTabChange($event)">
+                    <ngb-tab id="subscribed" title="Subscribed">
+                        <ng-template ngbTabContent>
+                            <div class="news-sources-container">
+                                <channels-singleselect-list #subscribedChannelsList
+                                              (onSelect)="subscribe($event)"
+                                              (onDeselect)="unsubscribe($event)"
+                                              [useSearch]="true"
+                                              [subscribed]="true">
+                                </channels-singleselect-list>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="all" title="All">
+                        <ng-template ngbTabContent>
+                            <div class="news-sources-container">
+                                <channels-singleselect-list #allChannelsList
+                                              (onSelect)="subscribe($event)"
+                                              (onDeselect)="unsubscribe($event)"
+                                              [useSearch]="true"
+                                              [subscribed]="false">
+                                </channels-singleselect-list>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="create" title="Create">
+                        <ng-template ngbTabContent>
+                            <channel-creation-form></channel-creation-form>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>

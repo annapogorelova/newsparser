@@ -1,0 +1,6 @@
+<button title="Sign in with {{provider}}" class="btn social-button {{buttonClass}}" type="button"
+        (click)="submit(true)"
+        [disabled]="submitInProgress || inputDisabled">
+    <i class="{{buttonIcon}}" aria-hidden="true"></i>
+    Sign in with {{provider}}
+</button>

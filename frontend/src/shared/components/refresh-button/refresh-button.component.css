@@ -1,0 +1,17 @@
+:host /deep/ .refresh {
+    width: 45px;
+    height: 45px;
+    line-height: 35px;
+    text-decoration: none;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+:host /deep/ .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    color: white;
+    outline: none;
+}

@@ -1,0 +1,64 @@
+:host /deep/ .tag-container {
+    display: inline-block;
+    padding-right: 5px;
+    max-width: 100%;
+}
+
+:host /deep/ .card-block {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+:host /deep/ .tag {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+}
+
+:host /deep/ .no-tags-text {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.8em;
+}
+
+:host /deep/ .tag-input-container {
+    padding: 5px 0 5px 0;
+}
+
+:host /deep/ div.card-header, div.card-block {
+    padding: 8px 8px 8px 8px;
+}
+
+:host /deep/ h5, p, span.clear {
+    padding: 0 0 0 0;
+    border: none;
+}
+
+:host /deep/ span {
+    cursor: pointer;
+}
+
+:host /deep/ p {
+    margin-bottom: 0;
+    color: #636C72;
+    font-weight: lighter;
+}
+
+:host /deep/ span[disabled="true"] {
+    cursor: not-allowed;
+}
+
+:host /deep/ span.tag.badge {
+    background-color: #0093D1;
+}
+
+:host /deep/ span.tag.badge.selected,
+    span.tag.badge:hover {
+    background-color: #0075A7;
+}

@@ -1,0 +1,161 @@
+:host /deep/ div.search-container {
+    padding: 0;
+}
+
+:host /deep/ div.news-item {
+    margin: 10px 0 10px 0;
+    font-size: small;
+}
+
+:host /deep/ .news-item p, br {
+    padding-bottom: 0;
+}
+
+:host /deep/ h5 {
+    color: #636C72;
+}
+
+:host /deep/ .news-item h2, h3, h4, h5 {
+    font-size: 1rem;
+    padding: 5px 0 5px 0;
+    margin: 0;
+}
+
+:host /deep/ .news-item-source {
+    display: inline-block;
+}
+
+:host /deep/ .news-item-source span {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 70%;
+}
+
+:host /deep/ .news-item-footer {
+    padding-top: 10px;
+}
+
+:host /deep/ .news-item-footer h6 {
+    margin: 0;
+}
+
+:host /deep/ div.news-item-content img {
+    padding: 5px;
+}
+
+:host /deep/ div.news-item-info-container {
+    width: 100%;
+}
+
+:host /deep/ .news-image-container {
+    overflow: hidden;
+    min-width: 100%;
+    min-height: 120px;
+    opacity: 0.5;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    margin: 5px 0 5px 0;
+}
+
+:host /deep/ .loading-more-icon-container {
+    display: table;
+    margin: auto;
+}
+
+:host /deep/ div.news-item-tag-container {
+    display: inline-block;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+
+:host /deep/ .news-item-content.list-group-item-action:focus,
+.news-item-content.list-group-item-action:hover {
+    background-color: white;
+}
+
+:host /deep/ .news-item-link {
+    color: #636c72;
+}
+
+:host /deep/ .news-item-link:hover {
+    color: #636c72;
+}
+
+:host /deep/ .news-item-tag-container span {
+    cursor: pointer;
+}
+
+:host /deep/ .loading-status {
+    width: 100%;
+    height: 50vh;
+    display: table;
+}
+
+:host /deep/ .loading-status h5, i {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+:host /deep/ .refresh-button-container {
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+    right: 0;
+    z-index: 100;
+    margin: 0;
+}
+
+:host /deep/ .refresh-button-container button {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    box-sizing: content-box;
+}
+
+:host /deep/ .news-item-info-container {
+    font-size: 16px;
+}
+
+:host /deep/ span.link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 11px;
+}
+
+:host /deep/ .news-item-info-container span.badge {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+:host /deep/ .news-item-info-container span.badge {
+    background-color: #F8991D;
+}
+
+:host /deep/ .news-item-tag-container span.badge {
+    background-color: #0093D1;
+}
+
+:host /deep/ .news-item-tag-container span.tag.badge.selected,
+    span.tag.badge:hover {
+    background-color: #0075A7;
+}
+
+:host /deep/ span.tag.badge.selected {
+    cursor: not-allowed;
+}
+
+:host /deep/ h3.news-item-title {
+    font-weight: normal;
+}
+
+:host /deep/ i.go-top, refresh-button i {
+    padding-bottom: 2px;
+}

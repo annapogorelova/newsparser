@@ -1,0 +1,19 @@
+:host /deep/ .tab-content {
+    padding: 10px 10px 10px 10px;
+}
+
+:host /deep/ button, change-password button {
+    cursor: pointer;
+}
+
+:host /deep/ .tab-content {
+    padding: 5px;
+}
+
+:host /deep/ h5 {
+    padding-bottom: 10px;
+}
+
+:host /deep/ .validation-error-text {
+    color: #BD362F;
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=Newsparser app
+
+[Service]
+WorkingDirectory=/var/www/newsparser/
+ExecStart=/usr/bin/dotnet /var/www/newsparser/backend/newsparser.web/bin/Debug/netcoreapp1.1/publish/newsparser.web.dll
+Restart=always
+RestartSec=10
+SyslogIdentifier=newsparser-app
+User=anna
+Environment=ASPNETCORE_ENVIRONMENT=Production 
+
+[Install]
+WantedBy=multi-user.target
