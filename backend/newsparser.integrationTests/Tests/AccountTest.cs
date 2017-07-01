@@ -176,7 +176,7 @@ namespace NewsParser.IntegrationTests.Tests
             var encodedEmail = System.Net.WebUtility.UrlEncode(testUser.Email);
             var response = await client.PostAsync($"/api/account/{encodedEmail}/confirmation", requestContent);
 
-            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
