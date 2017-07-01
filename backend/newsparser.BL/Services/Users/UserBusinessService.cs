@@ -30,25 +30,25 @@ namespace NewsParser.BL.Services.Users
         public User GetUserById(int id)
         {
             return _userRepository.GetUserById(id) ?? 
-                throw new EntityNotFoundException($"User was not found");
+                throw new EntityNotFoundException($"User was not found.");
         }
 
         public User GetUserByEmail(string email)
         {
             return _userRepository.GetUserByEmail(email) ??
-                throw new EntityNotFoundException($"User with email {email} was not found");
+                throw new EntityNotFoundException($"User with email {email} was not found.");
         }
 
         public User AddUser(User user)
         {
             if (user == null)
             {
-                throw new ArgumentNullException(nameof(user), "User cannot be null");
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
             }
 
             if (UserExists(user))
             {
-                throw new BusinessLayerException("User already exists");
+                throw new BusinessLayerException("User already exists.");
             }
 
             try
@@ -65,12 +65,12 @@ namespace NewsParser.BL.Services.Users
         {
             if (user == null)
             {
-                throw new ArgumentNullException(nameof(user), $"User cannot be null");
+                throw new ArgumentNullException(nameof(user), $"User cannot be null.");
             }
 
             if (_userRepository.GetUserById(user.Id) == null)
             {
-                throw new EntityNotFoundException($"User does not exist");
+                throw new EntityNotFoundException($"User does not exist.");
             }
 
             try
@@ -79,7 +79,7 @@ namespace NewsParser.BL.Services.Users
             }
             catch (Exception e)
             {
-                throw new BusinessLayerException($"Failed updating user", e);
+                throw new BusinessLayerException($"Failed updating user.", e);
             }
         }
 
@@ -88,7 +88,7 @@ namespace NewsParser.BL.Services.Users
             var existingUser = _userRepository.GetUserById(id);
             if (existingUser == null)
             {
-                throw new EntityNotFoundException($"User does not exist");
+                throw new EntityNotFoundException($"User does not exist.");
             }
 
             try
@@ -97,7 +97,7 @@ namespace NewsParser.BL.Services.Users
             }
             catch (Exception e)
             {
-                throw new BusinessLayerException($"Failed deleting user", e);
+                throw new BusinessLayerException($"Failed deleting user.", e);
             }
         }
 
@@ -119,7 +119,7 @@ namespace NewsParser.BL.Services.Users
         public User GetUserByUserName(string userName)
         {
             return _userRepository.GetUserByUserName(userName) ??
-                throw new EntityNotFoundException($"User was not found");
+                throw new EntityNotFoundException($"User was not found.");
         }
 
         public bool EmailAvailable(string email)
