@@ -75,7 +75,7 @@ namespace NewsParser.API.Controllers
             
             if(user.EmailConfirmed)
             {
-                return MakeErrorResponse(HttpStatusCode.Forbidden, "Email has already been confirmed.");
+                return MakeErrorResponse(HttpStatusCode.BadRequest, "Email has already been confirmed.");
             }
 
             var result = await _authService.ConfirmEmail(appUser, Base64EncodingUtility.Decode(model.ConfirmationToken));
