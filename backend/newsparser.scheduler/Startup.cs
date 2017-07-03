@@ -66,7 +66,10 @@ namespace NewsParser.Scheduler
                 loggerFactory.AddDebug();
             }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddFile("logs/newsparser.scheduler-{Date}.txt");
+            
+            string logFilePath = Configuration["LogFilePath"];
+            string logFileName = $"{logFilePath}{Configuration["AppName"]}" + "-{Date}.txt";
+            loggerFactory.AddFile(logFileName);
 
             ServiceLocator.Instance = app.ApplicationServices;
 

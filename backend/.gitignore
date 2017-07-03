@@ -241,12 +241,10 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
-# logs
-newsparser.web/logs
-newsparser.scheduler/logs
-
 .vscode/
 
 appsettings.*.json
 !appsettings.example.json
 *.env
+
+*/log/

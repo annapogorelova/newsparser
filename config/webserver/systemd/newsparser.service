@@ -1,14 +1,15 @@
 [Unit]
-Description=Newsparser app
+Description=Newsparser web app
 
 [Service]
-WorkingDirectory=/var/www/newsparser/
-ExecStart=/usr/bin/dotnet /var/www/newsparser/backend/newsparser.web/bin/Debug/netcoreapp1.1/publish/newsparser.web.dll
+WorkingDirectory=/var/www/newsparser/dist/backend/web
+ExecStart=/usr/bin/dotnet /var/www/newsparser/dist/backend/web/newsparser.web.dll
 Restart=always
-RestartSec=10
-SyslogIdentifier=newsparser-app
-User=anna
-Environment=ASPNETCORE_ENVIRONMENT=Production 
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=newsparser
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
 
 [Install]
 WantedBy=multi-user.target
+
