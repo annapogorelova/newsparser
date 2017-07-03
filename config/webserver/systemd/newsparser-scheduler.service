@@ -1,0 +1,15 @@
+[Unit]
+Description=Newsparser scheduler app
+
+[Service]
+WorkingDirectory=/var/www/newsparser/dist/backend/scheduler
+ExecStart=/usr/bin/dotnet /var/www/newsparser/dist/backend/scheduler/newsparser.scheduler.dll
+Restart=always
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=newsparser-scheduler
+User=ubuntu
+Environment=ASPNETCORE_ENVIRONMENT=Production
+
+[Install]
+WantedBy=multi-user.target
+
