@@ -32,7 +32,7 @@ namespace NewsParser
             Configuration = builder.Build();
 
             string envFileName = $"{Configuration["AppName"]}.{envName}.env";
-            DotNetEnv.Env.Load($"{Configuration["EnvFilePath"]}/{envFileName}");
+            DotNetEnv.Env.Load($"{Configuration["EnvFilePath"]}{envFileName}");
 
             _externalConfigService = externalConfigService;
             _externalConfigService.ConfigureEnvironment(env, Configuration);

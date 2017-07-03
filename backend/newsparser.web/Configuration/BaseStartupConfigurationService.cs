@@ -54,7 +54,10 @@ namespace NewsParser.Web.Configuration
             }
             
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
-            loggerFactory.AddFile("logs/newsparser.web-{Date}.txt");
+
+            string logFilePath = _configuration["LogFilePath"];
+            string logFileName = $"{logFilePath}{_configuration["AppName"]}" + "-{Date}.txt";
+            loggerFactory.AddFile(logFileName);
 
             var dbContext = app.ApplicationServices.GetService<AppDbContext>();
             InitializeDatabase(dbContext);
