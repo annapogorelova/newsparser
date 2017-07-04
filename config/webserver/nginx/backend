@@ -10,10 +10,3 @@ server {
         proxy_cache_bypass $http_upgrade;
     }	
 }
-
-server {
-    listen 8000;
-    index index.html;
-    root /var/www/newsparser/docs;
-}
-
