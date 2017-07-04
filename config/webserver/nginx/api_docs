@@ -1,0 +1,6 @@
+server {
+    listen 80;
+    #server_name newsparser;
+    index index.html;
+    root /var/www/newsparser/docs;
+}
