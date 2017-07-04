@@ -37,13 +37,12 @@ namespace NewsParser.Services
             {              
                 await client.ConnectAsync(
                     EnvConfigurationProvider.MailerHost, 
-                    int.Parse(EnvConfigurationProvider.MailerPort), 
-                    SecureSocketOptions.Auto);
+                    int.Parse(EnvConfigurationProvider.MailerPort));
+                
                 await client.AuthenticateAsync(
                     new NetworkCredential(
                         EnvConfigurationProvider.MailerUsername,
-                        EnvConfigurationProvider.MailerPassword,
-                        EnvConfigurationProvider.MailerDomain
+                        EnvConfigurationProvider.MailerPassword
                     )
                 );
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
