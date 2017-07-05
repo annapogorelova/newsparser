@@ -247,4 +247,4 @@ appsettings.*.json
 !appsettings.example.json
 *.env
 
-*/log/
+*/logs/
