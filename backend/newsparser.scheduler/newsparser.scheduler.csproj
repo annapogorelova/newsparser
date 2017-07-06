@@ -30,4 +30,7 @@
     <PackageReference Include="MySqlConnector" Version="0.16.2" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="7.0.7-m61" />
   </ItemGroup>
+  <Target Name="PrebuildScript" BeforeTargets="Build">
+    <Exec Command="dotnet restore" />
+  </Target>
 </Project>
