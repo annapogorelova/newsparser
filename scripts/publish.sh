@@ -28,11 +28,13 @@ echo ""
 PROJECT_PATH=./backend/newsparser.$PROJECT_NAME/newsparser.$PROJECT_NAME.csproj
 OUTPUT_PATH=./dist/backend/$PROJECT_NAME
 
+echo "--- dotnet restore ---"
+dotnet restore
 echo "--- dotnet publish ---"
 dotnet publish $PROJECT_PATH -o=$OUTPUT_PATH -c=Production
 echo ""
 
-if [[ "$PROJECT_NAME" -eq "web" ]];
+if [[ "$PROJECT_NAME" == "web" ]];
 	then
 		echo "--- generating api docs ---"
 		apidoc -i ./backend/newsparser.web/ -o ./docs
