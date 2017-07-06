@@ -152,15 +152,28 @@ namespace NewsParser.BL.Services.Feed
             return _feedRepository.GetByGuid(guid);
         }
 
-        public void Update(int feedItemId, int channelId, List<string> tags = null)
+        public void Update(FeedItem feedItem)
+        {
+            var existingFeedItem = _feedRepository.GetById(feedItem.Id);
+            if (existingFeedItem == null)
+            {
+                throw new BusinessLayerException($"Feed item with id {feedItem.Id} does not exist");
+            }
+
+            try
+            {
+                _feedRepository.Update(feedItem);
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLayerException($"Failed to update feed item with id {feedItem.Id}", e);
+            }
+        }
+
+        public void UpdateTags(int feedItemId, List<string> tags = null)
         {
             try
             {
-                if(!_feedRepository.HasChannel(feedItemId, channelId))
-                {
-                    AddChannel(feedItemId, channelId);
-                }
-
                 var feedItemTags = _tagRepository.GetByFeedItemId(feedItemId).ToList();
                 var newTags = tags.Except(feedItemTags.Select(t => t.Name)).ToList();
 
@@ -171,8 +184,13 @@ namespace NewsParser.BL.Services.Feed
             }
             catch (Exception e)
             {
-                throw new BusinessLayerException($"Failed to update feed item with id {feedItemId}", e);
+                throw new BusinessLayerException($"Failed to update feed item tags with feed item id {feedItemId}", e);
             }
+        }
+
+        public bool HasChannel(int feedItemId, int channelId)
+        {
+            return _feedRepository.HasChannel(feedItemId, channelId);
         }
     }
 }

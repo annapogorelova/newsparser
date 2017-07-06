@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using AutoMapper;
-using NewsParser.Helpers.Mapper.Profiles;
 
-namespace NewsParser.Helpers.Mapper
+namespace NewsParser.FeedParser.Mapper
 {
     /// <summary>
     /// Static class that performs the configuration of AutoMapper 
@@ -15,17 +14,12 @@ namespace NewsParser.Helpers.Mapper
         public static void Congifure()
         {
             AutoMapper.Mapper.Initialize(ConfigAction);
-            //AutoMapper.Mapper.AssertConfigurationIsValid();
         }
 
         public static Action<IMapperConfigurationExpression> ConfigAction = cfg =>
         {
             cfg.AddProfile<FeedMappingProfile>();
             cfg.AddProfile<ChannelMappingProfile>();
-            cfg.AddProfile<UserMappingProfile>();
-            cfg.AddProfile<TokenMappingProfile>();
-            cfg.AddProfile<FeedParser.Mapper.FeedMappingProfile>();
-            cfg.AddProfile<FeedParser.Mapper.ChannelMappingProfile>();
         };
     }
 }

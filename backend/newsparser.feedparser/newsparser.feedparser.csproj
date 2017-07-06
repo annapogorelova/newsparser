@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>newsparser.feedparser</AssemblyName>
@@ -12,9 +11,10 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="../newsparser.BL/newsparser.BL.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="5.2.0" />
+  </ItemGroup>
 </Project>

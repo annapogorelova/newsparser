@@ -152,5 +152,13 @@ namespace NewsParser.DAL.Repositories.Feed
             return _dbContext.ChannelFeedItems
                 .Any(ns => ns.FeedItemId == feedItemId && ns.ChannelId == channelId);
         }
+
+        public void Update(FeedItem feedItem)
+        {
+            _dbContext.FeedItems.Attach(feedItem);
+            var dbEntry = _dbContext.Entry(feedItem);
+            dbEntry.CurrentValues.SetValues(feedItem);
+            _dbContext.SaveChanges();
+        }
     }
 }

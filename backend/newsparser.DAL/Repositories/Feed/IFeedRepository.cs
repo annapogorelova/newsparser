@@ -128,5 +128,11 @@ namespace NewsParser.DAL.Repositories.Feed
         /// <param name="channelId">channel id</param>
         /// <returns>True if feed item has such news channel, false - if not</returns>
         bool HasChannel(int feedItemId, int channelId);
+
+        /// <summary>
+        /// Updates the feed item properties
+        /// </summary>
+        /// <param name="feedItem">FeedItem object</param>
+        void Update(FeedItem feedItem);
     }
 }
