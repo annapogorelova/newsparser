@@ -7,6 +7,7 @@ using NewsParser.BL.Services.Channels;
 using NewsParser.FeedParser.Exceptions;
 using NewsParser.FeedParser.Services;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace NewsParser.Scheduler
 {
@@ -17,12 +18,14 @@ namespace NewsParser.Scheduler
     {
         private readonly IFeedUpdater _feedUpdater;
         private readonly IChannelDataService _channelDataService;
+        private readonly ILogger<FeedUpdateJob> _log;
         private readonly object _feedUpadteLock = new object();
 
         public FeedUpdateJob()
         {
             _feedUpdater = ServiceLocator.Instance.GetService<IFeedUpdater>();
             _channelDataService = ServiceLocator.Instance.GetService<IChannelDataService>();
+            _log = ServiceLocator.Instance.GetService<ILogger<FeedUpdateJob>>();
         }
 
         public void Execute()
@@ -34,6 +37,7 @@ namespace NewsParser.Scheduler
                     var channels = _channelDataService.GetForUpdate();
                     if(!channels.Any())
                     {
+                        _log.LogInformation("No channels to update.");
                         return;
                     }
 
