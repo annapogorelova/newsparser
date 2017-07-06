@@ -73,6 +73,8 @@ namespace NewsParser.Scheduler
 
             ServiceLocator.Instance = app.ApplicationServices;
 
+            FeedParser.Mapper.ModelsMapper.Congifure();
+
             InitializeJobScheduler();
         }
 

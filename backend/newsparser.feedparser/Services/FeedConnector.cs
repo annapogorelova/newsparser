@@ -47,7 +47,7 @@ namespace NewsParser.FeedParser.Services
                         Author = feedParser.GetItemAuthor(feedItemXml)?.CropString(100),
                         Categories = feedParser.GetItemCategories(feedItemXml),
                         ImageUrl = feedParser.GetItemImageUrl(feedItemXml),
-                        Link = feedParser.GetItemLink(feedItemXml),
+                        LinkToSource = feedParser.GetItemLink(feedItemXml),
                         Description = feedParser.GetItemDescription(feedItemXml)
                     };
 

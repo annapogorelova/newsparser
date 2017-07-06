@@ -98,11 +98,24 @@ namespace NewsParser.BL.Services.Feed
         bool Exists(string guid);
 
         /// <summary>
-        /// Update feed item with channel and tags
+        /// Updates the feed item properties
+        /// </summary>
+        /// <param name="feedItem">FeedItem object</param>
+        void Update(FeedItem feedItem);
+
+        /// <summary>
+        /// Update the list of tags of the feed item
+        /// </summary>
+        /// <param name="feedItemId">Feed item id</param>
+        /// <param name="tags">List of tags</param>
+        void UpdateTags(int feedItemId, List<string> tags = null);
+
+        /// <summary>
+        /// Determines whether the feed item already has the channel specified
         /// </summary>
         /// <param name="feedItemId">Feed item id</param>
         /// <param name="channelId">Channel id</param>
-        /// <param name="tags">List of tags</param>
-        void Update(int feedItemId, int channelId, List<string> tags = null);
+        /// <returns>True is has, false - if not</returns>
+        bool HasChannel(int feedItemId, int channelId);
     }
 }

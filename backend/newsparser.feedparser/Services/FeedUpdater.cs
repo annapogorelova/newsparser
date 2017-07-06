@@ -13,6 +13,8 @@ using NewsParser.FeedParser.Helpers;
 using System.Xml.Linq;
 using System.Net.Http;
 using NewsParser.FeedParser.Services.FeedSourceParser;
+using AutoMapper;
+using NewsParser.FeedParser.Extensions;
 
 namespace NewsParser.FeedParser.Services
 {
@@ -160,30 +162,7 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 var channelModel = await _feedConnector.ParseFeedSource(feedUrl);
-                var channel = new Channel
-                {
-                    Name = channelModel.Name?
-                            .RemoveTabulation(" ")
-                            .RemoveHtmlTags()
-                            .RemoveNonAlphanumericCharacters()
-                            .CropString(100) ?? "Untitled",
-                    Description = channelModel.Description?
-                            .RemoveTabulation(" ")
-                            .RemoveHtmlTags()
-                            .RemoveNonAlphanumericCharacters()
-                            .CropString(255),
-                    ImageUrl = channelModel.ImageUrl,
-                    FeedUrl = channelModel.FeedUrl,
-                    WebsiteUrl = channelModel.WebsiteUrl,
-                    FeedFormat = channelModel.FeedFormat,
-                    Language = channelModel.Language
-                };
-
-                if(channelModel.UpdateIntervalMinutes != 0)
-                {
-                    channel.UpdateIntervalMinutes = channelModel.UpdateIntervalMinutes;
-                }
-
+                var channel = AutoMapper.Mapper.Map<ChannelModel, Channel>(channelModel);
                 var addedChannel = _channelDataService.Add(channel);
                 UpdateChannel(addedChannel.Id);
                 _channelDataService.SubscribeUser(addedChannel.Id, userId, isPrivate);
@@ -209,44 +188,54 @@ namespace NewsParser.FeedParser.Services
 
         private void SaveFeed(int channelId, List<FeedItemModel> feed)
         {
-            foreach (var feedItem in feed)
+            foreach (var feedItemModel in feed)
             {
                 FeedItem existingFeedItem;
-                if (!_feedDataService.Exists(feedItem.Id))
+                if (!_feedDataService.Exists(feedItemModel.Id))
                 {
                     try
                     {
-                        existingFeedItem = _feedDataService.Add(new FeedItem()
-                        {
-                            DatePublished = feedItem.DatePublished,
-                            Description = feedItem.Description?
-                                .RemoveTabulation(" ")
-                                .RemoveHtmlTags()
-                                .RemoveNonAlphanumericCharacters()
-                                .CropString(500),
-                            ImageUrl = feedItem.ImageUrl,
-                            LinkToSource = feedItem.Link,
-                            Title = feedItem.Title?
-                                .RemoveTabulation(" ")
-                                .RemoveHtmlTags()
-                                .RemoveNonAlphanumericCharacters()
-                                .CropString(255) ?? "Untitled",
-                            Guid = feedItem.Id
-                        });
+                        var feedItemToAdd = AutoMapper.Mapper.Map<FeedItemModel, FeedItem>(feedItemModel);
+                        existingFeedItem = _feedDataService.Add(feedItemToAdd);
+                        _log.LogInformation($"Added feed item with id {existingFeedItem.Id}, guid {existingFeedItem.Guid}");
                     }
                     catch(Exception e)
                     {
-                        _log.LogError($"Failed to add a feed item {feedItem.Id}", e);
+                        _log.LogError($"Failed to add a feed item {feedItemModel.Id}", e);
                         continue;
                     }
                 }
                 else 
                 {
-                    existingFeedItem = _feedDataService.GetByGuid(feedItem.Id);
+                    existingFeedItem = _feedDataService.GetByGuid(feedItemModel.Id);
+                    var updatedFeedItem = AutoMapper.Mapper.Map<FeedItemModel, FeedItem>(feedItemModel);
+                    if(!TypeExtensions.PublicInstancePropertiesEqual<FeedItem>(
+                        existingFeedItem, 
+                        updatedFeedItem,
+                        new string[] {"Id", "Channels", "Tags", "DateAdded", "DatePublished", }))
+                    {
+                        AutoMapper.Mapper.Map(updatedFeedItem, existingFeedItem);
+                        _feedDataService.Update(existingFeedItem);   
+                        _log.LogInformation($"Updated the existing feed item properties with id {existingFeedItem.Id}, guid {existingFeedItem.Guid}");
+                    }
                 }
 
-                _feedDataService.Update(existingFeedItem.Id, channelId, feedItem.Categories);
+                UpdateFeedItem(existingFeedItem.Id, channelId, feedItemModel.Categories);
             }
+        }
+
+        private void UpdateFeedItem(
+            int feedItemId,
+            int channelId, 
+            List<string> tags
+        )
+        {
+            if(!_feedDataService.HasChannel(feedItemId, channelId))
+            {
+                _feedDataService.AddChannel(feedItemId, channelId);
+            }
+
+            _feedDataService.AddTags(feedItemId, tags); 
         }
 
         private FeedFormat GetChannelFeedFormat(Channel channel)
