@@ -43,9 +43,13 @@ namespace NewsParser
             _externalConfigService.ConfigureServices(services);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime)
         {
-            _externalConfigService.Configure(app, env, loggerFactory);
+            _externalConfigService.Configure(app, env, loggerFactory, appLifetime);
         }
     }
 }

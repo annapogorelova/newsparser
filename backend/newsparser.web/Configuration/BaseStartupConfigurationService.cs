@@ -1,4 +1,3 @@
-
 using System;
 using System.Net;
 using System.Text;
@@ -39,6 +38,8 @@ using NewsParser.Web.Auth;
 using NewsParser.Web.Auth.ExternalAuth;
 using OpenIddict.Core;
 using OpenIddict.Models;
+using Serilog;
+using Serilog.Events;
 
 namespace NewsParser.Web.Configuration
 {
@@ -46,21 +47,18 @@ namespace NewsParser.Web.Configuration
     {
         protected IConfigurationRoot _configuration { get; set; }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime
+        )
         {
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-            }
-            
-            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
-
-            string logFilePath = _configuration["LogFilePath"];
-            string logFileName = $"{logFilePath}{_configuration["AppName"]}" + "-{Date}.txt";
-            loggerFactory.AddFile(logFileName);
-
             var dbContext = app.ApplicationServices.GetService<AppDbContext>();
             InitializeDatabase(dbContext);
+
+            loggerFactory.AddSerilog();
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
             app.UseResponseCaching();
 
@@ -87,6 +85,7 @@ namespace NewsParser.Web.Configuration
         public virtual void ConfigureEnvironment(IHostingEnvironment env, IConfigurationRoot configuration)
         {
             _configuration = configuration;
+            ConfigureLogger(env);
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
@@ -124,6 +123,30 @@ namespace NewsParser.Web.Configuration
         protected virtual void InitializeDatabase(AppDbContext dbContext)
         {
             dbContext.Database.Migrate();
+        }
+
+        protected virtual void ConfigureLogger(IHostingEnvironment env)
+        {
+            var logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Override("Microsoft", 
+                    env.IsProduction() ? 
+                        LogEventLevel.Warning : LogEventLevel.Information)
+                .WriteTo.File(GetLogFileName(), LogEventLevel.Information);
+
+            if(env.IsDevelopment())
+            {
+                logger.WriteTo.LiterateConsole();
+            }
+
+            Log.Logger = logger.CreateLogger();
+        }
+
+        protected string GetLogFileName()
+        {
+            string dateString = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            string logFileName = $"{_configuration["LogFilePath"]}{_configuration["AppName"]}-{dateString}.txt";
+            return logFileName;
         }
 
         private void RegisterDependencies(IServiceCollection services)
