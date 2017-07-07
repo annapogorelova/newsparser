@@ -11,7 +11,6 @@ namespace NewsParser.Web.Configuration
     {
         public override void ConfigureEnvironment(IHostingEnvironment env, IConfigurationRoot configuration)
         {
-            env.EnvironmentName = "Development";
             base.ConfigureEnvironment(env, configuration);
         }
 

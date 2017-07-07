@@ -8,6 +8,8 @@ using System;
 using NewsParser.Services;
 using NewsParser.IntegrationTests.Fakes;
 using NewsParser.FeedParser.Services;
+using Serilog.Events;
+using Serilog;
 
 namespace NewsParser.IntegrationTests
 {
@@ -29,6 +31,16 @@ namespace NewsParser.IntegrationTests
         protected override void InitializeDatabase(AppDbContext dbContext)
         {
             base.InitializeDatabase(dbContext);
+        }
+
+        protected override void ConfigureLogger(IHostingEnvironment env)
+        {
+            var logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.LiterateConsole();
+
+            Log.Logger = logger.CreateLogger();
         }
     }
 }

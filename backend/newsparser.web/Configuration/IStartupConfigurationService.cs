@@ -8,7 +8,12 @@ namespace NewsParser.Web.Configuration
 {
     public interface IStartupConfigurationService
     {
-        void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory);
+        void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime
+        );
 
         void ConfigureEnvironment(IHostingEnvironment env, IConfigurationRoot configuration);
 

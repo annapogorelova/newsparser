@@ -20,6 +20,8 @@ using NewsParser.FeedParser;
 using NewsParser.FeedParser.Services;
 using NewsParser.Scheduler;
 using static System.Int32;
+using Serilog;
+using Serilog.Events;
 
 namespace NewsParser.Scheduler
 {
@@ -44,6 +46,8 @@ namespace NewsParser.Scheduler
 
             string envFileName = $"{Configuration["AppName"]}.{envName}.env";
             DotNetEnv.Env.Load($"{Configuration["EnvFilePath"]}/{envFileName}");
+
+            ConfigureLogger(env);
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -59,17 +63,15 @@ namespace NewsParser.Scheduler
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IApplicationLifetime appLifetime
+        )
         {
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-            }
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            
-            string logFilePath = Configuration["LogFilePath"];
-            string logFileName = $"{logFilePath}{Configuration["AppName"]}" + "-{Date}.txt";
-            loggerFactory.AddFile(logFileName);
+            loggerFactory.AddSerilog();
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
             ServiceLocator.Instance = app.ApplicationServices;
 
@@ -101,6 +103,27 @@ namespace NewsParser.Scheduler
         {
             int feedUpdateInterval = Parse(Configuration.GetSection("AppConfig")["FeedUpdateIntervalMinutes"]);
             JobManager.Initialize(new JobRegistry(feedUpdateInterval));
+        }
+
+        private void ConfigureLogger(IHostingEnvironment env)
+        {
+            string logFilePath = Configuration["LogFilePath"];
+            string dateString = DateTime.UtcNow.ToString("yyyy-MM-dd");
+            string logFileName = $"{logFilePath}{Configuration["AppName"]}-{dateString}.txt";
+
+            var logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Override("Microsoft", 
+                    env.IsProduction() ? 
+                        LogEventLevel.Warning : LogEventLevel.Information)
+                .WriteTo.File(logFileName, LogEventLevel.Information);
+
+            if(env.IsDevelopment())
+            {
+                logger.WriteTo.LiterateConsole();
+            }
+
+            Log.Logger = logger.CreateLogger();
         }
 
         private string GetDbConnectionString()

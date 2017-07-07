@@ -155,9 +155,12 @@ namespace NewsParser.DAL.Repositories.Feed
 
         public void Update(FeedItem feedItem)
         {
-            _dbContext.FeedItems.Attach(feedItem);
-            var dbEntry = _dbContext.Entry(feedItem);
-            dbEntry.CurrentValues.SetValues(feedItem);
+            if (feedItem == null)
+            {
+                throw new ArgumentNullException(nameof(feedItem), "Feed item cannot be null");
+            }
+
+            _dbContext.Entry(feedItem).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
     }
