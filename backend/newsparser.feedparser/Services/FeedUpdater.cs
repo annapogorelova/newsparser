@@ -188,6 +188,7 @@ namespace NewsParser.FeedParser.Services
 
         private void SaveFeed(int channelId, List<FeedItemModel> feed)
         {
+            var nonUpdatadbleProperties = new string[] {"Id", "Channels", "Tags", "DateAdded", "DatePublished" }; 
             foreach (var feedItemModel in feed)
             {
                 FeedItem existingFeedItem;
@@ -212,7 +213,7 @@ namespace NewsParser.FeedParser.Services
                     if(!TypeExtensions.PublicInstancePropertiesEqual<FeedItem>(
                         existingFeedItem, 
                         updatedFeedItem,
-                        new string[] {"Id", "Channels", "Tags", "DateAdded", "DatePublished", }))
+                        nonUpdatadbleProperties))
                     {
                         AutoMapper.Mapper.Map(updatedFeedItem, existingFeedItem);
                         _feedDataService.Update(existingFeedItem);   
