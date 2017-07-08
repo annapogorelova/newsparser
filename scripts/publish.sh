@@ -28,8 +28,6 @@ echo ""
 PROJECT_PATH=./backend/newsparser.$PROJECT_NAME/newsparser.$PROJECT_NAME.csproj
 OUTPUT_PATH=./dist/backend/$PROJECT_NAME
 
-echo "--- dotnet restore ---"
-dotnet restore $PROJECT_PATH
 echo "--- dotnet publish ---"
 dotnet publish $PROJECT_PATH -o=$OUTPUT_PATH -c=Production
 echo ""

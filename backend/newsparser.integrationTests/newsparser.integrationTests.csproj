@@ -17,4 +17,7 @@
     <None Include="../newsparser.web/appsettings.json" CopyToOutputDirectory="Always" />
     <None Include="../newsparser.web/appsettings.test.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
+  <Target Name="PrebuildScript" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet restore" />
+  </Target>
 </Project>
