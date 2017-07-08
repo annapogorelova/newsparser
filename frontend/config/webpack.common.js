@@ -1,4 +1,7 @@
+const {root} = require('./helpers');
 var webpack = require('webpack');
+require('dotenv').config({path: root('./.env')});
+const Dotenv = require('dotenv-webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
@@ -48,6 +51,10 @@ module.exports = {
     },
 
     plugins: [
+        new Dotenv({
+            path: root('./.env'),
+            safe: true
+        }),
         // Workaround for angular/angular#11580
         new webpack.ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
@@ -61,7 +68,10 @@ module.exports = {
         }),
 
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: 'src/index.html',
+            output: root('../dist/frontend'),
+            inject: 'body',
+            appName: process.env.APP_NAME
         })
     ]
 };

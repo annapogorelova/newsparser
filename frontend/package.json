@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "QuickStart package.json from the documentation, supplemented with testing support",
   "scripts": {
+    "prebuild": "npm run clean",
+    "clean": "rimraf ../dist/frontend",
     "start": "webpack-dev-server --inline --progress --port 8080",
-    "build": "rimraf dist && webpack --config config/webpack.dev.js --progress --profile --bail"
+    "build": "webpack --config config/webpack.dev.js --progress --profile --bail",
+    "build:production": "webpack --config config/webpack.dev.js --progress --profile --bail -p"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,8 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.19",
     "angular-in-memory-web-api": "~0.2.4",
     "bootstrap": "^4.0.0-alpha.6",
+    "dotenv": "^4.0.0",
+    "dotenv-webpack": "^1.5.2",
     "ng2-go-top-button": "^2.0.8",
     "ngx-infinite-scroll": "^0.5.1",
     "rxjs": "5.0.1",
