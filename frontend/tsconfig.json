@@ -13,6 +13,7 @@
     "noImplicitAny": false,
     "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,
+    "noStrictGenericChecks": true,
     "exclude": ["node_modules"],
     "include": ["src"]
   }

@@ -7,7 +7,7 @@
     "clean": "rimraf ../dist/frontend",
     "start": "webpack-dev-server --inline --progress --port 8080",
     "build": "webpack --config config/webpack.dev.js --progress --profile --bail",
-    "build:production": "webpack --config config/webpack.dev.js --progress --profile --bail -p"
+    "build:production": "webpack --config config/webpack.prod.js --progress --profile --bail -p"
   },
   "keywords": [],
   "author": "",
