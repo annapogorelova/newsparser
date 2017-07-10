@@ -7,6 +7,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
 module.exports = {
+    devtool: 'source-map',
     entry: {
         'polyfills': './src/polyfills.ts',
         'vendor': './src/vendor.ts',
@@ -72,6 +73,8 @@ module.exports = {
             output: root('../dist/frontend'),
             inject: 'body',
             appName: process.env.APP_NAME
-        })
+        }),
+
+        new ExtractTextPlugin('[name].css')
     ]
 };
