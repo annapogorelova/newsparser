@@ -19,7 +19,7 @@ namespace NewsParser.Web.Configuration
         public static string MailerSenderName = Environment.GetEnvironmentVariable("MAILER_SENDER_NAME");
         public static string MailerSenderEmail = Environment.GetEnvironmentVariable("MAILER_SENDER_EMAIL");
         
-        public static string WebsiteUrl = Environment.GetEnvironmentVariable("WEBSITE_URL");
+        public static string FrontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
 
         public static string GetDbConnectionString()
         {
