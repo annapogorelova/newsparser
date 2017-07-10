@@ -63,7 +63,7 @@
                         </button>
                     </div>
                     <div class="col-md-6">
-                        <a href="#" routerLink="/password-remind">Forgot password?</a>
+                        <a href="#" [routerLink]="['/password-remind']">Forgot password?</a>
                     </div>
                 </div>
             </form>
@@ -76,7 +76,7 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <p><small>Do not have an account?</small></p>
-                    <a role="button" class="btn btn-info btn-full-length" routerLink="/sign-up">
+                    <a role="button" class="btn btn-info btn-full-length" [routerLink]="['/sign-up']">
                         Sign up
                     </a>
                 </div>

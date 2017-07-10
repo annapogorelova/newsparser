@@ -6,24 +6,24 @@
                 [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
             <i [attr.class]="isNavbarCollapsed ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
         </a>
-        <a class="navbar-brand" routerLink="/feed" title="Feed">
+        <a class="navbar-brand" [routerLink]="'/feed'" title="Feed">
             <img src="../../../../public/images/app-icon.png" alt="NewsParser"/>
         </a>
         <div class="collapse navbar-collapse" id="collapseNavBar" [ngbCollapse]="isNavbarCollapsed">
             <ul class="navbar-nav mr-auto">
             </ul>
             <div class="navbar-nav">
-                <a role="link" title="Account Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/account">
+                <a role="link" title="Account Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" [routerLink]="['/account']">
                     <i class="fa fa-user-circle"></i>
                 </a>
-                <a role="link" title="Subscriptions Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" routerLink="/subscriptions">
+                <a role="link" title="Subscriptions Settings" class="nav-link" *ngIf="authProvider.isAuthenticated()" [routerLink]="['/subscriptions']">
                     <i class="fa fa-feed"></i>
                 </a>
                 <a role="link" title="Sign Out" class="nav-link" *ngIf="authProvider.isAuthenticated()" (click)="signOut()">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
                 </a>
                 <a href="" title="Sign In" role="link" class="nav-link" *ngIf="!authProvider.isAuthenticated()"
-                   routerLink="/sign-in" routerLinkActive="active">
+                   [routerLink]="['/sign-in']" routerLinkActive="active">
                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                 </a>
             </div>
