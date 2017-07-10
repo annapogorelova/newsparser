@@ -22,7 +22,7 @@ namespace NewsParser.Services
 
         public Task SendAccountConfirmationEmail(string email, string confirmationToken)
         {
-            string websiteUrl = EnvConfigurationProvider.WebsiteUrl;
+            string websiteUrl = EnvConfigurationProvider.FrontendUrl;
             string confirmationLink = $"{websiteUrl}/email-confirmation?confirmationToken={confirmationToken}&email={email}";
             string mailContent = $@"Please confirm your email by following <a href='{confirmationLink}'>this link</a>.";
             
@@ -52,7 +52,7 @@ namespace NewsParser.Services
 
         public Task SendPasswordResetEmail(string email, string passwordResetToken)
         {
-            string websiteUrl = EnvConfigurationProvider.WebsiteUrl;
+            string websiteUrl = EnvConfigurationProvider.FrontendUrl;
             string resetPasswordLink = $"{websiteUrl}/password-reset?passwordResetToken={passwordResetToken}&email={email}";
             string mailContent = $@"You have requested a password reset on NewsParser.
                 Please set a new password by following <a href='{resetPasswordLink}'>this link</a>.";

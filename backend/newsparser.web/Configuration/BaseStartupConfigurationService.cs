@@ -66,7 +66,7 @@ namespace NewsParser.Web.Configuration
 
             ModelsMapper.Congifure();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors("DefaultCorsPolicy");
 
             ServiceLocator.Instance = app.ApplicationServices;
             
@@ -98,8 +98,8 @@ namespace NewsParser.Web.Configuration
 
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin());
+                options.AddPolicy("DefaultCorsPolicy",
+                    builder => builder.WithOrigins(EnvConfigurationProvider.FrontendUrl));
             });
 
             ConfigureCaching(services);
