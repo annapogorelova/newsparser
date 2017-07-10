@@ -99,7 +99,10 @@ namespace NewsParser.Web.Configuration
             services.AddCors(options =>
             {
                 options.AddPolicy("DefaultCorsPolicy",
-                    builder => builder.WithOrigins(EnvConfigurationProvider.FrontendUrl));
+                    builder => builder
+                        .WithOrigins(EnvConfigurationProvider.FrontendUrl)
+                        .WithHeaders("accept", "content-type", "authorization", "x-requested-with")
+                        .WithMethods("PUT", "POST", "GET", "DELETE", "OPTIONS"));
             });
 
             ConfigureCaching(services);
