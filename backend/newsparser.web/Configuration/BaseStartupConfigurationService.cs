@@ -40,6 +40,7 @@ using OpenIddict.Core;
 using OpenIddict.Models;
 using Serilog;
 using Serilog.Events;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace NewsParser.Web.Configuration
 {
@@ -59,6 +60,11 @@ namespace NewsParser.Web.Configuration
 
             loggerFactory.AddSerilog();
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseResponseCaching();
 
