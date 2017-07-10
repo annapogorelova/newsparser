@@ -9,7 +9,7 @@
                 Account confirmation succeeded.
             </div>
             <a *ngIf="!authProvider.isAuthenticated() && submitCompleted && !submitFailed" role="button"
-               class="btn btn-success btn-md pull-right" routerLink="/sign-in">
+               class="btn btn-success btn-md pull-right" [routerLink]="['/sign-in']">
                 Sign In
             </a>
         </div>
