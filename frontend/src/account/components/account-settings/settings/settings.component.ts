@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {NavigatorService, AuthService} from '../../../../shared';
+import {
+    NavigatorService,
+    AuthService,
+    PageTitleService
+} from '../../../../shared';
 
 @Component({
     templateUrl: 'settings.component.html',
@@ -18,12 +22,14 @@ export class AccountSettingsComponent implements OnInit {
 
     constructor(private route:ActivatedRoute,
                 private authService:AuthService,
-                private navigator:NavigatorService) {
+                private navigator:NavigatorService,
+                private pageTitleService:PageTitleService) {
     }
 
     ngOnInit() {
         this.route.fragment.subscribe((fragment:string) => this.setActiveTab(fragment));
         this.loadUser(true);
+        this.pageTitleService.appendTitle('Account');
     };
 
     setActiveTab(fragment:string) {

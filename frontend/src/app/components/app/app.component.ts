@@ -1,6 +1,10 @@
 import {Component, HostListener, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService, AuthProviderService} from '../../../shared';
+import {
+    AuthService,
+    AuthProviderService,
+    PageTitleService
+} from '../../../shared';
 
 @Component({
     selector: 'app',
@@ -14,7 +18,8 @@ export class AppComponent {
 
     constructor(private authService:AuthService,
                 private authProvider:AuthProviderService,
-                private router:Router) {
+                private router:Router,
+                private pageTitleService:PageTitleService) {
     }
 
     ngOnInit() {
@@ -24,6 +29,8 @@ export class AppComponent {
         this.router.events.subscribe(() => {
             this.isNavbarCollapsed = true;
         });
+
+        this.pageTitleService.setBaseTitle(process.env.APP_NAME);
     };
 
     @HostListener('window:resize')

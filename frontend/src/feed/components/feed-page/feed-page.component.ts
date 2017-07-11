@@ -1,6 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {NavigatorService, CacheService} from '../../../shared';
+import {
+    NavigatorService,
+    CacheService,
+    PageTitleService
+} from '../../../shared';
 import {AppSettings} from '../../../app/app.settings';
 
 @Component({
@@ -25,11 +29,14 @@ export class FeedPageComponent implements OnInit {
 
     constructor(private navigator:NavigatorService,
                 private route:ActivatedRoute,
-                private cacheService:CacheService) {
+                private cacheService:CacheService,
+                private pageTitleService:PageTitleService) {
         this.marginLeft = AppSettings.SIDEBAR_WIDTH_PX;
     }
 
     ngOnInit() {
+        this.pageTitleService.appendTitle('Feed');
+
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page:string) => {

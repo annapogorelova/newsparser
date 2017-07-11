@@ -17,7 +17,8 @@ import {
     AbstractDataProviderService,
     AuthRefreshLocker,
     CanActivateAuth,
-    RequestLockerService
+    RequestLockerService,
+    PageTitleService
 } from './services';
 import {
     PageNotFoundComponent,
@@ -43,6 +44,7 @@ import {
         CacheService,
         RequestLockerService,
         AbstractDataProviderService,
+        PageTitleService,
         {
             provide: NavigatorService,
             useFactory: (router:Router, activatedRoute:ActivatedRoute) =>
