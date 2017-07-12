@@ -1,0 +1,7 @@
+server {
+    listen 80;
+    #server_name feedscatcher;
+    index index.html;
+    try_files $uri $uri/ /index.html;
+    root /var/www/newsparser/frontend/dist;
+}

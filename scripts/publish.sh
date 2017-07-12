@@ -27,7 +27,7 @@ echo ""
 
 # Assuming that we are in /var/www/newsparser
 PROJECT_PATH=$CURRENT_DIR/../backend/newsparser.$PROJECT_NAME/newsparser.$PROJECT_NAME.csproj
-OUTPUT_PATH=$CURRENT_DIR/../dist/backend/$PROJECT_NAME
+OUTPUT_PATH=$CURRENT_DIR/../backend/dist/$PROJECT_NAME
 
 rm -rf $OUTPUT_PATH
 
@@ -38,7 +38,7 @@ echo ""
 if [[ "$PROJECT_NAME" == "web" ]];
 	then
 		echo "--- generating api docs ---"
-		apidoc -i $CURRENT_DIR/../backend/newsparser.web/ -o ./docs
+		apidoc -i $CURRENT_DIR/../backend/newsparser.$PROJECT_NAME/ -o $CURRENT_DIR/../docs
 fi
 
 echo "--- starting" $SERVICE_NAME "---"
