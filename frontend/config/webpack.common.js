@@ -70,7 +70,7 @@ module.exports = {
 
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-            output: root('../dist/frontend'),
+            output: root('./dist'),
             inject: 'body',
             appName: process.env.APP_NAME
         }),

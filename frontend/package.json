@@ -4,7 +4,7 @@
   "description": "Newsparser frontend application",
   "scripts": {
     "prebuild": "npm run clean",
-    "clean": "rimraf ../dist/frontend",
+    "clean": "rimraf ./dist",
     "start": "webpack-dev-server --inline --progress --port 8080",
     "build": "webpack --config config/webpack.dev.js --progress --profile --bail",
     "build:production": "npm i && webpack --config config/webpack.prod.js --progress --profile --bail"
