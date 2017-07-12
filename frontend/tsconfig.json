@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
     "noStrictGenericChecks": true,
     "exclude": ["node_modules"],
