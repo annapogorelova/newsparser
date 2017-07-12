@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using NewsParser.DAL.Tags;
 using NewsParser.BL.Exceptions;
 using NewsParser.DAL.Repositories.Channels;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace NewsParser.BL.Services.Feed
 {
@@ -20,14 +22,18 @@ namespace NewsParser.BL.Services.Feed
 
         private readonly IChannelRepository _channelRepository;
 
+        private readonly ILogger<FeedDataService> _log;
+
         public FeedDataService(
             IFeedRepository feedRepository, 
             ITagRepository tagRepository,
-            IChannelRepository channelRepository)
+            IChannelRepository channelRepository,
+            ILogger<FeedDataService> log)
         {
             _feedRepository = feedRepository;
             _tagRepository = tagRepository;
             _channelRepository = channelRepository;
+            _log = log;
         }
 
         public IEnumerable<FeedItem> GetPage(
@@ -180,6 +186,7 @@ namespace NewsParser.BL.Services.Feed
                 if(newTags.Any())
                 {
                     AddTags(feedItemId, newTags);
+                    _log.LogInformation($"Added [{newTags.Join(",")}] tags to the feed item with id {feedItemId}.");
                 }
             }
             catch (Exception e)

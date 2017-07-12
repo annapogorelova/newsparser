@@ -45,6 +45,8 @@ namespace NewsParser.Scheduler
                     {
                         _feedUpdater.UpdateChannel(channel.Id);
                     }
+
+                    _log.LogInformation("Finished updating the feed.");
                 }
                 catch (FeedParsingException e)
                 {
