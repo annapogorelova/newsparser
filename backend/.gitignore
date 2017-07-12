@@ -248,3 +248,4 @@ appsettings.*.json
 *.env
 
 */logs/
+dist/**
