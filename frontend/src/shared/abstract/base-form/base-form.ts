@@ -98,10 +98,10 @@ export abstract class BaseForm implements IForm {
                 this.validationErrors = error.validationErrors.map(function (e:any) {
                     return e['message'];
                 });
-            }
 
-            for (var i = 0; i < this.validationErrors.length; i++) {
-                this.notices.error(this.validationErrors[i]);
+                for (var i = 0; i < this.validationErrors.length; i++) {
+                    this.notices.error(this.validationErrors[i]);
+                }
             }
         }
 
