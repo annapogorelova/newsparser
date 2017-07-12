@@ -1,4 +1,4 @@
-notices .notices-wrapper {
+:host /deep/ .notices-wrapper {
     display: block;
     position: fixed;
     top: 0;
@@ -8,7 +8,7 @@ notices .notices-wrapper {
     z-index: 10000;
 }
 
-notices .notices-wrapper .notice {
+:host /deep/ .notices-wrapper .notice {
     display: block;
     width: 260px;
     padding: 10px;
@@ -18,41 +18,41 @@ notices .notices-wrapper .notice {
     cursor: pointer;
 }
 
-notices .notices-wrapper .notice:first-child {
+:host /deep/ .notices-wrapper .notice:first-child {
     margin-top: 10px;
 }
 
-notices .notices-wrapper .notice {
+:host /deep/ .notices-wrapper .notice {
     margin: 6px 10px 0 0;
 }
 
-notices .notices-wrapper .notice:hover {
+:host /deep/ .notices-wrapper .notice:hover {
     opacity: 0.95;
 }
 
-notices .notices-wrapper .notice.notice-success {
+:host /deep/ .notices-wrapper .notice.notice-success {
     color: #fff;
     background-color: #51A351;
 }
 
-notices .notices-wrapper .notice.notice-warning {
+:host /deep/ .notices-wrapper .notice.notice-warning {
     color: #fff;
     background-color: #F7A735;
 }
 
-notices .notices-wrapper .notice.notice-error {
+:host /deep/ .notices-wrapper .notice.notice-error {
     color: #fff;
     background-color: #BD362F;
 }
 
-notices .notices-wrapper .notice.notice-info {
+:host /deep/ .notices-wrapper .notice.notice-info {
     color: #fff;
     background-color: #2F96B4;
 }
 
-notices .notices-wrapper .notice .notice-title {
+:host /deep/ .notices-wrapper .notice .notice-title {
     font-weight: bold;
 }
 
-notices .notices-wrapper .notice .notice-text {
+:host /deep/ .notices-wrapper .notice .notice-text {
 }
