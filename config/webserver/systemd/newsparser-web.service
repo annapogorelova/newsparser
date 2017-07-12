@@ -2,8 +2,8 @@
 Description=Newsparser web app
 
 [Service]
-WorkingDirectory=/var/www/newsparser/dist/backend/web
-ExecStart=/usr/bin/dotnet /var/www/newsparser/dist/backend/web/newsparser.web.dll
+WorkingDirectory=/var/www/newsparser/backend/dist/web
+ExecStart=/usr/bin/dotnet /var/www/newsparser/backend/dist/web/newsparser.web.dll
 Restart=always
 RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
 SyslogIdentifier=newsparser

@@ -2,8 +2,8 @@
 Description=Newsparser scheduler app
 
 [Service]
-WorkingDirectory=/var/www/newsparser/dist/backend/scheduler
-ExecStart=/usr/bin/dotnet /var/www/newsparser/dist/backend/scheduler/newsparser.scheduler.dll
+WorkingDirectory=/var/www/newsparser/backend/dist/scheduler
+ExecStart=/usr/bin/dotnet /var/www/newsparser/backend/dist/scheduler/newsparser.scheduler.dll
 Restart=always
 RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
 SyslogIdentifier=newsparser-scheduler
