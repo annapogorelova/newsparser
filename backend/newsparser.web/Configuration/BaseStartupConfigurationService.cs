@@ -48,7 +48,7 @@ namespace NewsParser.Web.Configuration
     {
         protected IConfigurationRoot _configuration { get; set; }
 
-        public void Configure(
+        public virtual void Configure(
             IApplicationBuilder app, 
             IHostingEnvironment env, 
             ILoggerFactory loggerFactory,
