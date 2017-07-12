@@ -9,7 +9,7 @@ import {FeedModule} from '../feed';
 import {AppRoutingProviders, AppRouting} from './app.routing';
 import {AccountModule} from '../account';
 import {ChannelsModule} from '../channels';
-
+import './meta.ts';
 
 @NgModule({
     imports: [
