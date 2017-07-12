@@ -1,6 +1,11 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ApiService, BaseForm, NoticesService} from '../../../shared';
+import {
+    ApiService,
+    BaseForm,
+    NoticesService,
+    PageTitleService
+} from '../../../shared';
 
 /**
  * Component contains functionality for the password reset
@@ -22,11 +27,14 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
 
     constructor(@Inject(ApiService) apiService:ApiService,
                 @Inject(NoticesService) notices:NoticesService,
-                private route:ActivatedRoute) {
+                private route:ActivatedRoute,
+                private pageTitleService:PageTitleService) {
         super(apiService, notices);
     }
 
     ngOnInit() {
+        this.pageTitleService.appendTitle('Password Reset');
+
         this.route.queryParams
             .map((queryParams) => queryParams['email'])
             .subscribe((email:string) => this.onEmailRetrieved(email));

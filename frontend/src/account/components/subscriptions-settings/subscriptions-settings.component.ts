@@ -1,6 +1,11 @@
 import {Component, ViewChild, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ApiService, NoticesService, NavigatorService} from '../../../shared';
+import {
+    ApiService,
+    NoticesService,
+    NavigatorService,
+    PageTitleService
+} from '../../../shared';
 
 @Component({
     selector: 'subscriptions-settings',
@@ -27,11 +32,13 @@ export class SubscriptionsSettingsComponent implements OnInit, AfterViewInit {
     constructor(private apiService:ApiService,
                 private navigator:NavigatorService,
                 private route:ActivatedRoute,
-                private notices:NoticesService) {
+                private notices:NoticesService,
+                private pageTitleService:PageTitleService) {
     }
 
     ngOnInit() {
         this.resetForm();
+        this.pageTitleService.appendTitle('Subscriptions');
     };
 
     setActiveTab(fragment:string) {

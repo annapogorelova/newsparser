@@ -1,13 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService, IForm, NoticesService} from '../../../shared';
+import {
+    AuthService,
+    IForm,
+    NoticesService,
+    PageTitleService
+} from '../../../shared';
 
 @Component({
     templateUrl: 'sign-in.component.html',
     styleUrls: ['./sign-in.component.css'],
     selector: 'sign-in'
 })
-export class SignInComponent implements IForm {
+export class SignInComponent implements IForm, OnInit {
     submitCompleted:boolean;
     validationErrors:Array<string>;
     submitInProgress:boolean;
@@ -21,9 +26,13 @@ export class SignInComponent implements IForm {
 
     constructor(private router:Router,
                 private authService:AuthService,
-                private notices:NoticesService) {
-
+                private notices:NoticesService,
+                private pageTitleService: PageTitleService) {
     }
+
+    ngOnInit(){
+        this.pageTitleService.appendTitle('Sign In');
+    };
 
     reset():void {
     };

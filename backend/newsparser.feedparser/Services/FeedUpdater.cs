@@ -234,9 +234,10 @@ namespace NewsParser.FeedParser.Services
             if(!_feedDataService.HasChannel(feedItemId, channelId))
             {
                 _feedDataService.AddChannel(feedItemId, channelId);
+                _log.LogInformation($"Added new channel with id {channelId} for the feed item with id {feedItemId}.");
             }
 
-            _feedDataService.AddTags(feedItemId, tags); 
+            _feedDataService.UpdateTags(feedItemId, tags); 
         }
 
         private FeedFormat GetChannelFeedFormat(Channel channel)
