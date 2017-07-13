@@ -1,10 +1,11 @@
 const {root} = require('./helpers');
-var webpack = require('webpack');
+const webpack = require('webpack');
 require('dotenv').config({path: root('./.env')});
 const Dotenv = require('dotenv-webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var helpers = require('./helpers');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ScriptExtPlugin = require('script-ext-html-webpack-plugin');
+const helpers = require('./helpers');
 
 module.exports = {
     devtool: 'source-map',
@@ -73,6 +74,10 @@ module.exports = {
             output: root('./dist'),
             inject: 'body',
             appName: process.env.APP_NAME
+        }),
+
+        new ScriptExtPlugin({
+            defaultAttribute: 'defer'
         }),
 
         new ExtractTextPlugin('[name].css')
