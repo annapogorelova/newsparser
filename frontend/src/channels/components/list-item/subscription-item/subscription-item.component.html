@@ -5,11 +5,13 @@
    #popover="ngbPopover"
    triggers="manual"
    (click)="handleClick()">
+    <div class="subscription-item-container">
     <span [ngStyle]="{'background-image': channel.imageUrl ?
         'url(' + channel.imageUrl + ')' :
         'url(\'/assets/default-rss-icon.png\')'}"
         class="news-source-image pull-left"></span>
     <span class="news-source-name">{{channel.name}}</span>
+    </div>
     <div class="pull-right">
         <i class="fa fa-lock private-icon" aria-hidden="true"
            *ngIf="channel.isPrivate" title="This channel is private"></i>
