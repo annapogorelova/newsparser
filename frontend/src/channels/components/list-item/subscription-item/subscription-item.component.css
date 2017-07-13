@@ -13,3 +13,10 @@
 :host /deep/ a.news-source-item.private {
     background-color: #fce5e5;
 }
+
+:host /deep/ .subscription-item-container {
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
