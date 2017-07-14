@@ -27,6 +27,11 @@ button {
     cursor: pointer;
 }
 
+.container-fluid {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
 /* Firefox red shadowed input border fixes */
 :invalid {
     box-shadow: none;
