@@ -2,12 +2,14 @@ import {
     Component,
     EventEmitter,
     Output,
+    Input,
+    ViewChild,
+    OnInit,
     style,
     state,
     animate,
     transition,
-    trigger,
-    Input, ViewChild
+    trigger
 } from '@angular/core';
 import {AppSettings} from '../../../app/app.settings';
 
@@ -40,7 +42,7 @@ import {AppSettings} from '../../../app/app.settings';
         ])
     ]
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
     protected animationState:string = 'in';
     @ViewChild('channelsList') channelsList:any;
 
@@ -60,6 +62,14 @@ export class SidebarComponent {
     defaultWidth:number = AppSettings.SIDEBAR_WIDTH_PX;
 
     constructor() {
+    }
+
+    ngOnInit() {
+        if (window.innerWidth <= AppSettings.MAX_DEVICE_WIDTH_PX) {
+            this.hide();
+        } else {
+            this.show();
+        }
     }
 
     show() {

@@ -13,4 +13,5 @@ export class AppSettings {
     public static DEFAULT_ERROR_MESSAGE = 'Something went wrong';
     
     public static SIDEBAR_WIDTH_PX = 350;
+    public static MAX_DEVICE_WIDTH_PX = 600;
 }
