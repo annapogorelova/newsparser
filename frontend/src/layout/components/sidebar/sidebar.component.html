@@ -1,4 +1,5 @@
 <div class="sidebar-container" [@slideInOut]="animationState" [style.width.px]="defaultWidth">
+    <div class="sidebar-swipe-area left" (swipeleft)="hide()"></div>
     <div class="sidebar-content">
         <div class="sidebar-content-header">
             <h3>Feed options</h3>
@@ -41,4 +42,4 @@
     </div>
 </div>
 <div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>
-<div (swipeleft)="hide()" (swiperight)="show()" class="sidebar-swipe-area"></div>
+<div (swiperight)="show()" class="sidebar-swipe-area right"></div>

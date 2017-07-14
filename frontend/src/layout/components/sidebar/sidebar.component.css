@@ -122,7 +122,14 @@
 :host /deep/ .sidebar-swipe-area {
     display: block;
     position: fixed;
-    width: 100%;
     height: 100%;
     z-index: 10000;
+}
+
+:host /deep/ .sidebar-swipe-area.right {
+    width: 10%;
+}
+
+:host /deep/ .sidebar-swipe-area.left {
+    width: 100%;
 }
