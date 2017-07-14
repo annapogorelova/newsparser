@@ -1,16 +1,12 @@
-<div class="sidebar-container" [@slideInOut]="animationState" [style.width.px]="defaultWidth">
-    <div class="sidebar-swipe-area left" (swipeleft)="hide()"></div>
+<div class="sidebar-container" [@slideInOut]="animationState" [style.width.px]="defaultWidth" (swipeleft)="hide()">
     <div class="sidebar-content">
         <div class="sidebar-content-header">
-            <h3>Feed options</h3>
-            <a class="btn sidebar-toggle-btn pull-right" role="button" (click)="hide()">
-                <i class="fa fa-close"></i>
-            </a>
+            <h5>Feed options</h5>
         </div>
         <div class="sidebar-main-content">
             <div class="news-sources-card card card-outline-primary text-xs-center">
                 <div class="card-header">
-                    <h5 class="pull-left">Channels</h5>
+                    <h6 class="pull-left">Channels</h6>
                     <span title="Clear" class="btn btn-sm clear pull-right"
                           (click)="clearChannels()"
                           [attr.disabled]="!selectedChannelsIds.length">
@@ -38,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <p class="copyright">© 2017 News Parser</p>
+        <small class="copyright">© 2017 FeedsCatcher</small>
     </div>
 </div>
 <div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>
