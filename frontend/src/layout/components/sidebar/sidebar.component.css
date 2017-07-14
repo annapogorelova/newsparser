@@ -92,7 +92,9 @@
 }
 
 :host /deep/ .news-sources-container .search-container {
-    padding: 1px;
+    padding: 0;
+    border-right: none;
+    border-left: none;
 }
 
 :host /deep/ tags-list .card {
