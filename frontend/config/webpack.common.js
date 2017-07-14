@@ -80,6 +80,6 @@ module.exports = {
             defaultAttribute: 'defer'
         }),
 
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].[hash].css')
     ]
 };
