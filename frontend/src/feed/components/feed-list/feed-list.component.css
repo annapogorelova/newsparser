@@ -61,8 +61,7 @@
 }
 
 :host /deep/
-    a.news-image-container:hover,
-    a.news-image-container:active {
+    a.news-image-container:hover {
     opacity: 0.9;
 }
 
