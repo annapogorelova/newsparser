@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {Router, ActivatedRoute} from '@angular/router';
+import {Router, ActivatedRoute, RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {EqualityValidator} from './directives';
@@ -33,7 +33,7 @@ import {
 } from './modules';
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, GoTopButtonModule],
+    imports: [BrowserModule, FormsModule, GoTopButtonModule, RouterModule],
     providers: [
         AuthService,
         CanActivateAuth,

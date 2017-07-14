@@ -1,0 +1,14 @@
+:host /deep/ .page-not-found-content {
+    padding: 10px 10px 10px 30px;
+}
+
+:host /deep/ .page-not-found-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+:host /deep/ .page-not-found-container {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
