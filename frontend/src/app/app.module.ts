@@ -9,6 +9,7 @@ import {FeedModule} from '../feed';
 import {AppRoutingProviders, AppRouting} from './app.routing';
 import {AccountModule} from '../account';
 import {ChannelsModule} from '../channels';
+import 'hammerjs';
 import './meta.ts';
 
 @NgModule({
