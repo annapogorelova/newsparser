@@ -49,7 +49,7 @@
     width: 100%;
 }
 
-:host /deep/ .news-image-container {
+:host /deep/ a.news-image-container {
     overflow: hidden;
     min-width: 100%;
     min-height: 120px;
@@ -58,6 +58,12 @@
     background-size: cover;
     background-position: center;
     margin: 5px 0 5px 0;
+}
+
+:host /deep/
+    a.news-image-container:hover,
+    a.news-image-container:active {
+    opacity: 0.9;
 }
 
 :host /deep/ .loading-more-icon-container {
