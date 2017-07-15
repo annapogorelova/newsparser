@@ -136,7 +136,7 @@
     color: blue;
     cursor: pointer;
     text-decoration: underline;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 :host /deep/ .news-item-info-container span.badge {
@@ -149,6 +149,11 @@
 
 :host /deep/ .news-item-info-container span.badge {
     background-color: #F8991D;
+}
+
+:host /deep/ .news-item-info-container h5 {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 :host /deep/ .news-item-tag-container span.badge {
@@ -166,6 +171,7 @@
 
 :host /deep/ h3.news-item-title {
     font-weight: normal;
+    padding-bottom: 10px;
 }
 
 :host /deep/ i.go-top, refresh-button i {

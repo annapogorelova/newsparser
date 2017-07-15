@@ -40,7 +40,7 @@ namespace NewsParser.FeedParser.Mapper
                                 .RemoveHtmlTags()
                                 .RemoveNonAlphanumericCharacters()
                                 .CropString(255)))
-                .ForMember(d => d.Guid, opt => opt.MapFrom(s => s.Id));
+                .ForMember(d => d.Guid, opt => opt.MapFrom(s => s.Id.CropString(255)));
         }
     }
 }
