@@ -14,7 +14,6 @@ import {
 export class AppComponent implements OnInit {
     isNavbarCollapsed = true;
     minContentHeight:number;
-    isAuthenticated:boolean = false;
     appName:string = process.env.APP_NAME;
 
     @ViewChild('appContent') appContent:any;
@@ -26,7 +25,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.isAuthenticated = this.authProvider.isAuthenticated();
         this.setAppMinContentHeight();
         this.authService.loadUser(true);
 
@@ -54,6 +52,10 @@ export class AppComponent implements OnInit {
     };
 
     signOut() {
-        this.authService.signOut().then(() => this.router.navigate(['/sign-in']));
+        this.authService.signOut().then(() => this.onSignedOut());
+    };
+
+    onSignedOut() {
+        this.router.navigate(['/sign-in']);
     };
 }

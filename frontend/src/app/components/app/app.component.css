@@ -27,3 +27,7 @@
     height: 28px;
     width: 28px;
 }
+
+:host /deep/ .nav-link span {
+    padding: 0 5px 0 8px;
+}
