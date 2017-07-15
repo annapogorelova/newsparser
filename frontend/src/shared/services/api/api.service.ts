@@ -82,7 +82,7 @@ export class ApiService {
             method: method,
             headers: this.initializeHeaders(headers),
             body: this.initializeBody(body),
-            search: this.initializeParams(params, params ? params.refresh : false)
+            params: this.initializeParams(params, params ? params.refresh : false)
         });
         return this.http.request(url, requestOptions)
             .toPromise()

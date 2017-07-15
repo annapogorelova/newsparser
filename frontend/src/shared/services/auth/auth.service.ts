@@ -25,8 +25,8 @@ export class AuthService {
         var requestOptions = new RequestOptions({headers: headers});
 
         if (refresh) {
-            requestOptions.search = new URLSearchParams;
-            requestOptions.search.set('autotimestamp', Date.now().toString());
+            requestOptions.params = new URLSearchParams;
+            requestOptions.params.set('autotimestamp', Date.now().toString());
         }
 
         return this.http.get(this.getAbsoluteUrl('account'), requestOptions)
