@@ -2,10 +2,12 @@
     padding: 8px 0 8px 0;
 }
 
-:host /deep/ button {
-    cursor: pointer;
-}
-
 :host /deep/ i {
     vertical-align: baseline;
+}
+
+:host /deep/ .search-container button {
+    border: 1px solid rgba(0,0,0,0.3);
+    border-left: none;
+    cursor: pointer;
 }
