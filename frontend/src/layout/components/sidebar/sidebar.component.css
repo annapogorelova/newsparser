@@ -1,7 +1,7 @@
 :host /deep/ .sidebar-container {
     position: fixed;
     width: 300px;
-    z-index: 1020;
+    z-index: 10300;
     height: 100%;
     background-color: #e6e6e6;
     -webkit-box-shadow: 2px 0px 4px -2px rgba(0,0,0,0.42);
@@ -15,7 +15,7 @@
     width: 100vw;
     height: 100%;
     background: black;
-    z-index: 1000;
+    z-index: 10200;
 }
 
 @media (min-width: 768px) {

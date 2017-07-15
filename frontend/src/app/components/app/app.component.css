@@ -31,3 +31,7 @@
 :host /deep/ .nav-link span {
     padding: 0 5px 0 8px;
 }
+
+:host /deep/ .navbar {
+    z-index: 10400;
+}
