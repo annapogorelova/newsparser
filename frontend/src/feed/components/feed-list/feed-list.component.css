@@ -16,9 +16,12 @@
 }
 
 :host /deep/ .news-item h2, h3, h4, h5 {
-    font-size: 1rem;
     padding: 5px 0 5px 0;
     margin: 0;
+}
+
+:host /deep/ h3.news-item-title {
+    font-size: 1.1rem;
 }
 
 :host /deep/ .news-item-source {
@@ -37,7 +40,7 @@
     padding-top: 10px;
 }
 
-:host /deep/ .news-item-footer h6 {
+:host /deep/ .news-item-footer h6, h5 {
     margin: 0;
 }
 
@@ -74,6 +77,10 @@
     display: inline-block;
     padding-right: 5px;
     padding-bottom: 5px;
+}
+
+:host /deep/ .news-item-tag-container h5 {
+    padding: 0;
 }
 
 :host /deep/ .news-item-content.list-group-item-action:focus,

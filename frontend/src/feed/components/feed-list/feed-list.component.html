@@ -13,7 +13,7 @@
                     <div class="news-item list-group" *ngFor="let feedItem of items">
                         <div class="news-item-content flex-column align-items-stretch list-group-item list-group-item-action">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     <div class="news-item-header">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h3 class="news-item-title">
@@ -24,18 +24,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="news-item-info-container">
-                                            <span class="badge"
+                                            <h5>
+                                                <span class="badge"
                                                   [attr.title]="feedItem.channels[0].name">
                                                 {{feedItem.channels[0].name}}
-                                            </span>
+                                                </span>
+                                            </h5>
                                             <div id="otherSources" [ngbCollapse]="!feedItem.channelsListCollapsed">
+                                                <h5>
                                                     <span *ngFor="let channel of getOtherChannels(feedItem)"
                                                           class="badge"
                                                           [attr.title]="channel.name">
                                                         {{channel.name}}
                                                     </span>
+                                                </h5>
                                             </div>
                                             <span class="link pull-right" *ngIf="feedItem.channels.length > 1"
                                                   (click)="feedItem.channelsListCollapsed = !feedItem.channelsListCollapsed"
@@ -67,13 +71,13 @@
                                 <div class="col-md-12">
                                     <div class="news-item-footer">
                                         <div class="news-item-tag-container" *ngFor="let tag of feedItem.tags">
-                                            <h6>
-                                            <span class="tag badge"
-                                                  (click)="selectTag(tag)"
-                                                  ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
-                                                {{tag}}
-                                            </span>
-                                            </h6>
+                                            <h5>
+                                                <span class="tag badge"
+                                                      (click)="selectTag(tag)"
+                                                      ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
+                                                    #{{tag}}
+                                                </span>
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
