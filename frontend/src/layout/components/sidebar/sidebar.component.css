@@ -35,7 +35,7 @@
 }
 
 :host /deep/ .sidebar-content {
-    padding: 5px 20px 5px 10px
+    padding: 10px 20px 10px 20px;
 }
 
 :host /deep/ .sidebar-content-header {
@@ -43,7 +43,7 @@
     width: 100%;
 }
 
-:host /deep/ .sidebar-content-header h3 {
+:host /deep/ .sidebar-content-header h5 {
     display: inline-block;
 }
 
@@ -135,4 +135,8 @@
 
 :host /deep/ .sidebar-swipe-area.left {
     width: 100%;
+}
+
+:host /deep/ .sidebar-content-header a {
+    padding: 0;
 }
