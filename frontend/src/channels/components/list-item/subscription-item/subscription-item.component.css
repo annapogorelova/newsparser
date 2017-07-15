@@ -20,3 +20,12 @@
     text-overflow: ellipsis;
     display: inline-block;
 }
+
+:host /deep/ .subscription-item-container span {
+    font-size: 14px;
+}
+
+:host /deep/ h6 {
+    display: inline-block;
+    margin: 0;
+}
