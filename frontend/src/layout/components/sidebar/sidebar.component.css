@@ -97,6 +97,16 @@
     border-left: none;
 }
 
+:host /deep/ .search-container input {
+    border-top: none;
+    border-left: none;
+}
+
+:host /deep/ .search-container button {
+    border-top: none !important;
+    border-right: none;
+}
+
 :host /deep/ tags-list .card {
     height: 20vh;
 }
