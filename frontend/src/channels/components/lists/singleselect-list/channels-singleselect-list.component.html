@@ -2,6 +2,7 @@
     <search (onSearch)="searchChannels($event.inputValue)"
             (onClear)="searchChannels($event)"></search>
 </div>
+<div class="news-sources-list-block" *ngIf="submitInProgress"></div>
 <div class="news-sources-list-container">
     <div *ngIf="hasItems()" class="news-sources-list">
         <div class="list-group" *ngFor="let channel of items">
@@ -51,11 +52,13 @@
         <p>{{selectedChannel.description}}</p>
         <p><a href="{{selectedChannel.websiteUrl}}" target="_blank">{{selectedChannel.websiteUrl}}</a></p>
     </div>
-    <button *ngIf="!selectedChannel.isSubscribed" class="btn btn-success btn-sm btn-full-length"
+    <button [disabled]="submitInProgress"
+            *ngIf="!selectedChannel.isSubscribed" class="btn btn-success btn-sm btn-full-length"
             (click)="handleSubscription(selectedChannel)">
         Subscribe
     </button>
-    <button *ngIf="selectedChannel.isSubscribed" class="btn btn-warning btn-sm btn-full-length"
+    <button [disabled]="submitInProgress"
+            *ngIf="selectedChannel.isSubscribed" class="btn btn-warning btn-sm btn-full-length"
             (click)="handleUnsubscription(selectedChannel)">
         Unsubscribe
     </button>

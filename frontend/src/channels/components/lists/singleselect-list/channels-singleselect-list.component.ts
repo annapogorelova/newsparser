@@ -16,6 +16,7 @@ export class ChannelsSingleSelectList
 
     selectedChannel:any = null;
     currentPopover:any;
+    submitInProgress:boolean = false;
 
     @Input() subscribed:boolean;
 
@@ -41,10 +42,12 @@ export class ChannelsSingleSelectList
     };
 
     handleSubscription() {
+        this.submitInProgress = true;
         this.onSelect.emit({channel: this.selectedChannel});
     };
 
     handleUnsubscription() {
+        this.submitInProgress = true;
         this.onDeselect.emit({channel: this.selectedChannel});
     };
 
@@ -91,7 +94,11 @@ export class ChannelsSingleSelectList
 
         if (channels.length) {
             channels[0].isSubscribed = isSubscribed;
+            channels[0].subscribersCount = isSubscribed ?
+                channels[0].subscribersCount + 1 : channels[0].subscribersCount - 1;
         }
+
+        this.submitInProgress = false;
     };
 
     nextPage():Promise<any> {
