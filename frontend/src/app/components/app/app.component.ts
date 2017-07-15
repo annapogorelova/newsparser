@@ -1,4 +1,4 @@
-import {Component, HostListener, ViewChild} from '@angular/core';
+import {Component, HostListener, ViewChild, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {
     AuthService,
@@ -11,9 +11,12 @@ import {
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     isNavbarCollapsed = true;
     minContentHeight:number;
+    isAuthenticated:boolean = false;
+    appName:string = process.env.APP_NAME;
+
     @ViewChild('appContent') appContent:any;
 
     constructor(private authService:AuthService,
@@ -23,6 +26,7 @@ export class AppComponent {
     }
 
     ngOnInit() {
+        this.isAuthenticated = this.authProvider.isAuthenticated();
         this.setAppMinContentHeight();
         this.authService.loadUser(true);
 
