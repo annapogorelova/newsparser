@@ -7,6 +7,7 @@
     background: rgba(0, 0, 0, 0.3);
     border: none;
     cursor: pointer;
+    z-index: 1000;
 }
 
 :host /deep/ .refresh:hover:not([disabled]), .refresh:focus:not([disabled]) {

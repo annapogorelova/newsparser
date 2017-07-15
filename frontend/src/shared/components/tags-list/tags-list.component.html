@@ -9,9 +9,11 @@
     </div>
     <div class="card-block">
         <div class="tag-container" *ngFor="let tag of tags">
-            <span class="tag badge" (click)="deselectTag(tag)" [attr.title]="tag">
-                #{{tag}}
-            </span>
+            <h5>
+                <span class="tag badge" (click)="deselectTag(tag)" [attr.title]="tag">
+                    #{{tag}}
+                </span>
+            </h5>
         </div>
         <div *ngIf="!tags.length">
             <p class="text-center">
