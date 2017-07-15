@@ -13,8 +13,8 @@
         <span class="news-source-name">{{channel.name}}</span>
     </div>
     <div class="pull-right">
-        <i class="fa fa-lock private-icon" aria-hidden="true"
-           *ngIf="channel.isPrivate" title="This channel is private"></i>
+        <h6><i class="fa fa-lock private-icon" aria-hidden="true"
+           *ngIf="channel.isPrivate" title="This channel is private"></i></h6>
         <h6><i class="fa fa-check" aria-hidden="true" *ngIf="channel.isSubscribed"></i></h6>
         <h6><span class="badge badge-default" title="Subscribed users">{{channel.subscribersCount}}</span></h6>
     </div>

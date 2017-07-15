@@ -15,14 +15,14 @@
 }
 
 :host /deep/ .subscription-item-container {
-    max-width: 80%;
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
 }
 
 :host /deep/ .subscription-item-container span {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 :host /deep/ h6 {
