@@ -98,7 +98,7 @@ export class FeedPageComponent implements OnInit {
         this.cacheService.set('selectedChannelsIds', selectedChannels);
 
         this.navigator.setQueryParam('channels', this.selectedChannelsIds.join(','));
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onChannelDeselected(event:any) {
@@ -115,14 +115,14 @@ export class FeedPageComponent implements OnInit {
         }
 
         this.navigator.setQueryParam('channels', this.selectedChannelsIds.join(','));
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onChannelsCleared(event:any) {
         this.selectedChannelsIds = [];
         this.cacheService.set('selectedChannelsIds', null);
         this.navigator.setQueryParam('channels', this.selectedChannelsIds.join(','));
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onTagSelected(event:any) {
@@ -133,7 +133,7 @@ export class FeedPageComponent implements OnInit {
         this.cacheService.set('selectedTags', selectedTags);
 
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onTagDeselected(event:any) {
@@ -150,14 +150,14 @@ export class FeedPageComponent implements OnInit {
         }
 
         this.navigator.setQueryParam('tags', this.selectedTags.join(','));
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onTagsCleared() {
         this.selectedTags = [];
         this.cacheService.set('selectedTags', null);
         this.navigator.setQueryParam('tags', null);
-        this.reloadFeed();
+        this.reloadFeed(true);
     };
 
     onSearch(event:any) {
