@@ -2,7 +2,8 @@ var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 var commonConfig = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const CriticalPlugin = require('webpack-plugin-critical').CriticalPlugin;
 var helpers = require('./helpers');
 
 module.exports = webpackMerge(commonConfig, {
@@ -21,6 +22,12 @@ module.exports = webpackMerge(commonConfig, {
             }
         }),
         new UglifyJSPlugin(),
+        new CriticalPlugin({
+            src: 'index.html',
+            inline: true,
+            minify: true,
+            dest: 'index.html'
+        }),
         new CompressionPlugin({
             asset: '[path].gz[query]',
             algorithm: 'gzip',

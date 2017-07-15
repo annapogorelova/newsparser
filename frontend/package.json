@@ -61,7 +61,8 @@
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "2.2.0",
     "webpack-dev-server": "2.2.0-rc.0",
-    "webpack-merge": "^2.4.0"
+    "webpack-merge": "^2.4.0",
+    "webpack-plugin-critical": "^1.0.0"
   },
   "repository": {}
 }
