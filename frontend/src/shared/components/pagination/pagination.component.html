@@ -1,6 +1,6 @@
 <ul class="pagination pagination-sm">
     <li class="page-item" [ngClass]="isFirstPage ? 'disabled' : ''">
-        <a role="button" class="page-link" aria-label="Previous" (click)="firstPage()">
+        <a role="button" class="page-link" aria-label="First" (click)="firstPage()">
             <span aria-hidden="true"><i class="fa fa-angle-double-left"></i></span>
             <span class="sr-only">First</span>
         </a>
@@ -18,7 +18,7 @@
         </a>
     </li>
     <li class="page-item" [ngClass]="isLastPage ? 'disabled' : ''">
-        <a role="button" class="page-link" aria-label="Next" (click)="lastPage()">
+        <a role="button" class="page-link" aria-label="Last" (click)="lastPage()">
             <span aria-hidden="true"><i class="fa fa-angle-double-right"></i></span>
             <span class="sr-only">Last</span>
         </a>
