@@ -85,11 +85,10 @@
                         </div>
                     </div>
                     <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
-                        <i class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                        <loading [sizePx]="35"></loading>
                     </div>
                     <div class="loading-status">
-                        <i *ngIf="!hasItems() && loadingInProgress"
-                           class="fa fa-refresh fa-spin fa-2x fa-fw" aria-hidden="true"></i>
+                        <loading [sizePx]="35" *ngIf="!hasItems() && loadingInProgress"></loading>
                         <h5 *ngIf="!hasItems() && !loadingInProgress">No News</h5>
                     </div>
                 </div>

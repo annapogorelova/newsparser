@@ -11,3 +11,6 @@ import 'rxjs';
 import '../assets/css/bootstrap-theme.min.css';
 import '../assets/font-awesome/css/font-awesome.min.css';
 import '../assets/css/app.css';
+
+// Images
+import '../assets/images/loading.gif';
