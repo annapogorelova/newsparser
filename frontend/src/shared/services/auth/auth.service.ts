@@ -30,6 +30,7 @@ export class AuthService {
         }
 
         return this.http.get(this.getAbsoluteUrl('account'), requestOptions)
+            .timeout(AppSettings.TIMEOUT['GET'])
             .toPromise()
             .then((response:any) => this.extractData(response))
             .then((response:any) => this.authProvider.setUser(response.data))
@@ -93,6 +94,7 @@ export class AuthService {
             var requestHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
             var requestOptions = new RequestOptions({headers: requestHeaders});
             return this.http.post(this.getAbsoluteUrl('token'), requestBody, requestOptions)
+                .timeout(AppSettings.TIMEOUT['POST'])
                 .toPromise()
                 .then((response:any) => resolve(this.extractData(response)))
                 .catch((error:any) => reject(error));

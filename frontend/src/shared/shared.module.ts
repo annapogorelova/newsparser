@@ -97,6 +97,7 @@ export function getApiService(http:Http,
     return new ApiService(
         http,
         AppSettings.API_ENDPOINT,
+        AppSettings.TIMEOUT,
         function onResponseSuccess(response:Response) {
             return response.json() || {};
         },

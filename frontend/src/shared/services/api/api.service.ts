@@ -8,6 +8,7 @@ import {Http, Headers, RequestOptions, URLSearchParams} from '@angular/http';
 export class ApiService {
     constructor(protected http:Http,
                 protected apiUrl:string,
+                protected timeoutSettings:any,
                 protected onResponseSuccess:any,
                 protected onResponseError:any,
                 protected provideDefaultHeaders:any = null) {
@@ -85,6 +86,7 @@ export class ApiService {
             params: this.initializeParams(params, params ? params.refresh : false)
         });
         return this.http.request(url, requestOptions)
+            .timeout(this.timeoutSettings[method.toUpperCase()])
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError)
