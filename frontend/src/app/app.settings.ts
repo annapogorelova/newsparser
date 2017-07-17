@@ -14,4 +14,11 @@ export class AppSettings {
     
     public static SIDEBAR_WIDTH_PX = 350;
     public static MAX_DEVICE_WIDTH_PX = 600;
+
+    public static TIMEOUT = {
+        'GET': 15000,
+        'POST': 20000,
+        'PUT': 20000,
+        'DELETE': 20000
+    };
 }
