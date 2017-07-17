@@ -117,7 +117,18 @@ namespace NewsParser.FeedParser.Services.FeedSourceParser
                 }
             }
             
-            return xml.Element("link")?.Value;
+            var linkElement = xml.Element("link");
+            if(!string.IsNullOrEmpty(linkElement.Value))
+            {
+                return linkElement.Value;
+            }
+
+            if(!string.IsNullOrEmpty(linkElement.Attribute("href")?.Value))
+            {
+                return linkElement.Attribute("href").Value;
+            }
+
+            return null;
         }
 
         public string GetItemTitle(XElement xml)
