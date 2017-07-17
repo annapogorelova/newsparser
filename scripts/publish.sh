@@ -12,15 +12,6 @@ fi
 PROJECT_NAME=$1
 SERVICE_NAME=newsparser-$PROJECT_NAME.service
 
-# Assuming the service exists
-echo "---" $SERVICE_NAME "status ---"
-systemctl is-active $SERVICE_NAME
-if [[ "$?" -eq "active" ]];
-    then
-        systemctl stop $SERVICE_NAME
-fi
-echo ""
-
 echo "--- git pull ---"
 git pull
 echo ""
@@ -41,6 +32,6 @@ if [[ "$PROJECT_NAME" == "web" ]];
 		apidoc -i $CURRENT_DIR/../backend/newsparser.$PROJECT_NAME/ -o $CURRENT_DIR/../docs
 fi
 
-echo "--- starting" $SERVICE_NAME "---"
-systemctl start $SERVICE_NAME
+echo "--- restarting" $SERVICE_NAME "---"
+systemctl restart $SERVICE_NAME
 systemctl status $SERVICE_NAME
