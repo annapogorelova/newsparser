@@ -12,9 +12,17 @@ export class SubscriptionItemComponent {
 
     @Output() onClick:EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild("popover") popover:any;
+    @ViewChild('popover') popover:any;
 
     handleClick() {
         this.onClick.emit({channel: this.channel, popover: this.popover});
+    };
+    
+    getSubscribersCountTitle(count:number) {
+        if(count === 0) {
+            return 'No subscribers';
+        }
+
+        return count === 1 ? '1 subscriber' : `${count} subscribers`;
     };
 }
