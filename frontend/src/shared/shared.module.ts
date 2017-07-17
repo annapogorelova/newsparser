@@ -1,10 +1,17 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {Router, ActivatedRoute, RouterModule} from '@angular/router';
+import {
+    Router,
+    ActivatedRoute,
+    RouterModule
+} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {EqualityValidator} from './directives';
-import {Http, Response} from '@angular/http';
+import {
+    Http,
+    Response
+} from '@angular/http';
 import {AppSettings} from '../app/app.settings';
 import {
     ApiService,
@@ -25,7 +32,8 @@ import {
     RefreshButtonComponent,
     SearchComponent,
     TagListComponent,
-    PaginationComponent
+    PaginationComponent,
+    LoadingComponent
 } from './components';
 import {
     ExternalAuthModule,
@@ -63,7 +71,8 @@ import {
         SearchComponent,
         TagListComponent,
         EqualityValidator,
-        PaginationComponent
+        PaginationComponent,
+        LoadingComponent
     ],
     exports: [
         PageNotFoundComponent,
@@ -74,7 +83,8 @@ import {
         ExternalAuthModule,
         EqualityValidator,
         PaginationComponent,
-        NoticesModule
+        NoticesModule,
+        LoadingComponent
     ]
 })
 

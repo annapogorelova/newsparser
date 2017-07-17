@@ -12,13 +12,10 @@
                                (onClick)="setCurrentChannel($event)">
             </subscription-item>
         </div>
-        <div *ngIf="loadingInProgress" class="loading-more-icon-container">
-            <i class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
-        </div>
     </div>
-    <div *ngIf="!hasItems()" class="loading-status-container">
+    <div *ngIf="!hasItems()" class="loading-status">
         <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
-        <i *ngIf="loadingInProgress" class="fa fa-refresh fa-spin fa-1x fa-fw" aria-hidden="true"></i>
+        <loading *ngIf="loadingInProgress" [sizePx]="35"></loading>
     </div>
 </div>
 <div class="pagination pull-right">
