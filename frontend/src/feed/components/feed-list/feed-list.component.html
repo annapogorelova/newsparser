@@ -64,7 +64,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <span class="news-item-date pull-right">{{feedItem.datePublished | date:'short'}}</span>
+                                    <span class="news-item-date pull-right">{{feedItem.datePublished | date:'dd-MM-y, HH:mm'}}</span>
                                 </div>
                             </div>
                             <div class="row" *ngIf="feedItem.tags.length">
