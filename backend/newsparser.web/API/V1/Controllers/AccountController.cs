@@ -147,7 +147,7 @@ namespace NewsParser.API.V1.Controllers
             if(!user.EmailConfirmed)
             {
                 throw new WebLayerException(HttpStatusCode.BadRequest, 
-                    "Password reset is not allowed until the user is not confirmed.");
+                    "Account update is not allowed until the user is not confirmed.");
             }
 
             bool emailChanged = user.Email != model.Email;

@@ -3,17 +3,17 @@ import {Observable} from 'rxjs';
 import {AuthProviderService} from './auth-provider.service';
 import {Inject} from '@angular/core';
 
-export class CanActivateAuth implements CanActivate {
+export class CanActivatePublic implements CanActivate {
     constructor(@Inject(Router) private router:Router,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService) {
     }
 
     canActivate(route:ActivatedRouteSnapshot, state:RouterStateSnapshot):Observable<boolean>|Promise<boolean>|boolean {
-        if (this.authProvider.isAuthenticated()) {
+        if (!this.authProvider.isAuthenticated()) {
             return true;
         }
 
-        this.router.navigate(['/sign-in']);
+        this.router.navigate(['/']);
         return false;
     }
 }

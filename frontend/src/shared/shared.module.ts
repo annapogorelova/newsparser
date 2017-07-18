@@ -23,7 +23,8 @@ import {
     AuthProviderService,
     AbstractDataProviderService,
     AuthRefreshLocker,
-    CanActivateAuth,
+    CanActivatePrivate,
+    CanActivatePublic,
     RequestLockerService,
     PageTitleService
 } from './services';
@@ -44,7 +45,8 @@ import {
     imports: [BrowserModule, FormsModule, GoTopButtonModule, RouterModule],
     providers: [
         AuthService,
-        CanActivateAuth,
+        CanActivatePrivate,
+        CanActivatePublic,
         PagerServiceProvider,
         AuthProviderService,
         AuthRefreshLocker,

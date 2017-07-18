@@ -37,6 +37,9 @@
 :host /deep/ .news-sources-list-container {
     height: 100%;
     overflow-y: auto;
+    background-color: #F7F7F9;
+    border: 1px rgba(0, 0, 0, 0.15) solid;
+    border-top: none;
 }
 
 :host /deep/ .news-sources-list-block {
