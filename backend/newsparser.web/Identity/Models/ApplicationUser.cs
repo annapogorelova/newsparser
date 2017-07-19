@@ -8,6 +8,7 @@ namespace NewsParser.Web.Identity.Models
     /// </summary>
     public class ApplicationUser: IdentityUser
     {
+        public bool HasSubscriptions { get; set; }
         public List<ExternalIdModel> ExternalIds { get; set; }
 
         public int GetId()
