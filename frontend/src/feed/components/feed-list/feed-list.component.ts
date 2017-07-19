@@ -89,8 +89,11 @@ export class FeedListComponent extends BaseList implements OnInit, AfterViewInit
 
     loadMore() {
         this.requestLocker.lock(() => this.loadMoreData(this.getRequestParams()))
-            .then(() => this.setPageUrlQueryParam())
-            .catch(() => console.log('Loading more failed'));
+            .then(() => this.onLoadMoreSucceeded());
+    };
+
+    onLoadMoreSucceeded() {
+        this.setPageUrlQueryParam();
     };
 
     setPageUrlQueryParam() {
