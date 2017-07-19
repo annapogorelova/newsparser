@@ -62,3 +62,7 @@
     span.tag.badge:hover {
     background-color: #0075A7;
 }
+
+:host /deep/ .no-data-text {
+    padding: 5px 5px 5px 5px;
+}

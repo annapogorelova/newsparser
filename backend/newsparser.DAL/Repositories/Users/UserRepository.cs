@@ -122,7 +122,9 @@ namespace NewsParser.DAL.Repositories.Users
 
         public User GetUserByUserName(string userName)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.UserName == userName);
+            return _dbContext.Users
+                .Include(u => u.Channels)
+                .FirstOrDefault(u => u.UserName == userName);
         }
     }
 }

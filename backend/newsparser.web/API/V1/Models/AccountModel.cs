@@ -10,5 +10,6 @@ namespace NewsParser.API.V1.Models
         [EmailAddress]
         public string Email { get; set; }
         public bool HasPassword { get; set; }
+        public bool HasSubscriptions { get; set; }
     }
 }

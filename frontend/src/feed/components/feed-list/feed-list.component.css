@@ -103,15 +103,12 @@
 :host /deep/ .loading-status {
     width: 100%;
     display: table;
-    padding-top: 35px;
-    padding-bottom: 35px;
+    padding: 20px 10px 20px 10px;
     text-align: center;
     vertical-align: middle;
 }
 
 :host /deep/ .loading-status h5 {
-    text-align: center;
-    vertical-align: middle;
     display: table-cell;
 }
 

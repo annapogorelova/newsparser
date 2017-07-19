@@ -20,6 +20,7 @@
                                 <channels-singleselect-list #subscribedChannelsList
                                               (onSelect)="subscribe($event)"
                                               (onDeselect)="unsubscribe($event)"
+                                              [noDataText]="'No subscribed channels'"
                                               [useSearch]="true"
                                               [subscribed]="true">
                                 </channels-singleselect-list>

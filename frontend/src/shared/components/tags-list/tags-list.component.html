@@ -15,10 +15,10 @@
                 </span>
             </h5>
         </div>
-        <div *ngIf="!tags.length">
-            <p class="text-center">
-                Nothing selected
-            </p>
+        <div *ngIf="!tags.length" class="no-data-text">
+            <h5 class="text-center">
+                No tags selected
+            </h5>
         </div>
     </div>
 </div>
