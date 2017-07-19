@@ -4,6 +4,7 @@
         <div class="col-md-6">
             <div *ngIf="submitSucceeded">
                 {{'Nearly done! Please check your email to confirm the registration.'}}
+                <a [routerLink]="['/']">Return to the home page</a>
             </div>
 
             <form #f="ngForm" novalidate (ngSubmit)="submit(f.valid)"
@@ -34,7 +35,9 @@
                     </small>
                 </div>
                 <button type="submit" class="btn btn-info btn-full-length"
-                        [disabled]="!f.valid || submitInProgress">Submit</button>
+                        [disabled]="!f.valid || submitInProgress">
+                    <span *ngIf="!submitInProgress">Submit</span>
+                    <i class="fa fa-circle-o-notch fa-spin" *ngIf="submitInProgress"  aria-hidden="true"></i></button>
             </form>
         </div>
         <div class="col-md-3"></div>

@@ -10,8 +10,11 @@
                     Email is not in valid format.
                 </small>
             </div>
-            <button type="submit" class="btn btn-info pull-right"
-                    [disabled]="!f.valid || submitInProgress || !formDataChanged">Submit</button>
+            <button type="submit" class="btn btn-info btn-short pull-right"
+                    [disabled]="!f.valid || submitInProgress || !formDataChanged">
+                <span *ngIf="!submitInProgress">Submit</span>
+                <i class="fa fa-circle-o-notch fa-spin" *ngIf="submitInProgress" aria-hidden="true"></i>
+            </button>
         </form>
     </div>
 </div>
