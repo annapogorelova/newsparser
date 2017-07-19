@@ -3,7 +3,9 @@ import {ActivatedRoute} from '@angular/router';
 import {
     NavigatorService,
     CacheService,
-    PageTitleService
+    PageTitleService,
+    AuthService,
+    NoticesService
 } from '../../../shared';
 import {AppSettings} from '../../../app/app.settings';
 
@@ -30,13 +32,27 @@ export class FeedPageComponent implements OnInit {
     constructor(private navigator:NavigatorService,
                 private route:ActivatedRoute,
                 private cacheService:CacheService,
-                private pageTitleService:PageTitleService) {
+                private pageTitleService:PageTitleService,
+                private authService:AuthService,
+                private noticesService:NoticesService) {
         this.marginLeft = AppSettings.SIDEBAR_WIDTH_PX;
     }
 
     ngOnInit() {
         this.pageTitleService.appendTitle('Feed');
+        this.initializeFiltering();
+        this.authService.loadUser(true).then((data:any) => this.onUserLoaded(data));
+    };
 
+    private onUserLoaded(user:any) {
+        if (!user.hasSubscriptions) {
+            this.navigator.navigate(['/subscriptions'], {fragment: 'all'});
+            this.noticesService.info(`You are not subscribed to any channel yet. 
+                Add some subscriptions to be able to receive the updates in your feed!`);
+        }
+    };
+
+    private initializeFiltering() {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page:string) => {

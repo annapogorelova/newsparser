@@ -10,7 +10,7 @@
 
 :host /deep/ .notices-wrapper .notice {
     display: block;
-    width: 260px;
+    width: 300px;
     padding: 10px;
     border: none;
     border-radius: 3px;
