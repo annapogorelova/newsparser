@@ -241,7 +241,7 @@ namespace NewsParser.API.V1.Controllers
         private JsonResult MakeIdentityErrorResponse(HttpStatusCode status, string errorMessage, IdentityResult result)
         {
             string detailedErrorMessage = result.Errors.FirstOrDefault()?.Description ?? string.Empty;
-            string fullErrorMessage = $"{errorMessage}. {detailedErrorMessage}";
+            string fullErrorMessage = $"{errorMessage} {detailedErrorMessage}";
             return MakeErrorResponse(HttpStatusCode.InternalServerError, fullErrorMessage);
         }
     }
