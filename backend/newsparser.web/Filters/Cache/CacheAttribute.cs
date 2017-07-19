@@ -101,10 +101,6 @@ namespace NewsParser.Cache
 
                 var responseStream = httpResponse.Body;
                 responseStream.Seek(0, SeekOrigin.Begin);
-                if (responseStream.Length <= cachedResult.Length)
-                {
-                    responseStream.SetLength((long)cachedResult.Length << 1);
-                }
                 
                 using (var writer = new StreamWriter(responseStream, Encoding.UTF8, 4096, true))
                 {
