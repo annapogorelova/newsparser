@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.setAppMinContentHeight();
         this.authService.loadUser(true);
 
         this.router.events.subscribe(() => {
@@ -33,22 +32,6 @@ export class AppComponent implements OnInit {
         });
 
         this.pageTitleService.setBaseTitle(process.env.APP_NAME);
-    };
-
-    @HostListener('window:resize')
-    onWindowResize() {
-        this.setAppMinContentHeight();
-    };
-
-    calculateMinContentHeight() {
-        // Height of top and bottom navbars is 38, padding - 8 top and bottom
-        // 39 + 16*2 = 71
-        return window.innerHeight - 71;
-    };
-
-    setAppMinContentHeight() {
-        this.minContentHeight = this.calculateMinContentHeight();
-        this.appContent.nativeElement.style['min-height'] = this.minContentHeight + 'px';
     };
 
     signOut() {
