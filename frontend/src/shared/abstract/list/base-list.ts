@@ -75,7 +75,12 @@ export abstract class BaseList {
         }
 
         this.pager.setPage(this.pager.getPage() + 1);
-        return this.loadData(params, refresh);
+        return this.loadData(params, refresh).catch((error:any) => this.onLoadMoreDataFailed(error));
+    };
+
+    private onLoadMoreDataFailed(error:any){
+        this.pager.setPage(this.pager.getPage() - 1);
+        throw new Error(error);
     };
 
     /**
@@ -116,6 +121,7 @@ export abstract class BaseList {
      */
     protected onError(error:any) {
         this.loadingInProgress = false;
+        throw new Error(error);
     };
 
     /**

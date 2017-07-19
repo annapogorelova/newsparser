@@ -5,9 +5,8 @@
                 <search (onSearch)="searchNews($event.inputValue)"
                         (onClear)="searchNews($event)"
                         [search]="search"></search>
-                <div class="news-container" infinite-scroll
-                     [infiniteScrollDistance]="4"
-                     [infiniteScrollThrottle]="300"
+                <div class="news-list-container" *ngIf="hasItems()" infinite-scroll
+                     [infiniteScrollDistance]="1"
                      [infiniteScrollDisabled]="!hasMoreItems"
                      (scrolled)="loadMore()">
                     <div class="news-item list-group" *ngFor="let feedItem of items">
@@ -84,13 +83,13 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
-                        <loading [sizePx]="35"></loading>
-                    </div>
-                    <div class="loading-status">
-                        <loading [sizePx]="35" *ngIf="!hasItems() && loadingInProgress"></loading>
-                        <h5 *ngIf="!hasItems() && !loadingInProgress">No News</h5>
-                    </div>
+                </div>
+                <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
+                    <loading [sizePx]="35"></loading>
+                </div>
+                <div class="loading-status" *ngIf="!hasItems()">
+                    <loading [sizePx]="35" *ngIf="loadingInProgress"></loading>
+                    <h5 *ngIf="!loadingInProgress">No News</h5>
                 </div>
             </div>
         </div>
