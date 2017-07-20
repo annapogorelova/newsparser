@@ -10,7 +10,7 @@
         </div>
     </div>
     <div *ngIf="!hasItems()" class="loading-status">
-        <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
+        <h6 *ngIf="!loadingInProgress">{{noDataText}}</h6>
         <loading *ngIf="loadingInProgress"></loading>
     </div>
 </div>
