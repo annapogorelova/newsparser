@@ -12,12 +12,6 @@
     </sidebar>
     <div class="news-container" [style.margin-left.px]="marginLeft"
          [ngClass]="sidebarComponent.isVisible() ? 'news-container-hidden' : ''">
-        <div class="container-fluid sidebar-toggler-container">
-            <a title="Toggle sidebar" role="button" class="btn btn-sm btn-primary"
-               (click)="sidebarComponent.toggle()">
-                <i class="fa fa-bars"></i>
-            </a>
-        </div>
         <feed-list #feedListComponent
                    [initialSearch]="initialSearch"
                    [initialPage]="initialPage"

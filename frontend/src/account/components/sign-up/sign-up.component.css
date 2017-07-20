@@ -3,10 +3,6 @@
     min-width: 230px;
 }
 
-:host /deep/ .btn-full-length {
-    width: 100%;
-}
-
 :host /deep/ button {
     cursor: pointer;
 }

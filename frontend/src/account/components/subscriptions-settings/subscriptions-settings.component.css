@@ -1,7 +1,3 @@
-:host /deep/ .news-sources-settings-container {
-    margin-top: 20px;
-}
-
 :host /deep/ .list-heading {
     text-align: center;
     padding-bottom: 15px;
@@ -21,4 +17,9 @@
 
 :host /deep/ .search-container {
     padding-bottom: 0 !important;
+}
+
+:host /deep/ .page-description-text {
+    font-size: 14px;
+    font-weight: 300;
 }

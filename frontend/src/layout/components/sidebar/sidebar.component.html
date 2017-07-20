@@ -1,8 +1,13 @@
+<div class="sidebar-toggler-container" [@slideInOutToggler]="animationState">
+    <a title="Toggle sidebar" (click)="toggle()">
+        <i class="fa fa-filter pull-right"></i>
+    </a>
+</div>
 <div class="sidebar-container" [@slideInOut]="animationState" [style.width.px]="defaultWidth" (swipeleft)="hide()">
     <div class="sidebar-content">
         <div class="sidebar-content-header">
             <h5>Feed options</h5>
-            <a class="btn sidebar-toggle-btn pull-right" role="button" (click)="hide()">
+            <a class="btn sidebar-close-btn pull-right" role="button" (click)="hide()">
                 <i class="fa fa-close"></i>
             </a>
         </div>

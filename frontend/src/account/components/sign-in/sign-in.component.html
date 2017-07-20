@@ -59,11 +59,13 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <button type="submit" [disabled]="submitInProgress" class="btn btn-primary btn-full-length">
-                            Sign in
+                            <span>Sign in</span>
                         </button>
                     </div>
                     <div class="col-md-6">
-                        <a href="#" [routerLink]="['/password-remind']">Forgot password?</a>
+                        <a class="forgot-password-link" href="#" [routerLink]="['/password-remind']">
+                            <span>Forgot password?</span>
+                        </a>
                     </div>
                 </div>
             </form>

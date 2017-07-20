@@ -15,7 +15,8 @@
     "data": {
       "id" : 1,
       "email" : "johndoe@gmail.com",
-      "hasPassword" : true
+      "hasPassword" : true,
+      "hasSubscriptions" : true
     }
   }
 }

@@ -3,10 +3,6 @@
     min-width: 230px;
 }
 
-:host /deep/ .btn-full-length {
-    width: 100%;
-}
-
 :host /deep/ button {
     cursor: pointer;
     overflow: hidden;
@@ -17,3 +13,9 @@
 :host /deep/ .validation-error-text {
     color: #BD362F;
 }
+
+:host /deep/ .forgot-password-link span {
+    vertical-align: middle;
+    line-height: 100%;
+}
+

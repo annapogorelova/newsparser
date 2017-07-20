@@ -31,6 +31,14 @@ button {
     cursor: pointer;
 }
 
+button.btn-short {
+    min-width: 150px;
+}
+
+.btn-full-length {
+    width: 100%;
+}
+
 .container-fluid {
     padding-left: 20px !important;
     padding-right: 20px !important;
