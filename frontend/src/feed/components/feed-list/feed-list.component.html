@@ -85,11 +85,11 @@
                     </div>
                 </div>
                 <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
-                    <loading [sizePx]="35"></loading>
+                    <loading></loading>
                 </div>
                 <div class="loading-status" *ngIf="!hasItems()">
-                    <loading [sizePx]="35" *ngIf="loadingInProgress"></loading>
-                    <h5 *ngIf="!loadingInProgress">No feed</h5>
+                    <loading *ngIf="loadingInProgress"></loading>
+                    <h6 *ngIf="!loadingInProgress">No feed found</h6>
                 </div>
             </div>
         </div>
