@@ -33,6 +33,7 @@
 
 :host /deep/ .sidebar-content {
     padding: 10px 20px 10px 20px;
+    height: 100%;
 }
 
 :host /deep/ .sidebar-content-header {
@@ -46,6 +47,7 @@
 
 :host /deep/ .sidebar-main-content {
     padding-top: 5px;
+    height: 100%;
 }
 
 :host /deep/ .sidebar-close-btn {
@@ -101,15 +103,16 @@
 
 :host /deep/ .search-container button {
     border-top: none !important;
-    border-right: none;
+    border-right: none !important;
 }
 
-:host /deep/ tags-list .card {
-    height: 20vh;
+:host /deep/ tags-list .card, .tags-list-container {
+    height: 100%;
 }
 
 :host /deep/ .tags-container {
     padding-top: 10px;
+    height: 20vh;
 }
 
 :host /deep/ .news-sources-card span {
@@ -118,11 +121,6 @@
 
 :host /deep/ .news-sources-card span[disabled="true"] {
     cursor: not-allowed;
-}
-
-:host /deep/ .copyright {
-    margin-bottom: 0;
-    padding: 10px 0 10px 0;
 }
 
 :host /deep/ i {
@@ -175,4 +173,8 @@
     color: #636c72;
     line-height: 30px;
     vertical-align: middle;
+}
+
+:host /deep/ .copyright-container {
+    padding-top: 10px;
 }
