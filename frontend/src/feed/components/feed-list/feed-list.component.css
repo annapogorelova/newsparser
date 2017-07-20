@@ -126,7 +126,6 @@
 :host /deep/ .refresh-button-container {
     position: fixed;
     top: 50%;
-    bottom: 50%;
     right: 0;
     z-index: 100;
     margin: 0;
