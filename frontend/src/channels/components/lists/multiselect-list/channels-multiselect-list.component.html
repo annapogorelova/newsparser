@@ -11,7 +11,7 @@
     </div>
     <div *ngIf="!hasItems()" class="loading-status">
         <h5 *ngIf="!loadingInProgress">{{noDataText}}</h5>
-        <loading *ngIf="loadingInProgress" [sizePx]="35"></loading>
+        <loading *ngIf="loadingInProgress"></loading>
     </div>
 </div>
 <div class="selected-sources-count pull-left">

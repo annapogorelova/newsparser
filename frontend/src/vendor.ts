@@ -13,4 +13,4 @@ import '../assets/font-awesome/css/font-awesome.min.css';
 import '../assets/css/app.css';
 
 // Images
-import '../assets/images/loading.gif';
+import '../assets/images/loading.svg';

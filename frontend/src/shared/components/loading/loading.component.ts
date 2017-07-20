@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'loading',
@@ -9,9 +9,4 @@ import {Component, Input} from '@angular/core';
  * A loading animation component
  */
 export class LoadingComponent {
-
-    /**
-     * Size in px of the loading icon
-     */
-    @Input() sizePx:number = 50;
 }
