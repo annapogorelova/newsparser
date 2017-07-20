@@ -28,6 +28,16 @@ import {AppSettings} from '../../../app/app.settings';
             transition('in => out', animate('200ms ease-in-out')),
             transition('out => in', animate('200ms ease-in-out'))
         ]),
+        trigger('slideInOutToggler', [
+            state('in', style({
+                'transform': 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                'transform': 'translate3d(-92%, 0, 0)'
+            })),
+            transition('in => out', animate('200ms ease-in-out')),
+            transition('out => in', animate('200ms ease-in-out'))
+        ]),
         trigger('appearInOut', [
             state('in', style({
                 'display': 'block',

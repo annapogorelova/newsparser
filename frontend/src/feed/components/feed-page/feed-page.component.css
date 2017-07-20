@@ -4,15 +4,6 @@
     }
 }
 
-:host /deep/ .sidebar-toggler-container {
-    padding-bottom: 5px;
-}
-
-:host /deep/ .sidebar-toggler-container i {
-    color: white;
-    vertical-align: baseline;
-}
-
 :host /deep/ .card-block {
     background-color: white;
 }
