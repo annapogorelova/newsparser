@@ -1,19 +1,80 @@
-:host /deep/ .container-fluid {
+:host /deep/ .landing-container {
+    position: fixed;
+    top: 0;
     height: 100%;
+    width: 100%;
+    background-image: url('/assets/landing.jpeg');
+    background-position: center;
+    background-size: cover;
+    color: white;
+    overflow-y: auto;
+}
+
+:host /deep/ .landing-container h1 {
+    font-size: 5vh;
+}
+
+:host /deep/ .landing-container h3 {
+    font-size: 3vh;
+}
+
+:host /deep/ .landing-container h5 {
+    font-size: 2.5vh;
+}
+
+:host /deep/ .description-container {
+    margin-top: 65px;
+    padding: 20px 20px 20px 20px;
+}
+
+:host /deep/ .navigation-section {
+    text-align: center;
+}
+
+:host /deep/ .buttons-container {
+    display: inline-block;
+    width: 100%;
+}
+
+:host /deep/ .navigation-section a {
+    margin: 0 10px 0 10px;
 }
 
 :host /deep/ .heading-container {
     min-height: 100px;
-    padding: 20px;
-    color: white;
+    padding-bottom: 10px;
+    text-align: center;
 }
 
 :host /deep/ .body-container {
-    padding: 20px;
+    padding-bottom: 10px;
     min-height: 150px;
-    color: white;
+    text-align: center;
 }
 
-:host /deep/ .body-container h6 {
-    font-weight: 500;
+:host /deep/ .list-items-container {
+    display: inline-block;
+    text-align: left;
+}
+
+:host /deep/ li {
+    list-style: none;
+    padding-left: 40px;
+    margin: 0;
+    background-image: url('/assets/default-rss-icon.png');
+    background-size: 2.5vh;
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+:host /deep/ .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 20px 10px 20px;
+}
+
+:host /deep/ .footer small {
+    font-weight: 300;
 }

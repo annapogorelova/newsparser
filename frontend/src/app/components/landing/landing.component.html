@@ -1,14 +1,32 @@
-<div class="landing-container blue">
-    <div class="heading-container">
-        <h3>FeedsCatcher</h3>
-        <h6>Be sure to catch every feed in the ocean of world news.</h6>
-    </div>
-    <div class="body-container orange">
-        <h6>News feed is refreshed every 15 minutes.</h6>
-        <h6>RSS and Atom support.</h6>
-        <h6>Hash tags filtering.</h6>
-        <h6>Ability to add your own channels or subscribe to the existing.</h6>
-        <h6>Ability to make your channels private to be sure that no one else has access to them.</h6>
-        <h6>No need to register by email: sign in with facebook or google.</h6>
+<div class="landing-container">
+    <div class="description-container">
+        <div class="heading-container">
+            <h1>FeedsCatcher</h1>
+            <h3>Be sure to catch every feed in the ocean of world news.</h3>
+        </div>
+        <div class="body-container">
+            <div class="list-items-container">
+                <ul>
+                    <li><h5>Free.</h5></li>
+                    <li><h5>Fresh news feed every 15 minutes.</h5></li>
+                    <li><h5>RSS and Atom support.</h5></li>
+                    <li><h5>Hash tags filtering.</h5></li>
+                    <li><h5>Add your own channels or subscribe to the existing.</h5></li>
+                    <li><h5>Make your channels private to be sure that no one else has access to them.</h5></li>
+                    <li><h5>Sign in with facebook or google.</h5></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navigation-section">
+            <div class="buttons-container">
+                <a class="btn btn-info" role="button" [routerLink]="['/sign-up']">Sign up</a>
+                or
+                <a class="btn btn-success" role="button" [routerLink]="['/sign-in']">Sign in</a>
+            </div>
+        </div>
+        <div class="footer">
+            <small class="pull-left">© 2017 FeedsCatcher</small>
+            <small class="pull-right">Photo by Oleksandr Tolochko</small>
+        </div>
     </div>
 </div>
