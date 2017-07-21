@@ -1,5 +1,5 @@
 # FeedsCather
-A web application for parsing and merging the news from different sources into a single news feed.
+A multiuser web application for parsing and merging the news from different sources into a single news feed.
 Application consists of the backend as web API and frontend as a SPA.
 
 ## Backend
