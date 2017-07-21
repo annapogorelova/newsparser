@@ -3,6 +3,7 @@
     top: 0;
     height: 100%;
     width: 100%;
+    background-color: #344D90;
     background-image: url('/assets/landing.jpeg');
     background-position: center;
     background-size: cover;
@@ -38,6 +39,8 @@
 
 :host /deep/ .navigation-section a {
     margin: 0 10px 0 10px;
+    width: 30vw;
+    max-width: 200px;
 }
 
 :host /deep/ .heading-container {
@@ -59,7 +62,7 @@
 
 :host /deep/ li {
     list-style: none;
-    padding-left: 40px;
+    padding-left: 30px;
     margin: 0;
     background-image: url('/assets/default-rss-icon.png');
     background-size: 2.5vh;
