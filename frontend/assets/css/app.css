@@ -1,5 +1,5 @@
 html, body {
-    min-height: 101%;
+    min-height: 100%;
 }
 
 .app-loading {
@@ -20,11 +20,76 @@ body {
 }
 
 .bg-primary, .badge-primary, .list-group-item.active, .btn-primary {
-    background-color: #336688 !important;
+    background-color: #344D90 !important;
 }
 
-.btn-primary:hover {
-    background-color: #28516C !important;
+.dark-blue {
+    background-color: #344D90;
+}
+
+.blue {
+    background-color: #5CC5EF;
+}
+
+.orange {
+    background-color: #FFB745;
+}
+
+.red {
+    background-color: #E7552C;
+}
+
+a {
+    color: #499DBF;
+}
+
+.nav-pills .nav-link.active, .nav-pills .nav-item.show .nav-link {
+    background-color: #344D90;
+}
+
+.btn-info {
+    background-color: #5CC5EF;
+    border-color: #5CC5EF;
+}
+
+.btn-info:disabled {
+    background-color: #7CD0F2;
+    border-color: #7CD0F2;
+}
+
+.btn-info:hover:enabled {
+    background-color: #499DBF !important;
+    border-color: #499DBF;
+}
+
+.btn-primary {
+    background-color: #344D90;
+    border-color: #344D90;
+}
+
+.btn-primary:disabled {
+    background-color: #5C70A6;
+    border-color: #5C70A6;
+}
+
+.btn-primary:hover:enabled {
+    background-color: #293D73 !important;
+    border-color: #293D73;
+}
+
+.btn-warning {
+    background-color: #FFB745;
+    border-color: #FFB745;
+}
+
+.btn-warning:disabled {
+    background-color: #FFC56A;
+    border-color: #FFC56A;
+}
+
+.btn-warning:hover:enabled {
+    background-color: #CC9237 !important;
+    border-color: #CC9237;
 }
 
 button {
@@ -42,6 +107,11 @@ button.btn-short {
 .container-fluid {
     padding-left: 20px !important;
     padding-right: 20px !important;
+}
+
+.validation-error-text {
+    color: #E7552C;
+    font-size: 13px;
 }
 
 /* Firefox red shadowed input border fixes */

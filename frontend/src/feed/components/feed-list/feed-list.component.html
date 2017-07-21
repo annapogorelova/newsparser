@@ -26,7 +26,7 @@
                                 <div class="col-md-4">
                                     <div class="news-item-info-container">
                                             <h5>
-                                                <span class="badge"
+                                                <span class="badge orange"
                                                   [attr.title]="feedItem.channels[0].name">
                                                 {{feedItem.channels[0].name}}
                                                 </span>
@@ -34,7 +34,7 @@
                                             <div id="otherSources" [ngbCollapse]="!feedItem.channelsListCollapsed">
                                                 <h5>
                                                     <span *ngFor="let channel of getOtherChannels(feedItem)"
-                                                          class="badge"
+                                                          class="badge orange"
                                                           [attr.title]="channel.name">
                                                         {{channel.name}}
                                                     </span>
@@ -71,7 +71,7 @@
                                     <div class="news-item-footer">
                                         <div class="news-item-tag-container" *ngFor="let tag of feedItem.tags">
                                             <h5>
-                                                <span class="tag badge"
+                                                <span class="tag badge blue"
                                                       (click)="selectTag(tag)"
                                                       ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
                                                     #{{tag}}

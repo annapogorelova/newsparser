@@ -143,7 +143,7 @@
 }
 
 :host /deep/ span.link {
-    color: blue;
+    color: #499DBF;
     cursor: pointer;
     text-decoration: underline;
     font-size: 13px;
@@ -157,22 +157,14 @@
     margin-bottom: 5px;
 }
 
-:host /deep/ .news-item-info-container span.badge {
-    background-color: #F8991D;
-}
-
 :host /deep/ .news-item-info-container h5 {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-:host /deep/ .news-item-tag-container span.badge {
-    background-color: #0093D1;
-}
-
 :host /deep/ .news-item-tag-container span.tag.badge.selected,
     span.tag.badge:hover {
-    background-color: #0075A7;
+    background-color: #499DBF;
 }
 
 :host /deep/ span.tag.badge.selected {

@@ -14,3 +14,4 @@ import '../assets/css/app.css';
 
 // Images
 import '../assets/images/loading.svg';
+import '../assets/images/landing.jpeg';

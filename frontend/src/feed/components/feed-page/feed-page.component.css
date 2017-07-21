@@ -16,3 +16,7 @@
     position: fixed;
     top: 0;
 }
+
+:host /deep/ .news-container {
+    min-height: 101vh;
+}

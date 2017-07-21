@@ -37,17 +37,17 @@
 
 :host /deep/ .notices-wrapper .notice.notice-warning {
     color: #fff;
-    background-color: #F7A735;
+    background-color: #FFB745;
 }
 
 :host /deep/ .notices-wrapper .notice.notice-error {
     color: #fff;
-    background-color: #BD362F;
+    background-color: #E7552C;
 }
 
 :host /deep/ .notices-wrapper .notice.notice-info {
     color: #fff;
-    background-color: #2F96B4;
+    background-color: #5CC5EF;
 }
 
 :host /deep/ .notices-wrapper .notice .notice-title {

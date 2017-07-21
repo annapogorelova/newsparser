@@ -6,7 +6,3 @@
 :host /deep/ button {
     cursor: pointer;
 }
-
-:host /deep/ .validation-error-text {
-    color: #BD362F;
-}
