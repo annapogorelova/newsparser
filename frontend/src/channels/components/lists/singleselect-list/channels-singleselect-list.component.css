@@ -141,6 +141,19 @@
     padding: 8px;
 }
 
+:host /deep/ .subscription-heading {
+    display: inline-block;
+    width: 100%;
+}
+
+:host /deep/ .subscription-heading a {
+    padding: 0 5px 0 5px;
+}
+
+:host /deep/ .subscription-title {
+    max-width: 90%;
+}
+
 :host /deep/ div.popover-content .subscription-info {
     max-height: 150px;
     overflow-x: auto;
@@ -151,7 +164,7 @@
     margin-bottom: 3px;
 }
 
-:host /deep/ div.popover-content .subscription-info p.subscription-title {
+:host /deep/ div.popover-content .subscription-info {
     margin-bottom: 10px;
 }
 

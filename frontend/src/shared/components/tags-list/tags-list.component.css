@@ -54,13 +54,9 @@
     cursor: not-allowed;
 }
 
-:host /deep/ span.tag.badge {
-    background-color: #0093D1;
-}
-
 :host /deep/ span.tag.badge.selected,
     span.tag.badge:hover {
-    background-color: #0075A7;
+    background-color: #499DBF;
 }
 
 :host /deep/ .no-data-text {

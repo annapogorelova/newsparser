@@ -1,0 +1,19 @@
+:host /deep/ .container-fluid {
+    height: 100%;
+}
+
+:host /deep/ .heading-container {
+    min-height: 100px;
+    padding: 20px;
+    color: white;
+}
+
+:host /deep/ .body-container {
+    padding: 20px;
+    min-height: 150px;
+    color: white;
+}
+
+:host /deep/ .body-container h6 {
+    font-weight: 500;
+}

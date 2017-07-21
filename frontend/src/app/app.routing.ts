@@ -1,9 +1,10 @@
 import {Routes, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import {CanActivatePrivate, PageNotFoundComponent} from '../shared';
+import {PageNotFoundComponent} from '../shared';
+import {LandingComponent} from './components';
 
 const appRoutes:Routes = [
-    {path: '', redirectTo: '/feed', pathMatch: 'full', canActivate: [CanActivatePrivate]},
+    {path: '', component: LandingComponent},
     {path: '**', component: PageNotFoundComponent}
 ];
 
