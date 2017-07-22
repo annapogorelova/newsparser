@@ -132,7 +132,7 @@ In the root of frontend project create the ```.env``` file with the settings (ex
 To publish frontend project go to the ```/frontend``` directory of the project and run:
 ```
 git pull
-npm run build:production
+npm run build
 ```
 ### DB Migrations
 To add migrations or update database run the scripts from the ```/newsparser.DAL``` directory but use ```newsparser.DAL.scaffolder``` as a startup project like this (a workaround for the current issues with EF Core):
