@@ -4,6 +4,7 @@
     z-index: 10300;
     height: 100%;
     background-color: #e6e6e6;
+    top: 55px;
 }
 
 :host /deep/ .sidebar-backdrop {
@@ -13,6 +14,7 @@
     height: 100%;
     background: black;
     z-index: 10200;
+    top: 55px;
 }
 
 @media (min-width: 768px) {
@@ -27,7 +29,7 @@
         height: 100% !important;
         overflow-y: scroll !important;
         top: 0;
-        z-index: 10300;
+        z-index: 10600;
     }
 }
 
