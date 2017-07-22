@@ -134,3 +134,9 @@ To publish frontend project go to the ```/frontend``` directory of the project a
 git pull
 npm run build:production
 ```
+### DB Migrations
+To add migrations or update database use newsparser.DAL.scaffolder as a startup project like this (a workaround for the current issues with EF Core):
+```
+dotnet ef database update --startup-project ../newsparser.DAL.scaffolder
+dotnet ef migrations add MigrationName --startup-project ../newsparser.DAL.scaffolder
+```
