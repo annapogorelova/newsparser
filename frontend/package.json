@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "description": "Newsparser frontend application",
   "scripts": {
-    "prebuild": "npm run clean",
     "clean": "rimraf ./dist",
-    "start": "webpack-dev-server --inline --progress --port 8080",
-    "build": "webpack --config config/webpack.dev.js --progress --profile --bail",
-    "build:production": "npm i && webpack --config config/webpack.prod.js --progress --profile --bail"
+    "start": "webpack-dev-server --config webpack/webpack.dev.js --inline --progress --port 8080",
+    "build": "npm i && webpack --config webpack/webpack.config.js --progress --profile --bail"
   },
   "keywords": [],
   "author": "",
@@ -62,7 +60,8 @@
     "webpack": "2.2.0",
     "webpack-dev-server": "2.2.0-rc.0",
     "webpack-merge": "^2.4.0",
-    "webpack-plugin-critical": "^1.0.0"
+    "webpack-plugin-critical": "^1.0.0",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "repository": {}
 }

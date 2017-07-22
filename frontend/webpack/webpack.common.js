@@ -80,6 +80,7 @@ module.exports = {
             defaultAttribute: 'defer'
         }),
 
-        new ExtractTextPlugin('[name].[hash].css')
+        new ExtractTextPlugin(process.env.NODE_ENV === 'production' ?
+            '[name].[hash].css' : '[name].css')
     ]
 };
