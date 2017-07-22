@@ -24,8 +24,20 @@ namespace NewsParser.Services
         {
             string websiteUrl = EnvConfigurationProvider.FrontendUrl;
             string confirmationLink = $"{websiteUrl}/email-confirmation?confirmationToken={confirmationToken}&email={email}";
-            string mailContent = $@"Please confirm your email by following <a href='{confirmationLink}'>this link</a>.";
-            
+            string mailContent = $@"You have recently created the account on FeedsCatcher.<br/>
+            If it was not you, please ignore this letter.<br/>
+            If it was you, please confirm your registration by following <a href='{confirmationLink}'>this link</a>.<br/>";
+
+            return SendEmail(email, "Email confirmation", mailContent);
+        }
+
+        public Task SendEmailConfirmationEmail(string email, string confirmationToken)
+        {
+            string websiteUrl = EnvConfigurationProvider.FrontendUrl;
+            string confirmationLink = $"{websiteUrl}/email-confirmation?confirmationToken={confirmationToken}&email={email}";
+            string mailContent = $@"You have recently changed your email on <a href='{EnvConfigurationProvider.FrontendUrl}'>FeedsCatcher</a>.<br/>
+            Please confirm your new email by following <a href='{confirmationLink}'>this link</a>.";
+
             return SendEmail(email, "Email confirmation", mailContent);
         }
 
@@ -54,7 +66,7 @@ namespace NewsParser.Services
         {
             string websiteUrl = EnvConfigurationProvider.FrontendUrl;
             string resetPasswordLink = $"{websiteUrl}/password-reset?passwordResetToken={passwordResetToken}&email={email}";
-            string mailContent = $@"You have requested a password reset on NewsParser.
+            string mailContent = $@"You have recently requested a password reset on <a href='{EnvConfigurationProvider.FrontendUrl}'>FeedsCatcher</a>.<br/>
                 Please set a new password by following <a href='{resetPasswordLink}'>this link</a>.";
             
             return SendEmail(email, "Password reset", mailContent);
