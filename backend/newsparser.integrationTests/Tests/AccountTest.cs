@@ -395,7 +395,7 @@ namespace NewsParser.IntegrationTests.Tests
             Assert.NotNull(updatedUser);
             Assert.Equal(false, updatedUser.EmailConfirmed);
 
-            AssertMailSent(accountUpdateModel.Email, "Account Confirmation");
+            AssertMailSent(accountUpdateModel.Email, "Email Confirmation");
         }
 
 
