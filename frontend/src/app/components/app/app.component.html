@@ -1,6 +1,6 @@
 <div class="page-content">
     <!-- Navbar -->
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary sticky-top">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
         <a class="navbar-toggler navbar-toggler-right" role="button"
                 (click)="isNavbarCollapsed = !isNavbarCollapsed"
                 [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
@@ -34,7 +34,7 @@
     </nav>
 
     <!-- Content -->
-    <div #appContent>
+    <div #appContent class="component-content">
         <router-outlet></router-outlet>
     </div>
 
