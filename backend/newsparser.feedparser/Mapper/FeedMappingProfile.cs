@@ -22,7 +22,10 @@ namespace NewsParser.FeedParser.Mapper
                 .ForMember(d => d.Id, opt => opt.Ignore())
                 .ForMember(d => d.Tags, opt => opt.Ignore())
                 .ForMember(d => d.Channels, opt => opt.Ignore())
-                .ForMember(d => d.ImageUrl, opt => opt.Condition(s => !string.IsNullOrEmpty(s.ImageUrl)))
+                .ForMember(d => d.ImageUrl, opt => 
+                    opt.Condition(s => 
+                        !string.IsNullOrEmpty(s.ImageUrl) && 
+                        s.ImageUrl.Length <= Constants.MaxUrlLength))
                 .ForMember(d => d.Author, opt => opt.Condition(s => !string.IsNullOrEmpty(s.ImageUrl)))
                 .ForMember(d => d.LinkToSource, opt => opt.Condition(s => !string.IsNullOrEmpty(s.LinkToSource)))
                 .ForMember(d => d.Description,
@@ -32,15 +35,15 @@ namespace NewsParser.FeedParser.Mapper
                                 .RemoveTabulation(" ")
                                 .RemoveHtmlTags()
                                 .RemoveNonAlphanumericCharacters()
-                                .CropString(500)))
+                                .CropString(Constants.MaxFeedItemDescriptionsLength)))
                 .ForMember(d => d.Title,
                     opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Title) ? "Untitled" : 
                                 s.Title
                                 .RemoveTabulation(" ")
                                 .RemoveHtmlTags()
                                 .RemoveNonAlphanumericCharacters()
-                                .CropString(255)))
-                .ForMember(d => d.Guid, opt => opt.MapFrom(s => s.Id.CropString(255)));
+                                .CropString(Constants.MaxFeedItemTitleLength)))
+                .ForMember(d => d.Guid, opt => opt.MapFrom(s => s.Id.CropString(Constants.MaxFeedItemGuidLength)));
         }
     }
 }

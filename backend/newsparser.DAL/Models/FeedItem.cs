@@ -15,7 +15,7 @@ namespace NewsParser.DAL.Models
         [MaxLength(500)]
         public string Description { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(500)]
         public string ImageUrl { get; set; }
 
         [Required]
@@ -26,7 +26,7 @@ namespace NewsParser.DAL.Models
         public string Author { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [MaxLength(500)]
         public string LinkToSource { get; set; }
 
         public DateTime DatePublished { get; set; } = DateTime.UtcNow;

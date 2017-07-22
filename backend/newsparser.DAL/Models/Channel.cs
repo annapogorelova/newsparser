@@ -12,10 +12,10 @@ namespace NewsParser.DAL.Models
         [Required, MaxLength(100)]
         public string Name { get; set; }
         
-        [Required, MaxLength(255)]
+        [Required, MaxLength(1000)]
         public string FeedUrl { get; set; }
         
-        [MaxLength(255)]
+        [MaxLength(500)]
         public string ImageUrl { get; set; }
         
         [MaxLength(255)]
