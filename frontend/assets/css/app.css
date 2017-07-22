@@ -1,5 +1,7 @@
 html, body {
     min-height: 100%;
+    min-width: 300px;
+    overflow-x: auto;
 }
 
 .app-loading {
