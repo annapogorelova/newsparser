@@ -171,7 +171,7 @@ namespace NewsParser.API.V1.Controllers
                 if(emailChanged)
                 {
                     string confirmationCode = await _authService.GenerateEmailConfirmationTokenAsync(user);
-                    await _mailService.SendAccountConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
+                    await _mailService.SendEmailConfirmationEmail(user.Email, Base64EncodingUtility.Encode(confirmationCode));
                     responseMessage = $@"The confirmation email was sent to {model.Email}.
                         Please, confirm it to be able to sign in with it next time.";
                 }
