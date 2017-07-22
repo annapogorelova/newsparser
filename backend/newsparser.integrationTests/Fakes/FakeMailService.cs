@@ -36,5 +36,10 @@ namespace NewsParser.IntegrationTests.Fakes
         {
             return SendEmail(email, "Password Recovery", passwordResetToken);
         }
+
+        public Task SendEmailConfirmationEmail(string email, string confirmationToken)
+        {
+            return SendEmail(email, "Email Confirmation", confirmationToken);
+        }
     }
 }

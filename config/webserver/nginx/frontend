@@ -4,4 +4,10 @@ server {
     index index.html;
     try_files $uri $uri/ /index.html;
     root /var/www/newsparser/frontend/dist;
+
+    location / {
+      expires 1d;
+      add_header Cache-Control "public";
+      try_files $uri $uri/ /index.html;
+    }
 }

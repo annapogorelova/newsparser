@@ -28,7 +28,7 @@ namespace NewsParser.Services
             If it was not you, please ignore this letter.<br/>
             If it was you, please confirm your registration by following <a href='{confirmationLink}'>this link</a>.<br/>";
 
-            return SendEmail(email, "Email confirmation", mailContent);
+            return SendEmail(email, "Account confirmation", mailContent);
         }
 
         public Task SendEmailConfirmationEmail(string email, string confirmationToken)
