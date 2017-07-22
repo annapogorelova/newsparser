@@ -1,6 +1,6 @@
 # FeedsCather
 A multiuser web application for parsing and merging the news from different sources into a single news feed.
-Application consists of the backend as web API and frontend as a SPA.
+Application consists of the backend as web API (ASP.NET Core) and frontend as a SPA (Angular 4).
 
 ## Backend
 ### Environment
