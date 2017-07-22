@@ -15,6 +15,14 @@ namespace NewsParser.FeedParser.Mapper
         {
             CreateMap<ChannelModel, Channel>()
                 .ForMember(d => d.Id, opt => opt.Ignore())
+                .ForMember(d => d.WebsiteUrl, opt => 
+                    opt.Condition(s => 
+                        !string.IsNullOrEmpty(s.ImageUrl) && 
+                        s.WebsiteUrl.Length <= Constants.MaxChannelWebsiteUrlLength))
+                .ForMember(d => d.ImageUrl, opt => 
+                    opt.Condition(s => 
+                        !string.IsNullOrEmpty(s.ImageUrl) &&
+                        s.ImageUrl.Length <= Constants.MaxUrlLength))
                 .ForMember(d => d.Name, 
                     opt => opt.MapFrom(s =>
                         string.IsNullOrEmpty(s.Name) ? "Untitled" :
@@ -22,7 +30,7 @@ namespace NewsParser.FeedParser.Mapper
                             .RemoveTabulation(" ")
                             .RemoveHtmlTags()
                             .RemoveNonAlphanumericCharacters()
-                            .CropString(100)))
+                            .CropString(Constants.MaxChannelNameLength)))
                 .ForMember(d => d.Description,
                     opt => opt.MapFrom(s =>
                         string.IsNullOrEmpty(s.Description) ? string.Empty :
@@ -30,7 +38,7 @@ namespace NewsParser.FeedParser.Mapper
                             .RemoveTabulation(" ")
                             .RemoveHtmlTags()
                             .RemoveNonAlphanumericCharacters()
-                            .CropString(255)))
+                            .CropString(Constants.MaxChannelDescriptionLength)))
                 .ForMember(d => d.Users, opt => opt.Ignore())
                 .ForMember(d => d.UpdateIntervalMinutes, opt => opt.Ignore())
                 .AfterMap(SetUpdateInterval);
