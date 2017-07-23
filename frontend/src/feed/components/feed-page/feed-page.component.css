@@ -1,5 +1,5 @@
 @media (max-width: 600px) {
-    :host /deep/ .news-container-hidden {
+    :host /deep/ .news-component-container-hidden {
         display: none !important;
     }
 }
@@ -15,8 +15,4 @@
     display: block;
     position: fixed;
     top: 0;
-}
-
-:host /deep/ .news-container {
-    min-height: 101vh;
 }

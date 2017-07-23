@@ -85,8 +85,8 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="hasItems() && loadingInProgress" class="loading-more-icon-container">
-                    <loading></loading>
+                <div class="loading-more-icon-container">
+                    <loading *ngIf="hasItems() && loadingInProgress"></loading>
                 </div>
                 <div class="loading-status" *ngIf="!hasItems()">
                     <loading *ngIf="loadingInProgress"></loading>

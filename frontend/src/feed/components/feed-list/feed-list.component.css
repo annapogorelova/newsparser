@@ -75,6 +75,8 @@
 :host /deep/ .loading-more-icon-container {
     display: table;
     margin: auto;
+    height: 40px;
+    width: 100%;
 }
 
 :host /deep/ div.news-item-tag-container {
@@ -116,10 +118,10 @@
     display: table-cell;
 }
 
-:host /deep/ .loading-more-icon-container {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
+/*:host /deep/ .loading-more-icon-container {*/
+    /*padding-top: 20px;*/
+    /*padding-bottom: 20px;*/
+/*}*/
 
 :host /deep/ .loading-more-icon-container img {
     position: absolute;
@@ -192,4 +194,8 @@
 
 :host /deep/ i.go-top, refresh-button i {
     padding-bottom: 2px;
+}
+
+:host /deep/ .news-container {
+    min-height: 101vh;
 }
