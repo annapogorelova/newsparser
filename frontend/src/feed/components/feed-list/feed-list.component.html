@@ -72,6 +72,7 @@
                                         <div class="news-item-tag-container" *ngFor="let tag of feedItem.tags">
                                             <h5>
                                                 <span class="tag badge blue"
+                                                      [attr.title]="tag"
                                                       (click)="selectTag(tag)"
                                                       ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
                                                     #{{tag}}
