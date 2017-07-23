@@ -10,8 +10,8 @@
              [selectedTags]="selectedTags"
              [selectedChannelsIds]="selectedChannelsIds">
     </sidebar>
-    <div class="news-container" [style.margin-left.px]="marginLeft"
-         [ngClass]="sidebarComponent.isVisible() ? 'news-container-hidden' : ''">
+    <div class="news-component-container" [style.margin-left.px]="marginLeft"
+         [ngClass]="sidebarComponent.isVisible() ? 'news-component-container-hidden' : ''">
         <feed-list #feedListComponent
                    [initialSearch]="initialSearch"
                    [initialPage]="initialPage"
