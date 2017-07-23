@@ -1,11 +1,11 @@
 :host /deep/ .notices-wrapper {
     display: block;
     position: fixed;
-    top: 0;
+    top: 60px;
     right: 0;
     max-height: 100%;
     overflow: hidden;
-    z-index: 10000;
+    z-index: 10700;
 }
 
 :host /deep/ .notices-wrapper .notice {
