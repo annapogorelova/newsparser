@@ -43,6 +43,10 @@
         </a>
     </div>
     <div class="subscription-info">
+        <p class="private-description" *ngIf="selectedChannel.isPrivate">
+            This channel is private
+            <i class="fa fa-lock private-icon" aria-hidden="true"></i>
+        </p>
         <p *ngIf="selectedChannel.language">
             Language: <span class="source-language badge badge-info">{{selectedChannel.language}}</span>
         </p>

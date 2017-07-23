@@ -2,6 +2,10 @@
     cursor: pointer;
 }
 
+:host /deep/ button:disabled {
+    cursor: not-allowed;
+}
+
 :host /deep/ div.input-group {
     padding: 8px 0 8px 0;
 }
