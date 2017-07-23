@@ -199,3 +199,7 @@
 :host /deep/ .news-container {
     min-height: 101vh;
 }
+
+:host /deep/ .news-item-date {
+    font-size: 14px;
+}
