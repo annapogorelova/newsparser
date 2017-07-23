@@ -11,7 +11,7 @@
 :host /deep/ span.news-source-image {
     width: 16px;
     height: 16px;
-    margin-right: 5px;
+    margin-right: 8px;
     background-color: white;
     background-size: contain;
     background-position: center;
@@ -152,16 +152,19 @@
 
 :host /deep/ .subscription-title {
     max-width: 90%;
+    font-size: 14px;
 }
 
 :host /deep/ div.popover-content .subscription-info {
     max-height: 150px;
     overflow-x: auto;
     padding: 5px 0 5px 0;
+    font-size: 14px;
 }
 
 :host /deep/ div.popover-content .subscription-info p {
     margin-bottom: 3px;
+    font-size: inherit;
 }
 
 :host /deep/ div.popover-content .subscription-info {
@@ -175,4 +178,8 @@
 
 :host /deep/ .source-language {
     font-size: 10px;
+}
+
+:host /deep/ .private-description i {
+    padding-left: 5px;
 }
