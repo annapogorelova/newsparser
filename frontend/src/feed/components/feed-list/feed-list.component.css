@@ -40,7 +40,7 @@
 
 :host /deep/ .feed-item-content {
     padding: 15px 15px 15px 15px;
-    background-color: #f7f7f7;
+    background: linear-gradient(360deg, #ebebeb, #f5f5f5);
 }
 
 :host /deep/ .feed-item-content .col-md-12 {
