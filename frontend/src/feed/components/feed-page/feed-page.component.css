@@ -1,5 +1,5 @@
 @media (max-width: 600px) {
-    :host /deep/ .news-component-container-hidden {
+    :host /deep/ .feed-component-container-hidden {
         display: none !important;
     }
 }

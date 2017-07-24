@@ -1,4 +1,4 @@
-<div class="news-page-content">
+<div class="feed-page-content">
     <sidebar #sidebarComponent
              (onHide)="onSidebarHidden()"
              (onShow)="onSidebarShown()"
@@ -10,8 +10,8 @@
              [selectedTags]="selectedTags"
              [selectedChannelsIds]="selectedChannelsIds">
     </sidebar>
-    <div class="news-component-container" [style.margin-left.px]="marginLeft"
-         [ngClass]="sidebarComponent.isVisible() ? 'news-component-container-hidden' : ''">
+    <div class="feed-component-container" [style.margin-left.px]="marginLeft"
+         [ngClass]="sidebarComponent.isVisible() ? 'feed-component-container-hidden' : ''">
         <feed-list #feedListComponent
                    [initialSearch]="initialSearch"
                    [initialPage]="initialPage"
