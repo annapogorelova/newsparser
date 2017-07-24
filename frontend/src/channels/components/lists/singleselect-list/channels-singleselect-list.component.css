@@ -4,7 +4,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 70%;
+    font-size: 0.7rem;
     padding: 5px 5px 5px 5px;
 }
 
@@ -114,7 +114,7 @@
 }
 
 :host /deep/ .news-source-popover-content span, p {
-    font-size: 12px;
+    font-size: 0.7rem;
 }
 
 :host /deep/ .popover-content i {
@@ -152,14 +152,14 @@
 
 :host /deep/ .subscription-title {
     max-width: 90%;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 :host /deep/ div.popover-content .subscription-info {
     max-height: 150px;
     overflow-x: auto;
     padding: 5px 0 5px 0;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 :host /deep/ div.popover-content .subscription-info p {
@@ -177,7 +177,7 @@
 }
 
 :host /deep/ .source-language {
-    font-size: 10px;
+    font-size: 0.8rem;
 }
 
 :host /deep/ .private-description i {

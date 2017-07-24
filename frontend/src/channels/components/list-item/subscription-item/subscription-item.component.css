@@ -18,7 +18,7 @@
 }
 
 :host /deep/ .subscription-item-container span {
-    font-size: 13px;
+    font-size: 0.9rem;
 }
 
 :host /deep/ h6 {

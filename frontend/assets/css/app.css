@@ -49,6 +49,10 @@ a {
     background-color: #344D90;
 }
 
+.badge.badge-info {
+    background-color: #5CC5EF;
+}
+
 .btn-info {
     background-color: #5CC5EF;
     border-color: #5CC5EF;
