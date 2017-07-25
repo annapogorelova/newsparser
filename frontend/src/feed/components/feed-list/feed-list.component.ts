@@ -14,6 +14,7 @@ import {
     PagerServiceProvider,
     RequestLockerService
 } from '../../../shared';
+import {AppSettings} from '../../../app/app.settings';
 
 @Component({
     selector: 'feed-list',
@@ -119,6 +120,12 @@ export class FeedListComponent extends BaseList implements OnInit, AfterViewInit
 
     getOtherChannels(feedItem:any) {
         return feedItem.channels.slice(1, feedItem.channels.length);
+    };
+
+    getFeedItemTitle(title:string) {
+        return title.length > AppSettings.MAX_FEED_ITEM_TITLE_LENGTH ? 
+            `${title.substring(0, AppSettings.MAX_FEED_ITEM_TITLE_LENGTH)}...` :
+            title;
     };
 
     /**

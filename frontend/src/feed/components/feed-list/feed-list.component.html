@@ -13,61 +13,62 @@
                         <div class="feed-item-container flex-column align-items-stretch list-group-item list-group-item-action">
                             <div class="row">
                                 <div class="col-md-4 feed-item-image-container">
-                                    <a class="feed-item-image" target="_blank" href="{{feedItem.linkToSource}}"
+                                    <a  href="{{feedItem.linkToSource}}" target="_blank" class="feed-item-image-cover"></a>
+                                    <div class="feed-item-title-container">
+                                        {{getFeedItemTitle(feedItem.title)}}
+                                    </div>
+                                    <div class="feed-item-image"
                                        [ngStyle]="{'background-image': feedItem.imageUrl ?
                                          'url(' + feedItem.imageUrl + ')' :
                                          'url(\'/assets/no-image.jpg\')'}">
-                                    </a>
+                                    </div>
                                 </div>
                                 <div class="col-md-8 feed-item-content">
-                                    <div class="row">
+                                    <div class="row channels">
                                         <div class="col-md-12">
-                                            <div class="feed-item-content-header">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <h3 class="feed-item-title">
-                                                        <a target="_blank" href="{{feedItem.linkToSource}}">
-                                                            {{feedItem.title}}
-                                                        </a>
-                                                    </h3>
+                                            <div class="feed-item-channel-container full-length">
+                                                <span>{{feedItem.channels[0].name}}</span>
+                                                <div class="more-channels-link-container pull-right" *ngIf="feedItem.channels.length > 1">
+                                                    <a class="more-channels-link" (click)="feedItem.displayAll = !feedItem.displayAll" *ngIf="feedItem.channels.length > 1">
+                                                        <i class="fa fa-chevron-down"
+                                                           *ngIf="!feedItem.displayAll"
+                                                           [attr.title]="feedItem.channels.length - 1 + ' more'"></i>
+                                                        <i class="fa fa-chevron-up" *ngIf="feedItem.displayAll" title="hide"></i>
+                                                    </a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div [class]="feedItem.channels.length > 1 ?
-                                                'feed-item-channel-container' : 'feed-item-channel-container full-length'"
-                                                 *ngFor="let channel of feedItem.channels">
-                                                    <span class="badge orange"
-                                                          [attr.title]="channel.name">
+                                                <div *ngIf="feedItem.displayAll">
+                                                    <span class="channel-name" *ngFor="let channel of getOtherChannels(feedItem)">
                                                         {{channel.name}}
                                                     </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="feed-item-description mb-1"
-                                                 [innerHtml]="feedItem.description"></div>
-                                        </div>
-                                    </div>
-                                    <div class="row" *ngIf="feedItem.tags.length">
-                                        <div class="col-md-12">
-                                            <div class="feed-item-footer">
-                                                <div class="feed-item-tag-container" *ngFor="let tag of feedItem.tags">
-                                                    <span class="tag badge blue"
-                                                          [attr.title]="tag"
-                                                          (click)="selectTag(tag)"
-                                                          ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
-                                                        #{{tag}}
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <span class="feed-item-date pull-right">{{feedItem.datePublished | date:'dd-MM-y, HH:mm'}}</span>
+                                    <div class="feed-item-description-content">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="feed-item-description mb-1"
+                                                     [innerHtml]="feedItem.description"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="feedItem.tags.length">
+                                            <div class="col-md-12">
+                                                <div class="feed-item-footer">
+                                                    <div class="feed-item-tag-container" *ngFor="let tag of feedItem.tags">
+                                                        <span class="tag badge blue"
+                                                              [attr.title]="tag"
+                                                              (click)="selectTag(tag)"
+                                                              ngClass="{{isTagSelected(tag) ? 'selected' : ''}}">
+                                                            #{{tag}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="feed-item-date pull-right">{{feedItem.datePublished | date:'dd-MM-y, HH:mm'}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
