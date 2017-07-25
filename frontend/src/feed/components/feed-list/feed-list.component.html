@@ -13,7 +13,7 @@
                         <div class="feed-item-container flex-column align-items-stretch list-group-item list-group-item-action">
                             <div class="row">
                                 <div class="col-md-4 feed-item-image-container">
-                                    <a  href="{{feedItem.linkToSource}}" target="_blank" class="feed-item-image-cover"></a>
+                                    <a [title]="'Open link in new window'" href="{{feedItem.linkToSource}}" target="_blank" class="feed-item-image-cover"></a>
                                     <div class="feed-item-title-container">
                                         {{getFeedItemTitle(feedItem.title)}}
                                     </div>
