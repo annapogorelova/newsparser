@@ -4,7 +4,7 @@
         <a class="navbar-toggler navbar-toggler-right" role="button"
                 (click)="isNavbarCollapsed = !isNavbarCollapsed"
                 [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="collapseNavBar">
-            <i [attr.class]="isNavbarCollapsed ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
+            <i [attr.class]="isNavbarCollapsed ? 'fa fa-chevron-down' : 'fa fa-chevron-up'"></i>
         </a>
         <a class="navbar-brand" [routerLink]="'/'" title="Feed">
             <img src="/assets/app-icon.png" [alt]="appName"/>

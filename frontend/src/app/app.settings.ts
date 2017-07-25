@@ -14,6 +14,8 @@ export class AppSettings {
     
     public static SIDEBAR_WIDTH_PX = 350;
     public static MAX_DEVICE_WIDTH_PX = 600;
+    
+    public static MAX_FEED_ITEM_TITLE_LENGTH = 100;
 
     public static TIMEOUT = {
         'GET': 15000,
