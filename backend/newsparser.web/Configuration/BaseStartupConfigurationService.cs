@@ -61,6 +61,8 @@ namespace NewsParser.Web.Configuration
             loggerFactory.AddSerilog();
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

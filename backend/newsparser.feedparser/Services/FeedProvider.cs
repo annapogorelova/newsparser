@@ -14,9 +14,8 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 HttpClient httpClient = new HttpClient();
-                var response = await httpClient.GetByteArrayAsync(feedUrl);
-                var responseString = Encoding.UTF8.GetString(response, 0, response.Length);
-                return XElement.Parse(responseString);
+                var response = await httpClient.GetStringAsync(feedUrl);
+                return XElement.Parse(response);
             }
             catch (Exception e)
             {
