@@ -22,6 +22,7 @@ using NewsParser.Scheduler;
 using static System.Int32;
 using Serilog;
 using Serilog.Events;
+using System.Text;
 
 namespace NewsParser.Scheduler
 {
@@ -72,6 +73,8 @@ namespace NewsParser.Scheduler
         {
             loggerFactory.AddSerilog();
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             ServiceLocator.Instance = app.ApplicationServices;
 
