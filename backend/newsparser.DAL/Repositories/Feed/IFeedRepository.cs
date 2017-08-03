@@ -97,6 +97,14 @@ namespace NewsParser.DAL.Repositories.Feed
         void Add(IEnumerable<FeedItem> FeedItems);
 
         /// <summary>
+        /// Adds or updates feed item
+        /// </summary>
+        /// <param name="feedItem">Feed item</param>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="tags">List of tags</param>
+        void AddOrUpdate(FeedItem feedItem, int channelId, List<string> tags = null);
+
+        /// <summary>
         /// Inserts a NewsTagNews record that connects feed item and tag
         /// </summary>
         /// <param name="feedItemId">feed item id</param>

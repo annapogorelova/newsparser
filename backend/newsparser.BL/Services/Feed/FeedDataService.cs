@@ -9,6 +9,7 @@ using NewsParser.BL.Exceptions;
 using NewsParser.DAL.Repositories.Channels;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Internal;
+using NewsParser.DAL.Exceptions;
 
 namespace NewsParser.BL.Services.Feed
 {
@@ -198,6 +199,18 @@ namespace NewsParser.BL.Services.Feed
         public bool HasChannel(int feedItemId, int channelId)
         {
             return _feedRepository.HasChannel(feedItemId, channelId);
+        }
+
+        public void AddOrUpdate(FeedItem feedItem, int channelId, List<string> tags)
+        {
+            try
+            {
+                _feedRepository.AddOrUpdate(feedItem, channelId, tags);
+            }
+            catch(DataLayerException e)
+            {
+                throw new BusinessLayerException($"Failed to save the feed item width guid {feedItem.Id}", e);
+            }
         }
     }
 }

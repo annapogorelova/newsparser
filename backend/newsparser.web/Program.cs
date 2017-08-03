@@ -13,7 +13,6 @@ namespace NewsParser
 
             host.UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
-            .UseIISIntegration()
             .UseStartup<Startup>()
             .UseUrls("http://0.0.0.0:5000")
             .ConfigureServices(s => s.AddSingleton<IStartupConfigurationService, StartupConfigurationService>())

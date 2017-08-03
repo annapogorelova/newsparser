@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using NewsParser.DAL.Exceptions;
 using NewsParser.DAL.Models;
 
 namespace NewsParser.DAL.Repositories.Feed
@@ -83,16 +84,16 @@ namespace NewsParser.DAL.Repositories.Feed
             return _dbContext.FeedItems.FirstOrDefault(n => n.LinkToSource == linkToSource);
         }
 
-        public FeedItem Add(FeedItem newsItem)
+        public FeedItem Add(FeedItem feedItem)
         {
-            if (newsItem == null)
+            if (feedItem == null)
             {
-                throw new ArgumentNullException(nameof(newsItem), "Feed can not be null");
+                throw new ArgumentNullException(nameof(feedItem), "Feed item can not be null");
             }
 
-            _dbContext.FeedItems.Add(newsItem);
+            var addedFeedItem = _dbContext.FeedItems.Add(feedItem);
             _dbContext.SaveChanges();
-            return _dbContext.Entry(newsItem).Entity;
+            return addedFeedItem.Entity;
         }
 
         public void Add(IEnumerable<FeedItem> newsItems)
@@ -109,6 +110,23 @@ namespace NewsParser.DAL.Repositories.Feed
         {
             _dbContext.TagFeedItems.Add(new TagFeedItem { FeedItemId = feedItemId, TagId = tagId });
             _dbContext.SaveChanges();
+        }
+
+        public void AddTags(int feedItemId, List<string> tags)
+        {
+            foreach (var tagName in tags)
+            {
+                var tag = _dbContext.Tags.FirstOrDefault(t => t.Name.ToLowerInvariant() == tagName);
+                if(tag == null)
+                {
+                    var newTag = new Tag { Name = tagName.ToLowerInvariant() };
+                    _dbContext.Tags.Add(newTag);
+                    _dbContext.SaveChanges();
+                    tag = _dbContext.Entry(newTag).Entity;
+                }
+
+                AddTag(feedItemId, tag.Id);
+            }
         }
 
         public void Delete(FeedItem newsItem)
@@ -133,11 +151,11 @@ namespace NewsParser.DAL.Repositories.Feed
             _dbContext.SaveChanges();
         }
 
-        public void AddChannel(int newsItemId, int sourceId)
+        public void AddChannel(int feedItemId, int channelId)
         {
             _dbContext.ChannelFeedItems.Add(new ChannelFeedItem() {
-                FeedItemId = newsItemId,
-                ChannelId = sourceId
+                FeedItemId = feedItemId,
+                ChannelId = channelId
             });
             _dbContext.SaveChanges();
         }
@@ -162,6 +180,43 @@ namespace NewsParser.DAL.Repositories.Feed
 
             _dbContext.Entry(feedItem).State = EntityState.Modified;
             _dbContext.SaveChanges();
+        }
+
+        public void AddOrUpdate(FeedItem feedItem, int channelId, List<string> tags = null)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var existingFeedItem = GetByGuid(feedItem.Guid);
+                    if(existingFeedItem == null)
+                    {                        
+                        existingFeedItem = Add(feedItem);
+                    }
+
+                    if(!HasChannel(existingFeedItem.Id, channelId))
+                    {
+                        AddChannel(existingFeedItem.Id, channelId);
+                    }
+
+                    var feedItemTags = _dbContext.TagFeedItems
+                        .Include(t => t.Tag)
+                        .Where(tf => tf.FeedItemId == existingFeedItem.Id);
+                    var newTags = tags.Except(feedItemTags.Select(t => t.Tag.Name)).ToList();
+
+                    if(newTags.Any())
+                    {
+                        AddTags(existingFeedItem.Id, newTags);
+                    }
+
+                    _dbContext.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    throw new DataLayerException($"Failed to add or update the feed item with guid {feedItem.Id}", e);
+                }
+            }
         }
     }
 }
