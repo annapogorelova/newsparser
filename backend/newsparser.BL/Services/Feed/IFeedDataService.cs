@@ -117,5 +117,13 @@ namespace NewsParser.BL.Services.Feed
         /// <param name="channelId">Channel id</param>
         /// <returns>True is has, false - if not</returns>
         bool HasChannel(int feedItemId, int channelId);
+
+        /// <summary>
+        /// Adds or updates feed item
+        /// </summary>
+        /// <param name="feedItem">Feed item</param>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="tags">List of tags</param>
+        void AddOrUpdate(FeedItem feedItem, int channelId, List<string> tags);
     }
 }

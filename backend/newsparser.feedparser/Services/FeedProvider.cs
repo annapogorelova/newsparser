@@ -14,6 +14,7 @@ namespace NewsParser.FeedParser.Services
             try
             {
                 HttpClient httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var response = await httpClient.GetStringAsync(feedUrl);
                 return XElement.Parse(response);
             }

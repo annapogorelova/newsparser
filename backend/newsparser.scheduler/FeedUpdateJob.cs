@@ -32,26 +32,37 @@ namespace NewsParser.Scheduler
         {
             lock (_feedUpadteLock)
             {
-                try
+                var channels = _channelDataService.GetForUpdate();
+                if (!channels.Any())
                 {
-                    var channels = _channelDataService.GetForUpdate();
-                    if(!channels.Any())
-                    {
-                        _log.LogInformation("No channels to update.");
-                        return;
-                    }
+                    _log.LogInformation("No channels to update.");
+                    return;
+                }
 
-                    foreach (var channel in channels)
+                foreach (var channel in channels)
+                {
+                    try
                     {
                         _feedUpdater.UpdateChannel(channel.Id);
                     }
+                    catch (FeedUpdatingException e)
+                    {
+                        _log.LogError($@"Scheduled update failed for the channel with id {channel.Id}. 
+                                Error message: {e.Message}");
+                        continue;
+                    }
+                    catch (FatalFeedUpdatingException e)
+                    {
+                        string message = $"Scheduled feed update failed. Error: {e.Message}";
+                        _log.LogError(message);
+                    }
+                    finally
+                    {
+                        _log.LogInformation($"Finished updating channel with id {channel.Id}.");
+                    }
+                }
 
-                    _log.LogInformation("Finished updating the feed.");
-                }
-                catch (FeedParsingException e)
-                {
-                    throw new JobExecutionException($"Failed to update the feed", e);
-                }
+                _log.LogInformation("Finished updating the feed.");
             }
         }
     }

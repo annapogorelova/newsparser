@@ -61,7 +61,7 @@ namespace NewsParser.Scheduler
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql(connection, b => b.MigrationsAssembly("newsparser.DAL"));
-            });
+            }, ServiceLifetime.Transient);
         }
 
         public void Configure(
@@ -136,7 +136,7 @@ namespace NewsParser.Scheduler
             string dbName = Environment.GetEnvironmentVariable("DB_NAME");
             string dbUser = Environment.GetEnvironmentVariable("DB_USER");
             string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-            return $"server={dbHost};userid={dbUser};pwd={dbPassword};port={dbPort};database={dbName};sslmode=none;charset=utf8;";
+            return $"server={dbHost};userid={dbUser};pwd={dbPassword};port={dbPort};database={dbName};sslmode=none;charset=utf8;ConnectionReset=True";
         }
     }
 }

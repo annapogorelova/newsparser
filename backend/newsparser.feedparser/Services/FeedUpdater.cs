@@ -54,16 +54,7 @@ namespace NewsParser.FeedParser.Services
 
             foreach (var channel in channels)
             {
-                try
-                {
-                    UpdateChannelAsync(channel.Id).Wait();
-                }
-                catch (Exception e)
-                {
-                    string errorMessage = $"Failed updating feed: {e.Message}";
-                    _log.LogError(errorMessage);
-                    throw new FeedUpdatingException(errorMessage, e);
-                }
+                UpdateChannel(channel.Id);
             }
 
             _log.LogInformation("Finished updating channels");
@@ -75,16 +66,7 @@ namespace NewsParser.FeedParser.Services
 
             foreach (var newsSource in newsSources)
             {
-                try
-                {
-                    await UpdateChannelAsync(newsSource.Id);
-                }
-                catch (Exception e)
-                {
-                    string errorMessage = $"Failed updating feed: {e.Message}";
-                    _log.LogError(errorMessage);
-                    throw new FeedUpdatingException(errorMessage, e);
-                }
+                await UpdateChannelAsync(newsSource.Id);
             }
 
             _log.LogInformation("Finished updating channels");
@@ -137,18 +119,23 @@ namespace NewsParser.FeedParser.Services
                 SaveFeed(channel.Id, feed);
                 SetChannelUpdatingState(channel, false);
             }
-            catch (Exception e)
+            catch (BusinessLayerException e)
             {
                 string errorMessage = $"Failed updating channel {channelId}: {e.Message}";
-
-                if(e is EntityNotFoundException)
-                {
-                    errorMessage = $"Failed updating the feed: channel with id {channelId} does not exist";
-                }
-
                 _log.LogError(errorMessage);
                 SetChannelUpdatingState(channel, false);
                 throw new FeedUpdatingException(errorMessage, e);
+            }
+            catch(EntityNotFoundException e)
+            {
+                string errorMessage = $"Failed updating the feed: channel with id {channelId} does not exist";
+                _log.LogError(errorMessage);
+                SetChannelUpdatingState(channel, false);
+                throw new FeedUpdatingException(errorMessage, e);
+            }
+            catch(Exception e)
+            {
+                throw new FatalFeedUpdatingException($"Fatal error happened when updating channel width id {channel.Id}", e);
             }
         }
 
@@ -159,7 +146,7 @@ namespace NewsParser.FeedParser.Services
                 throw new ArgumentNullException(nameof(feedUrl), "Feed url cannot be null or empty");
             }
 
-            try
+            try 
             {
                 var channelModel = await _feedConnector.ParseFeedSource(feedUrl);
                 var channel = AutoMapper.Mapper.Map<ChannelModel, Channel>(channelModel);
@@ -171,14 +158,14 @@ namespace NewsParser.FeedParser.Services
             }
             catch (Exception e)
             {
-                throw new FeedUpdatingException($"Failed to get RSS {feedUrl} channel info", e);
+                _log.LogError($"Failed to add a feed channel with feed url {feedUrl}");
+                throw e;
             }
         }
 
         private void SetChannelUpdatingState(Channel channel, bool isUpdating)
         {
             channel.IsUpdating = isUpdating;
-            // If finished updating -> update the DateFeedUpdated property
             if(!isUpdating)
             {
                 channel.DateFeedUpdated = DateTime.UtcNow;
@@ -191,53 +178,16 @@ namespace NewsParser.FeedParser.Services
             var nonUpdatadbleProperties = new string[] {"Id", "Channels", "Tags", "DateAdded", "DatePublished" }; 
             foreach (var feedItemModel in feed)
             {
-                FeedItem existingFeedItem;
-                if (!_feedDataService.Exists(feedItemModel.Id))
+                try
                 {
-                    try
-                    {
-                        var feedItemToAdd = AutoMapper.Mapper.Map<FeedItemModel, FeedItem>(feedItemModel);
-                        existingFeedItem = _feedDataService.Add(feedItemToAdd);
-                        _log.LogInformation($"Added feed item with id {existingFeedItem.Id}, guid {existingFeedItem.Guid}");
-                    }
-                    catch(Exception e)
-                    {
-                        _log.LogError($"Failed to add a feed item {feedItemModel.Id}", e);
-                        continue;
-                    }
+                    var feedItemToAdd = AutoMapper.Mapper.Map<FeedItemModel, FeedItem>(feedItemModel);
+                    _feedDataService.AddOrUpdate(feedItemToAdd, channelId, feedItemModel.Categories);
                 }
-                else 
+                catch(BusinessLayerException e)
                 {
-                    existingFeedItem = _feedDataService.GetByGuid(feedItemModel.Id);
-                    var updatedFeedItem = AutoMapper.Mapper.Map<FeedItemModel, FeedItem>(feedItemModel);
-                    if(!TypeExtensions.PublicInstancePropertiesEqual<FeedItem>(
-                        existingFeedItem, 
-                        updatedFeedItem,
-                        nonUpdatadbleProperties))
-                    {
-                        AutoMapper.Mapper.Map(updatedFeedItem, existingFeedItem);
-                        _feedDataService.Update(existingFeedItem);   
-                        _log.LogInformation($"Updated the existing feed item properties with id {existingFeedItem.Id}, guid {existingFeedItem.Guid}");
-                    }
+                    _log.LogError($"Failed to add or update the feed item with guid {feedItemModel.Id}. Error: {e.Message}");
                 }
-
-                UpdateFeedItem(existingFeedItem.Id, channelId, feedItemModel.Categories);
             }
-        }
-
-        private void UpdateFeedItem(
-            int feedItemId,
-            int channelId, 
-            List<string> tags
-        )
-        {
-            if(!_feedDataService.HasChannel(feedItemId, channelId))
-            {
-                _feedDataService.AddChannel(feedItemId, channelId);
-                _log.LogInformation($"Added new channel with id {channelId} for the feed item with id {feedItemId}.");
-            }
-
-            _feedDataService.UpdateTags(feedItemId, tags); 
         }
 
         private FeedFormat GetChannelFeedFormat(Channel channel)
