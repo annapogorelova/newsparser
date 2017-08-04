@@ -66,7 +66,7 @@ namespace NewsParser.Web.Configuration
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.All
             });
 
             app.UseResponseCaching();
@@ -302,7 +302,7 @@ namespace NewsParser.Web.Configuration
                
                 options.UseJsonWebTokens();
 
-                if(_env.IsDevelopment() || _env.EnvironmentName == "Test")
+                if(_env.IsDevelopment() || _env.IsEnvironment("Test"))
                 {
                     options.DisableHttpsRequirement();
                 }
