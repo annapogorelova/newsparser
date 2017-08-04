@@ -110,16 +110,14 @@ namespace NewsParser.Scheduler
 
         private void ConfigureLogger(IHostingEnvironment env)
         {
-            string logFilePath = Configuration["LogFilePath"];
-            string dateString = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            string logFileName = $"{logFilePath}{Configuration["AppName"]}-{dateString}.txt";
+            string logFileName = Configuration["LogFilePath"] + "log-{Date}.txt";
 
             var logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .MinimumLevel.Override("Microsoft", 
                     env.IsProduction() ? 
                         LogEventLevel.Warning : LogEventLevel.Information)
-                .WriteTo.File(logFileName, LogEventLevel.Information);
+                .WriteTo.RollingFile(logFileName, LogEventLevel.Information);
 
             if(env.IsDevelopment())
             {
