@@ -9,6 +9,7 @@ namespace NewsParser.Scheduler
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseIISIntegration()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
                 .UseUrls("http://0.0.0.0:50452")
