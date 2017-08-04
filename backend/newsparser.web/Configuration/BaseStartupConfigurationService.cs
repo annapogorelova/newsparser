@@ -47,6 +47,7 @@ namespace NewsParser.Web.Configuration
     public class BaseStartupConfigurationService : IStartupConfigurationService
     {
         protected IConfigurationRoot _configuration { get; set; }
+        protected IHostingEnvironment _env { get; set; }
 
         public virtual void Configure(
             IApplicationBuilder app, 
@@ -92,8 +93,9 @@ namespace NewsParser.Web.Configuration
 
         public virtual void ConfigureEnvironment(IHostingEnvironment env, IConfigurationRoot configuration)
         {
+            _env = env;
             _configuration = configuration;
-            ConfigureLogger(env);
+            ConfigureLogger();
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
@@ -136,18 +138,18 @@ namespace NewsParser.Web.Configuration
             dbContext.Database.Migrate();
         }
 
-        protected virtual void ConfigureLogger(IHostingEnvironment env)
+        protected virtual void ConfigureLogger()
         {
             string logFileName = _configuration["LogFilePath"] + "log-{Date}.txt";
             
             var logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .MinimumLevel.Override("Microsoft", 
-                    env.IsProduction() ? 
+                    _env.IsProduction() ? 
                         LogEventLevel.Warning : LogEventLevel.Information)
                 .WriteTo.RollingFile(logFileName, LogEventLevel.Information);
 
-            if(env.IsDevelopment())
+            if(_env.IsDevelopment())
             {
                 logger.WriteTo.LiterateConsole();
             }
@@ -299,7 +301,11 @@ namespace NewsParser.Web.Configuration
                 options.EnableAuthorizationEndpoint("/api/authorize");
                
                 options.UseJsonWebTokens();
-                options.DisableHttpsRequirement();
+
+                if(_env.IsDevelopment())
+                {
+                    options.DisableHttpsRequirement();
+                }
                
                 options.AddMvcBinders();
                 options.AddSigningKey(signingKey);
