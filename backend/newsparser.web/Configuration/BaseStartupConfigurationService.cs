@@ -138,12 +138,14 @@ namespace NewsParser.Web.Configuration
 
         protected virtual void ConfigureLogger(IHostingEnvironment env)
         {
+            string logFileName = _configuration["LogFilePath"] + "log-{Date}.txt";
+            
             var logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .MinimumLevel.Override("Microsoft", 
                     env.IsProduction() ? 
                         LogEventLevel.Warning : LogEventLevel.Information)
-                .WriteTo.File(GetLogFileName(), LogEventLevel.Information);
+                .WriteTo.RollingFile(logFileName, LogEventLevel.Information);
 
             if(env.IsDevelopment())
             {
@@ -151,13 +153,6 @@ namespace NewsParser.Web.Configuration
             }
 
             Log.Logger = logger.CreateLogger();
-        }
-
-        protected string GetLogFileName()
-        {
-            string dateString = DateTime.UtcNow.ToString("yyyy-MM-dd");
-            string logFileName = $"{_configuration["LogFilePath"]}{_configuration["AppName"]}-{dateString}.txt";
-            return logFileName;
         }
 
         private void RegisterDependencies(IServiceCollection services)
