@@ -302,7 +302,7 @@ namespace NewsParser.Web.Configuration
                
                 options.UseJsonWebTokens();
 
-                if(_env.IsDevelopment())
+                if(_env.IsDevelopment() || _env.EnvironmentName == "Test")
                 {
                     options.DisableHttpsRequirement();
                 }

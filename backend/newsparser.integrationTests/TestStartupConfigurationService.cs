@@ -33,7 +33,7 @@ namespace NewsParser.IntegrationTests
             base.InitializeDatabase(dbContext);
         }
 
-        protected override void ConfigureLogger(IHostingEnvironment env)
+        protected override void ConfigureLogger()
         {
             var logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
