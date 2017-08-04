@@ -6,3 +6,4 @@ export * from './navigator';
 export * from './pager';
 export * from './request-locker';
 export * from './page-title';
+export * from './window-provider';

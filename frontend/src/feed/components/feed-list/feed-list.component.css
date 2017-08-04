@@ -65,7 +65,8 @@
 }
 
 :host /deep/ .feed-item-description-content .col-md-12,
-    .feed-item-content.col-md-8 {
+    .feed-item-content.col-md-8,
+    .feed-item-container .col-md-12 {
     padding: 0;
 }
 
@@ -90,13 +91,9 @@
     position: absolute;
     top: 0;
     display: block;
-    background: #ffffff;
     opacity: 0.3;
+    background-color: white;
     cursor: pointer;
-}
-
-:host /deep/ a.feed-item-image-cover:hover {
-    opacity: 0;
 }
 
 :host /deep/ .loading-more-icon-container {
@@ -166,6 +163,8 @@
     overflow: hidden;
     max-width: 100%;
     display: inline-block;
+    line-height: 1rem;
+    vertical-align: middle;
 }
 
 :host /deep/ .feed-item-channel-container a {
@@ -173,15 +172,8 @@
 }
 
 :host /deep/ .feed-item-channel-container span.channel-name {
-    display: block;
-}
-
-:host /deep/ a.more-channels-link {
-    cursor: pointer;
-}
-
-:host /deep/ .more-channels-link-container {
-    display: inline;
+    display: inline-block;
+    padding-right: 10px;
 }
 
 /* Tags */
@@ -232,26 +224,19 @@
     color: #636C72;
 }
 
-:host /deep/ h3.feed-item-title {
-    font-size: 1.1rem;
-    padding-top: 0;
+:host /deep/ .feed-item-title-container a {
+    text-decoration: none;
+    color: white;
+    background-color: #344D90;
+    line-height: inherit;
+    padding: 5px 10px 5px 10px;
+    display: inline-block;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
 }
 
-:host /deep/ .feed-item-title-container {
-    position: absolute;
-    z-index: 100;
-    background: white;
-    opacity: 0.9;
-    top: 0;
-    width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    padding: 5px 5px 5px 5px;
-    cursor: pointer;
-    display: block;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    line-height: 1.2rem;
-    color: #373a3c;
+:host /deep/ .feed-item-title-container a:hover {
+    background-color: #293d73;
+    color: white;
 }
