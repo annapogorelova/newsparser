@@ -12,11 +12,13 @@
                     <div class="feed-item-list-group list-group" *ngFor="let feedItem of items">
                         <div class="feed-item-container flex-column align-items-stretch list-group-item list-group-item-action">
                             <div class="row">
-                                <div class="col-md-4 feed-item-image-container">
-                                    <a [title]="'Open link in new window'" href="{{feedItem.linkToSource}}" target="_blank" class="feed-item-image-cover"></a>
+                                <div class="col-md-12">
                                     <div class="feed-item-title-container">
-                                        {{getFeedItemTitle(feedItem.title)}}
+                                        <a [title]="'Open link in new window'" (click)="openFeedItemLink(feedItem.linkToSource)" target="_blank">{{feedItem.title}}</a>
                                     </div>
+                                </div>
+                                <div class="col-md-4 feed-item-image-container">
+                                    <a [title]="'Open link in new window'" (click)="openFeedItemLink(feedItem.linkToSource)" target="_blank" class="feed-item-image-cover"></a>
                                     <div class="feed-item-image"
                                        [ngStyle]="{'background-image': feedItem.imageUrl ?
                                          'url(' + feedItem.imageUrl + ')' :
@@ -27,20 +29,9 @@
                                     <div class="row channels">
                                         <div class="col-md-12">
                                             <div class="feed-item-channel-container full-length">
-                                                <span>{{feedItem.channels[0].name}}</span>
-                                                <div class="more-channels-link-container pull-right" *ngIf="feedItem.channels.length > 1">
-                                                    <a class="more-channels-link" (click)="feedItem.displayAll = !feedItem.displayAll" *ngIf="feedItem.channels.length > 1">
-                                                        <i class="fa fa-chevron-down"
-                                                           *ngIf="!feedItem.displayAll"
-                                                           [attr.title]="feedItem.channels.length - 1 + ' more'"></i>
-                                                        <i class="fa fa-chevron-up" *ngIf="feedItem.displayAll" title="hide"></i>
-                                                    </a>
-                                                </div>
-                                                <div *ngIf="feedItem.displayAll">
-                                                    <span class="channel-name" *ngFor="let channel of getOtherChannels(feedItem)">
-                                                        {{channel.name}}
-                                                    </span>
-                                                </div>
+                                                <span class="channel-name" *ngFor="let channel of feedItem.channels">
+                                                    {{channel.name}}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

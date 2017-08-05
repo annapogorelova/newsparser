@@ -26,7 +26,8 @@ import {
     CanActivatePrivate,
     CanActivatePublic,
     RequestLockerService,
-    PageTitleService
+    PageTitleService,
+    WindowProviderService
 } from './services';
 import {
     PageNotFoundComponent,
@@ -42,7 +43,12 @@ import {
 } from './modules';
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, GoTopButtonModule, RouterModule],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        GoTopButtonModule,
+        RouterModule
+    ],
     providers: [
         AuthService,
         CanActivatePrivate,
@@ -55,6 +61,7 @@ import {
         RequestLockerService,
         AbstractDataProviderService,
         PageTitleService,
+        WindowProviderService,
         {
             provide: NavigatorService,
             useFactory: (router:Router, activatedRoute:ActivatedRoute) =>

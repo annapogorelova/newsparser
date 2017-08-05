@@ -12,9 +12,9 @@ import {
     AbstractDataProviderService,
     BaseList,
     PagerServiceProvider,
-    RequestLockerService
+    RequestLockerService,
+    WindowProviderService
 } from '../../../shared';
-import {AppSettings} from '../../../app/app.settings';
 
 @Component({
     selector: 'feed-list',
@@ -28,6 +28,7 @@ import {AppSettings} from '../../../app/app.settings';
 export class FeedListComponent extends BaseList implements OnInit, AfterViewInit {
     protected apiRoute:string = 'feed';
     private search:string = null;
+    private nativeWindow:any;
 
     refreshInProgress:boolean = false;
 
@@ -41,9 +42,11 @@ export class FeedListComponent extends BaseList implements OnInit, AfterViewInit
     @Output() onSearch:EventEmitter<any> = new EventEmitter<any>();
 
     constructor(protected dataProvider:AbstractDataProviderService,
+                private windowProvider:WindowProviderService,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 public requestLocker:RequestLockerService) {
         super(dataProvider, pagerProvider.getInstance());
+        this.nativeWindow = this.windowProvider.getNativeWindow();
     }
 
     ngOnInit() {
@@ -118,14 +121,8 @@ export class FeedListComponent extends BaseList implements OnInit, AfterViewInit
         this.reload(true, this.selectedChannelsIds, this.selectedTags);
     };
 
-    getOtherChannels(feedItem:any) {
-        return feedItem.channels.slice(1, feedItem.channels.length);
-    };
-
-    getFeedItemTitle(title:string) {
-        return title.length > AppSettings.MAX_FEED_ITEM_TITLE_LENGTH ? 
-            `${title.substring(0, AppSettings.MAX_FEED_ITEM_TITLE_LENGTH)}...` :
-            title;
+    openFeedItemLink(feedItemUrl:string) {
+        this.nativeWindow.open(feedItemUrl, '_blank');
     };
 
     /**
