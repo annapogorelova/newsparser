@@ -89,8 +89,8 @@ git clone https://github.com/annapogorelova/newsparser.git
 Create ```newsparser.production.env```, ```newsparser.test.env```. The ```.env``` files can be placed anywhere on the machine - just make sure that they are not in the ```/dist``` folder. Create ```appsettings.production.json```, ```appsettings.test.json``` in the root of ```newsparser.web``` project. Fill in these settings files with the real settings corresponding to your environment by following the examples files (```appsettings.example.json``` and ```.env.example```).
 
 #### Configure Nginx
-Add a ```newsparser.web``` config file to ```/var/etc/nginx/sites-available``` and fill it with the default config that can be found in ```/config/webserver/nginx``` project directory.
-Navigate to the ```/var/etc/nginx/sites-enabled``` and create a symlink to the ```newsparser.web``` config by running:
+Add a ```newsparser.web``` config file to ```/etc/nginx/sites-available``` and fill it with the default config that can be found in ```/config/webserver/nginx``` project directory.
+Navigate to the ```/etc/nginx/sites-enabled``` and create a symlink to the ```newsparser.web``` config by running:
 ```
 sudo ln -s ../sites-available/newsparser.web
 ```
